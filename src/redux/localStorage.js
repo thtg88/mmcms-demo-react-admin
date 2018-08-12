@@ -23,3 +23,14 @@ export const saveState = (state) => {
         console.log(err);
     }
 }
+
+export const sanitizeState = (state) => {
+    return {
+        auth: {
+            login: {
+                token: state.auth.login.token || state.auth.register.token,
+                user: state.auth.login.user || state.auth.register.user,
+            }
+        }
+    }
+};

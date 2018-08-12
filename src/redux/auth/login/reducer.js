@@ -5,9 +5,9 @@ const initial_state = {
     user: null
 };
 
-const auth = (state = initial_state, action) => {
+const login = (state = initial_state, action) => {
     switch(action.type) {
-        case 'AUTH_RESET_ERROR':
+        case 'LOGIN_RESET_ERROR':
             return {
                 ...state,
                 error: null
@@ -33,32 +33,10 @@ const auth = (state = initial_state, action) => {
                 error: action.error,
                 loading: false
             };
-        case 'REGISTER_REQUEST':
-            return {
-                ...state,
-                error: null,
-                loading: true
-            };
-        case 'REGISTER_SUCCESS':
-            // TODO set token
-            // TODO set user
-            return {
-                ...state,
-                error: null,
-                loading: false
-            };
-        case 'REGISTER_ERROR':
-            console.log('dispatched error');
-            console.log(action);
-            return {
-                ...state,
-                error: action.error,
-                loading: false
-            };
         case 'LOGOUT':
             return initial_state;
         default:
             return state;
     }
 };
-export default auth;
+export default login;

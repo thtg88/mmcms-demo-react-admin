@@ -1,4 +1,4 @@
-const normalizeApiErrors = (error) => {
+const getApiErrorMessages = (error) => {
     let errors = [];
 
     if(typeof error !== 'undefined' && error !== null) {
@@ -31,8 +31,8 @@ const normalizeApiErrors = (error) => {
         }
     }
 
-    // console.log('normalizeApiErrors errors normalized:', errors);
+    // console.log('getApiErrorMessages errors normalized:', errors);
 
     return errors;
 };
-export default normalizeApiErrors;
+export default getApiErrorMessages;

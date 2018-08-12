@@ -15,7 +15,7 @@ import {
 	InputGroupText,
 	Row
 } from 'reactstrap';
-import normalizeApiErrors from '../../../helpers/normalizeApiErrors';
+import getApiErrorMessages from '../../../helpers/getApiErrorMessages';
 import AuthErrorAlert from '../AuthErrorAlert';
 
 class Login extends Component {
@@ -71,18 +71,23 @@ class Login extends Component {
     render() {
         console.log('rendering...');
 
-        if(this.state.redirect_register === true) {
+        const { redirect_register } = this.state;
+        const { loading, errors, logged_in } = this.props;
+
+        if(redirect_register === true) {
             return <Redirect to="/register" />
         }
 
-        const { errors } = this.props;
-        console.log('rendering errors:', errors);
+        if(logged_in === true) {
+            return <Redirect to="/" />
+        }
 
-        const { loading } = this.props;
         let loginButtonIconClassName = 'fa fa-sign-in';
         if(typeof loading !== 'undefined' && loading === true) {
             loginButtonIconClassName = 'fa fa-spinner fa-spin';
         }
+
+        console.log('rendering errors:', errors);
 
         return (
             <div className="app flex-row align-items-center">
@@ -168,11 +173,11 @@ class Login extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const errors = normalizeApiErrors(state.auth.error);
+    const errors = getApiErrorMessages(state.auth.login.error);
     return {
         errors: errors,
-        loading: state.auth.loading === true,
-        isLoggedIn: typeof state.auth.token !== 'undefined' && state.auth.token !== null
+        loading: state.auth.login.loading === true,
+        logged_in: typeof state.auth.login.user !== 'undefined' && state.auth.login.user !== null && !isNaN(state.auth.login.user.id)
     }
 };
 
@@ -185,7 +190,7 @@ const mapDispatchToProps = (dispatch) => ({
     },
     resetError() {
         dispatch({
-            type: 'AUTH_RESET_ERROR'
+            type: 'LOGIN_RESET_ERROR'
         });
     }
 });

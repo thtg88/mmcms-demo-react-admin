@@ -1,31 +1,22 @@
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import throttle from 'lodash/throttle';
-import { loadState, saveState } from './localStorage';
+import { loadState, sanitizeState, saveState } from './localStorage';
+import rootReducers from './reducers';
 import rootSaga from './sagas';
-import auth from './auth/reducer';
 
 const configureStore = () => {
     const persistedState = loadState();
     const sagaMiddleware = createSagaMiddleware();
 
     const store = createStore(
-        combineReducers({
-            auth
-        }),
+        rootReducers,
         persistedState,
         applyMiddleware(sagaMiddleware)
     );
 
     store.subscribe(throttle(() => {
-        const state = store.getState();
-        const cleanedState = {
-            auth: {
-                token: state.auth.token,
-                user: state.auth.user
-            }
-        }
-        saveState(cleanedState);
+        saveState(sanitizeState(store.getState()));
     }, 1000));
 
     console.log('initial state: ', store.getState());

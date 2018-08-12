@@ -13,7 +13,7 @@ import {
     InputGroupText,
     Row
 } from 'reactstrap';
-import normalizeApiErrors from '../../../helpers/normalizeApiErrors';
+import getApiErrorMessages from '../../../helpers/getApiErrorMessages';
 import AuthErrorAlert from '../AuthErrorAlert';
 
 class Register extends Component {
@@ -70,13 +70,17 @@ class Register extends Component {
 
 
     render() {
-        if(this.state.redirect_login === true) {
+        const { redirect_login } = this.state;
+        const { errors, loading, logged_in } = this.props;
+
+        if(redirect_login === true) {
             return <Redirect to="/login" />
         }
 
-        const { errors } = this.props;
+        if(logged_in === true) {
+            return <Redirect to="/" />
+        }
 
-        const { loading } = this.props;
         let registerButtonIconClassName = 'fa fa-pencil-square-o';
         if(typeof loading !== 'undefined' && loading === true) {
             registerButtonIconClassName = 'fa fa-spinner fa-spin';
@@ -180,11 +184,11 @@ class Register extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const errors = normalizeApiErrors(state.auth.error);
+    const errors = getApiErrorMessages(state.auth.register.error);
     return {
         errors: errors,
-        loading: state.auth.loading === true,
-        isLoggedIn: typeof state.auth.token !== 'undefined' && state.auth.token !== null
+        loading: state.auth.register.loading === true,
+        logged_in: typeof state.auth.login.user !== 'undefined' && state.auth.login.user !== null && !isNaN(state.auth.login.user.id)
     }
 };
 
@@ -197,7 +201,7 @@ const mapDispatchToProps = (dispatch) => ({
     },
     resetError() {
         dispatch({
-            type: 'AUTH_RESET_ERROR'
+            type: 'REGISTER_RESET_ERROR'
         });
     }
 });
