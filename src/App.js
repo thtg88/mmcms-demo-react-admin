@@ -15,6 +15,7 @@ import 'simple-line-icons/css/simple-line-icons.css';
 import './scss/style.css'
 // Containers
 import { DefaultLayout } from './containers';
+import GuestComponent from './containers/DefaultLayout/GuestComponent';
 // Pages
 import { Login, Register } from './views/Pages';
 import configureStore from './redux/store';
@@ -27,8 +28,16 @@ class App extends Component {
             <Provider store={store}>
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path="/login" name="Login Page" component={Login} />
-                        <Route exact path="/register" name="Register Page" component={Register} />
+                        <Route exact path="/login" name="Login Page" render={props => (
+                            <GuestComponent>
+                                <Login {...props} />
+                            </GuestComponent>
+                        )} />
+                        <Route exact path="/register" name="Register Page" render={props => (
+                            <GuestComponent>
+                                <Register {...props} />
+                            </GuestComponent>
+                        )} />
                         <Route path="/" name="Home" component={DefaultLayout} />
                     </Switch>
                 </BrowserRouter>

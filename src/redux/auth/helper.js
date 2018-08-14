@@ -21,3 +21,15 @@ export const register = async (data) => {
     })
     .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
+
+export const logout = async (data) => {
+    return await fetch(process.env.REACT_APP_API_BASE_URL+'/auth/logout', {
+        method: 'POST',
+        headers: new Headers({
+            "Authentication": "Bearer "+data.token.access_token,
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }),
+    })
+    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+};

@@ -19,6 +19,7 @@ import navigation from '../../_nav';
 import routes from '../../routes';
 import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
+import RestrictedComponent from './RestrictedComponent';
 
 class DefaultLayout extends Component {
     render() {
@@ -41,7 +42,9 @@ class DefaultLayout extends Component {
                             <Switch>
                                 {routes.map((route, idx) => {
                                     return route.component ? (<Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (
-                                        <route.component {...props} />
+                                        <RestrictedComponent>
+                                            <route.component {...props} />
+                                        </RestrictedComponent>
                                     )} />)
                                     : (null);
                                 },)}

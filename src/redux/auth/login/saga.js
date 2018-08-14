@@ -1,5 +1,5 @@
 import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
-import { login } from '../helper';
+import { login, logout } from '../helper';
 
 export function* loginRequest() {
     yield takeEvery('LOGIN_REQUEST', function*({ payload }) {
@@ -39,8 +39,29 @@ export function* loginError() {
     yield takeEvery('LOGIN_ERROR', function*() {});
 }
 
-export function* logout() {
-    yield takeEvery('LOGOUT', function*() {});
+export function* logoutRequest() {
+    yield takeEvery('LOGOUT_REQUEST', function*({ payload }) {
+        console.log('logout taken!', payload);
+        const { data } = payload;
+        console.log('data', data);
+        try {
+            const result = yield call(logout, data);
+            console.log('logout result: ', result);
+
+        } catch(err) {}
+
+        yield put({
+            type: 'LOGOUT_SUCCESS'
+        });
+    });
+}
+
+export function* logoutSuccess() {
+    yield takeEvery('LOGOUT_SUCCESS', function*({ payload }) {});
+}
+
+export function* logoutError() {
+    yield takeEvery('LOGOUT_ERROR', function*() {});
 }
 
 export default function* rootSaga() {
@@ -48,6 +69,8 @@ export default function* rootSaga() {
         fork(loginRequest),
         fork(loginSuccess),
         fork(loginError),
-        fork(logout)
+        fork(logoutRequest),
+        fork(logoutSuccess),
+        fork(logoutError)
     ]);
 }

@@ -20,12 +20,15 @@ const login = (state = initial_state, action) => {
                 loading: true
             };
         case 'LOGIN_SUCCESS':
-            // TODO set token
-            // TODO set user
+            // Destructure object into user and the rest
+            // Which will be the payload
+            const { resource, ...token_payload } = action.payload;
             return {
                 ...state,
                 error: null,
-                loading: false
+                loading: false,
+                user: resource,
+                token: token_payload,
             };
         case 'LOGIN_ERROR':
             return {
@@ -33,8 +36,23 @@ const login = (state = initial_state, action) => {
                 error: action.error,
                 loading: false
             };
-        case 'LOGOUT':
-            return initial_state;
+        case 'LOGOUT_REQUEST':
+            console.log(action.type+' taken');
+            return {
+                ...state,
+                error: null,
+                loading: true
+            };
+        case 'LOGOUT_SUCCESS':
+        case 'LOGOUT_ERROR':
+            console.log(action.type+' taken');
+            return {
+                ...state,
+                error: null,
+                loading: false,
+                user: null,
+                token: null,
+            };
         default:
             return state;
     }

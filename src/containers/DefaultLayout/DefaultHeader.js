@@ -1,21 +1,37 @@
 import React, { Component } from 'react';
-import { DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink } from 'reactstrap';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import {
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
+    Nav,
+    NavItem,
+    NavLink
+} from 'reactstrap';
+// import PropTypes from 'prop-types';
 import { AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.svg'
 import sygnet from '../../assets/img/brand/sygnet.svg'
 
-const propTypes = {
-    children: PropTypes.node,
-};
+// const propTypes = {
+//     children: PropTypes.node,
+// };
+// const defaultProps = {};
 
-const defaultProps = {};
+export class DefaultHeader extends Component {
+    handleLogout() {
+        const { token } = this.props
+        const data = token;
+        console.log(token);
+        console.log(data);
+        console.log('handling logout');
+        this.props.logout({ data });
+    }
 
-class DefaultHeader extends Component {
     render() {
-
         // eslint-disable-next-line
-        const { children, ...attributes } = this.props;
+        const { children, logout, ...attributes } = this.props;
 
         return (
             <React.Fragment>
@@ -37,7 +53,7 @@ class DefaultHeader extends Component {
                         </DropdownToggle>
                         <DropdownMenu right style={{ right: 'auto' }}>
                             <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
-                            <DropdownItem><i className="fa fa-sign-out"></i> Logout</DropdownItem>
+                            <DropdownItem onClick={() => this.handleLogout()}><i className="fa fa-sign-out"></i> Logout</DropdownItem>
                         </DropdownMenu>
                     </AppHeaderDropdown>
                 </Nav>
@@ -45,6 +61,26 @@ class DefaultHeader extends Component {
         );
     }
 }
-DefaultHeader.propTypes = propTypes;
-DefaultHeader.defaultProps = defaultProps;
-export default DefaultHeader;
+// DefaultHeader.propTypes = propTypes;
+// DefaultHeader.defaultProps = defaultProps;
+// export default DefaultHeader;
+
+const mapStateToProps = (state) => {
+    return {
+        token: state.auth.login.token
+    }
+};
+
+const mapDispatchToProps = (dispatch) => ({
+    logout(data) {
+        dispatch({
+            type: 'LOGOUT_REQUEST',
+            payload: data
+        });
+    }
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(DefaultHeader);
