@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import {
     DropdownItem,
     DropdownMenu,
@@ -9,17 +8,19 @@ import {
     NavItem,
     NavLink
 } from 'reactstrap';
-// import PropTypes from 'prop-types';
 import { AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.svg'
 import sygnet from '../../assets/img/brand/sygnet.svg'
 
-// const propTypes = {
-//     children: PropTypes.node,
-// };
-// const defaultProps = {};
-
 export class DefaultHeader extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            redirect_profile: false
+        };
+    }
+
     handleLogout() {
         const { token } = this.props
         const data = token;
@@ -27,6 +28,10 @@ export class DefaultHeader extends Component {
         console.log(data);
         console.log('handling logout');
         this.props.logout({ data });
+    }
+
+    redirectProfile() {
+        this.props.history.push('/me')
     }
 
     render() {
@@ -52,7 +57,7 @@ export class DefaultHeader extends Component {
                             <img src={'assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
                         </DropdownToggle>
                         <DropdownMenu right style={{ right: 'auto' }}>
-                            <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
+                            <DropdownItem onClick={() => this.redirectProfile()}><i className="fa fa-user"></i> Profile</DropdownItem>
                             <DropdownItem onClick={() => this.handleLogout()}><i className="fa fa-sign-out"></i> Logout</DropdownItem>
                         </DropdownMenu>
                     </AppHeaderDropdown>
@@ -61,13 +66,10 @@ export class DefaultHeader extends Component {
         );
     }
 }
-// DefaultHeader.propTypes = propTypes;
-// DefaultHeader.defaultProps = defaultProps;
-// export default DefaultHeader;
 
 const mapStateToProps = (state) => {
     return {
-        token: state.auth.login.token
+        token: state.auth.token
     }
 };
 

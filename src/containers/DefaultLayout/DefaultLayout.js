@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Container } from 'reactstrap';
 import { Page404 } from '../../views/Pages';
+import LoggingOutAlert from '../../views/LoggingOutAlert';
 import {
     AppBreadcrumb,
     AppFooter,
@@ -26,7 +28,7 @@ class DefaultLayout extends Component {
         return (
             <div className="app">
                 <AppHeader fixed>
-                    <DefaultHeader />
+                    <DefaultHeader history={this.props.history} />
                 </AppHeader>
                 <div className="app-body">
                     <AppSidebar fixed display="lg">
@@ -39,6 +41,7 @@ class DefaultLayout extends Component {
                     <main className="main">
                         <AppBreadcrumb appRoutes={routes}/>
                         <Container fluid>
+                            <LoggingOutAlert loggingOut={this.props.logging_out} />
                             <Switch>
                                 {routes.map((route, idx) => {
                                     return route.component ? (<Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (
@@ -60,4 +63,15 @@ class DefaultLayout extends Component {
         );
     }
 }
-export default DefaultLayout;
+// export default DefaultLayout;
+
+const mapStateToProps = (state) => {
+    console.log('state.auth', state.auth);
+    return {
+        logging_out: state.auth.logging_out
+    }
+};
+
+export default connect(
+    mapStateToProps
+)(DefaultLayout);
