@@ -20,7 +20,7 @@ const getApiErrorMessages = (error) => {
                             errors.push(error_arr);
                         } else {
                             Object.entries(error_arr).forEach(([idx, error]) => {
-                                console.log(idx, error, typeof error);
+                                // console.log(idx, error, typeof error);
                                 errors.push(error);
                             });
                         }

@@ -16,7 +16,7 @@ import {
 	Row
 } from 'reactstrap';
 import getApiErrorMessages from '../../../helpers/getApiErrorMessages';
-import AuthErrorAlert from '../AuthErrorAlert';
+import ApiErrorAlert from '../../ApiErrorAlert';
 
 class Login extends Component {
     constructor(props) {
@@ -62,7 +62,6 @@ class Login extends Component {
             resetError();
             console.log('reset error');
         }
-        console.log('updating state: ', [evt.target.name], evt.target.value);
         this.setState({
             [evt.target.name]: evt.target.value,
         });
@@ -72,7 +71,7 @@ class Login extends Component {
         console.log('rendering...');
 
         const { redirect_register } = this.state;
-        const { loading, errors, logged_in } = this.props;
+        const { logging_in, errors, logged_in } = this.props;
 
         if(redirect_register === true) {
             return <Redirect to="/register" />
@@ -83,7 +82,7 @@ class Login extends Component {
         }
 
         let loginButtonIconClassName = 'fa fa-sign-in';
-        if(typeof loading !== 'undefined' && loading === true) {
+        if(typeof logging_in !== 'undefined' && logging_in === true) {
             loginButtonIconClassName = 'fa fa-spinner fa-spin';
         }
 
@@ -100,7 +99,7 @@ class Login extends Component {
                                         <Form innerRef={"login-form"}>
                                             <h1>Login</h1>
                                             <p className="text-muted">Sign In to your account</p>
-                                            <AuthErrorAlert errors={errors} />
+                                            <ApiErrorAlert errors={errors} />
                                             <InputGroup className="mb-3">
                                                 <InputGroupAddon addonType="prepend">
                                                     <InputGroupText>@</InputGroupText>
@@ -132,7 +131,7 @@ class Login extends Component {
                                                     <Button
                                                         color="primary"
                                                         className="px-4"
-                                                        disabled={loading}
+                                                        disabled={logging_in}
                                                         onClick={() => this.handleLogin()}
                                                         block
                                                     >
@@ -173,11 +172,11 @@ class Login extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const errors = getApiErrorMessages(state.auth.login.error);
+    const errors = getApiErrorMessages(state.auth.error);
     return {
         errors: errors,
-        loading: state.auth.login.loading === true,
-        logged_in: typeof state.auth.login.user !== 'undefined' && state.auth.login.user !== null && !isNaN(state.auth.login.user.id)
+        logging_in: state.auth.logging_in === true,
+        logged_in: typeof state.auth.token !== 'undefined' && state.auth.token !== null && typeof state.auth.token.access_token !== 'undefined'
     }
 };
 
@@ -190,7 +189,7 @@ const mapDispatchToProps = (dispatch) => ({
     },
     resetError() {
         dispatch({
-            type: 'LOGIN_RESET_ERROR'
+            type: 'LOGIN_ERROR_RESET'
         });
     }
 });

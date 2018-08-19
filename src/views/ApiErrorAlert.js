@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Alert } from 'reactstrap';
 
-class AuthErrorAlert extends Component {
+class ApiErrorAlert extends Component {
     render() {
         const { errors } = this.props;
 
@@ -20,4 +20,4 @@ class AuthErrorAlert extends Component {
         );
     }
 }
-export default AuthErrorAlert;
+export default ApiErrorAlert;

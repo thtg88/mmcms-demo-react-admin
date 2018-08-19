@@ -17,7 +17,7 @@ class RestrictedComponent extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        logged_in: typeof state.auth.login.token !== 'undefined' && state.auth.login.token !== null
+        logged_in: typeof state.auth.token !== 'undefined' && state.auth.token !== null
     }
 };
 

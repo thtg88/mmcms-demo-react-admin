@@ -14,7 +14,7 @@ import {
     Row
 } from 'reactstrap';
 import getApiErrorMessages from '../../../helpers/getApiErrorMessages';
-import AuthErrorAlert from '../AuthErrorAlert';
+import ApiErrorAlert from '../../ApiErrorAlert';
 
 class Register extends Component {
     constructor(props) {
@@ -71,7 +71,7 @@ class Register extends Component {
 
     render() {
         const { redirect_login } = this.state;
-        const { errors, loading, logged_in } = this.props;
+        const { errors, registering, logged_in } = this.props;
 
         if(redirect_login === true) {
             return <Redirect to="/login" />
@@ -82,7 +82,7 @@ class Register extends Component {
         }
 
         let registerButtonIconClassName = 'fa fa-pencil-square-o';
-        if(typeof loading !== 'undefined' && loading === true) {
+        if(typeof registering !== 'undefined' && registering === true) {
             registerButtonIconClassName = 'fa fa-spinner fa-spin';
         }
 
@@ -95,7 +95,7 @@ class Register extends Component {
                                 <CardBody className="p-4">
                                     <h1>Register</h1>
                                     <p className="text-muted">Create your account</p>
-                                    <AuthErrorAlert errors={errors} />
+                                    <ApiErrorAlert errors={errors} />
                                     <InputGroup className="mb-3">
                                         <InputGroupAddon addonType="prepend">
                                             <InputGroupText>
@@ -158,7 +158,7 @@ class Register extends Component {
                                                 color="success"
                                                 block
                                                 onClick={() => this.handleRegister()}
-                                                disabled={loading}
+                                                disabled={registering}
                                             >
                                                 <i className={registerButtonIconClassName}></i>
                                                 {' '}
@@ -184,11 +184,11 @@ class Register extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const errors = getApiErrorMessages(state.auth.register.error);
+    const errors = getApiErrorMessages(state.auth.error);
     return {
         errors: errors,
-        loading: state.auth.register.loading === true,
-        logged_in: typeof state.auth.login.user !== 'undefined' && state.auth.login.user !== null && !isNaN(state.auth.login.user.id)
+        registering: state.auth.registering === true,
+        logged_in: typeof state.auth.user !== 'undefined' && state.auth.user !== null && !isNaN(state.auth.user.id)
     }
 };
 
@@ -201,7 +201,7 @@ const mapDispatchToProps = (dispatch) => ({
     },
     resetError() {
         dispatch({
-            type: 'REGISTER_RESET_ERROR'
+            type: 'REGISTER_ERROR_RESET'
         });
     }
 });
