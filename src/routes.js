@@ -1,9 +1,7 @@
 import React from 'react';
 import Loadable from 'react-loadable'
 
-function Loading() {
-    return <div>Loading...</div>;
-}
+const Loading = () => (<div>Loading...</div>);
 
 const Breadcrumbs = Loadable({
     loader: () => import('./views/Base/Breadcrumbs'),
@@ -44,6 +42,11 @@ const ListGroups = Loadable({
     loader: () => import('./views/Base/ListGroups'),
     loading: Loading,
 });
+
+const Profile = Loadable({
+    loader: () => import('./views/Profile'),
+    loading: Loading,
+})
 
 const Navbars = Loadable({
     loader: () => import('./views/Base/Navbars'),
@@ -210,6 +213,7 @@ const routes = [
     { path: '/icons/flags', name: 'Flags', component: Flags },
     { path: '/icons/font-awesome', name: 'Font Awesome', component: FontAwesome },
     { path: '/icons/simple-line-icons', name: 'Simple Line Icons', component: SimpleLineIcons },
+    { path: '/me', name: 'Profile', component: Profile },
     { path: '/notifications', exact: true, name: 'Notifications', component: Alerts },
     { path: '/notifications/alerts', name: 'Alerts', component: Alerts },
     { path: '/notifications/badges', name: 'Badges', component: Badges },
