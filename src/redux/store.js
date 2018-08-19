@@ -1,11 +1,11 @@
-import { combineReducers, createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import throttle from 'lodash/throttle';
-import { loadState, sanitizeState, saveState } from './localStorage';
+import { loadState, saveState } from './localStorage';
 import rootReducers from './reducers';
 import rootSaga from './sagas';
 
-const configureStore = () => {
+export const configureStore = () => {
     const persistedState = loadState();
     const sagaMiddleware = createSagaMiddleware();
 
@@ -16,7 +16,7 @@ const configureStore = () => {
     );
 
     store.subscribe(throttle(() => {
-        saveState(sanitizeState(store.getState()));
+        saveState(store.getState());
     }, 1000));
 
     console.log('initial state: ', store.getState());
@@ -25,4 +25,7 @@ const configureStore = () => {
 
     return store;
 }
-export default configureStore;
+
+const store = configureStore();
+
+export default store;

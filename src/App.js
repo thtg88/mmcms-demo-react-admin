@@ -18,9 +18,7 @@ import { DefaultLayout } from './containers';
 import GuestComponent from './containers/DefaultLayout/GuestComponent';
 // Pages
 import { Login, Register } from './views/Pages';
-import configureStore from './redux/store';
-
-const store = configureStore();
+import store from './redux/store';
 
 class App extends Component {
     render() {
@@ -28,12 +26,12 @@ class App extends Component {
             <Provider store={store}>
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path="/login" name="Login Page" render={props => (
+                        <Route exact path="/login" name="Login Page" render={(props) => (
                             <GuestComponent>
                                 <Login {...props} />
                             </GuestComponent>
                         )} />
-                        <Route exact path="/register" name="Register Page" render={props => (
+                        <Route exact path="/register" name="Register Page" render={(props) => (
                             <GuestComponent>
                                 <Register {...props} />
                             </GuestComponent>
