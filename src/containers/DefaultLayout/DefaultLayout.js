@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Container } from 'reactstrap';
-import { Page404 } from '../../views/Pages';
 import {
     AppBreadcrumb,
     AppFooter,
@@ -13,20 +13,22 @@ import {
     AppSidebarMinimizer,
     AppSidebarNav,
 } from '@coreui/react';
+import { Page404 } from '../../views/Pages';
+import LoggingOutAlert from '../../views/LoggingOutAlert';
+import DefaultFooter from './DefaultFooter';
+import DefaultHeader from './DefaultHeader';
+import RestrictedComponent from './RestrictedComponent';
 // sidebar nav config
 import navigation from '../../_nav';
 // routes config
 import routes from '../../routes';
-import DefaultFooter from './DefaultFooter';
-import DefaultHeader from './DefaultHeader';
-import RestrictedComponent from './RestrictedComponent';
 
 class DefaultLayout extends Component {
     render() {
         return (
             <div className="app">
                 <AppHeader fixed>
-                    <DefaultHeader />
+                    <DefaultHeader history={this.props.history} />
                 </AppHeader>
                 <div className="app-body">
                     <AppSidebar fixed display="lg">
@@ -39,6 +41,7 @@ class DefaultLayout extends Component {
                     <main className="main">
                         <AppBreadcrumb appRoutes={routes}/>
                         <Container fluid>
+                            <LoggingOutAlert loggingOut={this.props.logging_out} />
                             <Switch>
                                 {routes.map((route, idx) => {
                                     return route.component ? (<Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (
@@ -60,4 +63,13 @@ class DefaultLayout extends Component {
         );
     }
 }
-export default DefaultLayout;
+
+const mapStateToProps = (state) => {
+    return {
+        logging_out: state.auth.logging_out
+    }
+};
+
+export default connect(
+    mapStateToProps
+)(DefaultLayout);
