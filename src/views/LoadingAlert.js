@@ -1,23 +1,16 @@
 import React, { Component } from 'react';
 import { Alert } from 'reactstrap';
 
-class LoggingOutAlert extends Component {
+class LoadingAlert extends Component {
     render() {
-        const { loggingOut } = this.props;
-
-        if(loggingOut !== true) {
-            return (
-                null
-            );
-        }
-
         return (
             <Alert color="info">
                 <i className="fa fa-spinner fa-spin"></i>
                 {' '}
-                Logging out...
+                {this.props.msg}
             </Alert>
         );
     }
 }
-export default LoggingOutAlert;
+
+export default LoadingAlert;
