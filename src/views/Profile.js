@@ -15,7 +15,10 @@ import {
 } from 'reactstrap';
 import getApiErrorMessages from '../helpers/getApiErrorMessages';
 import ApiErrorAlert from './ApiErrorAlert';
+<<<<<<< HEAD
 import LoadingAlert from './LoadingAlert';
+=======
+>>>>>>> 7cc9f15e6769d79e766df4f95e5a5cafaadaaa0a
 
 class Profile extends Component {
     constructor(props) {
@@ -85,7 +88,13 @@ class Profile extends Component {
 
         if(getting_profile === true) {
             return (
+<<<<<<< HEAD
                 <LoadingAlert msg="Loading Profile..." />
+=======
+                <Alert color="info">
+                    <div>Loading Profile...</div>
+                </Alert>
+>>>>>>> 7cc9f15e6769d79e766df4f95e5a5cafaadaaa0a
             );
         }
 
