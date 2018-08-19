@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Container } from 'reactstrap';
-<<<<<<< HEAD
-=======
-import { Page404 } from '../../views/Pages';
-import LoggingOutAlert from '../../views/LoggingOutAlert';
->>>>>>> 7cc9f15e6769d79e766df4f95e5a5cafaadaaa0a
 import {
     AppBreadcrumb,
     AppFooter,
@@ -68,15 +63,8 @@ class DefaultLayout extends Component {
         );
     }
 }
-<<<<<<< HEAD
 
 const mapStateToProps = (state) => {
-=======
-// export default DefaultLayout;
-
-const mapStateToProps = (state) => {
-    console.log('state.auth', state.auth);
->>>>>>> 7cc9f15e6769d79e766df4f95e5a5cafaadaaa0a
     return {
         logging_out: state.auth.logging_out
     }
