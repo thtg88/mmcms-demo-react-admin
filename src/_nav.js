@@ -220,36 +220,36 @@ export default {
         {
             divider: true,
         },
+        // {
+        //     title: true,
+        //     name: 'Extras',
+        // },
+        // {
+        //     name: 'Pages',
+        //     url: '/pages',
+        //     icon: 'icon-star',
+        //     children: [
+        //         {
+        //             name: 'Error 500',
+        //             url: '/500',
+        //             icon: 'icon-star',
+        //         },
+        //     ],
+        // },
         {
             title: true,
-            name: 'Extras',
+            name: 'System',
+            wrapper: {
+                // required valid HTML5 element tag
+                element: ''
+            },
+            // optional class names space delimited list for title item ex: "text-center"
+            class: ''
         },
         {
-            name: 'Pages',
-            url: '/pages',
-            icon: 'icon-star',
-            children: [
-                {
-                    name: 'Login',
-                    url: '/login',
-                    icon: 'icon-star',
-                },
-                {
-                    name: 'Register',
-                    url: '/register',
-                    icon: 'icon-star',
-                },
-                {
-                    name: 'Error 404',
-                    url: '/404',
-                    icon: 'icon-star',
-                },
-                // {
-                //     name: 'Error 500',
-                //     url: '/500',
-                //     icon: 'icon-star',
-                // },
-            ],
+            name: 'Users',
+            url: '/users',
+            icon: 'icon-user',
         },
         // {
         //     name: 'Download CoreUI',
