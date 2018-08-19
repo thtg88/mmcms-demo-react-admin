@@ -12,7 +12,7 @@ const initial_state = {
 };
 
 const login = (state = initial_state, action) => {
-    console.log('action dispatched', action);
+    // console.log('action dispatched', action);
     switch(action.type) {
         case 'LOGIN_ERROR_RESET':
             return {

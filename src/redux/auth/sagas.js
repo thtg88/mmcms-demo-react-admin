@@ -17,7 +17,7 @@ export function* loginRequest() {
             } else {
                 yield put({
                     type: 'LOGIN_ERROR',
-                    error: result.error || result
+                    error: result.error || result.errors || result
                 });
             }
 
@@ -85,7 +85,7 @@ export function* registerRequest() {
             } else {
                 yield put({
                     type: 'REGISTER_ERROR',
-                    error: result.error || result
+                    error: result.error || result.errors || result
                 });
             }
 
@@ -123,7 +123,7 @@ export function* getProfileRequest() {
             } else {
                 yield put({
                     type: 'GET_PROFILE_ERROR',
-                    error: result.error || result
+                    error: result.error || result.errors || result
                 });
             }
 
@@ -161,7 +161,7 @@ export function* updateProfileRequest() {
             } else {
                 yield put({
                     type: 'UPDATE_PROFILE_ERROR',
-                    error: result.error || result
+                    error: result.error || result.errors || result
                 });
             }
 
