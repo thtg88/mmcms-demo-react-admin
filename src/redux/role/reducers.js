@@ -1,52 +1,52 @@
 const initial_state = {
-    current_page: 1,
     error: null,
-    fetching_users: false,
-    resource: null,
+    fetching_roles: false,
+    updating: false,
+    updated: false,
     resources: [],
     total_resources: 0,
-    updated: false,
-    updating: false,
+    resource: null,
+    current_page: 1,
 };
 
-const user = (state = initial_state, action) => {
+const role = (state = initial_state, action) => {
     // console.log('action dispatched', action);
     switch(action.type) {
-        case 'GET_PAGINATED_USERS_REQUEST':
-            console.log('getUsers dispatched');
+        case 'GET_PAGINATED_ROLES_REQUEST':
+            console.log('getPaginatedRoles dispatched');
             return {
                 ...state,
                 error: null,
-                fetching_users: true,
+                fetching_roles: true,
                 resources: [],
             };
-        case 'GET_PAGINATED_USERS_SUCCESS':
+        case 'GET_PAGINATED_ROLES_SUCCESS':
             const { data, total, current_page } = action.payload;
             return {
                 ...state,
                 error: null,
-                fetching_users: false,
+                fetching_roles: false,
                 resources: data,
                 total_resources: total,
                 current_page: current_page,
             };
-        case 'GET_PAGINATED_USERS_ERROR':
-            console.log('getUsers error:', action);
+        case 'GET_PAGINATED_ROLES_ERROR':
+            console.log('getPaginatedRoles error:', action);
             return {
                 ...state,
                 error: action.error,
-                fetching_users: false,
+                fetching_roles: false,
                 resources: [],
             };
-        case 'UPDATE_USER_REQUEST':
-            console.log('updatingUser dispatched');
+        case 'UPDATE_ROLE_REQUEST':
+            console.log('updatingRole dispatched');
             return {
                 ...state,
                 error: null,
                 updated: false,
                 updating: true,
             };
-        case 'UPDATE_USER_SUCCESS':
+        case 'UPDATE_ROLE_SUCCESS':
             return {
                 ...state,
                 error: null,
@@ -54,8 +54,8 @@ const user = (state = initial_state, action) => {
                 updated: true,
                 resource: action.payload.resource,
             };
-        case 'UPDATE_USER_ERROR':
-            console.log('updatingUser error:', action);
+        case 'UPDATE_ROLE_ERROR':
+            console.log('updatingRole error:', action);
             return {
                 ...state,
                 error: action.error,
@@ -66,4 +66,4 @@ const user = (state = initial_state, action) => {
             return state;
     }
 };
-export default user;
+export default role;

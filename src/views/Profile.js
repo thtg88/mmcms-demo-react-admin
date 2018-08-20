@@ -15,7 +15,7 @@ import {
 } from 'reactstrap';
 import getApiErrorMessages from '../helpers/getApiErrorMessages';
 import ApiErrorAlert from './ApiErrorAlert';
-import LoadingAlert from './LoadingAlert';
+import SpinnerLoader from './SpinnerLoader';
 
 class Profile extends Component {
     constructor(props) {
@@ -83,16 +83,10 @@ class Profile extends Component {
         const { errors, getting_profile, updated_profile, updating_profile } = this.props;
         const { profile_unchanged, profile } = this.state;
 
-        if(getting_profile === true) {
-            return (
-                <LoadingAlert msg="Loading Profile..." />
-            );
-        }
-
         console.log(this.state.profile);
         console.log(this.props);
 
-        if(profile === null) {
+        if(profile === null && getting_profile !== true) {
             return (null);
         }
 
@@ -107,11 +101,6 @@ class Profile extends Component {
             <div className="animated fadeIn">
                 <Row>
                     <Col md="12">
-                        {(updated_profile === true
-                        ? <Alert color="success">
-                            <div><i className="fa fa-check"></i> Profile Updated!</div>
-                        </Alert>
-                        : null)}
                         <ApiErrorAlert errors={errors} />
                     </Col>
                 </Row>
@@ -122,52 +111,60 @@ class Profile extends Component {
                                 <strong>Edit Profile</strong>
                             </CardHeader>
                             <CardBody>
-                                <Form>
-                                    <FormGroup>
-                                        <Label htmlFor="name">Name</Label>
-                                        <Input
-                                            type="text"
-                                            id="name"
-                                            name="name"
-                                            value={profile.name}
-                                            placeholder="Enter your name"
-                                            onChange={this.updateInputValue}
-                                        />
+                                {(updated_profile === true
+                                    ? <Alert color="success">
+                                        <div><i className="fa fa-check"></i> Profile Updated!</div>
+                                    </Alert>
+                                    : null)}
+                                {getting_profile
+                                    ? <SpinnerLoader />
+                                    : <Form onSubmit={() => this.handleUpdateProfile()}>
+                                        <FormGroup>
+                                            <Label htmlFor="name">Name</Label>
+                                            <Input
+                                                type="text"
+                                                id="name"
+                                                name="name"
+                                                value={profile.name}
+                                                placeholder="Enter your name"
+                                                onChange={this.updateInputValue}
+                                            />
+                                            {/*<FormFeedback>Houston, we have a problem...</FormFeedback>*/}
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <Label htmlFor="email">Email</Label>
+                                            <Input
+                                                type="email"
+                                                id="email"
+                                                name="email"
+                                                value={profile.email}
+                                                placeholder="Enter your email"
+                                                onChange={this.updateInputValue}
+                                            />
                                         {/*<FormFeedback>Houston, we have a problem...</FormFeedback>*/}
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label htmlFor="email">Email</Label>
-                                        <Input
-                                            type="email"
-                                            id="email"
-                                            name="email"
-                                            value={profile.email}
-                                            placeholder="Enter your email"
-                                            onChange={this.updateInputValue}
-                                        />
-                                        {/*<FormFeedback>Houston, we have a problem...</FormFeedback>*/}
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label>Role</Label>
-                                        <p className="form-control-static">{(
-                                            profile.role !== null
-                                            ? profile.role.display_name
-                                            : 'N/A'
-                                        )}</p>
-                                    </FormGroup>
-                                    <Button
-                                        type="button"
-                                        size="md"
-                                        color="success"
-                                        block
-                                        disabled={profile_unchanged || updating_profile}
-                                        onClick={() => this.handleUpdateProfile()}
-                                    >
-                                        <i className={updateButtonIconClassName}></i>
-                                        {' '}
-                                        Update
-                                    </Button>
-                                </Form>
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <Label>Role</Label>
+                                            <p className="form-control-static">{(
+                                                profile.role !== null
+                                                ? profile.role.display_name
+                                                : 'N/A'
+                                            )}</p>
+                                        </FormGroup>
+                                        <Button
+                                            type="button"
+                                            size="md"
+                                            color="success"
+                                            block
+                                            disabled={profile_unchanged || updating_profile}
+                                            onClick={() => this.handleUpdateProfile()}
+                                        >
+                                            <i className={updateButtonIconClassName}></i>
+                                            {' '}
+                                            Update
+                                        </Button>
+                                    </Form>
+                                }
                             </CardBody>
                         </Card>
                     </Col>

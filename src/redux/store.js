@@ -6,18 +6,28 @@ import rootReducers from './reducers';
 import rootSaga from './sagas';
 
 export const configureStore = () => {
-    const persistedState = loadState();
+    const { REACT_APP_STATE_DRIVER } = process.env;
     const sagaMiddleware = createSagaMiddleware();
+    let store;
 
-    const store = createStore(
-        rootReducers,
-        persistedState,
-        applyMiddleware(sagaMiddleware)
-    );
+    if(REACT_APP_STATE_DRIVER === "localStorage") {
+        const persistedState = loadState();
+        store = createStore(
+            rootReducers,
+            persistedState,
+            applyMiddleware(sagaMiddleware)
+        );
 
-    store.subscribe(throttle(() => {
-        saveState(store.getState());
-    }, 1000));
+        store.subscribe(throttle(() => {
+            saveState(store.getState());
+        }, 1000));
+
+    } else {
+        store = createStore(
+            rootReducers,
+            applyMiddleware(sagaMiddleware)
+        );
+    }
 
     console.log('initial state: ', store.getState());
 

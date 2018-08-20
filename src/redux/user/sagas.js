@@ -9,7 +9,7 @@ export function* getPaginatedUsersRequest() {
         try {
             const result = yield call(getPaginatedUsers, data);
             console.log('getPaginatedUsers result: ', result);
-            if (result.resources) {
+            if (result.data) {
                 yield put({
                     type: 'GET_PAGINATED_USERS_SUCCESS',
                     payload: result
