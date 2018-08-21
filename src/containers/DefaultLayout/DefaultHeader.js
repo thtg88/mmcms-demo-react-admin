@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
     DropdownItem,
     DropdownMenu,
     DropdownToggle,
     Nav,
-    NavItem,
-    NavLink
+    NavItem
 } from 'reactstrap';
 import { AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.svg'
@@ -48,7 +48,7 @@ export class DefaultHeader extends Component {
                 <AppSidebarToggler className="d-md-down-none" display="lg" />
                 <Nav className="d-md-down-none" navbar>
                     <NavItem className="px-3">
-                        <NavLink href="/">Dashboard</NavLink>
+                        <Link to="/dashboard" className="nav-link">Dashboard</Link>
                     </NavItem>
                 </Nav>
                 <Nav className="ml-auto" navbar>

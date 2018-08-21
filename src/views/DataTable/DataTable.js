@@ -8,7 +8,7 @@ const DataTable = ({ columns, data, loading, keyField, urlBuilder, hover }) => (
     <Table responsive hover={hover}>
         <thead>
             <tr>
-                {columns.map((column, index) => <th scope="col">{column.text}</th>)}
+                {columns.map((column, index) => <th key={"header_"+index} scope="col">{column.text}</th>)}
             </tr>
         </thead>
         <tbody>
