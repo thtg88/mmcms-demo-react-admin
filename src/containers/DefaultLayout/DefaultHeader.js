@@ -54,7 +54,7 @@ export class DefaultHeader extends Component {
                 <Nav className="ml-auto" navbar>
                     <AppHeaderDropdown direction="down">
                         <DropdownToggle nav>
-                            <img src={'assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+                            <img src={process.env.PUBLIC_URL+"/assets/img/avatars/6.jpg"} className="img-avatar" alt="admin@bootstrapmaster.com" />
                         </DropdownToggle>
                         <DropdownMenu right style={{ right: 'auto' }}>
                             <DropdownItem onClick={() => this.redirectProfile()}><i className="fa fa-user"></i> Profile</DropdownItem>

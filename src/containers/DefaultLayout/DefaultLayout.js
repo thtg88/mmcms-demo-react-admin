@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
+import queryString from 'query-string';
 import { Container } from 'reactstrap';
 import {
     AppBreadcrumb,
@@ -46,7 +47,7 @@ class DefaultLayout extends Component {
                                 {routes.map((route, idx) => {
                                     return route.component ? (<Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (
                                         <RestrictedComponent>
-                                            <route.component {...props} />
+                                            <route.component query={queryString.parse(this.props.location.search)} {...props} />
                                         </RestrictedComponent>
                                     )} />)
                                     : (null);

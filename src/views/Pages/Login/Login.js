@@ -60,7 +60,7 @@ class Login extends Component {
         const { errors } = this.props;
         if(errors.length > 0) {
             resetError();
-            console.log('reset error');
+            // console.log('reset error');
         }
         this.setState({
             [evt.target.name]: evt.target.value,
@@ -68,7 +68,7 @@ class Login extends Component {
     }
 
     render() {
-        console.log('rendering...');
+        // console.log('rendering...');
 
         const { redirect_register } = this.state;
         const { logging_in, errors, logged_in } = this.props;
@@ -86,7 +86,7 @@ class Login extends Component {
             loginButtonIconClassName = 'fa fa-spinner fa-spin';
         }
 
-        console.log('rendering errors:', errors);
+        // console.log('rendering errors:', errors);
 
         return (
             <div className="app flex-row align-items-center">

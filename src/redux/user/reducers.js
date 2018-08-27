@@ -3,39 +3,66 @@ const initial_state = {
     error: null,
     fetching_users: false,
     resource: null,
-    resources: [],
-    total_resources: 0,
+    resources: {
+        1: []
+    },
+    total: 0,
     updated: false
 };
 
 const user = (state = initial_state, action) => {
     // console.log('action dispatched', action);
     switch(action.type) {
-        case 'GET_PAGINATED_USERS_REQUEST':
-            console.log('getUsers dispatched');
+        case 'GET_PAGINATED_USERS_REQUEST': {
+            // console.log('getUsers state', state);
+            // console.log('getUsers dispatched', action);
+            const { data } = action.payload;
             return {
                 ...state,
                 error: null,
                 fetching_users: true,
-                resources: [],
+                current_page: data.page,
+                resources: {
+                    ...state.resources,
+                    [data.page]: []
+                },
+                total: 0,
             };
-        case 'GET_PAGINATED_USERS_SUCCESS':
+        }
+        case 'GET_PAGINATED_USERS_SUCCESS': {
             const { data, total, current_page } = action.payload;
             return {
                 ...state,
+                current_page: current_page,
                 error: null,
                 fetching_users: false,
-                resources: data,
-                total_resources: total,
-                current_page: current_page,
+                resources: {
+                    ...state.resources,
+                    [current_page]: data
+                },
+                total: total,
             };
+        }
         case 'GET_PAGINATED_USERS_ERROR':
-            console.log('getUsers error:', action);
+            // console.log('getUsers error:', action);
             return {
                 ...state,
                 error: action.error,
                 fetching_users: false,
-                resources: [],
+                total: 0
+            };
+        case 'CHANGE_PAGE_USERS':
+            return {
+                ...state,
+                current_page: action.payload.data.page
+            };
+        case 'CLEAR_METADATA_USERS':
+            // console.log(action.type);
+            return {
+                ...state,
+                error: null,
+                current_page: 1,
+                fetching_users: false
             };
         case 'UPDATE_USER_REQUEST':
             console.log('updatingUser dispatched');
@@ -62,4 +89,5 @@ const user = (state = initial_state, action) => {
             return state;
     }
 };
+
 export default user;

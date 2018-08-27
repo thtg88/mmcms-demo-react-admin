@@ -125,7 +125,7 @@ const login = (state = initial_state, action) => {
                 error: action.error,
                 updated_profile: false
             };
-        case 'CLEAR_PROFILE_METADATA':
+        case 'CLEAR_METADATA_PROFILE':
             return {
                 ...state,
                 error: null,

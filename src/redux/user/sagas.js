@@ -3,12 +3,12 @@ import { getPaginatedUsers, updateUser } from './helper';
 
 export function* getPaginatedUsersRequest() {
     yield takeEvery('GET_PAGINATED_USERS_REQUEST', function*({ payload }) {
-        console.log('getPaginatedUsers taken!', payload);
+        // console.log('getPaginatedUsers taken!', payload);
         const { data } = payload;
-        console.log('data', data);
+        // console.log('data', data);
         try {
             const result = yield call(getPaginatedUsers, data);
-            console.log('getPaginatedUsers result: ', result);
+            // console.log('getPaginatedUsers result: ', result);
             if (result.data) {
                 yield put({
                     type: 'GET_PAGINATED_USERS_SUCCESS',
@@ -22,7 +22,7 @@ export function* getPaginatedUsersRequest() {
             }
 
         } catch(err) {
-            console.log('getPaginatedUsers error caught: ', err);
+            // console.log('getPaginatedUsers error caught: ', err);
             yield put({
                 type: 'GET_PAGINATED_USERS_ERROR',
                 error: err

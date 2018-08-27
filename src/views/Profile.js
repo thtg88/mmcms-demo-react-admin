@@ -99,15 +99,15 @@ class Profile extends Component {
     }
 
     componentWillUnmount() {
-        this.props.clearProfileMetadata();
+        this.props.clearMetadataProfile();
     }
 
     render() {
         const { errors, updated_profile } = this.props;
         const { profile_unchanged, profile, getting_profile, updating_profile } = this.state;
 
-        console.log(this.state.profile);
-        console.log(this.props);
+        // console.log(this.state);
+        // console.log(this.props);
 
         if(profile === null && getting_profile !== true) {
             return (null);
@@ -206,9 +206,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    clearProfileMetadata(data) {
+    clearMetadataProfile(data) {
         dispatch({
-            type: 'CLEAR_PROFILE_METADATA'
+            type: 'CLEAR_METADATA_PROFILE'
         })
     },
     getProfile(data) {

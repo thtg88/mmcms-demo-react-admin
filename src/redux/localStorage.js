@@ -29,15 +29,12 @@ export const sanitizeState = (state) => {
         current_page,
         resource,
         resources,
-        total_resources
+        total
     } = state.users;
     return {
         auth: { token, user },
         users: {
-            current_page,
-            resource,
-            resources,
-            total_resources
+            //
         }
     }
 };

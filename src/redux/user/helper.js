@@ -1,5 +1,5 @@
 export const getPaginatedUsers = async (data) => {
-    console.log('getPaginatedUsers data', data);
+    // console.log('getPaginatedUsers data', data);
     const { token, page, page_size } = data;
     const url = process.env.REACT_APP_API_BASE_URL
         +'/users/paginate'
