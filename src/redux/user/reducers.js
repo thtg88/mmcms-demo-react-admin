@@ -5,8 +5,7 @@ const initial_state = {
     resource: null,
     resources: [],
     total_resources: 0,
-    updated: false,
-    updating: false,
+    updated: false
 };
 
 const user = (state = initial_state, action) => {
@@ -43,14 +42,12 @@ const user = (state = initial_state, action) => {
             return {
                 ...state,
                 error: null,
-                updated: false,
-                updating: true,
+                updated: false
             };
         case 'UPDATE_USER_SUCCESS':
             return {
                 ...state,
                 error: null,
-                updating: false,
                 updated: true,
                 resource: action.payload.resource,
             };
@@ -59,8 +56,7 @@ const user = (state = initial_state, action) => {
             return {
                 ...state,
                 error: action.error,
-                updated: false,
-                updating: false,
+                updated: false
             };
         default:
             return state;

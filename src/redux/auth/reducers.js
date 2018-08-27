@@ -1,11 +1,8 @@
 const initial_state = {
     error: null,
-    loading: false,
     logging_in: false,
     logging_out: false,
     registering: false,
-    getting_profile: false,
-    updating: false,
     updated_profile: false,
     token: null,
     user: null
@@ -92,14 +89,12 @@ const login = (state = initial_state, action) => {
             return {
                 ...state,
                 error: null,
-                getting_profile: true,
                 user: null,
             };
         case 'GET_PROFILE_SUCCESS':
             return {
                 ...state,
                 error: null,
-                getting_profile: false,
                 user: action.payload.resource,
             };
         case 'GET_PROFILE_ERROR':
@@ -107,7 +102,6 @@ const login = (state = initial_state, action) => {
             return {
                 ...state,
                 error: action.error,
-                getting_profile: false,
                 user: null,
             };
         case 'UPDATE_PROFILE_REQUEST':
@@ -115,14 +109,12 @@ const login = (state = initial_state, action) => {
             return {
                 ...state,
                 error: null,
-                updated_profile: false,
-                updating_profile: true,
+                updated_profile: false
             };
         case 'UPDATE_PROFILE_SUCCESS':
             return {
                 ...state,
                 error: null,
-                updating_profile: false,
                 updated_profile: true,
                 user: action.payload.resource,
             };
@@ -131,8 +123,16 @@ const login = (state = initial_state, action) => {
             return {
                 ...state,
                 error: action.error,
-                updated_profile: false,
-                updating_profile: false,
+                updated_profile: false
+            };
+        case 'CLEAR_PROFILE_METADATA':
+            return {
+                ...state,
+                error: null,
+                logging_in: false,
+                logging_out: false,
+                registering: false,
+                updated_profile: false
             };
         default:
             return state;

@@ -11,7 +11,7 @@ import {
     AppSidebarForm,
     AppSidebarHeader,
     AppSidebarMinimizer,
-    AppSidebarNav,
+    AppSidebarNav
 } from '@coreui/react';
 import { Page404 } from '../../views/Pages';
 import LoggingOutAlert from '../../views/LoggingOutAlert';

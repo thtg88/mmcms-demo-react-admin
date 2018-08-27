@@ -1,7 +1,6 @@
 const initial_state = {
     error: null,
     fetching_roles: false,
-    updating: false,
     updated: false,
     resources: [],
     total_resources: 0,
@@ -43,14 +42,12 @@ const role = (state = initial_state, action) => {
             return {
                 ...state,
                 error: null,
-                updated: false,
-                updating: true,
+                updated: false
             };
         case 'UPDATE_ROLE_SUCCESS':
             return {
                 ...state,
                 error: null,
-                updating: false,
                 updated: true,
                 resource: action.payload.resource,
             };
@@ -59,8 +56,7 @@ const role = (state = initial_state, action) => {
             return {
                 ...state,
                 error: action.error,
-                updated: false,
-                updating: false,
+                updated: false
             };
         default:
             return state;

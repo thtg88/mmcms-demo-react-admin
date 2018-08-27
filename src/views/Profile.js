@@ -18,13 +18,14 @@ import ApiErrorAlert from './ApiErrorAlert';
 import SpinnerLoader from './SpinnerLoader';
 
 class Profile extends Component {
+    state = {
+        profile: null,
+        profile_unchanged: true,
+        updating_profile: false
+    }
+
     constructor(props) {
         super(props);
-
-        this.state = {
-            profile: null,
-            profile_unchanged: true
-        }
 
         this.updateInputValue = this.updateInputValue.bind(this);
     }
@@ -52,6 +53,10 @@ class Profile extends Component {
             token
         };
 
+        this.setState({
+            updating_profile: true
+        });
+
         updateProfile({ data });
     }
 
@@ -63,6 +68,9 @@ class Profile extends Component {
         if(profile === null) {
             const data = { token };
             this.props.getProfile({ data });
+            this.setState({
+                getting_profile: true
+            });
         } else {
             this.setState({ profile });
         }
@@ -75,13 +83,28 @@ class Profile extends Component {
             // Set in the state so it can be updated properly
             // avoiding blank fields for ones that do not get updated
             const { profile } = this.props;
-            this.setState({ profile });
+
+            this.setState({
+                profile,
+                getting_profile: false,
+                updating_profile: false
+            });
+        }
+        if(this.props.errors.length !== 0 && this.state.updating_profile === true) {
+            this.setState({
+                getting_profile: false,
+                updating_profile: false
+            });
         }
     }
 
+    componentWillUnmount() {
+        this.props.clearProfileMetadata();
+    }
+
     render() {
-        const { errors, getting_profile, updated_profile, updating_profile } = this.props;
-        const { profile_unchanged, profile } = this.state;
+        const { errors, updated_profile } = this.props;
+        const { profile_unchanged, profile, getting_profile, updating_profile } = this.state;
 
         console.log(this.state.profile);
         console.log(this.props);
@@ -90,11 +113,9 @@ class Profile extends Component {
             return (null);
         }
 
-        let updateButtonIconClassName;
+        let updateButtonIconClassName = "fa fa-check";
         if(updating_profile === true) {
             updateButtonIconClassName = "fa fa-spinner fa-spin";
-        } else {
-            updateButtonIconClassName = "fa fa-check";
         }
 
         return (
@@ -179,14 +200,17 @@ const mapStateToProps = (state) => {
     return {
         token: state.auth.token,
         profile: state.auth.user,
-        getting_profile: state.auth.getting_profile,
-        updating_profile: state.auth.updating_profile,
         updated_profile: state.auth.updated_profile,
         errors: errors
     }
 };
 
 const mapDispatchToProps = (dispatch) => ({
+    clearProfileMetadata(data) {
+        dispatch({
+            type: 'CLEAR_PROFILE_METADATA'
+        })
+    },
     getProfile(data) {
         dispatch({
             type: 'GET_PROFILE_REQUEST',
@@ -194,7 +218,6 @@ const mapDispatchToProps = (dispatch) => ({
         })
     },
     updateProfile(data) {
-        console.log('updateProfile?!?');
         dispatch({
             type: 'UPDATE_PROFILE_REQUEST',
             payload: data
