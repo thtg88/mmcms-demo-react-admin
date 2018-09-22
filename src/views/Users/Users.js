@@ -128,7 +128,7 @@ class Users extends Component {
             history,
             current_page,
             resources,
-            role_errors,
+            // role_errors,
             total
         } = this.props;
 
@@ -140,11 +140,13 @@ class Users extends Component {
 
         if(
             (
-                typeof resources === 'undefined'
-                || typeof current_page === 'undefined'
-                || typeof resources[current_page] === 'undefined'
+                (
+                    typeof resources === 'undefined'
+                    || typeof current_page === 'undefined'
+                    || typeof resources[current_page] === 'undefined'
+                )
+                && !fetching_users
             )
-            && !fetching_users
             || typeof total === 'undefined'
         ) {
             return (null);
@@ -193,7 +195,7 @@ const mapStateToProps = (state) => {
         total
     } = state.users;
 
-    // console.log(state.users);
+    console.log(state.users);
 
     return {
         current_page: current_page,

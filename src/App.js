@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Provider } from "react-redux";
 import './App.css';
 // Styles
 // CoreUI Icons Set
@@ -18,28 +17,25 @@ import { DefaultLayout } from './containers';
 import GuestComponent from './containers/DefaultLayout/GuestComponent';
 // Pages
 import { Login, Register } from './views/Pages';
-import store from './redux/store';
 
 class App extends Component {
     render() {
         return (
-            <Provider store={store}>
-                <BrowserRouter>
-                    <Switch>
-                        <Route exact path="/login" name="Login Page" render={(props) => (
-                            <GuestComponent>
-                                <Login {...props} />
-                            </GuestComponent>
-                        )} />
-                        <Route exact path="/register" name="Register Page" render={(props) => (
-                            <GuestComponent>
-                                <Register {...props} />
-                            </GuestComponent>
-                        )} />
-                        <Route path="/" name="Home" component={DefaultLayout} />
-                    </Switch>
-                </BrowserRouter>
-            </Provider>
+            <BrowserRouter>
+                <Switch>
+                    <Route exact path="/login" name="Login Page" render={(props) => (
+                        <GuestComponent>
+                            <Login {...props} />
+                        </GuestComponent>
+                    )} />
+                    <Route exact path="/register" name="Register Page" render={(props) => (
+                        <GuestComponent>
+                            <Register {...props} />
+                        </GuestComponent>
+                    )} />
+                    <Route path="/" name="Home" component={DefaultLayout} />
+                </Switch>
+            </BrowserRouter>
         );
     }
 }

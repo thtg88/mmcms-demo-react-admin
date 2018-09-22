@@ -64,6 +64,24 @@ const user = (state = initial_state, action) => {
                 current_page: 1,
                 fetching_users: false
             };
+        case 'GET_USER_REQUEST':
+            console.log('getUser dispatched');
+            return {
+                ...state,
+                error: null
+            };
+        case 'GET_USER_SUCCESS':
+            return {
+                ...state,
+                error: null,
+                resource: action.payload.resource,
+            };
+        case 'GET_USER_ERROR':
+            console.log('getUser error:', action);
+            return {
+                ...state,
+                error: action.error
+            };
         case 'UPDATE_USER_REQUEST':
             console.log('updatingUser dispatched');
             return {

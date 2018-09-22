@@ -25,12 +25,12 @@ export const saveState = (state) => {
 
 export const sanitizeState = (state) => {
     const { token, user } = state.auth;
-    const {
-        current_page,
-        resource,
-        resources,
-        total
-    } = state.users;
+    // const {
+    //     current_page,
+    //     resource,
+    //     resources,
+    //     total
+    // } = state.users;
     return {
         auth: { token, user },
         users: {

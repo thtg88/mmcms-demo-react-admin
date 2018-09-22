@@ -1,5 +1,5 @@
 import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
-import { getPaginatedUsers, updateUser } from './helper';
+import { getPaginatedUsers, getUser, updateUser } from './helper';
 
 export function* getPaginatedUsersRequest() {
     yield takeEvery('GET_PAGINATED_USERS_REQUEST', function*({ payload }) {
@@ -39,14 +39,52 @@ export function* getPaginatedUsersError() {
     yield takeEvery('GET_PAGINATED_USERS_ERROR', function*() {});
 }
 
+export function* getUserRequest() {
+    yield takeEvery('GET_USER_REQUEST', function*({ payload }) {
+        // console.log('getUser taken!', payload);
+        const { data } = payload;
+        // console.log('data', data);
+        try {
+            const result = yield call(getUser, data);
+            // console.log('getUser result: ', result);
+            if (result.resource) {
+                yield put({
+                    type: 'GET_USER_SUCCESS',
+                    payload: result
+                });
+            } else {
+                yield put({
+                    type: 'GET_USER_ERROR',
+                    error: result.error || result.errors || result
+                });
+            }
+
+        } catch(err) {
+            // console.log('getUser error caught: ', err);
+            yield put({
+                type: 'GET_USER_ERROR',
+                error: err
+            });
+        }
+    });
+}
+
+export function* getUserSuccess() {
+    yield takeEvery('GET_USER_SUCCESS', function*({ payload }) {});
+}
+
+export function* getUserError() {
+    yield takeEvery('GET_USER_ERROR', function*() {});
+}
+
 export function* updateUserRequest() {
     yield takeEvery('UPDATE_USER_REQUEST', function*({ payload }) {
-        console.log('updateUser taken!', payload);
+        // console.log('updateUser taken!', payload);
         const { data } = payload;
-        console.log('data', data);
+        // console.log('data', data);
         try {
             const result = yield call(updateUser, data);
-            console.log('updateUser result: ', result);
+            // console.log('updateUser result: ', result);
             if (result.resource) {
                 yield put({
                     type: 'UPDATE_USER_SUCCESS',
@@ -60,7 +98,7 @@ export function* updateUserRequest() {
             }
 
         } catch(err) {
-            console.log('updateUser error caught: ', err);
+            // console.log('updateUser error caught: ', err);
             yield put({
                 type: 'UPDATE_USER_ERROR',
                 error: err
@@ -82,8 +120,11 @@ export default function* rootSaga() {
         fork(getPaginatedUsersRequest),
         fork(getPaginatedUsersSuccess),
         fork(getPaginatedUsersError),
+        fork(getUserRequest),
+        fork(getUserSuccess),
+        fork(getUserError),
         fork(updateUserRequest),
         fork(updateUserSuccess),
-        fork(updateUserError)
+        fork(updateUserError),
     ]);
 }
