@@ -23,5 +23,10 @@ export default {
             url: '/users',
             icon: 'fa fa-users',
         },
+        {
+            name: 'Roles',
+            url: '/roles',
+            icon: 'fa fa-black-tie',
+        },
     ],
 };
