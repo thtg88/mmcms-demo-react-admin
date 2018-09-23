@@ -16,7 +16,7 @@ import {
 	Row
 } from 'reactstrap';
 import getApiErrorMessages from '../../../helpers/getApiErrorMessages';
-import ApiErrorAlert from '../../ApiErrorAlert';
+import ApiErrorCard from '../../ApiErrorCard';
 
 class Login extends Component {
     constructor(props) {
@@ -99,7 +99,7 @@ class Login extends Component {
                                         <Form innerRef={"login-form"}>
                                             <h1>Login</h1>
                                             <p className="text-muted">Sign In to your account</p>
-                                            <ApiErrorAlert errors={errors} />
+                                            <ApiErrorCard errors={errors} />
                                             <InputGroup className="mb-3">
                                                 <InputGroupAddon addonType="prepend">
                                                     <InputGroupText>@</InputGroupText>

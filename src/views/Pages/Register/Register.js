@@ -14,7 +14,7 @@ import {
     Row
 } from 'reactstrap';
 import getApiErrorMessages from '../../../helpers/getApiErrorMessages';
-import ApiErrorAlert from '../../ApiErrorAlert';
+import ApiErrorCard from '../../ApiErrorCard';
 
 class Register extends Component {
     constructor(props) {
@@ -95,7 +95,7 @@ class Register extends Component {
                                 <CardBody className="p-4">
                                     <h1>Register</h1>
                                     <p className="text-muted">Create your account</p>
-                                    <ApiErrorAlert errors={errors} />
+                                    <ApiErrorCard errors={errors} />
                                     <InputGroup className="mb-3">
                                         <InputGroupAddon addonType="prepend">
                                             <InputGroupText>

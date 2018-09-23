@@ -14,7 +14,7 @@ import {
     Row,
 } from 'reactstrap';
 import getApiErrorMessages from '../helpers/getApiErrorMessages';
-import ApiErrorAlert from './ApiErrorAlert';
+import ApiErrorCard from './ApiErrorCard';
 import SpinnerLoader from './SpinnerLoader';
 
 class Profile extends Component {
@@ -122,7 +122,7 @@ class Profile extends Component {
             <div className="animated fadeIn">
                 <Row>
                     <Col md="12">
-                        <ApiErrorAlert errors={errors} />
+                        <ApiErrorCard errors={errors} />
                     </Col>
                 </Row>
                 <Row>
