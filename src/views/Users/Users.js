@@ -23,7 +23,7 @@ const actions = [
 
 class Users extends Component {
     componentDidMount() {
-        const { current_page, query, resources, roles, token } = this.props;
+        const { current_page, query, resources, token } = this.props;
 
         // console.log(this.props);
         // console.log(this.state);
@@ -50,7 +50,7 @@ class Users extends Component {
                     page,
                     pageSize
                 };
-                this.props.getPaginatedUsers({ data });
+                this.props.getPaginatedResources({ data });
 
             } else {
                 // If resources for that page have been fetched before
@@ -63,14 +63,7 @@ class Users extends Component {
                 page: parseInt(query.page, 10),
                 pageSize
             };
-            this.props.getPaginatedUsers({ data });
-        }
-
-        // If roles is already in global state
-        // Avoid re-fetching
-        if(roles.length === 0) {
-            // const data = { token };
-            // this.props.getAllRoles({ data });
+            this.props.getPaginatedResources({ data });
         }
     }
 
@@ -103,7 +96,7 @@ class Users extends Component {
                     pageSize
                 };
 
-                this.props.getPaginatedUsers({ data });
+                this.props.getPaginatedResources({ data });
 
             } else {
                 // If changing page and data is preloaded into state
@@ -112,19 +105,19 @@ class Users extends Component {
                     page: query_page,
                 };
 
-                this.props.changePageUsers({ data });
+                this.props.changePageResources({ data });
             }
         }
     }
 
     componentWillUnmount() {
-        this.props.clearMetadataUsers();
+        this.props.clearMetadataResources();
     }
 
     render() {
         const {
             errors,
-            fetching_users,
+            fetching_resources,
             history,
             current_page,
             resources,
@@ -145,7 +138,7 @@ class Users extends Component {
                     || typeof current_page === 'undefined'
                     || typeof resources[current_page] === 'undefined'
                 )
-                && !fetching_users
+                && !fetching_resources
             )
             || typeof total === 'undefined'
         ) {
@@ -156,7 +149,7 @@ class Users extends Component {
             <div className="animated fadeIn">
                 <Row>
                     <Col xl={12}>
-                        {errors.length && !fetching_users > 0
+                        {errors.length && !fetching_resources > 0
                             ? <ApiErrorCard errors={errors} />
                             : <Card className="card-accent-primary">
                                 <CardHeader>
@@ -165,10 +158,10 @@ class Users extends Component {
                                 </CardHeader>
                                 <CardBody>
                                     <DataTable
-                                        hover={!fetching_users}
+                                        hover={!fetching_resources}
                                         columns={columns}
                                         data={resources[current_page]}
-                                        loading={fetching_users}
+                                        loading={fetching_resources}
                                         keyField="id"
                                         urlBuilder={(entity) => '/users/'+entity.id}
                                         page={current_page}
@@ -188,53 +181,44 @@ class Users extends Component {
 
 const mapStateToProps = (state) => {
     const errors = getApiErrorMessages(state.users.error);
-    const role_errors = getApiErrorMessages(state.roles.error);
     const {
         current_page,
-        fetching_users,
+        fetching_resources,
         resources,
         total
     } = state.users;
 
-    console.log(state.users);
+    // console.log(state.users);
 
     return {
         current_page: current_page,
         errors: errors,
-        fetching_users: fetching_users,
+        fetching_resources: fetching_resources,
         resources: resources,
-        role_errors: role_errors,
-        roles: state.roles.resources,
         token: state.auth.token,
         total: total
     };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    changePageUsers(data) {
+    changePageResources(data) {
         dispatch({
             type: 'CHANGE_PAGE_USERS',
             payload: data
         })
     },
-    clearMetadataUsers(data) {
+    clearMetadataResources(data) {
         dispatch({
             type: 'CLEAR_METADATA_USERS'
         })
     },
-    getAllRoles(data) {
-        dispatch({
-            type: 'GET_ALL_ROLES_REQUEST',
-            payload: data
-        })
-    },
-    getPaginatedUsers(data) {
+    getPaginatedResources(data) {
         dispatch({
             type: 'GET_PAGINATED_USERS_REQUEST',
             payload: data
         })
     },
-    updateUser(data) {
+    updateResource(data) {
         dispatch({
             type: 'UPDATE_USER_REQUEST',
             payload: data

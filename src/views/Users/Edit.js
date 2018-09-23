@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Card,
+import {
+    Card,
     Button,
     CardBody,
     CardHeader,
@@ -205,7 +206,6 @@ class Edit extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     const errors = getApiErrorMessages(state.users.error);
-    const role_errors = getApiErrorMessages(state.roles.error);
     const params_id = parseInt(ownProps.match.params.id, 10);
     const {
         created,
@@ -226,8 +226,6 @@ const mapStateToProps = (state, ownProps) => {
         created: created,
         errors: errors,
         resource: typeof resource === 'undefined' ? null : resource,
-        role_errors: role_errors,
-        roles: state.roles.resources,
         token: state.auth.token,
         updated: updated
     };
@@ -237,12 +235,6 @@ const mapDispatchToProps = (dispatch) => ({
     clearMetadataResourceEdit() {
         dispatch({
             type: 'CLEAR_METADATA_USER_EDIT'
-        })
-    },
-    getAllRoles(data) {
-        dispatch({
-            type: 'GET_ALL_ROLES_REQUEST',
-            payload: data
         })
     },
     getResource(data) {

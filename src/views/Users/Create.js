@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Card,
+import {
     Button,
+    Card,
     CardBody,
     CardHeader,
     Col,
@@ -201,20 +202,17 @@ class Create extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const {
-        resource,
-        created
-    } = state.users;
     const errors = getApiErrorMessages(state.users.error);
-    const role_errors = getApiErrorMessages(state.roles.error);
+    const {
+        created,
+        resource
+    } = state.users;
 
     return {
+        created: created,
         errors: errors,
         resource: typeof resource === 'undefined' ? null : resource,
-        role_errors: role_errors,
-        roles: state.roles.resources,
         token: state.auth.token,
-        created: created
     };
 };
 
@@ -229,13 +227,7 @@ const mapDispatchToProps = (dispatch) => ({
             type: 'CREATE_USER_REQUEST',
             payload: data
         })
-    },
-    getAllRoles(data) {
-        dispatch({
-            type: 'GET_ALL_ROLES_REQUEST',
-            payload: data
-        })
-    },
+    }
 });
 
 export default connect(

@@ -2,7 +2,7 @@ const initial_state = {
     created: false,
     current_page: 1,
     error: null,
-    fetching_users: false,
+    fetching_resources: false,
     resource: null,
     resources: {
         1: []
@@ -21,7 +21,7 @@ const user = (state = initial_state, action) => {
             return {
                 ...state,
                 error: null,
-                fetching_users: true,
+                fetching_resources: true,
                 current_page: data.page,
                 resources: {
                     ...state.resources,
@@ -36,7 +36,7 @@ const user = (state = initial_state, action) => {
                 ...state,
                 current_page: current_page,
                 error: null,
-                fetching_users: false,
+                fetching_resources: false,
                 resources: {
                     ...state.resources,
                     [current_page]: data
@@ -49,7 +49,7 @@ const user = (state = initial_state, action) => {
             return {
                 ...state,
                 error: action.error,
-                fetching_users: false,
+                fetching_resources: false,
                 total: 0
             };
         case 'CHANGE_PAGE_USERS':
@@ -63,7 +63,7 @@ const user = (state = initial_state, action) => {
                 ...state,
                 error: null,
                 current_page: 1,
-                fetching_users: false
+                fetching_resources: false
             };
         case 'GET_USER_REQUEST':
             console.log('getUser dispatched');
