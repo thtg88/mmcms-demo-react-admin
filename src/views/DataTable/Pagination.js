@@ -9,12 +9,12 @@ import {
 const propTypes = {
     history: PropTypes.object,
     page: PropTypes.number,
-    page_size: PropTypes.number,
+    pageSize: PropTypes.number,
     total: PropTypes.number,
 };
 
-const Pagination = ({ history, page, page_size, total }) => {
-    const last_page = parseInt(total / page_size, 10) + 1;
+const Pagination = ({ history, page, pageSize, total }) => {
+    const last_page = parseInt(total / pageSize, 10) + 1;
 
     // Create pages empty array from number of pages
     const pages = [...Array(last_page).keys()];

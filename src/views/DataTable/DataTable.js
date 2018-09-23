@@ -14,7 +14,7 @@ const propTypes = {
     keyField: PropTypes.string,
     loading: PropTypes.bool,
     page: PropTypes.number,
-    page_size: PropTypes.number,
+    pageSize: PropTypes.number,
     total: PropTypes.number,
     urlBuilder: PropTypes.func
 };
@@ -27,7 +27,7 @@ const DataTable = ({
     keyField,
     loading,
     page,
-    page_size,
+    pageSize,
     total,
     urlBuilder,
 }) => {
@@ -56,7 +56,7 @@ const DataTable = ({
                 : <Pagination
                     page={page}
                     total={total}
-                    page_size={page_size}
+                    pageSize={pageSize}
                     history={history}
                 />
             }
