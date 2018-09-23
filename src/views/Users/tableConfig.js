@@ -29,10 +29,10 @@ export const columns = [
     }
 ];
 
-const selectRow = {
-    mode: 'checkbox',
-    clickToSelect: false
-};
+// const selectRow = {
+//     mode: 'checkbox',
+//     clickToSelect: false
+// };
 
 const defaultSorted = [
     {
@@ -44,6 +44,8 @@ const defaultSorted = [
 export const cellEditProps = {
     mode: 'click'
 };
+
+export const pageSize = 10;
 
 const tableConfig = {
     striped: true,
