@@ -11,13 +11,11 @@ import { Card,
     Label,
     Row,
 } from 'reactstrap';
-// import {
-//     Alert,
-// } from 'reactstrap';
+import ApiErrorCard from '../ApiErrorCard';
 import getApiErrorMessages from '../../helpers/getApiErrorMessages';
-import getResourceFromResourcesAndId from '../../helpers/getResourceFromResourcesAndId';
+import getResourceFromPaginatedResourcesAndId from '../../helpers/getResourceFromPaginatedResourcesAndId';
 
-class User extends Component {
+class Edit extends Component {
     state = {
         resource: null,
         resource_unchanged: true,
@@ -28,7 +26,7 @@ class User extends Component {
         super(props);
 
         this.updateInputValue = this.updateInputValue.bind(this);
-        this.handleUpdateUser = this.handleUpdateUser.bind(this);
+        this.handleUpdateResource = this.handleUpdateResource.bind(this);
     }
 
     updateInputValue(evt) {
@@ -45,7 +43,7 @@ class User extends Component {
         });
     }
 
-    handleUpdateUser() {
+    handleUpdateResource() {
         const { updateResource, token } = this.props;
         const { resource } = this.state;
         const data = {
@@ -107,20 +105,23 @@ class User extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this.props.clearMetadataResource();
+    }
+
     render() {
-        const { resource } = this.state;
         const {
+            errors
+        } = this.props;
+        const {
+            resource,
             resource_unchanged,
             updating_resource
         } = this.state;
 
         // console.log(resource, resource_unchanged, updating_resource);
 
-        if(resource === null) {
-            return (null);
-        }
-
-        let updateButtonIconClassName = "fa fa-check";
+        let updateButtonIconClassName = "fa fa-save";
         if(updating_resource === true) {
             updateButtonIconClassName = "fa fa-spinner fa-spin";
         }
@@ -128,49 +129,57 @@ class User extends Component {
         return (
             <div className="animated fadeIn">
                 <Row>
-                    <Col lg={12}>
-                        <Card>
-                            <CardHeader>
-                                <strong>
-                                    <i className="fa fa-user"></i>
-                                    {" "}
-                                    User: {resource.name}
-                                </strong>
-                            </CardHeader>
-                            <CardBody>
-                                <Form onSubmit={() => this.handleUpdateProfile()}>
-                                    {Object.entries(resource).map(([key, value]) => (
-                                        key.indexOf('id') === -1 && key.indexOf('_at') === -1
-                                            ? <FormGroup key={key}>
-                                                <Label htmlFor={key}>{key}</Label>
-                                                <Input
-                                                    type="text"
-                                                    id={key}
-                                                    name={key}
-                                                    value={value ? value : ''}
-                                                    placeholder={`Enter your ${key}`}
-                                                    onChange={this.updateInputValue}
-                                                />
-                                            </FormGroup>
-                                            : null
-                                    ))}
-                                    <Button
-                                        type="button"
-                                        size="md"
-                                        color="success"
-                                        block
-                                        disabled={resource_unchanged || updating_resource}
-                                        onClick={this.handleUpdateUser}
-                                    >
-                                        <i className={updateButtonIconClassName}></i>
-                                        {' '}
-                                        Update
-                                    </Button>
-                                </Form>
-                            </CardBody>
-                        </Card>
+                    <Col md="12">
+                        <ApiErrorCard errors={errors} />
                     </Col>
                 </Row>
+                {resource === null
+                    ? null
+                    : <Row>
+                        <Col md={12}>
+                            <Card className="card-accent-warning">
+                                <CardHeader>
+                                    <strong>
+                                        <i className="fa fa-user"></i>
+                                        {" "}
+                                        Resource: {resource.name}
+                                    </strong>
+                                </CardHeader>
+                                <CardBody>
+                                    <Form onSubmit={this.handleUpdateResource}>
+                                        {Object.entries(resource).map(([key, value]) => (
+                                            key.indexOf('id') === -1 && key.indexOf('_at') === -1
+                                                ? <FormGroup key={key}>
+                                                    <Label htmlFor={key}>{key}</Label>
+                                                    <Input
+                                                        type="text"
+                                                        id={key}
+                                                        name={key}
+                                                        value={value ? value : ''}
+                                                        placeholder={`Enter your ${key}`}
+                                                        onChange={this.updateInputValue}
+                                                    />
+                                                </FormGroup>
+                                                : null
+                                        ))}
+                                        <Button
+                                            type="button"
+                                            size="md"
+                                            color="warning"
+                                            block
+                                            disabled={resource_unchanged || updating_resource}
+                                            onClick={this.handleUpdateResource}
+                                        >
+                                            <i className={updateButtonIconClassName}></i>
+                                            {' '}
+                                            Update
+                                        </Button>
+                                    </Form>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
+                }
             </div>
         );
     }
@@ -181,9 +190,7 @@ const mapStateToProps = (state, ownProps) => {
     const role_errors = getApiErrorMessages(state.roles.error);
     const params_id = parseInt(ownProps.match.params.id, 10);
     const {
-        current_page,
         resources,
-        total_resources,
         updated
     } = state.users;
     let { resource } = state.users;
@@ -193,22 +200,25 @@ const mapStateToProps = (state, ownProps) => {
         || typeof resource === 'undefined'
         || resource.id !== params_id
     ) {
-        resource = getResourceFromResourcesAndId(resources, params_id);
+        resource = getResourceFromPaginatedResourcesAndId(resources, params_id);
     }
 
     return {
         errors: errors,
-        current_page: current_page,
         resource: typeof resource === 'undefined' ? null : resource,
         role_errors: role_errors,
         roles: state.roles.resources,
         token: state.auth.token,
-        total_resources: total_resources,
         updated: updated
-    }
+    };
 };
 
 const mapDispatchToProps = (dispatch) => ({
+    clearMetadataResource() {
+        dispatch({
+            type: 'CLEAR_METADATA_USER'
+        })
+    },
     getAllRoles(data) {
         dispatch({
             type: 'GET_ALL_ROLES_REQUEST',
@@ -232,4 +242,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(User);
+)(Edit);
