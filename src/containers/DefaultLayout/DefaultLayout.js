@@ -15,7 +15,7 @@ import {
     AppSidebarNav
 } from '@coreui/react';
 import { Page404 } from '../../views/Pages';
-import LoggingOutAlert from '../../views/LoggingOutAlert';
+import LoggingOutCard from '../../views/LoggingOutCard';
 import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
 import RestrictedComponent from './RestrictedComponent';
@@ -42,7 +42,7 @@ class DefaultLayout extends Component {
                     <main className="main">
                         <AppBreadcrumb appRoutes={routes}/>
                         <Container fluid>
-                            <LoggingOutAlert loggingOut={this.props.logging_out} />
+                            <LoggingOutCard loggingOut={this.props.logging_out} />
                             <Switch>
                                 {routes.map((route, idx) => {
                                     return route.component ? (<Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (

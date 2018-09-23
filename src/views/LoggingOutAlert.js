@@ -16,6 +16,6 @@ const LoggingOutAlert = ({ loggingOut }) => {
             Logging out...
         </Alert>
     );
-}
+};
 
 export default LoggingOutAlert;

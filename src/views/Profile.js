@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-    Alert,
     Button,
     Card,
     CardBody,
@@ -23,7 +22,7 @@ class Profile extends Component {
         profile: null,
         profile_unchanged: true,
         updating_profile: false
-    }
+    };
 
     constructor(props) {
         super(props);
