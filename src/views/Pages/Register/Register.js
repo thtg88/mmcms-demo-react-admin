@@ -7,6 +7,7 @@ import {
     CardBody,
     Col,
     Container,
+    Form,
     Input,
     InputGroup,
     InputGroupAddon,
@@ -14,60 +15,66 @@ import {
     Row
 } from 'reactstrap';
 import getApiErrorMessages from '../../../helpers/getApiErrorMessages';
-import ApiErrorCard from '../../ApiErrorCard';
+import ApiErrorAlert from '../../ApiErrorAlert';
 
 class Register extends Component {
+    state = {
+        redirect_login: false,
+        email: '',
+        name: '',
+        password: '',
+        password_confirmation: ''
+    };
+
     constructor(props) {
         super(props);
 
-        this.state = {
-            redirect_login: false,
-            email: '',
-            name: '',
-            password: '',
-            password_confirmation: ''
-        };
-
+        this.handleRegister = this.handleRegister.bind(this);
         this.updateInputValue = this.updateInputValue.bind(this);
     }
 
     redirectLogin() {
-        const { resetError } = this.props;
-        const { errors } = this.props;
+        const { resetError, errors } = this.props;
+
         if(errors.length > 0) {
             resetError();
         }
+
         this.setState({
             redirect_login: true
         });
     }
 
-    handleRegister() {
-        const { resetError } = this.props;
-        const { errors } = this.props;
+    handleRegister(evt) {
+        evt.preventDefault();
+
+        const { resetError, errors, register } = this.props;
+        const { email, name, password, password_confirmation } = this.state;
+        const data = { email, name, password, password_confirmation };
+
+        console.log(data);
+
         if(errors.length > 0) {
             resetError();
         }
-        const { register } = this.props;
-        const { email, name, password, password_confirmation } = this.state;
-        const data = { email, name, password, password_confirmation };
-        console.log(data);
+
         register({ data });
     };
 
     updateInputValue(evt) {
-        const { resetError } = this.props;
-        const { errors } = this.props;
+        const { resetError, errors } = this.props;
+
         if(errors.length > 0) {
             resetError();
             console.log('reset error');
         }
+
         console.log('updating state: ', [evt.target.name], evt.target.value);
+
         this.setState({
             [evt.target.name]: evt.target.value,
         });
     }
-
 
     render() {
         const { redirect_login } = this.state;
@@ -95,84 +102,87 @@ class Register extends Component {
                                 <CardBody className="p-4">
                                     <h1>Register</h1>
                                     <p className="text-muted">Create your account</p>
-                                    <ApiErrorCard errors={errors} />
-                                    <InputGroup className="mb-3">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>
-                                                <i className="icon-user"></i>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input
-                                            type="text"
-                                            name="name"
-                                            value={this.state.name}
-                                            autoComplete="name"
-                                            placeholder="e.g. John Smith"
-                                            onChange={this.updateInputValue}
-                                        />
-                                    </InputGroup>
-                                    <InputGroup className="mb-3">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>@</InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input
-                                            type="email"
-                                            name="email"
-                                            value={this.state.email}
-                                            autoComplete="email"
-                                            placeholder="e.g. john.smith@domain.com"
-                                            onChange={this.updateInputValue}
-                                        />
-                                    </InputGroup>
-                                    <InputGroup className="mb-3">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>
-                                                <i className="icon-lock"></i>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input
-                                            type="password"
-                                            name="password"
-                                            value={this.state.password}
-                                            placeholder="Password"
-                                            onChange={this.updateInputValue}
-                                        />
-                                    </InputGroup>
-                                    <InputGroup className="mb-4">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>
-                                                <i className="icon-lock"></i>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input
-                                            type="password"
-                                            name="password_confirmation"
-                                            value={this.state.password_confirmation}
-                                            placeholder="Confirm password"
-                                            onChange={this.updateInputValue}
-                                        />
-                                    </InputGroup>
-                                    <Row>
-                                        <Col xs="6">
-                                            <Button
-                                                color="success"
-                                                block
-                                                onClick={() => this.handleRegister()}
-                                                disabled={registering}
-                                            >
-                                                <i className={registerButtonIconClassName}></i>
-                                                {' '}
-                                                Create Account
-                                            </Button>
-                                        </Col>
-                                        <Col xs="6" className="text-right">
-                                            <Button
-                                                color="link"
-                                                className="px-0"
-                                                onClick={() => this.redirectLogin()}
-                                            >Back to Login</Button>
-                                        </Col>
-                                    </Row>
+                                    <ApiErrorAlert errors={errors} />
+                                    <Form onSubmit={this.handleRegister}>
+                                        <InputGroup className="mb-3">
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText>
+                                                    <i className="icon-user"></i>
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input
+                                                type="text"
+                                                name="name"
+                                                value={this.state.name}
+                                                autoComplete="name"
+                                                placeholder="e.g. John Smith"
+                                                onChange={this.updateInputValue}
+                                            />
+                                        </InputGroup>
+                                        <InputGroup className="mb-3">
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText>@</InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input
+                                                type="email"
+                                                name="email"
+                                                value={this.state.email}
+                                                autoComplete="email"
+                                                placeholder="e.g. john.smith@domain.com"
+                                                onChange={this.updateInputValue}
+                                            />
+                                        </InputGroup>
+                                        <InputGroup className="mb-3">
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText>
+                                                    <i className="icon-lock"></i>
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input
+                                                type="password"
+                                                name="password"
+                                                value={this.state.password}
+                                                placeholder="Password"
+                                                onChange={this.updateInputValue}
+                                            />
+                                        </InputGroup>
+                                        <InputGroup className="mb-4">
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText>
+                                                    <i className="icon-lock"></i>
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input
+                                                type="password"
+                                                name="password_confirmation"
+                                                value={this.state.password_confirmation}
+                                                placeholder="Confirm password"
+                                                onChange={this.updateInputValue}
+                                            />
+                                        </InputGroup>
+                                        <Row>
+                                            <Col xs="6">
+                                                <Button
+                                                    type="submit"
+                                                    color="success"
+                                                    block
+                                                    onClick={this.handleRegister}
+                                                    disabled={registering}
+                                                >
+                                                    <i className={registerButtonIconClassName}></i>
+                                                    {' '}
+                                                    Create Account
+                                                </Button>
+                                            </Col>
+                                            <Col xs="6" className="text-right">
+                                                <Button
+                                                    color="link"
+                                                    className="px-0"
+                                                    onClick={() => this.redirectLogin()}
+                                                >Back to Login</Button>
+                                            </Col>
+                                        </Row>
+                                    </Form>
                                 </CardBody>
                             </Card>
                         </Col>

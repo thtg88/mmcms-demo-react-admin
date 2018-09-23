@@ -13,9 +13,10 @@ import {
     Label,
     Row,
 } from 'reactstrap';
-import getApiErrorMessages from '../helpers/getApiErrorMessages';
 import ApiErrorCard from './ApiErrorCard';
+import ApiResourceUpdateSuccessCard from './ApiResourceUpdateSuccessCard';
 import SpinnerLoader from './SpinnerLoader';
+import getApiErrorMessages from '../helpers/getApiErrorMessages';
 
 class Profile extends Component {
     state = {
@@ -27,6 +28,7 @@ class Profile extends Component {
     constructor(props) {
         super(props);
 
+        this.handleUpdateProfile = this.handleUpdateProfile.bind(this);
         this.updateInputValue = this.updateInputValue.bind(this);
     }
 
@@ -36,6 +38,7 @@ class Profile extends Component {
                 profile_unchanged: false,
             });
         }
+
         this.setState({
             profile: {
                 ...this.state.profile,
@@ -44,7 +47,9 @@ class Profile extends Component {
         });
     }
 
-    handleUpdateProfile() {
+    handleUpdateProfile(evt) {
+        evt.preventDefault();
+
         const { updateProfile, token } = this.props;
         const { profile } = this.state;
         const data = {
@@ -62,12 +67,15 @@ class Profile extends Component {
 
     componentDidMount() {
         const { profile, token } = this.props;
+
         // If profile is already in global state
         // Avoid re-fetching
         // console.log(profile);
         if(profile === null) {
             const data = { token };
+
             this.props.getProfile({ data });
+
             this.setState({
                 getting_profile: true
             });
@@ -78,6 +86,7 @@ class Profile extends Component {
 
     componentDidUpdate(prevProps) {
         // console.log('prevProps', prevProps);
+
         if(this.props.profile !== prevProps.profile) {
             // If component is receiving props
             // Set in the state so it can be updated properly
@@ -90,6 +99,7 @@ class Profile extends Component {
                 updating_profile: false
             });
         }
+
         if(this.props.errors.length !== 0 && this.state.updating_profile === true) {
             this.setState({
                 getting_profile: false,
@@ -104,7 +114,12 @@ class Profile extends Component {
 
     render() {
         const { errors, updated_profile } = this.props;
-        const { profile_unchanged, profile, getting_profile, updating_profile } = this.state;
+        const {
+            getting_profile,
+            profile,
+            profile_unchanged,
+            updating_profile
+        } = this.state;
 
         // console.log(this.state);
         // console.log(this.props);
@@ -127,16 +142,16 @@ class Profile extends Component {
                 </Row>
                 <Row>
                     <Col md="12">
+                        <ApiResourceUpdateSuccessCard success={updated_profile} resourceDisplayName="Profile" />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md="12">
                         <Card>
                             <CardHeader>
                                 <strong>Edit Profile</strong>
                             </CardHeader>
                             <CardBody>
-                                {(updated_profile === true
-                                    ? <Alert color="success">
-                                        <div><i className="fa fa-check"></i> Profile Updated!</div>
-                                    </Alert>
-                                    : null)}
                                 {getting_profile
                                     ? <SpinnerLoader />
                                     : <Form onSubmit={() => this.handleUpdateProfile()}>
@@ -173,12 +188,12 @@ class Profile extends Component {
                                             )}</p>
                                         </FormGroup>
                                         <Button
-                                            type="button"
+                                            type="submit"
                                             size="md"
                                             color="success"
                                             block
                                             disabled={profile_unchanged || updating_profile}
-                                            onClick={() => this.handleUpdateProfile()}
+                                            onClick={this.handleUpdateProfile}
                                         >
                                             <i className={updateButtonIconClassName}></i>
                                             {' '}

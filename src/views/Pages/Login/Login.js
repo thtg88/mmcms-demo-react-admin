@@ -16,7 +16,7 @@ import {
 	Row
 } from 'reactstrap';
 import getApiErrorMessages from '../../../helpers/getApiErrorMessages';
-import ApiErrorCard from '../../ApiErrorCard';
+import ApiErrorAlert from '../../ApiErrorAlert';
 
 class Login extends Component {
     constructor(props) {
@@ -28,6 +28,7 @@ class Login extends Component {
             password: ''
         };
 
+        this.handleLogin = this.handleLogin.bind(this);
         this.updateInputValue = this.updateInputValue.bind(this);
     }
 
@@ -42,36 +43,43 @@ class Login extends Component {
         });
     }
 
-    handleLogin() {
+    handleLogin(evt) {
+        evt.preventDefault();
+
         const { resetError } = this.props;
         const { errors } = this.props;
-        if(errors.length > 0) {
-            resetError();
-        }
         const { login } = this.props;
         const { email, password } = this.state;
         const data = { email, password };
+
         console.log(data);
+
+        if(errors.length > 0) {
+            resetError();
+        }
+
         login({ data });
     };
 
     updateInputValue(evt) {
         const { resetError } = this.props;
         const { errors } = this.props;
+
         if(errors.length > 0) {
             resetError();
             // console.log('reset error');
         }
+
         this.setState({
             [evt.target.name]: evt.target.value,
         });
     }
 
     render() {
-        // console.log('rendering...');
-
         const { redirect_register } = this.state;
         const { logging_in, errors, logged_in } = this.props;
+
+        // console.log('rendering...');
 
         if(redirect_register === true) {
             return <Redirect to="/register" />
@@ -86,8 +94,6 @@ class Login extends Component {
             loginButtonIconClassName = 'fa fa-spinner fa-spin';
         }
 
-        // console.log('rendering errors:', errors);
-
         return (
             <div className="app flex-row align-items-center">
                 <Container>
@@ -99,7 +105,7 @@ class Login extends Component {
                                         <Form innerRef={"login-form"}>
                                             <h1>Login</h1>
                                             <p className="text-muted">Sign In to your account</p>
-                                            <ApiErrorCard errors={errors} />
+                                            <ApiErrorAlert errors={errors} />
                                             <InputGroup className="mb-3">
                                                 <InputGroupAddon addonType="prepend">
                                                     <InputGroupText>@</InputGroupText>
@@ -129,10 +135,11 @@ class Login extends Component {
                                             <Row>
                                                 <Col xs="6">
                                                     <Button
+                                                        type="submit"
                                                         color="primary"
                                                         className="px-4"
                                                         disabled={logging_in}
-                                                        onClick={() => this.handleLogin()}
+                                                        onClick={this.handleLogin}
                                                         block
                                                     >
                                                         <i className={loginButtonIconClassName}></i>

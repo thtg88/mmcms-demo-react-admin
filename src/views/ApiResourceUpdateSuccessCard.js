@@ -4,7 +4,7 @@ import {
     CardBody
 } from 'reactstrap';
 
-// const ApiResourceUpdateSuccessCard = ({ success }) => {
+// const ApiResourceUpdateSuccessCard = ({ success, resourceDisplayName }) => {
 //
 //     if(success !== true) {
 //         return (
@@ -17,13 +17,13 @@ import {
 //             <CardBody>
 //                 <i className="fa fa-check"></i>
 //                 {" "}
-//                 Resource updated successfully.
+//                 {resourceDisplayName ? resourceDisplayName : "Resource"} updated successfully.
 //             </CardBody>
 //         </Card>
 //     );
 // }
 
-const ApiResourceUpdateSuccessCard = ({ success }) => {
+const ApiResourceUpdateSuccessCard = ({ success, resourceDisplayName }) => {
 
     if(success !== true) {
         return (
@@ -36,13 +36,13 @@ const ApiResourceUpdateSuccessCard = ({ success }) => {
             <CardBody>
                 <i className="fa fa-check"></i>
                 {" "}
-                Resource updated successfully.
+                {resourceDisplayName ? resourceDisplayName : "Resource"} updated successfully.
             </CardBody>
         </Card>
     );
 }
 
-// const ApiResourceUpdateSuccessCard = ({ success }) => {
+// const ApiResourceUpdateSuccessCard = ({ success, resourceDisplayName }) => {
 //
 //     if(success !== true) {
 //         return (
@@ -55,7 +55,7 @@ const ApiResourceUpdateSuccessCard = ({ success }) => {
 //             <CardBody>
 //                 <i className="fa fa-check"></i>
 //                 {" "}
-//                 Resource updated successfully.
+//                 {resourceDisplayName ? resourceDisplayName : "Resource"} updated successfully.
 //             </CardBody>
 //         </Card>
 //     );
