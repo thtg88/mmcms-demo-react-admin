@@ -18,8 +18,13 @@ const Users = Loadable({
     loading: Loading,
 });
 
-const User = Loadable({
-    loader: () => import('./views/Users/User'),
+const UserEdit = Loadable({
+    loader: () => import('./views/Users/Edit'),
+    loading: Loading,
+});
+
+const UserCreate = Loadable({
+    loader: () => import('./views/Users/Create'),
     loading: Loading,
 });
 
@@ -28,6 +33,7 @@ const routes = [
     { path: '/dashboard', exact: true, name: 'Dashboard', component: Dashboard },
     { path: '/me', exact: true, name: 'Profile', component: Profile },
     { path: '/users', exact: true,  name: 'Users', component: Users },
-    { path: '/users/:id', exact: true, name: 'User Details', component: User },
+    { path: '/users/create', exact: true,  name: 'Create', component: UserCreate },
+    { path: '/users/:id', exact: true, name: 'Edit User', component: UserEdit },
 ];
 export default routes;

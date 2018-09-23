@@ -1,10 +1,10 @@
 export const getPaginatedRoles = async (data) => {
     console.log('getPaginatedRoles data', data);
-    const { token, page, page_size } = data;
+    const { token, page, pageSize } = data;
     const url = process.env.REACT_APP_API_BASE_URL
         +'/roles/paginate'
         +'?page='+page
-        +'&page_size='+page_size;
+        +'&page_size='+pageSize;
     return await fetch(url, {
         method: 'GET',
         headers: new Headers({

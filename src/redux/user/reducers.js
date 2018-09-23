@@ -1,4 +1,5 @@
 const initial_state = {
+    created: false,
     current_page: 1,
     error: null,
     fetching_users: false,
@@ -102,6 +103,41 @@ const user = (state = initial_state, action) => {
                 ...state,
                 error: action.error,
                 updated: false
+            };
+        case 'CREATE_USER_REQUEST':
+            console.log('creatingUser dispatched');
+            return {
+                ...state,
+                error: null,
+                created: false
+            };
+        case 'CREATE_USER_SUCCESS':
+            return {
+                ...state,
+                error: null,
+                created: true,
+                resource: action.payload.resource,
+            };
+        case 'CREATE_USER_ERROR':
+            console.log('creatingUser error:', action);
+            return {
+                ...state,
+                error: action.error,
+                created: false
+            };
+        case 'CLEAR_METADATA_USER':
+            return {
+                ...state,
+                error: null,
+                updated: false,
+                resource: null
+            };
+        case 'CLEAR_METADATA_USER_CREATE':
+            return {
+                ...state,
+                error: null,
+                created: false,
+                resource: null
             };
         default:
             return state;
