@@ -7,19 +7,23 @@ import {
     Col,
     Row
 } from 'reactstrap';
-import ApiErrorAlert from '../ApiErrorAlert';
+import CardHeaderActions from '../CardHeaderActions';
+import ApiErrorCard from '../ApiErrorCard';
 import DataTable from '../DataTable';
 import getApiErrorMessages from '../../helpers/getApiErrorMessages';
-import { columns } from './tableConfig';
+import { columns, pageSize } from './tableConfig';
+
+const actions = [
+    {
+        href: '/users/create',
+        title: 'New Resource',
+        iconClassName: 'fa fa-plus',
+    }
+];
 
 class Users extends Component {
-    state = {
-        page_size: 10
-    };
-
     componentDidMount() {
         const { current_page, query, resources, roles, token } = this.props;
-        const { page_size } = this.state;
 
         // console.log(this.props);
         // console.log(this.state);
@@ -44,9 +48,8 @@ class Users extends Component {
                 const data = {
                     token,
                     page,
-                    page_size
+                    pageSize
                 };
-
                 this.props.getPaginatedUsers({ data });
 
             } else {
@@ -58,9 +61,8 @@ class Users extends Component {
             const data = {
                 token,
                 page: parseInt(query.page, 10),
-                page_size
+                pageSize
             };
-
             this.props.getPaginatedUsers({ data });
         }
 
@@ -77,7 +79,6 @@ class Users extends Component {
         // console.log('this.props', this.props);
         // console.log('prevProps', prevProps);
 
-        const { page_size } = this.state;
         const { query, resources, token } = this.props;
         const query_page = parseInt(query.page, 10);
 
@@ -99,7 +100,7 @@ class Users extends Component {
                 const data = {
                     token,
                     page: query_page,
-                    page_size
+                    pageSize
                 };
 
                 this.props.getPaginatedUsers({ data });
@@ -121,7 +122,6 @@ class Users extends Component {
     }
 
     render() {
-        const { page_size } = this.state;
         const {
             errors,
             fetching_users,
@@ -156,14 +156,15 @@ class Users extends Component {
             <div className="animated fadeIn">
                 <Row>
                     <Col xl={12}>
-                        <Card>
-                            <CardHeader>
-                                <i className="fa fa-users"></i> Users
-                            </CardHeader>
-                            <CardBody>
-                                {errors.length && !fetching_users > 0
-                                    ? <ApiErrorAlert errors={errors} />
-                                    : <DataTable
+                        {errors.length && !fetching_users > 0
+                            ? <ApiErrorCard errors={errors} />
+                            : <Card className="card-accent-primary">
+                                <CardHeader>
+                                    <i className="fa fa-users"></i> Users
+                                    <CardHeaderActions actions={actions} />
+                                </CardHeader>
+                                <CardBody>
+                                    <DataTable
                                         hover={!fetching_users}
                                         columns={columns}
                                         data={resources[current_page]}
@@ -172,12 +173,12 @@ class Users extends Component {
                                         urlBuilder={(entity) => '/users/'+entity.id}
                                         page={current_page}
                                         total={total}
-                                        page_size={page_size}
+                                        pageSize={pageSize}
                                         history={history}
                                     />
-                                }
-                            </CardBody>
-                        </Card>
+                                </CardBody>
+                            </Card>
+                        }
                     </Col>
                 </Row>
             </div>
@@ -206,19 +207,19 @@ const mapStateToProps = (state) => {
         roles: state.roles.resources,
         token: state.auth.token,
         total: total
-    }
+    };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    clearMetadataUsers(data) {
-        dispatch({
-            type: 'CLEAR_METADATA_USERS'
-        })
-    },
     changePageUsers(data) {
         dispatch({
             type: 'CHANGE_PAGE_USERS',
             payload: data
+        })
+    },
+    clearMetadataUsers(data) {
+        dispatch({
+            type: 'CLEAR_METADATA_USERS'
         })
     },
     getAllRoles(data) {

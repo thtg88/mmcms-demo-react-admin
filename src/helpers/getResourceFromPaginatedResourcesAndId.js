@@ -1,4 +1,4 @@
-const getResourceFromResourcesAndId = (resources, id) => {
+const getResourceFromPaginatedResourcesAndId = (resources, id) => {
     if(
         resources === null
         || typeof resources === 'undefined'
@@ -22,4 +22,4 @@ const getResourceFromResourcesAndId = (resources, id) => {
     return resource;
 };
 
-export default getResourceFromResourcesAndId;
+export default getResourceFromPaginatedResourcesAndId;

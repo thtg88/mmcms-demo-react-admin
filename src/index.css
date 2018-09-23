@@ -1,0 +1,31 @@
+.card-header-action.btn-outline-danger {
+    color: #f86c6b;
+}
+
+.card-header-action.btn-outline-danger:hover {
+    color: #ffffff;
+}
+
+.card-header-action.btn-outline-primary {
+    color: #20a8d8;
+}
+
+.card-header-action.btn-outline-primary:hover {
+    color: #ffffff;
+}
+
+.card-header-action.btn-outline-success {
+    color: #4dbd74;
+}
+
+.card-header-action.btn-outline-success:hover {
+    color: #ffffff;
+}
+
+.card-header-action.btn-outline-warning {
+    color: #ffc107;
+}
+
+.card-header-action.btn-outline-warning:hover {
+    color: #23282c;
+}
