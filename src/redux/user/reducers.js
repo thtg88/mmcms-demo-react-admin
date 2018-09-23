@@ -87,6 +87,7 @@ const user = (state = initial_state, action) => {
             console.log('updatingUser dispatched');
             return {
                 ...state,
+                created: false,
                 error: null,
                 updated: false
             };
@@ -125,18 +126,19 @@ const user = (state = initial_state, action) => {
                 error: action.error,
                 created: false
             };
-        case 'CLEAR_METADATA_USER':
+        case 'CLEAR_METADATA_USER_EDIT':
             return {
                 ...state,
                 error: null,
                 updated: false,
+                created: false,
                 resource: null
             };
         case 'CLEAR_METADATA_USER_CREATE':
             return {
                 ...state,
                 error: null,
-                created: false,
+                // created: false,
                 resource: null
             };
         default:

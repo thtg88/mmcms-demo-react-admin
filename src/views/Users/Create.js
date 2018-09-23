@@ -47,7 +47,9 @@ class Create extends Component {
         });
     }
 
-    handleCreateResource() {
+    handleCreateResource(evt) {
+        evt.preventDefault();
+
         const { createResource, token } = this.props;
         const { resource } = this.state;
         const data = { token, ...resource };
@@ -100,7 +102,6 @@ class Create extends Component {
     render() {
         const { errors } = this.props;
         const {
-            resource,
             resource_unchanged,
             creating_resource
         } = this.state;
@@ -178,7 +179,7 @@ class Create extends Component {
                                         />
                                     </FormGroup>
                                     <Button
-                                        type="button"
+                                        type="submit"
                                         size="md"
                                         color="success"
                                         block

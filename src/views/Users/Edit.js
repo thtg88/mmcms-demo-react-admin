@@ -12,6 +12,8 @@ import { Card,
     Row,
 } from 'reactstrap';
 import ApiErrorCard from '../ApiErrorCard';
+import ApiResourceCreateSuccessCard from '../ApiResourceCreateSuccessCard';
+import ApiResourceUpdateSuccessCard from '../ApiResourceUpdateSuccessCard';
 import getApiErrorMessages from '../../helpers/getApiErrorMessages';
 import getResourceFromPaginatedResourcesAndId from '../../helpers/getResourceFromPaginatedResourcesAndId';
 
@@ -43,7 +45,9 @@ class Edit extends Component {
         });
     }
 
-    handleUpdateResource() {
+    handleUpdateResource(evt) {
+        evt.preventDefault();
+
         const { updateResource, token } = this.props;
         const { resource } = this.state;
         const data = {
@@ -86,7 +90,7 @@ class Edit extends Component {
         } = this.props;
 
         // console.log('prevProps', prevProps);
-        if(resource !== prevProps.resource) {
+        if(resource !== null && prevProps.resource === null) {
             // If component is receiving props
             // Set in the state so it can be updated properly
             // avoiding blank fields for ones that do not get updated
@@ -106,12 +110,14 @@ class Edit extends Component {
     }
 
     componentWillUnmount() {
-        this.props.clearMetadataResource();
+        this.props.clearMetadataResourceEdit();
     }
 
     render() {
         const {
-            errors
+            created,
+            errors,
+            updated
         } = this.props;
         const {
             resource,
@@ -119,7 +125,9 @@ class Edit extends Component {
             updating_resource
         } = this.state;
 
-        // console.log(resource, resource_unchanged, updating_resource);
+        console.log('resource', resource);
+        console.log('resource_unchanged', resource_unchanged);
+        console.log('updating_resource', updating_resource);
 
         let updateButtonIconClassName = "fa fa-save";
         if(updating_resource === true) {
@@ -131,6 +139,16 @@ class Edit extends Component {
                 <Row>
                     <Col md="12">
                         <ApiErrorCard errors={errors} />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md="12">
+                        <ApiResourceCreateSuccessCard success={created} />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md="12">
+                        <ApiResourceUpdateSuccessCard success={updated} />
                     </Col>
                 </Row>
                 {resource === null
@@ -163,7 +181,7 @@ class Edit extends Component {
                                                 : null
                                         ))}
                                         <Button
-                                            type="button"
+                                            type="submit"
                                             size="md"
                                             color="warning"
                                             block
@@ -190,6 +208,7 @@ const mapStateToProps = (state, ownProps) => {
     const role_errors = getApiErrorMessages(state.roles.error);
     const params_id = parseInt(ownProps.match.params.id, 10);
     const {
+        created,
         resources,
         updated
     } = state.users;
@@ -204,6 +223,7 @@ const mapStateToProps = (state, ownProps) => {
     }
 
     return {
+        created: created,
         errors: errors,
         resource: typeof resource === 'undefined' ? null : resource,
         role_errors: role_errors,
@@ -214,9 +234,9 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    clearMetadataResource() {
+    clearMetadataResourceEdit() {
         dispatch({
-            type: 'CLEAR_METADATA_USER'
+            type: 'CLEAR_METADATA_USER_EDIT'
         })
     },
     getAllRoles(data) {
