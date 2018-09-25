@@ -1,5 +1,6 @@
 const initial_state = {
     created: false,
+    destroyed: false,
     current_page: 1,
     error: null,
     fetching_resources: false,
@@ -14,6 +15,77 @@ const initial_state = {
 const role = (state = initial_state, action) => {
     // console.log('action dispatched', action);
     switch(action.type) {
+        case 'CHANGE_PAGE_ROLES':
+            return {
+                ...state,
+                current_page: action.payload.data.page
+            };
+        case 'CLEAR_METADATA_ROLES':
+            // console.log(action.type);
+            return {
+                ...state,
+                error: null,
+                current_page: 1,
+                destroyed: false,
+                fetching_resources: false
+            };
+        case 'CLEAR_METADATA_ROLE_EDIT':
+            return {
+                ...state,
+                error: null,
+                updated: false,
+                created: false,
+                resource: null
+            };
+        case 'CLEAR_METADATA_ROLE_CREATE':
+            return {
+                ...state,
+                error: null,
+                // created: false,
+                resource: null
+            };
+        case 'CREATE_ROLE_REQUEST':
+            console.log('creatingRole dispatched');
+            return {
+                ...state,
+                error: null,
+                created: false
+            };
+        case 'CREATE_ROLE_SUCCESS':
+            return {
+                ...state,
+                error: null,
+                created: true,
+                resource: action.payload.resource,
+            };
+        case 'CREATE_ROLE_ERROR':
+            console.log('creatingRole error:', action);
+            return {
+                ...state,
+                error: action.error,
+                created: false
+            };
+        case 'DESTROY_ROLE_REQUEST':
+            console.log('deletingRole dispatched');
+            return {
+                ...state,
+                error: null,
+                destroyed: false
+            };
+        case 'DESTROY_ROLE_SUCCESS':
+            return {
+                ...state,
+                error: null,
+                destroyed: true,
+                // resource: action.payload.resource,
+            };
+        case 'DESTROY_ROLE_ERROR':
+            console.log('deletingRole error:', action);
+            return {
+                ...state,
+                error: action.error,
+                destroyed: false
+            };
         case 'GET_PAGINATED_ROLES_REQUEST': {
             // console.log('getRoles state', state);
             // console.log('getRoles dispatched', action);
@@ -51,19 +123,6 @@ const role = (state = initial_state, action) => {
                 error: action.error,
                 fetching_resources: false,
                 total: 0
-            };
-        case 'CHANGE_PAGE_ROLES':
-            return {
-                ...state,
-                current_page: action.payload.data.page
-            };
-        case 'CLEAR_METADATA_ROLES':
-            // console.log(action.type);
-            return {
-                ...state,
-                error: null,
-                current_page: 1,
-                fetching_resources: false
             };
         case 'GET_ROLE_REQUEST':
             console.log('getRole dispatched');
@@ -104,42 +163,6 @@ const role = (state = initial_state, action) => {
                 ...state,
                 error: action.error,
                 updated: false
-            };
-        case 'CREATE_ROLE_REQUEST':
-            console.log('creatingRole dispatched');
-            return {
-                ...state,
-                error: null,
-                created: false
-            };
-        case 'CREATE_ROLE_SUCCESS':
-            return {
-                ...state,
-                error: null,
-                created: true,
-                resource: action.payload.resource,
-            };
-        case 'CREATE_ROLE_ERROR':
-            console.log('creatingRole error:', action);
-            return {
-                ...state,
-                error: action.error,
-                created: false
-            };
-        case 'CLEAR_METADATA_ROLE_EDIT':
-            return {
-                ...state,
-                error: null,
-                updated: false,
-                created: false,
-                resource: null
-            };
-        case 'CLEAR_METADATA_ROLE_CREATE':
-            return {
-                ...state,
-                error: null,
-                // created: false,
-                resource: null
             };
         default:
             return state;

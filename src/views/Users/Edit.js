@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import {
     Card,
     Button,
@@ -15,11 +16,16 @@ import {
 import ApiErrorCard from '../ApiErrorCard';
 import ApiResourceCreateSuccessCard from '../ApiResourceCreateSuccessCard';
 import ApiResourceUpdateSuccessCard from '../ApiResourceUpdateSuccessCard';
+import CardHeaderActions from '../CardHeaderActions';
+import DestroyResourceModal from '../DestroyResourceModal';
 import getApiErrorMessages from '../../helpers/getApiErrorMessages';
 import getResourceFromPaginatedResourcesAndId from '../../helpers/getResourceFromPaginatedResourcesAndId';
 
 class Edit extends Component {
     state = {
+        destroying_resource: false,
+        getting_resource: false,
+        is_modal_open: false,
         resource: null,
         resource_unchanged: true,
         updating_resource: false
@@ -28,22 +34,24 @@ class Edit extends Component {
     constructor(props) {
         super(props);
 
-        this.updateInputValue = this.updateInputValue.bind(this);
+        this.handleDestroyResource = this.handleDestroyResource.bind(this);
         this.handleUpdateResource = this.handleUpdateResource.bind(this);
+        this.toggleDestroyResourceModal = this.toggleDestroyResourceModal.bind(this);
+        this.updateInputValue = this.updateInputValue.bind(this);
     }
 
-    updateInputValue(evt) {
-        if(this.state.resource_unchanged === true) {
-            this.setState({
-                resource_unchanged: false,
-            });
-        }
+    handleDestroyResource(evt) {
+        evt.preventDefault();
+
+        const { destroyResource, token } = this.props;
+        const { id } = this.state.resource;
+        const data = { id, token };
+
         this.setState({
-            resource: {
-                ...this.state.resource,
-                [evt.target.name]: evt.target.value,
-            }
+            destroying_resource: true,
         });
+
+        destroyResource({ data });
     }
 
     handleUpdateResource(evt) {
@@ -62,6 +70,28 @@ class Edit extends Component {
         });
 
         updateResource({ data });
+    }
+
+    toggleDestroyResourceModal(evt) {
+        evt.preventDefault();
+
+        this.setState({
+            is_modal_open: !this.state.is_modal_open
+        })
+    }
+
+    updateInputValue(evt) {
+        if(this.state.resource_unchanged === true) {
+            this.setState({
+                resource_unchanged: false,
+            });
+        }
+        this.setState({
+            resource: {
+                ...this.state.resource,
+                [evt.target.name]: evt.target.value,
+            }
+        });
     }
 
     componentDidMount() {
@@ -85,25 +115,55 @@ class Edit extends Component {
 
     componentDidUpdate(prevProps) {
         const {
+            destroyed,
             errors,
-            resource,
             updated
         } = this.props;
+        const {
+            destroying_resource,
+            getting_resource,
+            resource,
+            resource_unchanged,
+            updating_resource
+        } = this.state;
 
-        // console.log('prevProps', prevProps);
-        if(resource !== null && prevProps.resource === null) {
-            // If component is receiving props
-            // Set in the state so it can be updated properly
-            // avoiding blank fields for ones that do not get updated
+        // This means that I was destroying the resource,
+        // And I received an destroyed from the store
+        // So it's time to redirect to the index
+        if(destroyed === true && errors.length !== 0 && destroying_resource === true) {
             this.setState({
-                resource,
+                destroying_resource: false,
+                is_modal_open: false
+            })
+        }
+
+        // This means that I was destroying the resource,
+        // And I received an destroyed from the store
+        // So it's time to redirect to the index
+        else if(prevProps.errors.length === 0 && errors.length > 0 && destroying_resource === true) {
+            this.setState({
+                destroying_resource: false,
+                is_modal_open: false
+            })
+        }
+
+        // This means that I was updating the resource,
+        // And I received an updated from the store
+        // So it's time to restore the Update button
+        else if(updated === true && errors.length !== 0 && updating_resource === true) {
+            this.setState({
                 getting_resource: false,
                 updating_resource: false
             });
         }
 
-        if(updated === true && errors.length !== 0 && this.state.updating_resource === true) {
+        // console.log('prevProps', prevProps);
+        else if(resource !== null && prevProps.resource === null) {
+            // If component is receiving props
+            // Set in the state so it can be updated properly
+            // avoiding blank fields for ones that do not get updated
             this.setState({
+                resource,
                 getting_resource: false,
                 updating_resource: false
             });
@@ -117,18 +177,40 @@ class Edit extends Component {
     render() {
         const {
             created,
+            destroyed,
             errors,
             updated
         } = this.props;
         const {
+            destroying_resource,
+            getting_resource,
             resource,
             resource_unchanged,
             updating_resource
         } = this.state;
+        const actions = [
+            {
+                className: 'btn-outline-danger',
+                disabled: getting_resource,
+                iconClassName: 'fa fa-trash',
+                onClick: this.toggleDestroyResourceModal,
+                title: 'Remove Resource',
+                type: 'button',
+            }
+        ];
 
         console.log('resource', resource);
         console.log('resource_unchanged', resource_unchanged);
         console.log('updating_resource', updating_resource);
+
+        if(destroyed === true) {
+            return <Redirect to="/users" />;
+        }
+
+        let destroyButtonIconClassName = "fa fa-trash";
+        if(destroying_resource === true) {
+            destroyButtonIconClassName = "fa fa-spinner fa-spin";
+        }
 
         let updateButtonIconClassName = "fa fa-save";
         if(updating_resource === true) {
@@ -162,6 +244,7 @@ class Edit extends Component {
                                         <i className="fa fa-user"></i>
                                         {" "}
                                         Resource: {resource.name}
+                                        <CardHeaderActions actions={actions} />
                                     </strong>
                                 </CardHeader>
                                 <CardBody>
@@ -197,6 +280,13 @@ class Edit extends Component {
                                 </CardBody>
                             </Card>
                         </Col>
+                        <DestroyResourceModal
+                            destroyButtonIconClassName={destroyButtonIconClassName}
+                            disabled={destroying_resource}
+                            isOpen={this.state.is_modal_open}
+                            onDestroyButtonClick={this.handleDestroyResource}
+                            toggle={this.toggleDestroyResourceModal}
+                        />
                     </Row>
                 }
             </div>
@@ -209,6 +299,7 @@ const mapStateToProps = (state, ownProps) => {
     const params_id = parseInt(ownProps.match.params.id, 10);
     const {
         created,
+        destroyed,
         resources,
         updated
     } = state.users;
@@ -224,6 +315,7 @@ const mapStateToProps = (state, ownProps) => {
 
     return {
         created: created,
+        destroyed: destroyed,
         errors: errors,
         resource: typeof resource === 'undefined' ? null : resource,
         token: state.auth.token,
@@ -235,6 +327,12 @@ const mapDispatchToProps = (dispatch) => ({
     clearMetadataResourceEdit() {
         dispatch({
             type: 'CLEAR_METADATA_USER_EDIT'
+        })
+    },
+    destroyResource(data) {
+        dispatch({
+            type: 'DESTROY_USER_REQUEST',
+            payload: data
         })
     },
     getResource(data) {

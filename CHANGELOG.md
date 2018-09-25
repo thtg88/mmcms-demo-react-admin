@@ -6,8 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 
 ## [Unreleased]
 ### Added
-- Destroy resources
 - PropTypes
+
+## [0.2.0] - 2018-09-25
+## Added
+- Destroy resources
 
 ## [0.1.0] - 2018-09-23
 ### Added

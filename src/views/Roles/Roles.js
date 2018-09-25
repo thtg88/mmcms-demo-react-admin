@@ -8,6 +8,7 @@ import {
     Row
 } from 'reactstrap';
 import ApiErrorCard from '../ApiErrorCard';
+import ApiResourceDestroySuccessCard from '../ApiResourceDestroySuccessCard';
 import CardHeaderActions from '../CardHeaderActions';
 import DataTable from '../DataTable';
 import getApiErrorMessages from '../../helpers/getApiErrorMessages';
@@ -15,18 +16,31 @@ import { columns, pageSize } from './tableConfig';
 
 const actions = [
     {
+        className: 'btn-outline-success',
         href: '/roles/create',
         title: 'New Resource',
+        type: 'link',
         iconClassName: 'fa fa-plus',
     }
 ];
 
 class Roles extends Component {
     componentDidMount() {
-        const { current_page, query, resources, token } = this.props;
+        const {
+            clearMetadataResources,
+            current_page,
+            destroyed,
+            query,
+            resources,
+            token
+        } = this.props;
 
         // console.log(this.props);
         // console.log(this.state);
+
+        if(destroyed === true) {
+            setTimeout(clearMetadataResources, 1000);
+        }
 
         // if query page is not valid
         if(
@@ -43,6 +57,8 @@ class Roles extends Component {
                 || typeof resources[page] === 'undefined'
                 // Or was empty (worth re-fetching)
                 || resources[page].length === 0
+                // Or I've just deleted a resource
+                || destroyed === true
             ) {
                 // Fetch first page
                 const data = {
@@ -116,6 +132,7 @@ class Roles extends Component {
 
     render() {
         const {
+            destroyed,
             errors,
             fetching_resources,
             history,
@@ -149,29 +166,36 @@ class Roles extends Component {
             <div className="animated fadeIn">
                 <Row>
                     <Col xl={12}>
-                        {errors.length && !fetching_resources > 0
-                            ? <ApiErrorCard errors={errors} />
-                            : <Card className="card-accent-primary">
-                                <CardHeader>
-                                    <i className="fa fa-black-tie"></i> Roles
-                                    <CardHeaderActions actions={actions} />
-                                </CardHeader>
-                                <CardBody>
-                                    <DataTable
-                                        hover={!fetching_resources}
-                                        columns={columns}
-                                        data={resources[current_page]}
-                                        loading={fetching_resources}
-                                        keyField="id"
-                                        urlBuilder={(entity) => '/roles/'+entity.id}
-                                        page={current_page}
-                                        total={total}
-                                        pageSize={pageSize}
-                                        history={history}
-                                    />
-                                </CardBody>
-                            </Card>
-                        }
+                        <ApiErrorCard errors={errors} />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xl={12}>
+                        <ApiResourceDestroySuccessCard success={destroyed} />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xl={12}>
+                        <Card className="card-accent-primary">
+                            <CardHeader>
+                                <i className="fa fa-black-tie"></i> Roles
+                                <CardHeaderActions actions={actions} />
+                            </CardHeader>
+                            <CardBody>
+                                <DataTable
+                                    hover={!fetching_resources}
+                                    columns={columns}
+                                    data={resources[current_page]}
+                                    loading={fetching_resources}
+                                    keyField="id"
+                                    urlBuilder={(entity) => '/roles/'+entity.id}
+                                    page={current_page}
+                                    total={total}
+                                    pageSize={pageSize}
+                                    history={history}
+                                />
+                            </CardBody>
+                        </Card>
                     </Col>
                 </Row>
             </div>
@@ -183,6 +207,7 @@ const mapStateToProps = (state) => {
     const errors = getApiErrorMessages(state.roles.error);
     const {
         current_page,
+        destroyed,
         fetching_resources,
         resources,
         total
@@ -192,6 +217,7 @@ const mapStateToProps = (state) => {
 
     return {
         current_page: current_page,
+        destroyed: destroyed,
         errors: errors,
         fetching_resources: fetching_resources,
         resources: resources,

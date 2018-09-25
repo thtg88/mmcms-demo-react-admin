@@ -9,24 +9,38 @@ import {
 } from 'reactstrap';
 import CardHeaderActions from '../CardHeaderActions';
 import ApiErrorCard from '../ApiErrorCard';
+import ApiResourceDestroySuccessCard from '../ApiResourceDestroySuccessCard';
 import DataTable from '../DataTable';
 import getApiErrorMessages from '../../helpers/getApiErrorMessages';
 import { columns, pageSize } from './tableConfig';
 
 const actions = [
     {
+        className: 'btn-outline-success',
         href: '/users/create',
         title: 'New Resource',
+        type: 'link',
         iconClassName: 'fa fa-plus',
     }
 ];
 
 class Users extends Component {
     componentDidMount() {
-        const { current_page, query, resources, token } = this.props;
+        const {
+            clearMetadataResources,
+            current_page,
+            destroyed,
+            query,
+            resources,
+            token
+        } = this.props;
 
         // console.log(this.props);
         // console.log(this.state);
+
+        if(destroyed === true) {
+            setTimeout(clearMetadataResources, 1000);
+        }
 
         // if query page is not valid
         if(
@@ -43,6 +57,8 @@ class Users extends Component {
                 || typeof resources[page] === 'undefined'
                 // Or was empty (worth re-fetching)
                 || resources[page].length === 0
+                // Or I've just deleted a resource
+                || destroyed === true
             ) {
                 // Fetch first page
                 const data = {
@@ -68,12 +84,12 @@ class Users extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        const { query, resources, token } = this.props;
+        const query_page = parseInt(query.page, 10);
+
         // console.log('this.state', this.state);
         // console.log('this.props', this.props);
         // console.log('prevProps', prevProps);
-
-        const { query, resources, token } = this.props;
-        const query_page = parseInt(query.page, 10);
 
         if(
             !isNaN(query_page)
@@ -116,6 +132,7 @@ class Users extends Component {
 
     render() {
         const {
+            destroyed,
             errors,
             fetching_resources,
             history,
@@ -149,29 +166,36 @@ class Users extends Component {
             <div className="animated fadeIn">
                 <Row>
                     <Col xl={12}>
-                        {errors.length && !fetching_resources > 0
-                            ? <ApiErrorCard errors={errors} />
-                            : <Card className="card-accent-primary">
-                                <CardHeader>
-                                    <i className="fa fa-users"></i> Users
-                                    <CardHeaderActions actions={actions} />
-                                </CardHeader>
-                                <CardBody>
-                                    <DataTable
-                                        hover={!fetching_resources}
-                                        columns={columns}
-                                        data={resources[current_page]}
-                                        loading={fetching_resources}
-                                        keyField="id"
-                                        urlBuilder={(entity) => '/users/'+entity.id}
-                                        page={current_page}
-                                        total={total}
-                                        pageSize={pageSize}
-                                        history={history}
-                                    />
-                                </CardBody>
-                            </Card>
-                        }
+                        <ApiErrorCard errors={errors} />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xl={12}>
+                        <ApiResourceDestroySuccessCard success={destroyed} />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xl={12}>
+                        <Card className="card-accent-primary">
+                            <CardHeader>
+                                <i className="fa fa-users"></i> Users
+                                <CardHeaderActions actions={actions} />
+                            </CardHeader>
+                            <CardBody>
+                                <DataTable
+                                    hover={!fetching_resources}
+                                    columns={columns}
+                                    data={resources[current_page]}
+                                    loading={fetching_resources}
+                                    keyField="id"
+                                    urlBuilder={(entity) => '/users/'+entity.id}
+                                    page={current_page}
+                                    total={total}
+                                    pageSize={pageSize}
+                                    history={history}
+                                />
+                            </CardBody>
+                        </Card>
                     </Col>
                 </Row>
             </div>
@@ -183,6 +207,7 @@ const mapStateToProps = (state) => {
     const errors = getApiErrorMessages(state.users.error);
     const {
         current_page,
+        destroyed,
         fetching_resources,
         resources,
         total
@@ -192,6 +217,7 @@ const mapStateToProps = (state) => {
 
     return {
         current_page: current_page,
+        destroyed: destroyed,
         errors: errors,
         fetching_resources: fetching_resources,
         resources: resources,

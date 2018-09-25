@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Button } from 'reactstrap';
 
 const CardHeaderActions = ({ actions }) => {
     // console.log(actions);
@@ -10,18 +11,67 @@ const CardHeaderActions = ({ actions }) => {
 
                 // console.log(action);
 
+                if(action.type === 'button') {
+                    return (
+                        <CardHeaderButton
+                            key={idx}
+                            className={action.className}
+                            disabled={action.disabled}
+                            iconClassName={action.iconClassName}
+                            onClick={action.onClick}
+                            title={action.title}
+                        />
+                    );
+                }
+
+                if(action.type === 'link') {
+                    return (
+                        <CardHeaderLink
+                            key={idx}
+                            className={action.className}
+                            href={action.href}
+                            iconClassName={action.iconClassName}
+                            title={action.title}
+                        />
+                    );
+                }
+
                 return (
-                    <Link
-                        key={idx}
-                        to={action.href}
-                        className="card-header-action btn btn-outline-success btn-setting"
-                        title={action.title}
-                        aria-label={action.title}
-                    ><i className={action.iconClassName}></i></Link>
+                    null
                 );
             })}
         </div>
     )
 };
+
+export const CardHeaderButton = ({
+    className,
+    disabled,
+    iconClassName,
+    onClick,
+    title
+}) => (
+    <Button
+        className={`card-header-action btn btn-setting ${className}`}
+        disabled={disabled}
+        onClick={onClick}
+        title={title}
+        aria-label={title}
+    ><i className={iconClassName}></i></Button>
+);
+
+export const CardHeaderLink = ({
+    className,
+    href,
+    iconClassName,
+    title
+}) => (
+    <Link
+        to={href}
+        className={`card-header-action btn btn-setting ${className}`}
+        title={title}
+        aria-label={title}
+    ><i className={iconClassName}></i></Link>
+);
 
 export default CardHeaderActions;

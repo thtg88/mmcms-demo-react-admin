@@ -1,6 +1,7 @@
 const initial_state = {
     created: false,
     current_page: 1,
+    destroyed: false,
     error: null,
     fetching_resources: false,
     resource: null,
@@ -14,6 +15,77 @@ const initial_state = {
 const user = (state = initial_state, action) => {
     // console.log('action dispatched', action);
     switch(action.type) {
+        case 'CHANGE_PAGE_USERS':
+            return {
+                ...state,
+                current_page: action.payload.data.page
+            };
+        case 'CLEAR_METADATA_USERS':
+            // console.log(action.type);
+            return {
+                ...state,
+                error: null,
+                current_page: 1,
+                destroyed: false,
+                fetching_resources: false
+            };
+        case 'CLEAR_METADATA_USER_EDIT':
+            return {
+                ...state,
+                error: null,
+                updated: false,
+                created: false,
+                resource: null
+            };
+        case 'CLEAR_METADATA_USER_CREATE':
+            return {
+                ...state,
+                error: null,
+                // created: false,
+                resource: null
+            };
+        case 'CREATE_USER_REQUEST':
+            console.log('creatingUser dispatched');
+            return {
+                ...state,
+                error: null,
+                created: false
+            };
+        case 'CREATE_USER_SUCCESS':
+            return {
+                ...state,
+                error: null,
+                created: true,
+                resource: action.payload.resource,
+            };
+        case 'CREATE_USER_ERROR':
+            console.log('createUser error:', action);
+            return {
+                ...state,
+                error: action.error,
+                created: false
+            };
+        case 'DESTROY_USER_REQUEST':
+            console.log('destroyUser dispatched');
+            return {
+                ...state,
+                error: null,
+                destroyed: false
+            };
+        case 'DESTROY_USER_SUCCESS':
+            return {
+                ...state,
+                error: null,
+                destroyed: true,
+                // resource: action.payload.resource,
+            };
+        case 'DESTROY_USER_ERROR':
+            console.log('destroyUser error:', action);
+            return {
+                ...state,
+                error: action.error,
+                destroyed: false
+            };
         case 'GET_PAGINATED_USERS_REQUEST': {
             // console.log('getUsers state', state);
             // console.log('getUsers dispatched', action);
@@ -52,19 +124,6 @@ const user = (state = initial_state, action) => {
                 fetching_resources: false,
                 total: 0
             };
-        case 'CHANGE_PAGE_USERS':
-            return {
-                ...state,
-                current_page: action.payload.data.page
-            };
-        case 'CLEAR_METADATA_USERS':
-            // console.log(action.type);
-            return {
-                ...state,
-                error: null,
-                current_page: 1,
-                fetching_resources: false
-            };
         case 'GET_USER_REQUEST':
             console.log('getUser dispatched');
             return {
@@ -84,7 +143,7 @@ const user = (state = initial_state, action) => {
                 error: action.error
             };
         case 'UPDATE_USER_REQUEST':
-            console.log('updatingUser dispatched');
+            console.log('updategUser dispatched');
             return {
                 ...state,
                 created: false,
@@ -99,47 +158,11 @@ const user = (state = initial_state, action) => {
                 resource: action.payload.resource,
             };
         case 'UPDATE_USER_ERROR':
-            console.log('updatingUser error:', action);
+            console.log('updategUser error:', action);
             return {
                 ...state,
                 error: action.error,
                 updated: false
-            };
-        case 'CREATE_USER_REQUEST':
-            console.log('creatingUser dispatched');
-            return {
-                ...state,
-                error: null,
-                created: false
-            };
-        case 'CREATE_USER_SUCCESS':
-            return {
-                ...state,
-                error: null,
-                created: true,
-                resource: action.payload.resource,
-            };
-        case 'CREATE_USER_ERROR':
-            console.log('creatingUser error:', action);
-            return {
-                ...state,
-                error: action.error,
-                created: false
-            };
-        case 'CLEAR_METADATA_USER_EDIT':
-            return {
-                ...state,
-                error: null,
-                updated: false,
-                created: false,
-                resource: null
-            };
-        case 'CLEAR_METADATA_USER_CREATE':
-            return {
-                ...state,
-                error: null,
-                // created: false,
-                resource: null
             };
         default:
             return state;
