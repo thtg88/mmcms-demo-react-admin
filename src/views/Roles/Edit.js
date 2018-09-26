@@ -123,30 +123,54 @@ class Edit extends Component {
         const { destroying_resource, updating_resource } = this.state;
 
         // This means that I was destroying the resource,
-        // And I received an destroyed from the store
-        // So it's time to redirect to the index
-        if(destroyed === true && errors.length !== 0 && destroying_resource === true) {
+        // And I received a destroyed from the store
+        // So restore the state  - this will trigger a re-render
+        // which will redirect us to the index
+        if(
+            typeof errors.length !== 'undefined'
+            && errors.length === 0
+            && destroying_resource === true
+            && destroyed === true
+        ) {
             this.setState({
                 destroying_resource: false,
                 is_modal_open: false
-            })
+            });
         }
 
         // This means that I was updating the resource,
         // And I received an updated from the store
         // So it's time to restore the Update button
-        else if(updated === true && errors.length !== 0 && updating_resource === true) {
+        else if(
+            typeof errors.length !== 'undefined'
+            && errors.length !== 0
+            && updated === true
+            && updating_resource === true
+        ) {
             this.setState({
                 getting_resource: false,
                 updating_resource: false
             });
         }
 
-        // console.log('prevProps', prevProps);
+        // This means that if I was destroying the resource,
+        // And I have errors,
+        // close the modal and show them
+        else if(
+            typeof errors.length !== 'undefined'
+            && errors.length > 0
+            && destroying_resource === true
+        ) {
+            this.setState({
+                destroying_resource: false,
+                is_modal_open: false
+            });
+        }
+
+        // If component is receiving props
+        // Set in the state so it can be updated properly
+        // avoiding blank fields for ones that do not get updated
         else if(resource !== null && prevProps.resource === null) {
-            // If component is receiving props
-            // Set in the state so it can be updated properly
-            // avoiding blank fields for ones that do not get updated
             this.setState({
                 resource,
                 getting_resource: false,
@@ -184,9 +208,9 @@ class Edit extends Component {
             }
         ];
 
-        console.log('resource', resource);
-        console.log('resource_unchanged', resource_unchanged);
-        console.log('updating_resource', updating_resource);
+        // console.log('resource', resource);
+        // console.log('resource_unchanged', resource_unchanged);
+        // console.log('updating_resource', updating_resource);
 
         if(destroyed === true) {
             return <Redirect to="/roles" />;
@@ -224,11 +248,9 @@ class Edit extends Component {
                     : <Row>
                         <Col md={12}>
                             <Card className="card-accent-warning">
-                                <CardHeader>
+                                <CardHeader className="h1">
                                     <strong>
-                                        <i className="fa fa-black-tie"></i>
-                                        {" "}
-                                        Resource: {resource.name}
+                                        {resource.name}
                                         <CardHeaderActions actions={actions} />
                                     </strong>
                                 </CardHeader>
