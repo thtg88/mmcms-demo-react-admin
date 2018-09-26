@@ -102,9 +102,10 @@ class Users extends Component {
             ) {
                 // Fetch first page
                 const data = {
+                    q: this.state.query,
                     token,
                     page,
-                    pageSize
+                    pageSize,
                 };
                 this.props.getPaginatedResources({ data });
 
@@ -115,9 +116,10 @@ class Users extends Component {
         } else {
             // Fetch page data
             const data = {
+                q: this.state.query,
                 token,
                 page: parseInt(query.page, 10),
-                pageSize
+                pageSize,
             };
             this.props.getPaginatedResources({ data });
         }
@@ -141,6 +143,7 @@ class Users extends Component {
             !isNaN(query_page)
             && query_page > 0
             && query_page !== parseInt(prevProps.query.page, 10)
+            && searching === false
         ) {
             if(
                 // If resources never fetched
@@ -153,11 +156,11 @@ class Users extends Component {
                 // If changing page and page is valid
                 // Re-fetch page
                 const data = {
+                    q: this.state.query,
                     token,
                     page: query_page,
                     pageSize
                 };
-
                 this.props.getPaginatedResources({ data });
 
             } else {

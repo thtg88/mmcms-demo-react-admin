@@ -45,7 +45,7 @@ const user = (state = initial_state, action) => {
                 resource: null
             };
         case 'CREATE_USER_REQUEST':
-            console.log('creatingUser dispatched');
+            // console.log('creatingUser dispatched');
             return {
                 ...state,
                 error: null,
@@ -66,7 +66,7 @@ const user = (state = initial_state, action) => {
                 created: false
             };
         case 'DESTROY_USER_REQUEST':
-            console.log('destroyUser dispatched');
+            // console.log('destroyUser dispatched');
             return {
                 ...state,
                 error: null,
@@ -80,7 +80,7 @@ const user = (state = initial_state, action) => {
                 // resource: action.payload.resource,
             };
         case 'DESTROY_USER_ERROR':
-            console.log('destroyUser error:', action);
+            // console.log('destroyUser error:', action);
             return {
                 ...state,
                 error: action.error,
@@ -95,10 +95,19 @@ const user = (state = initial_state, action) => {
                 error: null,
                 fetching_resources: true,
                 current_page: data.page,
-                resources: {
-                    ...state.resources,
-                    [data.page]: []
-                },
+                // If searching, reset all pages
+                resources: (
+                        typeof data.q !== 'undefined'
+                        && data.q !== ''
+                    )
+                    ? {
+                        1: []
+                    }
+                    // Otherwise reset page I'm fetching
+                    : {
+                        ...state.resources,
+                        [data.page]: []
+                    },
                 total: 0,
             };
         }
@@ -111,7 +120,7 @@ const user = (state = initial_state, action) => {
                 fetching_resources: false,
                 resources: {
                     ...state.resources,
-                    [current_page]: data
+                    [current_page]: data,
                 },
                 total: total,
             };
@@ -125,7 +134,7 @@ const user = (state = initial_state, action) => {
                 total: 0
             };
         case 'GET_USER_REQUEST':
-            console.log('getUser dispatched');
+            // console.log('getUser dispatched');
             return {
                 ...state,
                 error: null
@@ -137,13 +146,13 @@ const user = (state = initial_state, action) => {
                 resource: action.payload.resource,
             };
         case 'GET_USER_ERROR':
-            console.log('getUser error:', action);
+            // console.log('getUser error:', action);
             return {
                 ...state,
                 error: action.error
             };
         case 'UPDATE_USER_REQUEST':
-            console.log('updategUser dispatched');
+            // console.log('updateUser dispatched');
             return {
                 ...state,
                 created: false,
@@ -158,7 +167,7 @@ const user = (state = initial_state, action) => {
                 resource: action.payload.resource,
             };
         case 'UPDATE_USER_ERROR':
-            console.log('updategUser error:', action);
+            // console.log('updateUser error:', action);
             return {
                 ...state,
                 error: action.error,

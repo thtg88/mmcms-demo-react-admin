@@ -14,12 +14,12 @@ const propTypes = {
 };
 
 const Pagination = ({ history, page, pageSize, total }) => {
-    const last_page = parseInt(total / pageSize, 10) + 1;
+
+    // Create last page from total and page size
+    const last_page = parseInt((total-1) / pageSize, 10) + 1;
 
     // Create pages empty array from number of pages
     const pages = [...Array(last_page).keys()];
-
-    // console.log(page);
 
     return (
         <BootstrapPagination className="float-right">

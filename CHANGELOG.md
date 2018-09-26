@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Added
 - PropTypes
 
+## [0.3.1] - 2018-09-26
+### Fixed
+- Pagination on multiples of 10 resources
+- Downgraded query-string package to version 5.1.1 to support compilation of package code to ES5
+
 ## [0.3.0] - 2018-09-26
 ### Added
 - Module search functionality
