@@ -177,8 +177,8 @@ class Users extends Component {
                 <Row>
                     <Col xl={12}>
                         <Card className="card-accent-primary">
-                            <CardHeader>
-                                <i className="fa fa-users"></i> Users
+                            <CardHeader className="h1">
+                                Users
                                 <CardHeaderActions actions={actions} />
                             </CardHeader>
                             <CardBody>

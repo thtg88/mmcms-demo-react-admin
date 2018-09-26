@@ -38,7 +38,7 @@ const DataTable = ({
         <Fragment>
             <Table responsive hover={hover}>
                 <thead>
-                    <tr>
+                    <tr className="table-secondary">
                         {columns.map((column, index) => <th key={"header_"+index} scope="col">{column.text}</th>)}
                     </tr>
                 </thead>

@@ -177,8 +177,8 @@ class Roles extends Component {
                 <Row>
                     <Col xl={12}>
                         <Card className="card-accent-primary">
-                            <CardHeader>
-                                <i className="fa fa-black-tie"></i> Roles
+                            <CardHeader className="h1">
+                                Roles
                                 <CardHeaderActions actions={actions} />
                             </CardHeader>
                             <CardBody>

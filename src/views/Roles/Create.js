@@ -125,10 +125,8 @@ class Create extends Component {
                 <Row>
                     <Col lg={12}>
                         <Card className="card-accent-success">
-                            <CardHeader>
+                            <CardHeader className="h1">
                                 <strong>
-                                    <i className="fa fa-black-tie"></i>
-                                    {" "}
                                     Create Resource
                                 </strong>
                             </CardHeader>

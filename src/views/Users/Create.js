@@ -126,12 +126,8 @@ class Create extends Component {
                 <Row>
                     <Col lg={12}>
                         <Card className="card-accent-success">
-                            <CardHeader>
-                                <strong>
-                                    <i className="fa fa-user-plus"></i>
-                                    {" "}
-                                    Create Resource
-                                </strong>
+                            <CardHeader className="h1">
+                                <strong>Create Resource</strong>
                             </CardHeader>
                             <CardBody>
                                 <Form onSubmit={this.handleCreateResource}>
