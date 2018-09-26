@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 
 ## [Unreleased]
 ### Added
-- PropTypes
+- Error Boundary
+
+## [0.4.0] - 2018-09-26
+### Added
+- PropTypes for functional components
+- README
 
 ## [0.3.1] - 2018-09-26
 ### Fixed

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Button,
     Modal,
@@ -34,5 +35,13 @@ const DestroyResourceModal = ({
         </ModalFooter>
     </Modal>
 );
+
+DestroyResourceModal.propTypes = {
+    destroyButtonIconClassName: PropTypes.string,
+    disabled: PropTypes.bool,
+    isOpen: PropTypes.bool,
+    onDestroyButtonClick: PropTypes.func,
+    toggle: PropTypes.bool
+};
 
 export default DestroyResourceModal;

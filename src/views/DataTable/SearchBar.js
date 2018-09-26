@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Button,
     Col,
@@ -41,5 +42,13 @@ export const SearchBar = ({
         </FormGroup>
     </Form>
 );
+
+SearchBar.propTypes = {
+    buttonDisabled: PropTypes.bool,
+    iconClassName: PropTypes.string,
+    onSubmit: PropTypes.func,
+    onChange: PropTypes.func,
+    query: PropTypes.string
+};
 
 export default SearchBar;

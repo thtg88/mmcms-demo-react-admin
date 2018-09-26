@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Card,
     CardBody
@@ -22,5 +23,10 @@ const ApiResourceDestroySuccessCard = ({ success, resourceDisplayName }) => {
         </Card>
     );
 }
+
+ApiResourceDestroySuccessCard.propTypes = {
+    success: PropTypes.bool,
+    resourceDisplayName: PropTypes.string
+};
 
 export default ApiResourceDestroySuccessCard;

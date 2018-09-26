@@ -7,19 +7,6 @@ import Row from './Row';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 
-const propTypes = {
-    columns: PropTypes.array,
-    data: PropTypes.array,
-    history: PropTypes.object,
-    hover: PropTypes.bool,
-    keyField: PropTypes.string,
-    loading: PropTypes.bool,
-    page: PropTypes.number,
-    pageSize: PropTypes.number,
-    total: PropTypes.number,
-    urlBuilder: PropTypes.func
-};
-
 const DataTable = ({
     columns,
     data,
@@ -58,7 +45,15 @@ const DataTable = ({
                     {loading
                         ? (<LoaderRow colSpan={columns.length} />)
                         : data.length > 0
-                            ? data.map((entity, index) => (<Row key={entity[keyField]} columns={columns} keyField={keyField} entity={entity} urlBuilder={urlBuilder} />))
+                            ? data.map((entity, index) => (
+                                <Row
+                                    key={entity[keyField]}
+                                    columns={columns}
+                                    keyField={keyField}
+                                    entity={entity}
+                                    urlBuilder={urlBuilder}
+                                />
+                            ))
                             : (<EmptyRow colSpan={columns.length} />)
                     }
                 </tbody>
@@ -76,6 +71,17 @@ const DataTable = ({
     )
 };
 
-DataTable.propTypes = propTypes;
+DataTable.propTypes = {
+    columns: PropTypes.array,
+    data: PropTypes.array,
+    history: PropTypes.object,
+    hover: PropTypes.bool,
+    keyField: PropTypes.string,
+    loading: PropTypes.bool,
+    page: PropTypes.number,
+    pageSize: PropTypes.number,
+    total: PropTypes.number,
+    urlBuilder: PropTypes.func
+};
 
 export default DataTable;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Alert } from 'reactstrap';
 
 const LoggingOutAlert = ({ loggingOut }) => {
@@ -16,6 +17,10 @@ const LoggingOutAlert = ({ loggingOut }) => {
             Logging out...
         </Alert>
     );
+};
+
+LoggingOutAlert.propTypes = {
+    loggingOut: PropTypes.bool
 };
 
 export default LoggingOutAlert;

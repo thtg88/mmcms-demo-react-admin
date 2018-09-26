@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardBody } from 'reactstrap';
 
 const LoggingOutCard = ({ loggingOut }) => {
@@ -18,6 +19,10 @@ const LoggingOutCard = ({ loggingOut }) => {
             </CardBody>
         </Card>
     );
+};
+
+LoggingOutCard.propTypes = {
+    loggingOut: PropTypes.bool
 };
 
 export default LoggingOutCard;

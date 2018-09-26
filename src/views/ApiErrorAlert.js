@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Alert } from 'reactstrap';
 
 const ApiErrorAlert = ({ errors }) => {
@@ -17,5 +18,9 @@ const ApiErrorAlert = ({ errors }) => {
         </Alert>
     );
 }
+
+ApiErrorAlert.propTypes = {
+    errors: PropTypes.arrayOf(PropTypes.string)
+};
 
 export default ApiErrorAlert;

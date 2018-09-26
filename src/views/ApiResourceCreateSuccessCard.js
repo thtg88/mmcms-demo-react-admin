@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Card,
     CardBody
@@ -22,5 +23,9 @@ const ApiResourceCreateSuccessCard = ({ success }) => {
         </Card>
     );
 }
+
+ApiResourceCreateSuccessCard.propTypes = {
+    success: PropTypes.bool
+};
 
 export default ApiResourceCreateSuccessCard;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 
@@ -73,5 +74,12 @@ export const CardHeaderLink = ({
         aria-label={title}
     ><i className={iconClassName}></i></Link>
 );
+
+CardHeaderActions.propTypes = {
+    className: PropTypes.string,
+    href: PropTypes.string,
+    iconClassName: PropTypes.string,
+    title: PropTypes.string
+};
 
 export default CardHeaderActions;

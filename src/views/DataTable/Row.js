@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const Row = ({ columns, entity, keyField, urlBuilder }) => (
@@ -18,6 +19,13 @@ const Row = ({ columns, entity, keyField, urlBuilder }) => (
         })}
     </tr>
 );
+
+Row.propTypes = {
+    columns: PropTypes.array,
+    entity: PropTypes.object,
+    keyField: PropTypes.string,
+    urlBuilder: PropTypes.func
+};
 
 export default Row;
 
