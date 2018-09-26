@@ -14,6 +14,7 @@ import {
 } from 'reactstrap';
 import ApiErrorCard from '../ApiErrorCard';
 import getApiErrorMessages from '../../helpers/getApiErrorMessages';
+import { pageSize } from './tableConfig';
 
 class Create extends Component {
     state = {
@@ -70,7 +71,9 @@ class Create extends Component {
         const {
             errors,
             resource,
-            created
+            created,
+            history,
+            token
         } = this.props;
 
         // console.log('prevProps', prevProps);
@@ -91,8 +94,17 @@ class Create extends Component {
         }
 
         if(prevProps.created !== true && created === true && typeof resource.id !== 'undefined') {
-            console.log('resource created', resource);
-            this.props.history.push('/users/'+resource.id)
+            history.push('/users/'+resource.id);
+
+            // Get all the resources in the background
+            // so that when the user goes back to the list
+            // he can see the latest changes
+            const data = {
+                token,
+                page: 1,
+                pageSize
+            };
+            this.props.getPaginatedResources({ data });
         }
     }
 
@@ -223,7 +235,13 @@ const mapDispatchToProps = (dispatch) => ({
             type: 'CREATE_USER_REQUEST',
             payload: data
         })
-    }
+    },
+    getPaginatedResources(data) {
+        dispatch({
+            type: 'GET_PAGINATED_USERS_REQUEST',
+            payload: data
+        })
+    },
 });
 
 export default connect(

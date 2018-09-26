@@ -25,6 +25,46 @@ const actions = [
 ];
 
 class Users extends Component {
+    state = {
+        query: '',
+        searching: false,
+    };
+
+    constructor(props) {
+        super(props);
+
+        this.handleSearchResources = this.handleSearchResources.bind(this);
+        this.updateSearchInputValue = this.updateSearchInputValue.bind(this);
+    }
+
+    handleSearchResources(evt) {
+        evt.preventDefault();
+
+        const { history, token } = this.props;
+        const { query } = this.state;
+
+        this.setState({
+            searching: true,
+        });
+
+        history.push({pathname: '/users', search: 'page=1'});
+
+        // Fetch first page
+        const data = {
+            token,
+            page: 1,
+            pageSize,
+            q: query
+        };
+        this.props.getPaginatedResources({ data });
+    }
+
+    updateSearchInputValue(evt) {
+        this.setState({
+            query: evt.target.value,
+        });
+    }
+
     componentDidMount() {
         const {
             clearMetadataResources,
@@ -84,7 +124,13 @@ class Users extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { query, resources, token } = this.props;
+        const {
+            fetching_resources,
+            query,
+            resources,
+            token
+        } = this.props;
+        const { searching } = this.state;
         const query_page = parseInt(query.page, 10);
 
         // console.log('this.state', this.state);
@@ -124,6 +170,19 @@ class Users extends Component {
                 this.props.changePageResources({ data });
             }
         }
+
+        // If I have been searching and fetching the resources,
+        // and now I have received the resources,
+        // set search to off
+        else if(
+            searching === true
+            && prevProps.fetching_resources === true
+            && fetching_resources === false
+        ) {
+            this.setState({
+                searching: false
+            })
+        }
     }
 
     componentWillUnmount() {
@@ -138,15 +197,12 @@ class Users extends Component {
             history,
             current_page,
             resources,
-            // role_errors,
             total
         } = this.props;
+        const { searching } = this.state;
 
         // console.log(this.props);
         // console.log(this.state);
-        // console.log('columns', columns);
-        // console.log('resources', resources);
-        // console.log('current_page', current_page);
 
         if(
             (
@@ -160,6 +216,11 @@ class Users extends Component {
             || typeof total === 'undefined'
         ) {
             return (null);
+        }
+
+        let searchButtonIconClassName = "fa fa-search";
+        if(searching === true && fetching_resources === true) {
+            searchButtonIconClassName = "fa fa-spinner fa-spin";
         }
 
         return (
@@ -183,16 +244,21 @@ class Users extends Component {
                             </CardHeader>
                             <CardBody>
                                 <DataTable
-                                    hover={!fetching_resources}
                                     columns={columns}
                                     data={resources[current_page]}
-                                    loading={fetching_resources}
-                                    keyField="id"
-                                    urlBuilder={(entity) => '/users/'+entity.id}
-                                    page={current_page}
-                                    total={total}
-                                    pageSize={pageSize}
                                     history={history}
+                                    hover={!fetching_resources}
+                                    keyField="id"
+                                    loading={fetching_resources}
+                                    page={current_page}
+                                    pageSize={pageSize}
+                                    total={total}
+                                    urlBuilder={(entity) => '/users/'+entity.id}
+                                    onSearchButtonClick={this.handleSearchResources}
+                                    onSearchInputChange={this.updateSearchInputValue}
+                                    query={this.state.query}
+                                    searchButtonDisabled={this.state.searching}
+                                    searchButtonIconClassName={searchButtonIconClassName}
                                 />
                             </CardBody>
                         </Card>

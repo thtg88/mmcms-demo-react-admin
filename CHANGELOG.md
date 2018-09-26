@@ -8,8 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Added
 - PropTypes
 
+## [0.3.0] - 2018-09-26
+### Added
+- Module search functionality
+
 ## [0.2.0] - 2018-09-25
-## Added
+### Added
 - Destroy resources
 
 ## [0.1.0] - 2018-09-23

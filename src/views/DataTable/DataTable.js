@@ -5,6 +5,7 @@ import LoaderRow from './LoaderRow';
 import EmptyRow from './EmptyRow';
 import Row from './Row';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
 
 const propTypes = {
     columns: PropTypes.array,
@@ -26,16 +27,27 @@ const DataTable = ({
     hover,
     keyField,
     loading,
+    onSearchButtonClick,
+    onSearchInputChange,
     page,
     pageSize,
+    query,
+    searchButtonDisabled,
+    searchButtonIconClassName,
     total,
-    urlBuilder,
+    urlBuilder
 }) => {
-    // console.log(loading);
-    // console.log(data);
+    // console.log(query);
 
     return (
         <Fragment>
+            <SearchBar
+                buttonDisabled={searchButtonDisabled}
+                iconClassName={searchButtonIconClassName}
+                onSubmit={onSearchButtonClick}
+                onChange={onSearchInputChange}
+                query={query}
+            />
             <Table responsive hover={hover}>
                 <thead>
                     <tr className="table-secondary">

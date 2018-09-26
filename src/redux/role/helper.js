@@ -31,11 +31,12 @@ export const destroyRole = async (data) => {
 
 export const getPaginatedRoles = async (data) => {
     // console.log('getPaginatedRoles data', data);
-    const { token, page, pageSize } = data;
+    const { token, page, pageSize, q } = data;
     const url = process.env.REACT_APP_API_BASE_URL
         +'/roles/paginate'
         +'?page='+page
-        +'&page_size='+pageSize;
+        +'&page_size='+pageSize
+        +(typeof q !== 'undefined' ? '&q='+q : '');
     return await fetch(url, {
         method: 'GET',
         headers: new Headers({

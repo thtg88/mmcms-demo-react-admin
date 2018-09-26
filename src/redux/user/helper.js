@@ -31,11 +31,12 @@ export const destroyUser = async (data) => {
 
 export const getPaginatedUsers = async (data) => {
     // console.log('getPaginatedUsers data', data);
-    const { token, page, pageSize } = data;
+    const { token, page, pageSize, q } = data;
     const url = process.env.REACT_APP_API_BASE_URL
         +'/users/paginate'
         +'?page='+page
-        +'&page_size='+pageSize;
+        +'&page_size='+pageSize
+        +(typeof q !== 'undefined' ? '&q='+q : '');
     return await fetch(url, {
         method: 'GET',
         headers: new Headers({
