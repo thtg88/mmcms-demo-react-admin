@@ -1,5 +1,5 @@
-# mmCMS Admin Demo
-mmCMS Admin demo is a ReactJS admin app built on top of an [mmCMS demo API project](https://github.com/thtg88/mmcms-api).
+# React Admin Dashboard - mmCMS Demo
+React Admin Dashboard - mmCMS Demo, is a ReactJS admin app built on top of an [mmCMS demo API project](https://github.com/thtg88/mmcms-demo-api).
 This project was bootstrapped with [CoreUI React](https://github.com/coreui/coreui-free-react-admin-template) on top of [Create React App](https://github.com/facebook/create-react-app).
 
 ## Table of Contents
@@ -15,7 +15,7 @@ This project was bootstrapped with [CoreUI React](https://github.com/coreui/core
 
 ``` bash
 # clone the repo
-$ git clone https://github.com/thtg88/mmcms-admin.git my-project
+$ git clone https://github.com/thtg88/mmcms-demo-react-admin.git my-project
 
 # go into app's directory
 $ cd my-project
@@ -23,15 +23,19 @@ $ cd my-project
 # install app's dependencies
 $ npm install
 ```
+In order for your mmCMS REST API to work you have to create a .env file containing a variable pointing to the base URL of your API e.g. ```REACT_APP_API_BASE_URL=https://api.domain.com/v1```
+
 
 ## Basic usage
 
 ``` bash
-# dev server with hot reload at http://localhost:3000
+# dev server with hot module replacement at http://localhost:3000
 $ npm start
 ```
 
 Navigate to [http://localhost:3000](http://localhost:3000). The app will automatically reload if you change any of the source files.
+
+mmCMS Admin supports saving the Redux state on local storage. To enable that, add the following to your .env file ``REACT_APP_STATE_DRIVER=localStorage````
 
 ## Build
 
@@ -49,6 +53,7 @@ $ npm run build
 - [Redux](https://redux.js.org/)
 - [Redux-Saga](https://redux-saga.js.org/)
 - [JSX](https://jsx.github.io/)
+- [Webpack Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/)
 - ES6+
 - [Core UI Free React Admin Template](https://coreui.io/react/)
 - [Create React App](https://github.com/facebook/create-react-app)
@@ -65,4 +70,3 @@ See the [change-log](https://github.com/thtg88/mmcms-admin/blob/master/CHANGELOG
 ## License
 
 Code released under [the MIT license](LICENSE).
-There is only one limitation you can't can’t re-distribute the CoreUI as stock. You can’t do this if you modify the CoreUI. In past we faced some problems with persons who tried to sell CoreUI based templates.
