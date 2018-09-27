@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@coreui/coreui": "^2.0.10",
+    "@coreui/coreui": "^2.0.11",
     "@coreui/coreui-plugin-chartjs-custom-tooltips": "^1.2.0",
     "@coreui/icons": "0.2.0",
     "@coreui/react": "^2.0.4",
