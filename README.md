@@ -35,7 +35,7 @@ $ npm start
 
 Navigate to [http://localhost:3000](http://localhost:3000). The app will automatically reload if you change any of the source files.
 
-mmCMS Admin supports saving the Redux state on local storage. To enable that, add the following to your .env file ``REACT_APP_STATE_DRIVER=localStorage````
+mmCMS Admin supports saving the Redux state on local storage. To enable that, add the following to your .env file ```REACT_APP_STATE_DRIVER=localStorage```
 
 ## Build
 
