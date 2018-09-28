@@ -1,0 +1,25 @@
+# No cache for HTML files
+<FilesMatch "\.(html|htm)$">
+	ExpiresDefault A0
+	Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+	Header set Pragma "no-cache"
+</FilesMatch>
+# Caching files - 14 days
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf|svg)$">
+	Header set Cache-Control "max-age=1209600, public"
+</FilesMatch>
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+
+	# Target build folder
+	RewriteCond %{REQUEST_URI} !build/
+	RewriteRule (.*) /build/$1 [L]
+
+	# If an existing asset or directory is requested go to it as it is
+	RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+	RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+	RewriteRule ^ - [L]
+
+	# If the requested resource doesn't exist, use index.html
+	RewriteRule ^ index.html
+</IfModule>
