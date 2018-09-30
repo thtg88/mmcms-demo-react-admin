@@ -47,7 +47,7 @@ class Roles extends Component {
             searching: true,
         });
 
-        history.push({pathname: '/users', search: 'page=1'});
+        history.push({pathname: '/roles', search: 'page=1'});
 
         // Fetch first page
         const data = {
@@ -192,7 +192,9 @@ class Roles extends Component {
     }
 
     componentWillUnmount() {
-        this.props.clearMetadataResources();
+        const { query } = this.state;
+        const data = { query };
+        this.props.clearMetadataResources({ data });
     }
 
     render() {
@@ -310,7 +312,8 @@ const mapDispatchToProps = (dispatch) => ({
     },
     clearMetadataResources(data) {
         dispatch({
-            type: 'CLEAR_METADATA_ROLES'
+            type: 'CLEAR_METADATA_ROLES',
+            payload: data
         })
     },
     getPaginatedResources(data) {

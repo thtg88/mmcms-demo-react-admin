@@ -20,15 +20,31 @@ const user = (state = initial_state, action) => {
                 ...state,
                 current_page: action.payload.data.page
             };
-        case 'CLEAR_METADATA_USERS':
+        case 'CLEAR_METADATA_USERS': {
+            const { data } = action.payload;
             // console.log(action.type);
             return {
                 ...state,
                 error: null,
                 current_page: 1,
                 destroyed: false,
-                fetching_resources: false
+                fetching_resources: false,
+                resources: (
+                        data.query !== ''
+                        && data.query !== null
+                        && typeof data.query !== 'undefined'
+                    )
+                    // If I've searched before,
+                    // Clear the resources so on next reload
+                    // A re-fetch will be needed
+                    ? {
+                        1: []
+                    }
+                    : {
+                        ...state.resources
+                    }
             };
+        }
         case 'CLEAR_METADATA_USER_EDIT':
             return {
                 ...state,

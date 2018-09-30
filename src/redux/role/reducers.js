@@ -20,15 +20,31 @@ const role = (state = initial_state, action) => {
                 ...state,
                 current_page: action.payload.data.page
             };
-        case 'CLEAR_METADATA_ROLES':
+        case 'CLEAR_METADATA_ROLES': {
+            const { data } = action.payload;
             // console.log(action.type);
             return {
                 ...state,
-                error: null,
                 current_page: 1,
                 destroyed: false,
-                fetching_resources: false
+                error: null,
+                fetching_resources: false,
+                resources: (
+                        data.query !== ''
+                        && data.query !== null
+                        && typeof data.query !== 'undefined'
+                    )
+                    // If I've searched before,
+                    // Clear the resources so on next reload
+                    // A re-fetch will be needed
+                    ? {
+                        1: []
+                    }
+                    : {
+                        ...state.resources
+                    }
             };
+        }
         case 'CLEAR_METADATA_ROLE_EDIT':
             return {
                 ...state,
@@ -45,7 +61,7 @@ const role = (state = initial_state, action) => {
                 resource: null
             };
         case 'CREATE_ROLE_REQUEST':
-            console.log('creatingRole dispatched');
+            // console.log('creatingRole dispatched');
             return {
                 ...state,
                 error: null,
@@ -59,14 +75,14 @@ const role = (state = initial_state, action) => {
                 resource: action.payload.resource,
             };
         case 'CREATE_ROLE_ERROR':
-            console.log('creatingRole error:', action);
+            // console.log('creatingRole error:', action);
             return {
                 ...state,
                 error: action.error,
                 created: false
             };
         case 'DESTROY_ROLE_REQUEST':
-            console.log('deletingRole dispatched');
+            // console.log('deletingRole dispatched');
             return {
                 ...state,
                 error: null,
@@ -80,7 +96,7 @@ const role = (state = initial_state, action) => {
                 // resource: action.payload.resource,
             };
         case 'DESTROY_ROLE_ERROR':
-            console.log('deletingRole error:', action);
+            // console.log('deletingRole error:', action);
             return {
                 ...state,
                 error: action.error,

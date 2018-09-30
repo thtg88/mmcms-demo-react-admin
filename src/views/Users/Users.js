@@ -195,7 +195,9 @@ class Users extends Component {
     }
 
     componentWillUnmount() {
-        this.props.clearMetadataResources();
+        const { query } = this.state;
+        const data = { query };
+        this.props.clearMetadataResources({ data });
     }
 
     render() {
@@ -313,7 +315,8 @@ const mapDispatchToProps = (dispatch) => ({
     },
     clearMetadataResources(data) {
         dispatch({
-            type: 'CLEAR_METADATA_USERS'
+            type: 'CLEAR_METADATA_USERS',
+            payload: data
         })
     },
     getPaginatedResources(data) {

@@ -14,10 +14,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 - Yup schema validation for form validation
 ### Changed
 - CRUD components to container of Vanilla components, providing props about fields and paths
-### Fixed
-- Redirect to login if unauthenticated
 ### Removed
 - Cards as messages (replace with toaster notification)
+
+## [0.4.1] - 2018-09-30
+## Changed
+- Redirect to login if unauthenticated
+- When unmounting list of resources that have been searched, clear resources in global store so that a re-fetch is needed next time I visit the component
+### Fixed
+- Search roles now stop redirecting to users screen
 
 ## [0.4.0] - 2018-09-26
 ### Added
