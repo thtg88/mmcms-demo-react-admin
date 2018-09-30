@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ## [Unreleased]
 ### Added
 - Error Boundary
+- Google ReCaptcha for user registration
+- React Toastify to provide notification capabilities
+- Sentry for error tracking
+- Terms and conditions of use
+- Yup schema validation for form validation
+### Changed
+- CRUD components to container of Vanilla components, providing props about fields and paths
+### Fixed
+- Redirect to login if unauthenticated
+### Removed
+- Cards as messages (replace with toaster notification)
 
 ## [0.4.0] - 2018-09-26
 ### Added
