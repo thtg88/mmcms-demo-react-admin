@@ -19,7 +19,7 @@ import {
     DropdownToggle,
     Progress,
     Row,
-    Table,
+    Table
 } from 'reactstrap';
 import Widget03 from '../../views/Widgets/Widget03'
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
