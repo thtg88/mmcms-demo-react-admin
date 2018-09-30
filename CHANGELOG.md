@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Removed
 - Cards as messages (replace with toaster notification)
 
+## [0.5.1] - 2018-09-30
+### Fixed
+- Alert cleared throwing an error for after deletion
+- Roles search does not need to be submitted twice anymore
+
 ## [0.5.0] - 2018-09-30
 ### Added
 - Google ReCaptcha for user registration

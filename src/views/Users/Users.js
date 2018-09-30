@@ -79,7 +79,11 @@ class Users extends Component {
         // console.log(this.state);
 
         if(destroyed === true) {
-            setTimeout(clearMetadataResources, 1000);
+            setTimeout(function() {
+                const { query } = this.state;
+                const data = { query };
+                clearMetadataResources({ data });
+            }, 1000);
         }
 
         // if query page is not valid

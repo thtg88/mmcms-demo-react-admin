@@ -79,7 +79,11 @@ class Roles extends Component {
         // console.log(this.state);
 
         if(destroyed === true) {
-            setTimeout(clearMetadataResources, 1000);
+            setTimeout(function() {
+                const { query } = this.state;
+                const data = { query };
+                clearMetadataResources({ data });
+            }, 1000);
         }
 
         // if query page is not valid
@@ -147,6 +151,7 @@ class Roles extends Component {
             !isNaN(query_page)
             && query_page > 0
             && query_page !== parseInt(prevProps.query.page, 10)
+            && searching === false
         ) {
             if(
                 // If resources never fetched
