@@ -8,12 +8,14 @@ import {
     Col,
     Container,
     Form,
+    FormGroup,
     Input,
     InputGroup,
     InputGroupAddon,
     InputGroupText,
     Row
 } from 'reactstrap';
+import ReCAPTCHA from "react-google-recaptcha";
 import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
 import ApiErrorAlert from '../../ApiErrorAlert';
 
@@ -21,16 +23,35 @@ class Register extends Component {
     state = {
         redirect_login: false,
         email: '',
+        g_recaptcha_response: null,
         name: '',
         password: '',
-        password_confirmation: ''
+        password_confirmation: '',
+        recaptcha: null
     };
 
     constructor(props) {
         super(props);
 
+        this.assignRecaptcha = this.assignRecaptcha.bind(this);
         this.handleRegister = this.handleRegister.bind(this);
+        this.reCaptchaOnChange = this.reCaptchaOnChange.bind(this);
         this.updateInputValue = this.updateInputValue.bind(this);
+    }
+
+    assignRecaptcha(el) {
+        if(this.state.recaptcha === null) {
+            this.setState({
+                recaptcha: el
+            });
+        }
+    }
+
+    reCaptchaOnChange(value) {
+        // console.log("Captcha value:", value);
+        this.setState({
+            g_recaptcha_response: value
+        })
     }
 
     redirectLogin() {
@@ -49,8 +70,20 @@ class Register extends Component {
         evt.preventDefault();
 
         const { resetError, errors, register } = this.props;
-        const { email, name, password, password_confirmation } = this.state;
-        const data = { email, name, password, password_confirmation };
+        const {
+            email,
+            g_recaptcha_response,
+            name,
+            password,
+            password_confirmation
+        } = this.state;
+        const data = {
+            email,
+            g_recaptcha_response,
+            name,
+            password,
+            password_confirmation
+        };
 
         console.log(data);
 
@@ -66,14 +99,21 @@ class Register extends Component {
 
         if(errors.length > 0) {
             resetError();
-            console.log('reset error');
         }
-
-        console.log('updating state: ', [evt.target.name], evt.target.value);
 
         this.setState({
             [evt.target.name]: evt.target.value,
         });
+    }
+
+    componentDidUpdate(prevProps) {
+        if(prevProps.errors.length !== this.props.errors.length && this.props.errors.length > 0) {
+            if(this.state.recaptcha !== null) {
+                console.log('resetting recaptcha');
+
+                this.state.recaptcha.reset();
+            }
+        }
     }
 
     render() {
@@ -97,7 +137,7 @@ class Register extends Component {
             <div className="app flex-row align-items-center">
                 <Container>
                     <Row className="justify-content-center">
-                        <Col md="6">
+                        <Col md="8">
                             <Card className="mx-4">
                                 <CardBody className="p-4">
                                     <h1>Register</h1>
@@ -160,6 +200,15 @@ class Register extends Component {
                                                 onChange={this.updateInputValue}
                                             />
                                         </InputGroup>
+                                        <FormGroup>
+                                            <Col xs="12">
+                                                <ReCAPTCHA
+                                                    ref={this.assignRecaptcha}
+                                                    sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}
+                                                    onChange={this.reCaptchaOnChange}
+                                                />
+                                            </Col>
+                                        </FormGroup>
                                         <Row>
                                             <Col xs="6">
                                                 <Button
@@ -194,12 +243,18 @@ class Register extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const errors = getApiErrorMessages(state.auth.error);
+    const {
+        error,
+        registering,
+        user
+    } = state.auth;
+    const errors = getApiErrorMessages(error);
+
     return {
         errors: errors,
-        registering: state.auth.registering === true,
-        logged_in: typeof state.auth.user !== 'undefined' && state.auth.user !== null && !isNaN(state.auth.user.id)
-    }
+        registering: registering === true,
+        logged_in: typeof user !== 'undefined' && user !== null && !isNaN(user.id)
+    };
 };
 
 const mapDispatchToProps = (dispatch) => ({

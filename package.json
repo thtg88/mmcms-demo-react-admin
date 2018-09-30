@@ -1,6 +1,6 @@
 {
     "name": "mmcms-admin",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "description": "Admin area of mmCMS",
     "author": "Marco Marassi",
     "copyright": "Copyright 2018 Marco Marassi",
@@ -24,6 +24,7 @@
         "react": "^16.5.2",
         "react-chartjs-2": "^2.7.2",
         "react-dom": "^16.5.2",
+        "react-google-recaptcha": "^1.0.4",
         "react-loadable": "^5.5.0",
         "react-redux": "^5.0.7",
         "react-router-config": "^1.0.0-beta.4",
