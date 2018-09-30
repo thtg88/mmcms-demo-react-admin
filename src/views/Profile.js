@@ -15,7 +15,7 @@ import {
 import ApiErrorCard from './ApiErrorCard';
 import ApiResourceUpdateSuccessCard from './ApiResourceUpdateSuccessCard';
 import SpinnerLoader from './SpinnerLoader';
-import getApiErrorMessages from '../helpers/getApiErrorMessages';
+import { getApiErrorMessages } from '../helpers/apiErrorMessages';
 
 class Profile extends Component {
     state = {

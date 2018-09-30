@@ -13,7 +13,7 @@ import {
     Row,
 } from 'reactstrap';
 import ApiErrorCard from '../ApiErrorCard';
-import getApiErrorMessages from '../../helpers/getApiErrorMessages';
+import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
 import { pageSize } from './tableConfig';
 
 class Create extends Component {

@@ -18,7 +18,7 @@ import ApiResourceCreateSuccessCard from '../ApiResourceCreateSuccessCard';
 import ApiResourceUpdateSuccessCard from '../ApiResourceUpdateSuccessCard';
 import CardHeaderActions from '../CardHeaderActions';
 import DestroyResourceModal from '../DestroyResourceModal';
-import getApiErrorMessages from '../../helpers/getApiErrorMessages';
+import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
 import getResourceFromPaginatedResourcesAndId from '../../helpers/getResourceFromPaginatedResourcesAndId';
 
 class Edit extends Component {

@@ -1,4 +1,8 @@
-const getApiErrorMessages = (error) => {
+/**
+ * Normalizes the API errors into an array format, containing all the messages.
+ * Returns an empty array if no errors returned by the API.
+ */
+export const getApiErrorMessages = (error) => {
     let errors = [];
 
     if(typeof error !== 'undefined' && error !== null) {
@@ -25,7 +29,6 @@ const getApiErrorMessages = (error) => {
                             });
                         }
                     });
-
                 }
             });
         }
@@ -35,4 +38,36 @@ const getApiErrorMessages = (error) => {
 
     return errors;
 };
-export default getApiErrorMessages;
+
+/**
+ * Returns whether the API error is "unauthenticated" or not.
+ */
+export const isUnauthenticatedError = (error) => {
+    // If error undefined or null
+    if(typeof error === 'undefined' || error === null) {
+        return false;
+    }
+
+    // If error not an object
+    if(typeof error !== 'object') {
+        return false;
+    }
+
+    // IF error a TypeError
+    if(error instanceof TypeError) {
+        return false;
+    }
+
+    let unauthenticated = false;
+
+    // Loop all the object attributes
+    Object.entries(error).forEach(([key, value]) => {
+
+        if(key === 'unauthenticated') {
+            unauthenticated = true;
+            return false;
+        }
+    });
+
+    return unauthenticated;
+};

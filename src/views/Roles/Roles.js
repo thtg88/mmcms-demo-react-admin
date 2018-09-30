@@ -11,7 +11,7 @@ import ApiErrorCard from '../ApiErrorCard';
 import ApiResourceDestroySuccessCard from '../ApiResourceDestroySuccessCard';
 import CardHeaderActions from '../CardHeaderActions';
 import DataTable from '../DataTable';
-import getApiErrorMessages from '../../helpers/getApiErrorMessages';
+import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
 import { columns, pageSize } from './tableConfig';
 
 const actions = [

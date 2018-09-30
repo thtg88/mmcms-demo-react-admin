@@ -14,7 +14,7 @@ import {
     InputGroupText,
     Row
 } from 'reactstrap';
-import getApiErrorMessages from '../../../helpers/getApiErrorMessages';
+import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
 import ApiErrorAlert from '../../ApiErrorAlert';
 
 class Register extends Component {
