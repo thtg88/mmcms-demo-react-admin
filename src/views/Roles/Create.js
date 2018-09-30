@@ -13,7 +13,7 @@ import {
     Row,
 } from 'reactstrap';
 import ApiErrorCard from '../ApiErrorCard';
-import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
+import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';
 import { pageSize } from './tableConfig';
 
 class Create extends Component {
@@ -72,32 +72,37 @@ class Create extends Component {
             resource,
             created,
             history,
-            token
+            token,
+            unauthenticated
         } = this.props;
 
-        // console.log('prevProps', prevProps);
-        if(resource !== prevProps.resource) {
-            // If component is receiving props
-            // Set in the state so it can be created properly
-            // avoiding blank fields for ones that do not get created
+        // if unauthenticated redirect to login
+        if(prevProps.unauthenticated === false && unauthenticated === true) {
+            this.props.loggedOut();
+        }
+
+        // If component is receiving props
+        // Set in the state so it can be created properly
+        // avoiding blank fields for ones that do not get created
+        else if(resource !== prevProps.resource) {
             this.setState({
                 resource,
                 creating_resource: false
             });
         }
 
-        if(errors.length !== 0 && this.state.creating_resource === true) {
+        else if(errors.length !== 0 && this.state.creating_resource === true) {
             this.setState({
                 creating_resource: false
             });
         }
 
-        if(prevProps.created !== true && created === true && typeof resource.id !== 'undefined') {
+        // Get all the resources in the background
+        // so that when the user goes back to the list
+        // he can see the latest changes
+        else if(prevProps.created !== true && created === true && typeof resource.id !== 'undefined') {
             history.push('/users/'+resource.id);
 
-            // Get all the resources in the background
-            // so that when the user goes back to the list
-            // he can see the latest changes
             const data = {
                 token,
                 page: 1,
@@ -200,17 +205,20 @@ class Create extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const errors = getApiErrorMessages(state.roles.error);
     const {
         created,
+        error,
         resource
     } = state.roles;
+    const errors = getApiErrorMessages(error);
+    const unauthenticated = isUnauthenticatedError(error);
 
     return {
         created: created,
         errors: errors,
         resource: typeof resource === 'undefined' ? null : resource,
         token: state.auth.token,
+        unauthenticated: unauthenticated
     };
 };
 
@@ -224,11 +232,17 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch({
             type: 'CREATE_ROLE_REQUEST',
             payload: data
-        })    
+        })
     },
     getPaginatedResources(data) {
         dispatch({
             type: 'GET_PAGINATED_USERS_REQUEST',
+            payload: data
+        })
+    },
+    loggedOut(data) {
+        dispatch({
+            type: 'LOGGED_OUT',
             payload: data
         })
     },

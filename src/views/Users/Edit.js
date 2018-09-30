@@ -18,7 +18,7 @@ import ApiResourceCreateSuccessCard from '../ApiResourceCreateSuccessCard';
 import ApiResourceUpdateSuccessCard from '../ApiResourceUpdateSuccessCard';
 import CardHeaderActions from '../CardHeaderActions';
 import DestroyResourceModal from '../DestroyResourceModal';
-import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
+import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';
 import getResourceFromPaginatedResourcesAndId from '../../helpers/getResourceFromPaginatedResourcesAndId';
 
 class Edit extends Component {
@@ -118,15 +118,21 @@ class Edit extends Component {
             destroyed,
             errors,
             resource,
+            unauthenticated,
             updated
         } = this.props;
         const { destroying_resource, updating_resource } = this.state;
+
+        if(prevProps.unauthenticated === false && unauthenticated === true) {
+            // if unauthenticated redirect to login
+            this.props.loggedOut();
+        }
 
         // This means that I was destroying the resource,
         // And I received a destroyed from the store
         // So restore the state  - this will trigger a re-render
         // which will redirect us to the index
-        if(
+        else if(
             typeof errors.length !== 'undefined'
             && errors.length === 0
             && destroying_resource === true
@@ -302,14 +308,16 @@ class Edit extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const errors = getApiErrorMessages(state.users.error);
-    const params_id = parseInt(ownProps.match.params.id, 10);
     const {
         created,
         destroyed,
+        error,
         resources,
         updated
     } = state.users;
+    const errors = getApiErrorMessages(error);
+    const unauthenticated = isUnauthenticatedError(error);
+    const params_id = parseInt(ownProps.match.params.id, 10);
     let { resource } = state.users;
 
     if(
@@ -326,6 +334,7 @@ const mapStateToProps = (state, ownProps) => {
         errors: errors,
         resource: typeof resource === 'undefined' ? null : resource,
         token: state.auth.token,
+        unauthenticated: unauthenticated,
         updated: updated
     };
 };
@@ -345,6 +354,12 @@ const mapDispatchToProps = (dispatch) => ({
     getResource(data) {
         dispatch({
             type: 'GET_USER_REQUEST',
+            payload: data
+        })
+    },
+    loggedOut(data) {
+        dispatch({
+            type: 'LOGGED_OUT',
             payload: data
         })
     },

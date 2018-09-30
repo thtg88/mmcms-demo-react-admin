@@ -15,29 +15,31 @@ import {
 	InputGroupText,
 	Row
 } from 'reactstrap';
-import getApiErrorMessages from '../../../helpers/getApiErrorMessages';
+import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
 import ApiErrorAlert from '../../ApiErrorAlert';
+import LoggedOutAlert from '../../LoggedOutAlert';
 
 class Login extends Component {
+    state = {
+        redirect_register: false,
+        email: '',
+        password: ''
+    };
+
     constructor(props) {
         super(props);
-
-        this.state = {
-            redirect_register: false,
-            email: '',
-            password: ''
-        };
 
         this.handleLogin = this.handleLogin.bind(this);
         this.updateInputValue = this.updateInputValue.bind(this);
     }
 
     redirectRegister() {
-        const { resetError } = this.props;
-        const { errors } = this.props;
+        const { resetError, errors } = this.props;
+
         if(errors.length > 0) {
             resetError();
         }
+
         this.setState({
             redirect_register: true
         });
@@ -46,13 +48,11 @@ class Login extends Component {
     handleLogin(evt) {
         evt.preventDefault();
 
-        const { resetError } = this.props;
-        const { errors } = this.props;
-        const { login } = this.props;
+        const { resetError, errors, login } = this.props;
         const { email, password } = this.state;
         const data = { email, password };
 
-        console.log(data);
+        // console.log(data);
 
         if(errors.length > 0) {
             resetError();
@@ -62,8 +62,7 @@ class Login extends Component {
     };
 
     updateInputValue(evt) {
-        const { resetError } = this.props;
-        const { errors } = this.props;
+        const { resetError, errors } = this.props;
 
         if(errors.length > 0) {
             resetError();
@@ -76,10 +75,15 @@ class Login extends Component {
     }
 
     render() {
+        const {
+            errors,
+            logged_in,
+            logged_out,
+            logging_in
+        } = this.props;
         const { redirect_register } = this.state;
-        const { logging_in, errors, logged_in } = this.props;
 
-        // console.log('rendering...');
+        console.log(logged_out);
 
         if(redirect_register === true) {
             return <Redirect to="/register" />
@@ -105,6 +109,7 @@ class Login extends Component {
                                         <Form innerRef={"login-form"}>
                                             <h1>Login</h1>
                                             <p className="text-muted">Sign In to your account</p>
+                                            <LoggedOutAlert logged_out={logged_out} />
                                             <ApiErrorAlert errors={errors} />
                                             <InputGroup className="mb-3">
                                                 <InputGroupAddon addonType="prepend">
@@ -179,12 +184,21 @@ class Login extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const errors = getApiErrorMessages(state.auth.error);
+    const {
+        error,
+        logged_out,
+        logging_in,
+        token
+    } = state.auth;
+
+    const errors = getApiErrorMessages(error);
+
     return {
         errors: errors,
-        logging_in: state.auth.logging_in === true,
-        logged_in: typeof state.auth.token !== 'undefined' && state.auth.token !== null && typeof state.auth.token.access_token !== 'undefined'
-    }
+        logged_in: typeof token !== 'undefined' && token !== null && typeof token.access_token !== 'undefined',
+        logged_out: logged_out,
+        logging_in: logging_in === true,
+    };
 };
 
 const mapDispatchToProps = (dispatch) => ({

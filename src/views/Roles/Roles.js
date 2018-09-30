@@ -11,7 +11,7 @@ import ApiErrorCard from '../ApiErrorCard';
 import ApiResourceDestroySuccessCard from '../ApiResourceDestroySuccessCard';
 import CardHeaderActions from '../CardHeaderActions';
 import DataTable from '../DataTable';
-import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
+import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';
 import { columns, pageSize } from './tableConfig';
 
 const actions = [
@@ -128,7 +128,8 @@ class Roles extends Component {
             fetching_resources,
             query,
             resources,
-            token
+            token,
+            unauthenticated
         } = this.props;
         const { searching } = this.state;
         const query_page = parseInt(query.page, 10);
@@ -137,7 +138,12 @@ class Roles extends Component {
         // console.log('this.props', this.props);
         // console.log('prevProps', prevProps);
 
-        if(
+        // if unauthenticated redirect to login
+        if(prevProps.unauthenticated === false && unauthenticated === true) {
+            this.props.loggedOut();
+        }
+
+        else if(
             !isNaN(query_page)
             && query_page > 0
             && query_page !== parseInt(prevProps.query.page, 10)
@@ -270,14 +276,16 @@ class Roles extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const errors = getApiErrorMessages(state.roles.error);
     const {
         current_page,
         destroyed,
+        error,
         fetching_resources,
         resources,
         total
     } = state.roles;
+    const errors = getApiErrorMessages(error);
+    const unauthenticated = isUnauthenticatedError(error);
 
     // console.log(state.roles);
 
@@ -288,7 +296,8 @@ const mapStateToProps = (state) => {
         fetching_resources: fetching_resources,
         resources: resources,
         token: state.auth.token,
-        total: total
+        total: total,
+        unauthenticated: unauthenticated
     };
 };
 
@@ -307,6 +316,12 @@ const mapDispatchToProps = (dispatch) => ({
     getPaginatedResources(data) {
         dispatch({
             type: 'GET_PAGINATED_ROLES_REQUEST',
+            payload: data
+        })
+    },
+    loggedOut(data) {
+        dispatch({
+            type: 'LOGGED_OUT',
             payload: data
         })
     },

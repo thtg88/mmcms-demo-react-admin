@@ -2,6 +2,7 @@ const initial_state = {
     error: null,
     logging_in: false,
     logging_out: false,
+    logged_out: false,
     registering: false,
     updated_profile: false,
     token: null,
@@ -11,6 +12,43 @@ const initial_state = {
 const login = (state = initial_state, action) => {
     // console.log('action dispatched', action);
     switch(action.type) {
+        case 'CLEAR_METADATA_PROFILE':
+            return {
+                ...state,
+                error: null,
+                logged_out: false,
+                logging_in: false,
+                logging_out: false,
+                registering: false,
+                updated_profile: false
+            };
+        case 'GET_PROFILE_REQUEST':
+            console.log('getProfile dispatched');
+            return {
+                ...state,
+                error: null,
+                user: null,
+            };
+        case 'GET_PROFILE_SUCCESS':
+            return {
+                ...state,
+                error: null,
+                user: action.payload.resource,
+            };
+        case 'GET_PROFILE_ERROR':
+            // console.log('getProfile error:', action);
+            return {
+                ...state,
+                error: action.error,
+                user: null,
+            };
+        case 'LOGGED_OUT':
+            return {
+                ...state,
+                logged_out: true,
+                user: null,
+                token: null
+            };
         case 'LOGIN_ERROR_RESET':
             return {
                 ...state,
@@ -21,6 +59,7 @@ const login = (state = initial_state, action) => {
             return {
                 ...state,
                 error: null,
+                logged_out: false,
                 logging_in: true
             };
         case 'LOGIN_SUCCESS':
@@ -63,6 +102,7 @@ const login = (state = initial_state, action) => {
             return {
                 ...state,
                 error: null,
+                logged_out: false,
                 registering: true
             };
         case 'REGISTER_SUCCESS':
@@ -84,26 +124,6 @@ const login = (state = initial_state, action) => {
                 error: action.error,
                 registering: false
             };
-        case 'GET_PROFILE_REQUEST':
-            console.log('getProfile dispatched');
-            return {
-                ...state,
-                error: null,
-                user: null,
-            };
-        case 'GET_PROFILE_SUCCESS':
-            return {
-                ...state,
-                error: null,
-                user: action.payload.resource,
-            };
-        case 'GET_PROFILE_ERROR':
-            console.log('getProfile error:', action);
-            return {
-                ...state,
-                error: action.error,
-                user: null,
-            };
         case 'UPDATE_PROFILE_REQUEST':
             console.log('updatingProfile dispatched');
             return {
@@ -123,15 +143,6 @@ const login = (state = initial_state, action) => {
             return {
                 ...state,
                 error: action.error,
-                updated_profile: false
-            };
-        case 'CLEAR_METADATA_PROFILE':
-            return {
-                ...state,
-                error: null,
-                logging_in: false,
-                logging_out: false,
-                registering: false,
                 updated_profile: false
             };
         default:

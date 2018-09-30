@@ -1,6 +1,44 @@
 import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
 import { getProfile, login, logout, register, updateProfile } from './helper';
 
+export function* getProfileRequest() {
+    yield takeEvery('GET_PROFILE_REQUEST', function*({ payload }) {
+        console.log('getProfile taken!', payload);
+        const { data } = payload;
+        console.log('data', data);
+        try {
+            const result = yield call(getProfile, data);
+            console.log('getProfile result: ', result);
+            if (result.resource) {
+                yield put({
+                    type: 'GET_PROFILE_SUCCESS',
+                    payload: result
+                });
+            } else {
+                yield put({
+                    type: 'GET_PROFILE_ERROR',
+                    error: result.error || result.errors || result
+                });
+            }
+
+        } catch(err) {
+            console.log('getProfile error caught: ', err);
+            yield put({
+                type: 'GET_PROFILE_ERROR',
+                error: err
+            });
+        }
+    });
+}
+
+export function* getProfileSuccess() {
+    yield takeEvery('GET_PROFILE_SUCCESS', function*({ payload }) {});
+}
+
+export function* getProfileError() {
+    yield takeEvery('GET_PROFILE_ERROR', function*() {});
+}
+
 export function* loginRequest() {
     yield takeEvery('LOGIN_REQUEST', function*({ payload }) {
         // console.log('login taken!', payload);
@@ -105,44 +143,6 @@ export function* registerSuccess() {
 
 export function* registerError() {
     yield takeEvery('REGISTER_ERROR', function*() {});
-}
-
-export function* getProfileRequest() {
-    yield takeEvery('GET_PROFILE_REQUEST', function*({ payload }) {
-        console.log('getProfile taken!', payload);
-        const { data } = payload;
-        console.log('data', data);
-        try {
-            const result = yield call(getProfile, data);
-            console.log('getProfile result: ', result);
-            if (result.resource) {
-                yield put({
-                    type: 'GET_PROFILE_SUCCESS',
-                    payload: result
-                });
-            } else {
-                yield put({
-                    type: 'GET_PROFILE_ERROR',
-                    error: result.error || result.errors || result
-                });
-            }
-
-        } catch(err) {
-            console.log('getProfile error caught: ', err);
-            yield put({
-                type: 'GET_PROFILE_ERROR',
-                error: err
-            });
-        }
-    });
-}
-
-export function* getProfileSuccess() {
-    yield takeEvery('GET_PROFILE_SUCCESS', function*({ payload }) {});
-}
-
-export function* getProfileError() {
-    yield takeEvery('GET_PROFILE_ERROR', function*() {});
 }
 
 export function* updateProfileRequest() {
