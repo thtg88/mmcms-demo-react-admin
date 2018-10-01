@@ -132,6 +132,8 @@ class Register extends Component {
             registerButtonIconClassName = 'fa fa-spinner fa-spin';
         }
 
+        throw new Error('asd');
+
         return (
             <div className="app flex-row align-items-center">
                 <Container>

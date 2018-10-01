@@ -15,6 +15,7 @@ import {
     AppSidebarNav
 } from '@coreui/react';
 import { Page404 } from '../../views/Pages';
+import ErrorBoundary from '../../ErrorBoundary';
 import LoggingOutCard from '../../views/LoggingOutCard';
 import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
@@ -46,9 +47,11 @@ class DefaultLayout extends Component {
                             <Switch>
                                 {routes.map((route, idx) => {
                                     return route.component ? (<Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (
-                                        <RestrictedComponent>
-                                            <route.component query={queryString.parse(this.props.location.search)} {...props} />
-                                        </RestrictedComponent>
+                                        <ErrorBoundary>
+                                            <RestrictedComponent>
+                                                <route.component query={queryString.parse(this.props.location.search)} {...props} />
+                                            </RestrictedComponent>
+                                        </ErrorBoundary>
                                     )} />)
                                     : (null);
                                 },)}

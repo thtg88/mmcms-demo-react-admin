@@ -14,6 +14,7 @@ import 'simple-line-icons/css/simple-line-icons.css';
 import './scss/style.css'
 // Containers
 import { DefaultLayout } from './containers';
+import ErrorBoundary from './ErrorBoundary';
 import GuestComponent from './containers/DefaultLayout/GuestComponent';
 // Pages
 import { Login, Register } from './views/Pages';
@@ -24,14 +25,18 @@ class App extends Component {
             <BrowserRouter>
                 <Switch>
                     <Route exact path="/login" name="Login Page" render={(props) => (
-                        <GuestComponent>
-                            <Login {...props} />
-                        </GuestComponent>
+                        <ErrorBoundary>
+                            <GuestComponent>
+                                <Login {...props} />
+                            </GuestComponent>
+                        </ErrorBoundary>
                     )} />
                     <Route exact path="/register" name="Register Page" render={(props) => (
-                        <GuestComponent>
-                            <Register {...props} />
-                        </GuestComponent>
+                        <ErrorBoundary>
+                            <GuestComponent>
+                                <Register {...props} />
+                            </GuestComponent>
+                        </ErrorBoundary>
                     )} />
                     <Route path="/" name="Home" component={DefaultLayout} />
                 </Switch>
