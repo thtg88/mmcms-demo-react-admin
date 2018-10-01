@@ -13,10 +13,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 - After resource gets updated, trigger the fetch of the first page of resources to avoid inconsistencies
 - Apply logged out state to profile when unauthenticated message is returned from API
 - CRUD components to container of Vanilla components, providing props about fields and paths
-- Google ReCaptcha to be optional
-- Sentry integration to be optional
+- Reload profile if page is refreshed
 ### Removed
 - Cards as messages (replace with toaster notification)
+
+## [0.7.2] - 2018-10-01
+### Changed
+- Google ReCaptcha to be optional
+- Sentry integration to be optional
 
 ## [0.7.1] - 2018-10-01
 ### Added

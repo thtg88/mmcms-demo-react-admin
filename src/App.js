@@ -22,14 +22,25 @@ import { Login, Register } from './views/Pages';
 
 class App extends Component {
     componentDidMount() {
-        // Initialize Sentry error tracking
         const {
+            NODE_ENV,
             REACT_APP_SENTRY_KEY,
             REACT_APP_SENTRY_PROJECT_ID
         } = process.env;
-        init({
-            dsn: `https://${REACT_APP_SENTRY_KEY}@sentry.io/${REACT_APP_SENTRY_PROJECT_ID}`
-        });
+        if(
+            NODE_ENV === 'production'
+            && typeof REACT_APP_SENTRY_KEY !== 'undefined'
+            && REACT_APP_SENTRY_KEY !== null
+            && REACT_APP_SENTRY_KEY !== ''
+            && typeof REACT_APP_SENTRY_PROJECT_ID !== 'undefined'
+            && REACT_APP_SENTRY_PROJECT_ID !== null
+            && REACT_APP_SENTRY_PROJECT_ID !== ''
+        ) {
+            // Initialize Sentry error tracking
+            init({
+                dsn: `https://${REACT_APP_SENTRY_KEY}@sentry.io/${REACT_APP_SENTRY_PROJECT_ID}`
+            });
+        }
     }
 
     render() {

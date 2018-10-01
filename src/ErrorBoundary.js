@@ -27,9 +27,23 @@ class ErrorBoundary extends Component {
     }
 
     componentDidCatch(error, errorInfo) {
+        const {
+            NODE_ENV,
+            REACT_APP_SENTRY_KEY,
+            REACT_APP_SENTRY_PROJECT_ID
+        } = process.env;
+
         this.setState({ error });
 
-        if(process.env.NODE_ENV === 'production') {
+        if(
+            NODE_ENV === 'production'
+            && typeof REACT_APP_SENTRY_KEY !== 'undefined'
+            && REACT_APP_SENTRY_KEY !== null
+            && REACT_APP_SENTRY_KEY !== ''
+            && typeof REACT_APP_SENTRY_PROJECT_ID !== 'undefined'
+            && REACT_APP_SENTRY_PROJECT_ID !== null
+            && REACT_APP_SENTRY_PROJECT_ID !== ''
+        ) {
             // If app in production, send error to Sentry
             configureScope(scope => {
                 Object.keys(errorInfo).forEach(key => {

@@ -32,9 +32,17 @@ class Register extends Component {
     constructor(props) {
         super(props);
 
-        this.assignRecaptcha = this.assignRecaptcha.bind(this);
+        const { REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY } = process.env;
+
         this.handleRegister = this.handleRegister.bind(this);
-        this.reCaptchaOnChange = this.reCaptchaOnChange.bind(this);
+        if(
+            typeof REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== 'undefined'
+            && REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== null
+            && REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== ''
+        ) {
+            this.assignRecaptcha = this.assignRecaptcha.bind(this);
+            this.reCaptchaOnChange = this.reCaptchaOnChange.bind(this);
+        }
         this.updateInputValue = this.updateInputValue.bind(this);
     }
 
@@ -116,8 +124,9 @@ class Register extends Component {
     }
 
     render() {
-        const { redirect_login } = this.state;
+        const { REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY } = process.env;
         const { errors, registering, logged_in } = this.props;
+        const { redirect_login } = this.state;
 
         if(redirect_login === true) {
             return <Redirect to="/login" />
@@ -199,17 +208,24 @@ class Register extends Component {
                                                 onChange={this.updateInputValue}
                                             />
                                         </InputGroup>
-                                        <Row>
-                                            <Col md="12" className="mb-3 text-center">
-                                                <div style={{margin: '0 auto', display: 'inline-block'}}>
-                                                    <ReCAPTCHA
-                                                        ref={this.assignRecaptcha}
-                                                        sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}
-                                                        onChange={this.reCaptchaOnChange}
-                                                    />
-                                                </div>
-                                            </Col>
-                                        </Row>
+                                        {(
+                                            typeof REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== 'undefined'
+                                            && REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== null
+                                            && REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== ''
+                                        )
+                                            ? <Row>
+                                                <Col md="12" className="mb-3 text-center">
+                                                    <div style={{margin: '0 auto', display: 'inline-block'}}>
+                                                        <ReCAPTCHA
+                                                            ref={this.assignRecaptcha}
+                                                            sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}
+                                                            onChange={this.reCaptchaOnChange}
+                                                        />
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            : null
+                                        }
                                         <Row>
                                             <Col md="6">
                                                 <Button
