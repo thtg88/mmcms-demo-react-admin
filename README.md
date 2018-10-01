@@ -50,7 +50,7 @@ $ npm run build
 ## Technologies Used
 - mmCMS Demo API
 - ES6+
-- [Bootstrap](https://getbootstrap.com/)
+- [Bootstrap](https://getbootstrap.com/) with [reactstrap](https://reactstrap.github.io/)
 - [FontAwesome Icons](https://fontawesome.com/v4.7.0/icons/)
 - [Google ReCaptcha v2](https://www.google.com/recaptcha) with [react-google-recaptcha](https://github.com/dozoisch/react-google-recaptcha)
 - JSX

@@ -6,16 +6,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 
 ## [Unreleased]
 ### Added
-- .htaccess now enables gzip compression
 - React Toastify to provide notification capabilities
 - Terms and conditions of use
 - Yup schema validation for form validation
 ### Changed
+- After resource gets updated, trigger the fetch of the first page of resources to avoid inconsistencies
+- Apply logged out state to profile when unauthenticated message is returned from API
 - CRUD components to container of Vanilla components, providing props about fields and paths
 - Google ReCaptcha to be optional
 - Sentry integration to be optional
 ### Removed
 - Cards as messages (replace with toaster notification)
+
+## [0.7.1] - 2018-10-01
+### Added
+- .htaccess to enable gzip compression
 
 ## [0.7.0] - 2018-10-01
 ### Added
