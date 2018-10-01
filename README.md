@@ -49,18 +49,20 @@ $ npm run build
 
 ## Technologies Used
 - mmCMS Demo API
-- [React](https://reactjs.org/)
-- [React Router](https://www.npmjs.com/package/react-router)
-- [Redux](https://redux.js.org/)
-- [Redux-Saga](https://redux-saga.js.org/)
-- [JSX](https://jsx.github.io/)
-- [Webpack Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/)
 - ES6+
-- [Core UI Free React Admin Template](https://coreui.io/react/)
-- [Create React App](https://github.com/facebook/create-react-app)
 - [Bootstrap](https://getbootstrap.com/)
 - [FontAwesome Icons](https://fontawesome.com/v4.7.0/icons/)
-- [PropTypes](https://www.npmjs.com/package/prop-types)
+- [Google ReCaptcha v2](https://www.google.com/recaptcha) with [react-google-recaptcha](https://github.com/dozoisch/react-google-recaptcha)
+- JSX
+- [React](https://reactjs.org/)
+    - [Core UI Free React Admin Template](https://coreui.io/react/)
+    - [Create React App](https://github.com/facebook/create-react-app)
+    - [Error Boundaries](https://reactjs.org/docs/error-boundaries.html)
+    - [PropTypes](https://www.npmjs.com/package/prop-types)
+    - [React Router](https://www.npmjs.com/package/react-router)
+- [Redux](https://redux.js.org/)
+    - [Redux-Saga](https://redux-saga.js.org/)
+- [Webpack Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/)
 
 ## Versioning
 
