@@ -8,7 +8,6 @@ import {
     Col,
     Container,
     Form,
-    FormGroup,
     Input,
     InputGroup,
     InputGroupAddon,
@@ -137,7 +136,7 @@ class Register extends Component {
             <div className="app flex-row align-items-center">
                 <Container>
                     <Row className="justify-content-center">
-                        <Col md="8">
+                        <Col md="6">
                             <Card className="mx-4">
                                 <CardBody className="p-4">
                                     <h1>Register</h1>
@@ -200,17 +199,19 @@ class Register extends Component {
                                                 onChange={this.updateInputValue}
                                             />
                                         </InputGroup>
-                                        <FormGroup>
-                                            <Col xs="12">
-                                                <ReCAPTCHA
-                                                    ref={this.assignRecaptcha}
-                                                    sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}
-                                                    onChange={this.reCaptchaOnChange}
-                                                />
-                                            </Col>
-                                        </FormGroup>
                                         <Row>
-                                            <Col xs="6">
+                                            <Col md="12" className="mb-3 text-center">
+                                                <div style={{margin: '0 auto', display: 'inline-block'}}>
+                                                    <ReCAPTCHA
+                                                        ref={this.assignRecaptcha}
+                                                        sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}
+                                                        onChange={this.reCaptchaOnChange}
+                                                    />
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md="6">
                                                 <Button
                                                     type="submit"
                                                     color="success"
@@ -223,7 +224,7 @@ class Register extends Component {
                                                     Create Account
                                                 </Button>
                                             </Col>
-                                            <Col xs="6" className="text-right">
+                                            <Col md="6" className="text-right">
                                                 <Button
                                                     color="link"
                                                     className="px-0"

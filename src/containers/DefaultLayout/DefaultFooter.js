@@ -16,7 +16,13 @@ class DefaultFooter extends Component {
                         rel="noopener noreferrer"
                     >mmCMS</a>
                     {" "}
-                    &copy; 2018 Marco Marassi.
+                    &copy; 2018
+                    {" "}
+                    <a
+                        href="https://www.marco-marassi.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >M. Marassi</a>.
                 </span>
                 <span className="ml-auto">
                     Powered by

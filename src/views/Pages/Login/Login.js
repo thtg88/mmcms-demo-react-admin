@@ -99,8 +99,8 @@ class Login extends Component {
             <div className="app flex-row align-items-center">
                 <Container>
                     <Row className="justify-content-center">
-                        <Col md="8">
-                            <Card className="p-4">
+                        <Col md="4">
+                            <Card className="p-2">
                                 <CardBody>
                                     <Form innerRef={"login-form"}>
                                         <h1>Login</h1>
@@ -138,7 +138,7 @@ class Login extends Component {
                                                 <Button
                                                     type="submit"
                                                     color="primary"
-                                                    className="px-4"
+                                                    className="px-2"
                                                     disabled={logging_in}
                                                     onClick={this.handleLogin}
                                                     block
