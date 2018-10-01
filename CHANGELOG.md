@@ -8,14 +8,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Added
 - .htaccess now enables gzip compression
 - React Toastify to provide notification capabilities
-- Sentry for error tracking
 - Terms and conditions of use
 - Yup schema validation for form validation
 ### Changed
 - CRUD components to container of Vanilla components, providing props about fields and paths
+- Google ReCaptcha to be optional
+- Sentry integration to be optional
 ### Removed
 - Cards as messages (replace with toaster notification)
-- Errors introduced purposely to test Error Boundary in production
 
 ## [0.7.0] - 2018-10-01
 ### Added
