@@ -132,8 +132,6 @@ class Profile extends Component {
             updateButtonIconClassName = "fa fa-spinner fa-spin";
         }
 
-        throw new Error('lol');
-
         return (
             <div className="animated fadeIn">
                 <Row>

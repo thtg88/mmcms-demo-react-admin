@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 - Cards as messages (replace with toaster notification)
 - Errors introduced purposely to test Error Boundary in production
 
+## [0.7.0] - 2018-10-01
+### Added
+- Sentry for error tracking
+### Removed
+- Errors introduced purposely to test Error Boundary in production
+
 ## [0.6.0] - 2018-10-01
 ### Added
 - Error Boundary

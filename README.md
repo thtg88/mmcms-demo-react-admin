@@ -62,6 +62,7 @@ $ npm run build
     - [React Router](https://www.npmjs.com/package/react-router)
 - [Redux](https://redux.js.org/)
     - [Redux-Saga](https://redux-saga.js.org/)
+- [Sentry](https://sentry.io)
 - [Webpack Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/)
 
 ## Versioning

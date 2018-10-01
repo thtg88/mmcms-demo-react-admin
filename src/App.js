@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { init } from '@sentry/browser';
 import './App.css';
 // Styles
 // CoreUI Icons Set
@@ -20,6 +21,17 @@ import GuestComponent from './containers/DefaultLayout/GuestComponent';
 import { Login, Register } from './views/Pages';
 
 class App extends Component {
+    componentDidMount() {
+        // Initialize Sentry error tracking
+        const {
+            REACT_APP_SENTRY_KEY,
+            REACT_APP_SENTRY_PROJECT_ID
+        } = process.env;
+        init({
+            dsn: `https://${REACT_APP_SENTRY_KEY}@sentry.io/${REACT_APP_SENTRY_PROJECT_ID}`
+        });
+    }
+
     render() {
         return (
             <BrowserRouter>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import { configureScope, captureException } from '@sentry/browser';
 import {
     Button,
     Col,
@@ -29,7 +30,14 @@ class ErrorBoundary extends Component {
         this.setState({ error });
 
         if(process.env.NODE_ENV === 'production') {
-            // window.Raven.captureException(error, { extra: errorInfo });
+            // If app in production, send error to Sentry
+            configureScope(scope => {
+                Object.keys(errorInfo).forEach(key => {
+                    scope.setExtra(key, errorInfo[key]);
+                });
+            });
+
+            captureException(error);
         }
     }
 
