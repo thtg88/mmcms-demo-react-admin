@@ -124,8 +124,9 @@ class Create extends Component {
     render() {
         const { errors } = this.props;
         const {
-            resource_unchanged,
-            creating_resource
+            creating_resource,
+            resource,
+            resource_unchanged
         } = this.state;
 
         // console.log('resource', resource);
@@ -158,7 +159,7 @@ class Create extends Component {
                                             type="text"
                                             id="name"
                                             name="name"
-                                            value={this.state.resource.name}
+                                            value={resource.name}
                                             placeholder="Enter your name"
                                             onChange={this.updateInputValue}
                                         />
@@ -169,7 +170,7 @@ class Create extends Component {
                                             type="email"
                                             id="email"
                                             name="email"
-                                            value={this.state.resource.email}
+                                            value={resource.email}
                                             placeholder="Enter your email"
                                             onChange={this.updateInputValue}
                                         />
@@ -180,7 +181,7 @@ class Create extends Component {
                                             type="password"
                                             id="password"
                                             name="password"
-                                            value={this.state.resource.password}
+                                            value={resource.password}
                                             placeholder="Enter your password"
                                             onChange={this.updateInputValue}
                                         />
@@ -191,7 +192,7 @@ class Create extends Component {
                                             type="password"
                                             id="password_confirmation"
                                             name="password_confirmation"
-                                            value={this.state.resource.password_confirmation}
+                                            value={resource.password_confirmation}
                                             placeholder="Confirm your password"
                                             onChange={this.updateInputValue}
                                         />

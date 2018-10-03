@@ -119,8 +119,9 @@ class Create extends Component {
     render() {
         const { errors } = this.props;
         const {
-            resource_unchanged,
-            creating_resource
+            creating_resource,
+            resource,
+            resource_unchanged
         } = this.state;
 
         // console.log('resource', resource);
@@ -155,7 +156,7 @@ class Create extends Component {
                                             type="text"
                                             id="name"
                                             name="name"
-                                            value={this.state.resource.name}
+                                            value={resource.name}
                                             placeholder="Enter your name"
                                             onChange={this.updateInputValue}
                                         />
@@ -166,7 +167,7 @@ class Create extends Component {
                                             type="text"
                                             id="display_name"
                                             name="display_name"
-                                            value={this.state.resource.display_name}
+                                            value={resource.display_name}
                                             placeholder="Enter your display name"
                                             onChange={this.updateInputValue}
                                         />
@@ -177,7 +178,7 @@ class Create extends Component {
                                             type="number"
                                             id="priority"
                                             name="priority"
-                                            value={this.state.resource.priority}
+                                            value={resource.priority}
                                             placeholder="Enter your priority"
                                             onChange={this.updateInputValue}
                                         />
