@@ -14,7 +14,6 @@ import {
 } from 'reactstrap';
 import ApiErrorCard from '../ApiErrorCard';
 import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';
-import { pageSize } from './tableConfig';
 
 class Create extends Component {
     state = {
@@ -89,21 +88,13 @@ class Create extends Component {
             });
         }
 
-        // Get all the resources in the background
-        // so that when the user goes back to the list
-        // he can see the latest changes
+        // If received created=true and resource id is there
+        // Redirect to resource edit
         else if(
             prevProps.created !== true
             && created === true
             && typeof resource.id !== 'undefined'
         ) {
-            const data = {
-                token,
-                page: 1,
-                pageSize
-            };
-            this.props.getPaginatedResources({ data });
-
             history.push('/roles/'+resource.id);
         }
     }
@@ -228,12 +219,6 @@ const mapDispatchToProps = (dispatch) => ({
     createResource(data) {
         dispatch({
             type: 'CREATE_ROLE_REQUEST',
-            payload: data
-        })
-    },
-    getPaginatedResources(data) {
-        dispatch({
-            type: 'GET_PAGINATED_USERS_REQUEST',
             payload: data
         })
     },

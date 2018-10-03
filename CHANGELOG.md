@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Removed
 - Cards as messages (replace with toaster notification)
 
+## [0.7.6] - 2018-10-03
+### Fixed
+- Fetch after creation of resource
+
 ## [0.7.5] - 2018-10-03
 ### Changed
 - Apply logged out state to profile when unauthenticated message is returned from API

@@ -24,7 +24,7 @@ export const saveState = (state) => {
 }
 
 export const sanitizeState = (state) => {
-    const { token, user } = state.auth;
+    const { token } = state.auth;
     // const {
     //     current_page,
     //     resource,

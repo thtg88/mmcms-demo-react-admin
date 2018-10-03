@@ -20,6 +20,7 @@ import CardHeaderActions from '../CardHeaderActions';
 import DestroyResourceModal from '../DestroyResourceModal';
 import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';
 import getResourceFromPaginatedResourcesAndId from '../../helpers/getResourceFromPaginatedResourcesAndId';
+import { pageSize } from './tableConfig';
 
 class Edit extends Component {
     state = {
@@ -95,7 +96,12 @@ class Edit extends Component {
     }
 
     componentDidMount() {
-        const { match, resource, token } = this.props;
+        const {
+            created,
+            match,
+            resource,
+            token
+        } = this.props;
 
         // console.log(resource);
 
@@ -112,6 +118,18 @@ class Edit extends Component {
             });
         } else {
             this.setState({ resource });
+        }
+
+        // Get all the resources in the background
+        // so that when the user goes back to the list
+        // he can see the latest changes
+        if(created === true) {
+            const data = {
+                token,
+                page: 1,
+                pageSize
+            };
+            this.props.getPaginatedResources({ data });
         }
     }
 
@@ -356,6 +374,12 @@ const mapDispatchToProps = (dispatch) => ({
     destroyResource(data) {
         dispatch({
             type: 'DESTROY_ROLE_REQUEST',
+            payload: data
+        })
+    },
+    getPaginatedResources(data) {
+        dispatch({
+            type: 'GET_PAGINATED_ROLES_REQUEST',
             payload: data
         })
     },
