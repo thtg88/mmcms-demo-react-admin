@@ -10,7 +10,7 @@
         "@coreui/coreui": "^2.0.14",
         "@coreui/coreui-plugin-chartjs-custom-tooltips": "^1.2.0",
         "@coreui/icons": "0.2.0",
-        "@coreui/react": "^2.0.6",
+        "@coreui/react": "^2.0.7",
         "@sentry/browser": "^4.0.6",
         "bootstrap": "^4.1.3",
         "chart.js": "^2.7.2",
