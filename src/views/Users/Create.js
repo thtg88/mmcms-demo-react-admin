@@ -77,8 +77,8 @@ class Create extends Component {
             unauthenticated
         } = this.props;
 
+        // if unauthenticated redirect to login
         if(prevProps.unauthenticated === false && unauthenticated === true) {
-            // if unauthenticated redirect to login
             this.props.loggedOut();
         }
 

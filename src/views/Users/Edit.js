@@ -123,8 +123,8 @@ class Edit extends Component {
         } = this.props;
         const { destroying_resource, updating_resource } = this.state;
 
+        // if unauthenticated redirect to login
         if(prevProps.unauthenticated === false && unauthenticated === true) {
-            // if unauthenticated redirect to login
             this.props.loggedOut();
         }
 

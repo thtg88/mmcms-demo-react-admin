@@ -3,9 +3,11 @@ import { getProfile, login, logout, register, updateProfile } from './helper';
 
 export function* getProfileRequest() {
     yield takeEvery('GET_PROFILE_REQUEST', function*({ payload }) {
-        console.log('getProfile taken!', payload);
         const { data } = payload;
-        console.log('data', data);
+
+        // console.log('getProfile taken!', payload);
+        // console.log('data', data);
+
         try {
             const result = yield call(getProfile, data);
             console.log('getProfile result: ', result);
@@ -41,9 +43,11 @@ export function* getProfileError() {
 
 export function* loginRequest() {
     yield takeEvery('LOGIN_REQUEST', function*({ payload }) {
-        // console.log('login taken!', payload);
         const { data } = payload;
+
+        // console.log('login taken!', payload);
         // console.log('data', data);
+
         try {
             const result = yield call(login, data);
             // console.log('login result: ', result);
@@ -79,18 +83,20 @@ export function* loginError() {
 
 export function* logoutRequest() {
     yield takeEvery('LOGOUT_REQUEST', function*({ payload }) {
-        console.log('logout taken!', payload);
         const { data } = payload;
-        console.log('data', data);
+
+        // console.log('logout taken!', payload);
+        // console.log('data', data);
+
         try {
             const result = yield call(logout, data);
-            console.log('logout result: ', result);
+            // console.log('logout result: ', result);
             yield put({
                 type: 'LOGOUT_SUCCESS'
             });
 
         } catch(err) {
-            console.log(err);
+            // console.log(err);
             yield put({
                 type: 'LOGOUT_SUCCESS'
             });
@@ -109,12 +115,16 @@ export function* logoutError() {
 
 export function* registerRequest() {
     yield takeEvery('REGISTER_REQUEST', function*({ payload }) {
-        console.log('register taken!', payload);
         const { data } = payload;
-        console.log('data', data);
+
+        // console.log('register taken!', payload);
+        // console.log('data', data);
+
         try {
             const result = yield call(register, data);
-            console.log('register result: ', result);
+
+            // console.log('register result: ', result);
+
             if (result.access_token) {
                 yield put({
                     type: 'REGISTER_SUCCESS',
@@ -128,7 +138,7 @@ export function* registerRequest() {
             }
 
         } catch(err) {
-            console.log('register error caught: ', err);
+            // console.log('register error caught: ', err);
             yield put({
                 type: 'REGISTER_ERROR',
                 error: err
@@ -147,12 +157,16 @@ export function* registerError() {
 
 export function* updateProfileRequest() {
     yield takeEvery('UPDATE_PROFILE_REQUEST', function*({ payload }) {
-        console.log('updateProfile taken!', payload);
         const { data } = payload;
-        console.log('data', data);
+
+        // console.log('updateProfile taken!', payload);
+        // console.log('data', data);
+
         try {
             const result = yield call(updateProfile, data);
-            console.log('updateProfile result: ', result);
+
+            // console.log('updateProfile result: ', result);
+
             if (result.resource) {
                 yield put({
                     type: 'UPDATE_PROFILE_SUCCESS',
@@ -166,7 +180,7 @@ export function* updateProfileRequest() {
             }
 
         } catch(err) {
-            console.log('updateProfile error caught: ', err);
+            // console.log('updateProfile error caught: ', err);
             yield put({
                 type: 'UPDATE_PROFILE_ERROR',
                 error: err

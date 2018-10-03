@@ -96,9 +96,11 @@ class Edit extends Component {
 
     componentDidMount() {
         const { match, resource, token } = this.props;
+
+        // console.log(resource);
+
         // If resource is already in global state
         // Avoid re-fetching
-        // console.log(resource);
         if(resource === null) {
             const data = {
                 token,
