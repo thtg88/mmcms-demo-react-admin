@@ -1,3 +1,5 @@
+import updatePaginatedResourcesFromResource from '../../helpers/updatePaginatedResourcesFromResource';
+
 const initial_state = {
     created: false,
     destroyed: false,
@@ -141,7 +143,7 @@ const role = (state = initial_state, action) => {
                 total: 0
             };
         case 'GET_ROLE_REQUEST':
-            console.log('getRole dispatched');
+            // console.log('getRole dispatched');
             return {
                 ...state,
                 error: null
@@ -153,28 +155,31 @@ const role = (state = initial_state, action) => {
                 resource: action.payload.resource,
             };
         case 'GET_ROLE_ERROR':
-            console.log('getRole error:', action);
+            // console.log('getRole error:', action);
             return {
                 ...state,
                 error: action.error
             };
         case 'UPDATE_ROLE_REQUEST':
-            console.log('updatingRole dispatched');
+            // console.log('updatingRole dispatched');
             return {
                 ...state,
                 created: false,
                 error: null,
                 updated: false
             };
-        case 'UPDATE_ROLE_SUCCESS':
+        case 'UPDATE_ROLE_SUCCESS': {
+            const { resource } = action.payload;
             return {
                 ...state,
                 error: null,
                 updated: true,
-                resource: action.payload.resource,
+                resource: resource,
+                resources: updatePaginatedResourcesFromResource(state.resources, resource)
             };
+        }
         case 'UPDATE_ROLE_ERROR':
-            console.log('updatingRole error:', action);
+            // console.log('updatingRole error:', action);
             return {
                 ...state,
                 error: action.error,

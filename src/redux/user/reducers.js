@@ -1,3 +1,5 @@
+import updatePaginatedResourcesFromResource from '../../helpers/updatePaginatedResourcesFromResource';
+
 const initial_state = {
     created: false,
     current_page: 1,
@@ -175,13 +177,16 @@ const user = (state = initial_state, action) => {
                 error: null,
                 updated: false
             };
-        case 'UPDATE_USER_SUCCESS':
+        case 'UPDATE_USER_SUCCESS': {
+            const { resource } = action.payload;
             return {
                 ...state,
                 error: null,
                 updated: true,
                 resource: action.payload.resource,
+                resources: updatePaginatedResourcesFromResource(state.resources, resource)
             };
+        }
         case 'UPDATE_USER_ERROR':
             // console.log('updateUser error:', action);
             return {

@@ -10,12 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 - Terms and conditions of use
 - Yup schema validation for form validation
 ### Changed
-- After resource gets updated, trigger the fetch of the first page of resources to avoid inconsistencies
 - Apply logged out state to profile when unauthenticated message is returned from API
 - CRUD components to container of Vanilla components, providing props about fields and paths
 - Reload profile if page is refreshed
 ### Removed
 - Cards as messages (replace with toaster notification)
+
+## [0.7.4] - 2018-10-03
+### Changed
+- After resource gets updated, update resources variable if in store so that there's no data inconsistency
 
 ## [0.7.3] - 2018-10-03
 ### Fixed
