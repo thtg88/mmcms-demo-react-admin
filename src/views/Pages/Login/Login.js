@@ -99,7 +99,7 @@ class Login extends Component {
             <div className="app flex-row align-items-center">
                 <Container>
                     <Row className="justify-content-center">
-                        <Col md="4">
+                        <Col md="6">
                             <Card className="p-2">
                                 <CardBody>
                                     <Form innerRef={"login-form"}>
@@ -181,7 +181,7 @@ const mapStateToProps = (state) => {
     return {
         errors: errors,
         logged_in: typeof token !== 'undefined' && token !== null && typeof token.access_token !== 'undefined',
-        logged_out: logged_out,
+        logged_out: logged_out === true,
         logging_in: logging_in === true,
     };
 };

@@ -15,10 +15,11 @@ import {
 import ApiErrorCard from './ApiErrorCard';
 import ApiResourceUpdateSuccessCard from './ApiResourceUpdateSuccessCard';
 import SpinnerLoader from './SpinnerLoader';
-import { getApiErrorMessages } from '../helpers/apiErrorMessages';
+import { getApiErrorMessages, isUnauthenticatedError } from '../helpers/apiErrorMessages';
 
 class Profile extends Component {
     state = {
+        getting_profile: false,
         profile: null,
         profile_unchanged: true,
         updating_profile: false
@@ -67,9 +68,10 @@ class Profile extends Component {
     componentDidMount() {
         const { profile, token } = this.props;
 
+        // console.log(profile);
+
         // If profile is already in global state
         // Avoid re-fetching
-        // console.log(profile);
         if(profile === null) {
             const data = { token };
 
@@ -84,23 +86,51 @@ class Profile extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        const {
+            errors,
+            profile,
+            unauthenticated,
+            updated_profile
+        } = this.props;
+        const { getting_profile, updating_profile } = this.state;
+
         // console.log('prevProps', prevProps);
 
-        if(this.props.profile !== prevProps.profile) {
-            // If component is receiving props
-            // Set in the state so it can be updated properly
-            // avoiding blank fields for ones that do not get updated
-            const { profile } = this.props;
+        // if unauthenticated redirect to login
+        if(prevProps.unauthenticated === false && unauthenticated === true) {
+            this.props.loggedOut();
+        }
 
+        // This means that I was updating the resource,
+        // And I received either errors from the store
+        // So it's time to restore the Update button
+        else if (
+            updating_profile === true
+            && typeof errors.length !== 'undefined'
+            && errors.length !== 0
+        ) {
             this.setState({
-                profile,
                 getting_profile: false,
                 updating_profile: false
             });
         }
 
-        if(this.props.errors.length !== 0 && this.state.updating_profile === true) {
+        // This means that I was updating or getting the resource,
+        // And I received either an updated or the profile from the store
+        // So it's time to restore the internal state
+        else if (
+            (
+                updating_profile === true
+                && updated_profile === true
+            )
+            || (
+                getting_profile === true
+                && prevProps.profile === null
+                && profile !== null
+            )
+        ) {
             this.setState({
+                profile,
                 getting_profile: false,
                 updating_profile: false
             });
@@ -123,7 +153,7 @@ class Profile extends Component {
         // console.log(this.state);
         // console.log(this.props);
 
-        if(profile === null && getting_profile !== true) {
+        if((profile === null || typeof profile === 'undefined') && getting_profile !== true) {
             return (null);
         }
 
@@ -210,12 +240,21 @@ class Profile extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const errors = getApiErrorMessages(state.auth.error);
+    const {
+        error,
+        token,
+        updated_profile,
+        user
+    } = state.auth;
+    const errors = getApiErrorMessages(error);
+    const unauthenticated = isUnauthenticatedError(error);
+
     return {
-        token: state.auth.token,
-        profile: state.auth.user,
-        updated_profile: state.auth.updated_profile,
-        errors: errors
+        errors: errors,
+        profile: typeof user === 'undefined' ? null : user,
+        token: token,
+        unauthenticated: unauthenticated,
+        updated_profile: updated_profile
     }
 };
 
@@ -228,6 +267,12 @@ const mapDispatchToProps = (dispatch) => ({
     getProfile(data) {
         dispatch({
             type: 'GET_PROFILE_REQUEST',
+            payload: data
+        })
+    },
+    loggedOut(data) {
+        dispatch({
+            type: 'LOGGED_OUT',
             payload: data
         })
     },

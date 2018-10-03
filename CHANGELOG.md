@@ -10,11 +10,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 - Terms and conditions of use
 - Yup schema validation for form validation
 ### Changed
-- Apply logged out state to profile when unauthenticated message is returned from API
 - CRUD components to container of Vanilla components, providing props about fields and paths
-- Reload profile if page is refreshed
 ### Removed
 - Cards as messages (replace with toaster notification)
+
+## [0.7.5] - 2018-10-03
+### Changed
+- Apply logged out state to profile when unauthenticated message is returned from API
+- Reload profile if page is refreshed
 
 ## [0.7.4] - 2018-10-03
 ### Changed

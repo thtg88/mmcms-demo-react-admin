@@ -16,7 +16,6 @@ const login = (state = initial_state, action) => {
             return {
                 ...state,
                 error: null,
-                logged_out: false,
                 logging_in: false,
                 logging_out: false,
                 registering: false,

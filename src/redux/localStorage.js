@@ -32,7 +32,7 @@ export const sanitizeState = (state) => {
     //     total
     // } = state.users;
     return {
-        auth: { token, user },
+        auth: { token },
         users: {
             //
         }
