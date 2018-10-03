@@ -79,7 +79,7 @@ class Roles extends Component {
         // console.log(this.state);
 
         if(destroyed === true) {
-            setTimeout(function() {
+            setTimeout(() => {
                 const { query } = this.state;
                 const data = { query };
                 clearMetadataResources({ data });
