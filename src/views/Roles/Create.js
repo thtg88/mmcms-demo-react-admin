@@ -81,16 +81,8 @@ class Create extends Component {
             this.props.loggedOut();
         }
 
-        // If component is receiving props
-        // Set in the state so it can be created properly
-        // avoiding blank fields for ones that do not get created
-        else if(resource !== prevProps.resource) {
-            this.setState({
-                resource,
-                creating_resource: false
-            });
-        }
-
+        // If I am receiving errors and I am creating the resource
+        // Set the creating resource to false
         else if(errors.length !== 0 && this.state.creating_resource === true) {
             this.setState({
                 creating_resource: false
@@ -100,15 +92,19 @@ class Create extends Component {
         // Get all the resources in the background
         // so that when the user goes back to the list
         // he can see the latest changes
-        else if(prevProps.created !== true && created === true && typeof resource.id !== 'undefined') {
-            history.push('/users/'+resource.id);
-
+        else if(
+            prevProps.created !== true
+            && created === true
+            && typeof resource.id !== 'undefined'
+        ) {
             const data = {
                 token,
                 page: 1,
                 pageSize
             };
             this.props.getPaginatedResources({ data });
+
+            history.push('/roles/'+resource.id);
         }
     }
 
