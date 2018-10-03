@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Removed
 - Cards as messages (replace with toaster notification)
 
+## [0.7.3] - 2018-10-03
+### Fixed
+- Various bug fixes
+
 ## [0.7.2] - 2018-10-01
 ### Changed
 - Google ReCaptcha to be optional
