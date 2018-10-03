@@ -41,7 +41,7 @@ DestroyResourceModal.propTypes = {
     disabled: PropTypes.bool,
     isOpen: PropTypes.bool,
     onDestroyButtonClick: PropTypes.func,
-    toggle: PropTypes.bool
+    toggle: PropTypes.func
 };
 
 export default DestroyResourceModal;
