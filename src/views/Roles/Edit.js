@@ -145,13 +145,19 @@ class Edit extends Component {
         }
 
         // This means that I was updating the resource,
-        // And I received an updated from the store
+        // And I received either an updated or errors from the store
         // So it's time to restore the Update button
         else if(
-            typeof errors.length !== 'undefined'
-            && errors.length !== 0
-            && updated === true
-            && updating_resource === true
+            updating_resource === true
+            && (
+                // Either I received errors
+                (
+                    typeof errors.length !== 'undefined'
+                    && errors.length !== 0
+                )
+                // Or I received a confirmation of the update
+                || updated === true
+            )
         ) {
             this.setState({
                 getting_resource: false,
