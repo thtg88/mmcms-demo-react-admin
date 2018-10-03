@@ -72,7 +72,6 @@ class Create extends Component {
             created,
             history,
             resource,
-            token,
             unauthenticated
         } = this.props;
 
