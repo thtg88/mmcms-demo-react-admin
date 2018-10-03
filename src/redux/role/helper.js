@@ -1,7 +1,9 @@
 export const createRole = async (data) => {
     const { token, ...rest } = data;
-    console.log(token, rest);
-    console.log('createRole rest', rest);
+
+    // console.log(token, rest);
+    // console.log('createRole rest', rest);
+
     return await fetch(process.env.REACT_APP_API_BASE_URL+'/roles', {
         method: 'POST',
         headers: new Headers({
@@ -16,8 +18,10 @@ export const createRole = async (data) => {
 
 export const destroyRole = async (data) => {
     const { token, id } = data;
-    console.log(token, id);
-    console.log('destryoRole', id);
+
+    // console.log(token, id);
+    // console.log('destryoRole', id);
+
     return await fetch(process.env.REACT_APP_API_BASE_URL+'/roles/'+id, {
         method: 'DELETE',
         headers: new Headers({
@@ -30,13 +34,21 @@ export const destroyRole = async (data) => {
 };
 
 export const getPaginatedRoles = async (data) => {
-    // console.log('getPaginatedRoles data', data);
     const { token, page, pageSize, q } = data;
     const url = process.env.REACT_APP_API_BASE_URL
         +'/roles/paginate'
         +'?page='+page
         +'&page_size='+pageSize
-        +(typeof q !== 'undefined' ? '&q='+q : '');
+        +(
+            typeof q !== 'undefined'
+            && q !== null
+            && q !== ''
+                ? '&q='+q
+                : ''
+        );
+
+    // console.log('getPaginatedRoles data', data);
+
     return await fetch(url, {
         method: 'GET',
         headers: new Headers({
@@ -49,9 +61,11 @@ export const getPaginatedRoles = async (data) => {
 };
 
 export const getRole = async (data) => {
-    console.log('getRole data', data);
     const { token, id } = data;
     const url = process.env.REACT_APP_API_BASE_URL+'/roles/'+id;
+
+    // console.log('getRole data', data);
+
     return await fetch(url, {
         method: 'GET',
         headers: new Headers({
@@ -65,8 +79,10 @@ export const getRole = async (data) => {
 
 export const updateRole = async (data) => {
     const { token, id, ...rest } = data;
-    console.log(token, id, rest);
-    console.log('updateRole rest', rest);
+
+    // console.log(token, id, rest);
+    // console.log('updateRole rest', rest);
+
     return await fetch(process.env.REACT_APP_API_BASE_URL+'/roles/'+id, {
         method: 'PUT',
         headers: new Headers({
