@@ -4,7 +4,7 @@ import Loadable from 'react-loadable'
 const Loading = () => (<div>Loading...</div>);
 
 const Profile = Loadable({
-    loader: () => import('./views/Profile'),
+    loader: () => import('./views/Pages/Profile'),
     loading: Loading,
 })
 

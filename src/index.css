@@ -29,3 +29,17 @@
 .card-header-action.btn-outline-warning:hover {
     color: #23282c;
 }
+
+.fa-border-circle {
+    border-radius: 60px;
+    border: 2px solid;
+}
+
+.fa-border-circle.fa-times.fa-danger {
+    padding: 3px;
+    color: #f86c6b;
+}
+
+.color-black {
+    color: #000000;
+}

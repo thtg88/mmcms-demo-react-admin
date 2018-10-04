@@ -12,10 +12,11 @@ import {
     Label,
     Row,
 } from 'reactstrap';
-import ApiErrorCard from './ApiErrorCard';
-import ApiResourceUpdateSuccessCard from './ApiResourceUpdateSuccessCard';
-import SpinnerLoader from './SpinnerLoader';
-import { getApiErrorMessages, isUnauthenticatedError } from '../helpers/apiErrorMessages';
+import ApiErrorCard from '../../ApiErrorCard';
+import ApiResourceUpdateSuccessCard from '../../ApiResourceUpdateSuccessCard';
+import SpinnerLoader from '../../SpinnerLoader';
+import { getApiErrorMessages, isUnauthenticatedError } from '../../../helpers/apiErrorMessages';
+import notification from '../../../helpers/notification';
 
 class Profile extends Component {
     state = {
@@ -66,6 +67,15 @@ class Profile extends Component {
     }
 
     componentDidMount() {
+        const data = {
+            type: 'danger',
+            title: 'OH MY GOD!',
+            content: 'Oh, nothing to worry about, good night :-)',
+            // onClose: () => console.log('closed')
+        };
+        notification(data);
+
+
         const { profile, token } = this.props;
 
         // console.log(profile);
@@ -102,10 +112,24 @@ class Profile extends Component {
         }
 
         // This means that I was updating the resource,
-        // And I received either errors from the store
+        // And I received errors from the store
         // So it's time to restore the Update button
         else if (
             updating_profile === true
+            && typeof errors.length !== 'undefined'
+            && errors.length !== 0
+        ) {
+            this.setState({
+                getting_profile: false,
+                updating_profile: false
+            });
+        }
+
+        // This means that I was getting the resource,
+        // And I received errors from the store
+        // So it's time to restore the Update button
+        else if (
+            getting_profile === true
             && typeof errors.length !== 'undefined'
             && errors.length !== 0
         ) {

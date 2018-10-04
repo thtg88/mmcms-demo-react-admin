@@ -46,14 +46,26 @@ class DefaultLayout extends Component {
                             <LoggingOutCard loggingOut={this.props.logging_out} />
                             <Switch>
                                 {routes.map((route, idx) => {
-                                    return route.component ? (<Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (
-                                        <ErrorBoundary>
-                                            <RestrictedComponent>
-                                                <route.component query={queryString.parse(this.props.location.search)} {...props} />
-                                            </RestrictedComponent>
-                                        </ErrorBoundary>
-                                    )} />)
-                                    : (null);
+                                    return route.component
+                                        ? (
+                                            <Route
+                                                key={idx}
+                                                path={route.path}
+                                                exact={route.exact}
+                                                name={route.name}
+                                                render={props => (
+                                                    <ErrorBoundary>
+                                                        <RestrictedComponent>
+                                                            <route.component
+                                                                query={queryString.parse(this.props.location.search)}
+                                                                {...props}
+                                                            />
+                                                        </RestrictedComponent>
+                                                    </ErrorBoundary>
+                                                )}
+                                            />
+                                        )
+                                        : (null);
                                 },)}
                                 <Route name="Page 404" component={Page404} />
                             </Switch>
