@@ -10,7 +10,7 @@ export function* getProfileRequest() {
 
         try {
             const result = yield call(getProfile, data);
-            console.log('getProfile result: ', result);
+            // console.log('getProfile result: ', result);
             if (result.resource) {
                 yield put({
                     type: 'GET_PROFILE_SUCCESS',
@@ -24,7 +24,7 @@ export function* getProfileRequest() {
             }
 
         } catch(err) {
-            console.log('getProfile error caught: ', err);
+            // console.log('getProfile error caught: ', err);
             yield put({
                 type: 'GET_PROFILE_ERROR',
                 error: err

@@ -22,7 +22,7 @@ const login = (state = initial_state, action) => {
                 updated_profile: false
             };
         case 'GET_PROFILE_REQUEST':
-            console.log('getProfile dispatched');
+            // console.log('getProfile dispatched');
             return {
                 ...state,
                 error: null,
@@ -54,7 +54,7 @@ const login = (state = initial_state, action) => {
                 error: null
             };
         case 'LOGIN_REQUEST':
-            console.log('dispatched', state);
+            // console.log('dispatched', state);
             return {
                 ...state,
                 error: null,
@@ -76,7 +76,7 @@ const login = (state = initial_state, action) => {
                 logging_in: false
             };
         case 'LOGOUT_REQUEST':
-            console.log(action.type+' taken');
+            // console.log(action.type+' taken');
             return {
                 ...state,
                 error: null,
@@ -84,7 +84,7 @@ const login = (state = initial_state, action) => {
             };
         case 'LOGOUT_SUCCESS':
         case 'LOGOUT_ERROR':
-            console.log(action.type+' taken');
+            // console.log(action.type+' taken');
             return {
                 ...state,
                 error: null,
@@ -116,15 +116,14 @@ const login = (state = initial_state, action) => {
                 token: token_payload,
             };
         case 'REGISTER_ERROR':
-            console.log('dispatched error');
-            console.log(action);
+            // console.log('dispatched error', action);
             return {
                 ...state,
                 error: action.error,
                 registering: false
             };
         case 'UPDATE_PROFILE_REQUEST':
-            console.log('updatingProfile dispatched');
+            // console.log('updatingProfile dispatched');
             return {
                 ...state,
                 error: null,
@@ -138,7 +137,7 @@ const login = (state = initial_state, action) => {
                 user: action.payload.resource,
             };
         case 'UPDATE_PROFILE_ERROR':
-            console.log('updatingProfile error:', action);
+            // console.log('updatingProfile error:', action);
             return {
                 ...state,
                 error: action.error,

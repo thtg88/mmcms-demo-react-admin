@@ -23,7 +23,8 @@ export const register = async (data) => {
 };
 
 export const logout = async (data) => {
-    console.log('logout data', data);
+    // console.log('logout data', data);
+
     return await fetch(process.env.REACT_APP_API_BASE_URL+'/auth/logout', {
         method: 'DELETE',
         headers: new Headers({
@@ -36,7 +37,8 @@ export const logout = async (data) => {
 };
 
 export const getProfile = async (data) => {
-    console.log('getProfile data', data);
+    // console.log('getProfile data', data);
+
     return await fetch(process.env.REACT_APP_API_BASE_URL+'/auth/me', {
         method: 'GET',
         headers: new Headers({
@@ -50,8 +52,10 @@ export const getProfile = async (data) => {
 
 export const updateProfile = async (data) => {
     const { token, ...rest } = data;
-    console.log(token, rest);
-    console.log('updateProfile data', data);
+
+    // console.log(token, rest);
+    // console.log('updateProfile data', data);
+
     return await fetch(process.env.REACT_APP_API_BASE_URL+'/auth/me', {
         method: 'PUT',
         headers: new Headers({
