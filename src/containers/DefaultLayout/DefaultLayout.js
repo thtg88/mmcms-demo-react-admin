@@ -16,7 +16,7 @@ import {
 } from '@coreui/react';
 import { Page404 } from '../../views/Pages';
 import ErrorBoundary from '../../ErrorBoundary';
-import LoggingOutCard from '../../views/LoggingOutCard';
+import LoggingOutCard from '../../views/Cards/LoggingOutCard';
 import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
 import RestrictedComponent from './RestrictedComponent';
