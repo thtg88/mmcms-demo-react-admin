@@ -7,8 +7,8 @@ import {
     Col,
     Row
 } from 'reactstrap';
-import ApiErrorCard from '../ApiErrorCard';
-import ApiResourceDestroySuccessCard from '../ApiResourceDestroySuccessCard';
+import ApiErrorCard from '../Cards/ApiErrorCard';
+import ApiResourceDestroySuccessCard from '../Cards/ApiResourceDestroySuccessCard';
 import CardHeaderActions from '../CardHeaderActions';
 import DataTable from '../DataTable';
 import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';

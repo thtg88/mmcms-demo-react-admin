@@ -15,8 +15,8 @@ import {
 	Row
 } from 'reactstrap';
 import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
-import ApiErrorAlert from '../../ApiErrorAlert';
-import LoggedOutAlert from '../../LoggedOutAlert';
+import ApiErrorAlert from '../../Alerts/ApiErrorAlert';
+import LoggedOutAlert from '../../Alerts/LoggedOutAlert';
 
 class Login extends Component {
     state = {

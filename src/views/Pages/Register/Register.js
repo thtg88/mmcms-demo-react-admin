@@ -16,7 +16,7 @@ import {
 } from 'reactstrap';
 import ReCAPTCHA from "react-google-recaptcha";
 import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
-import ApiErrorAlert from '../../ApiErrorAlert';
+import ApiErrorAlert from '../../Alerts/ApiErrorAlert';
 
 class Register extends Component {
     state = {

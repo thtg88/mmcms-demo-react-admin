@@ -13,9 +13,9 @@ import {
     Label,
     Row,
 } from 'reactstrap';
-import ApiErrorCard from '../ApiErrorCard';
-import ApiResourceCreateSuccessCard from '../ApiResourceCreateSuccessCard';
-import ApiResourceUpdateSuccessCard from '../ApiResourceUpdateSuccessCard';
+import ApiErrorCard from '../Cards/ApiErrorCard';
+import ApiResourceCreateSuccessCard from '../Cards/ApiResourceCreateSuccessCard';
+import ApiResourceUpdateSuccessCard from '../Cards/ApiResourceUpdateSuccessCard';
 import CardHeaderActions from '../CardHeaderActions';
 import DestroyResourceModal from '../DestroyResourceModal';
 import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';

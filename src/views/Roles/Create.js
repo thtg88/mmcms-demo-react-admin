@@ -12,7 +12,7 @@ import {
     Label,
     Row,
 } from 'reactstrap';
-import ApiErrorCard from '../ApiErrorCard';
+import ApiErrorCard from '../Cards/ApiErrorCard';
 import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';
 
 class Create extends Component {
