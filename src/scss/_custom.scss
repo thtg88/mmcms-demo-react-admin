@@ -1,1 +1,88 @@
 // Here you can add other styles
+.card-header-action {
+    &.btn-outline-danger {
+        color: #f86c6b;
+
+        &:hover {
+            color: #ffffff;
+        }
+    }
+
+    &.btn-outline-primary {
+        color: #20a8d8;
+
+        &:hover {
+            color: #ffffff;
+        }
+    }
+
+    &.btn-outline-success {
+        color: #4dbd74;
+
+        &:hover {
+            color: #ffffff;
+        }
+    }
+
+    &.btn-outline-warning {
+        color: #ffc107;
+
+        &:hover {
+            color: #23282c;
+        }
+    }
+}
+
+.color-black {
+    color: #000000;
+}
+
+div.notification-container {
+    padding: 10px;
+    border-radius: 4px;
+    background: #fff;
+    line-height: 1.5;
+    position: relative;
+    overflow: hidden;
+
+    .notification-content {
+        .notification-icon {
+            position: absolute;
+            line-height: 24px;
+            margin-left: 4px;
+
+            &.notification-icon-danger {
+                color: #f86c6b;
+            }
+
+            &.notification-icon-primary {
+                color: #20a8d8;
+            }
+
+            &.notification-icon-success {
+                color: #4dbd74;
+            }
+
+            &.notification-icon-warning {
+                color: #ffc107;
+            }
+        }
+
+        .notification-title {
+            font-size: 16px;
+            margin-left: 48px;
+            /*margin-bottom: 4px;*/
+            margin-bottom: 8px;
+            padding-right: 24px;
+            color: rgba(0,0,0,.85);
+            line-height: 24px;
+            display: inline-block;
+        }
+
+        .notification-message {
+            margin-left: 48px;
+            color: rgba(0,0,0,.85);
+            font-size: 14px;
+        }
+    }
+}

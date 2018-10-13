@@ -69,9 +69,8 @@ class Profile extends Component {
     componentDidMount() {
         const data = {
             type: 'danger',
-            title: 'OH MY GOD!',
-            content: 'Oh, nothing to worry about, good night :-)',
-            // onClose: () => console.log('closed')
+            message: 'Oh, nothing to worry about, good night :-)',
+            onClose: () => console.log('closed')
         };
         notification(data);
 

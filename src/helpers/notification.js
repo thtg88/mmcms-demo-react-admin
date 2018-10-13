@@ -1,25 +1,33 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import {
-    Col,
-    Row
-} from 'reactstrap';
 
 const notification = ({
-    content,
-    // onClose,
+    message,
+    onClose,
     title,
     type,
 }) => toast(
-    <Row>
-        <Col sm="2">
-            <i className={`fa fa-fw fa-lg fa-times fa-border-circle fa-${type}`}></i>
-        </Col>
-        <Col sm="10">
-            <h5>{title}</h5>
-            <p>{content}</p>
-        </Col>
-    </Row>
-, { /*onClose*/ });
+    <div className="notification-container">
+    	<div className="notification-content">
+			<i className={`notification-icon fa fa-fw fa-lg fa-warning notification-icon-${type}`}></i>
+            {
+                typeof title !== 'undefined'
+                && title !== null
+                && title !== ''
+                ? <div className="notification-title">{title}</div>
+                : null
+            }
+			<div className="notification-message">{message}</div>
+    	</div>
+    </div>
+, { onClose });
+
+notification.propTypes = {
+    message: PropTypes.string,
+    onClose: PropTypes.func,
+    title: PropTypes.string,
+    type: PropTypes.string
+};
 
 export default notification;
