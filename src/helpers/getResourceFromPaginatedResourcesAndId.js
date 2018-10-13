@@ -2,7 +2,7 @@ const getResourceFromPaginatedResourcesAndId = (resources, id) => {
     if(
         resources === null
         || typeof resources === 'undefined'
-        || Object.keys(resources).length === 0 && resources.constructor === Object
+        || (Object.keys(resources).length === 0 && resources.constructor === Object)
     ) {
         return null;
     }
