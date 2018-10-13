@@ -27,7 +27,7 @@ const actions = [
     }
 ];
 
-class Users extends Component {
+export class Users extends Component {
     state = {
         query: '',
         searching: false,
@@ -43,7 +43,11 @@ class Users extends Component {
     handleSearchResources(evt) {
         evt.preventDefault();
 
-        const { history, token } = this.props;
+        const {
+            getPaginatedResources,
+            history,
+            token
+        } = this.props;
         const { query } = this.state;
 
         this.setState({
@@ -59,7 +63,7 @@ class Users extends Component {
             pageSize,
             q: query
         };
-        this.props.getPaginatedResources({ data });
+        getPaginatedResources({ data });
     }
 
     updateSearchInputValue(evt) {
@@ -73,6 +77,7 @@ class Users extends Component {
             clearMetadataResources,
             current_page,
             destroyed,
+            getPaginatedResources,
             query,
             resources,
             token
@@ -95,46 +100,47 @@ class Users extends Component {
             }, 500);
         }
 
-        // if query page is not valid
-        if(
-            (
-                typeof query.page === 'undefined'
+        if(typeof getPaginatedResources !== 'undefined') {
+            // if query page is not valid
+            if(
+                typeof query === 'undefined'
+                || typeof query.page === 'undefined'
                 || isNaN(query.page)
                 || query.page <= 0
-            )
-        ) {
-            const page = typeof current_page !== 'undefined' ? current_page : 1;
-            if(
-                // If resources never fetched
-                typeof resources === 'undefined'
-                || typeof resources[page] === 'undefined'
-                // Or was empty (worth re-fetching)
-                || resources[page].length === 0
-                // Or I've just deleted a resource
-                || destroyed === true
             ) {
-                // Fetch first page
+                const page = typeof current_page !== 'undefined' ? current_page : 1;
+                if(
+                    // If resources never fetched
+                    typeof resources === 'undefined'
+                    || typeof resources[page] === 'undefined'
+                    // Or was empty (worth re-fetching)
+                    || resources[page].length === 0
+                    // Or I've just deleted a resource
+                    || destroyed === true
+                ) {
+                    // Fetch first page
+                    const data = {
+                        q: this.state.query,
+                        token,
+                        page,
+                        pageSize,
+                    };
+                    getPaginatedResources({ data });
+
+                } else {
+                    // If resources for that page have been fetched before
+                    // avoid re-fetching
+                }
+            } else {
+                // Fetch page data
                 const data = {
                     q: this.state.query,
                     token,
-                    page,
+                    page: parseInt(query.page, 10),
                     pageSize,
                 };
-                this.props.getPaginatedResources({ data });
-
-            } else {
-                // If resources for that page have been fetched before
-                // avoid re-fetching
+                getPaginatedResources({ data });
             }
-        } else {
-            // Fetch page data
-            const data = {
-                q: this.state.query,
-                token,
-                page: parseInt(query.page, 10),
-                pageSize,
-            };
-            this.props.getPaginatedResources({ data });
         }
     }
 
@@ -208,9 +214,13 @@ class Users extends Component {
     }
 
     componentWillUnmount() {
+        const { clearMetadataResources } = this.props;
         const { query } = this.state;
-        const data = { query };
-        this.props.clearMetadataResources({ data });
+
+        if(typeof clearMetadataResources !== 'undefined') {
+            const data = { query };
+            clearMetadataResources({ data });
+        }
     }
 
     render() {

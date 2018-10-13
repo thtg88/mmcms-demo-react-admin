@@ -15,7 +15,7 @@ import {
 import ApiErrorCard from '../Cards/ApiErrorCard';
 import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';
 
-class Create extends Component {
+export class Create extends Component {
     state = {
         resource: {
             name: '',
@@ -100,7 +100,11 @@ class Create extends Component {
     }
 
     componentWillUnmount() {
-        this.props.clearMetadataResourceCreate();
+        const { clearMetadataResourceCreate } = this.props;
+
+        if(typeof clearMetadataResourceCreate !== 'undefined') {
+            clearMetadataResourceCreate();
+        }
     }
 
     render() {

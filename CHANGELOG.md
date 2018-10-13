@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Changed
 - CRUD components to container of Vanilla components, providing props about fields and paths
 
+## [0.8.1] - 2018-10-13
+### Fixed
+- Tests of Redux connected components
+
 ## [0.8.0] - 2018-10-13
 ### Added
 - React Toastify to provide notification capabilities

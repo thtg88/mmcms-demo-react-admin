@@ -24,7 +24,7 @@ import {
 } from '../../helpers/notification';
 import { pageSize } from './tableConfig';
 
-class Edit extends Component {
+export class Edit extends Component {
     state = {
         destroying_resource: false,
         getting_resource: false,
@@ -157,7 +157,8 @@ class Edit extends Component {
         // So restore the state  - this will trigger a re-render
         // which will redirect us to the index
         else if(
-            typeof errors.length !== 'undefined'
+            typeof errors !== 'undefined'
+            && typeof errors.length !== 'undefined'
             && errors.length === 0
             && destroying_resource === true
             && destroyed === true
@@ -201,7 +202,8 @@ class Edit extends Component {
         // And I have errors,
         // close the modal and show them
         else if(
-            typeof errors.length !== 'undefined'
+            typeof errors !== 'undefined'
+            && typeof errors.length !== 'undefined'
             && errors.length > 0
             && destroying_resource === true
         ) {
@@ -224,7 +226,11 @@ class Edit extends Component {
     }
 
     componentWillUnmount() {
-        this.props.clearMetadataResourceEdit();
+        const { clearMetadataResourceEdit } = this.props;
+
+        if(typeof clearMetadataResourceEdit !== 'undefined') {
+            clearMetadataResourceEdit();
+        }
     }
 
     render() {
@@ -235,6 +241,7 @@ class Edit extends Component {
         const {
             destroying_resource,
             getting_resource,
+            is_modal_open,
             resource,
             resource_unchanged,
             updating_resource
@@ -275,7 +282,11 @@ class Edit extends Component {
                         <ApiErrorCard errors={errors} />
                     </Col>
                 </Row>
-                {resource === null
+                {
+                    (
+                        typeof resource === 'undefined'
+                        || resource === null
+                    )
                     ? null
                     : <Row>
                         <Col md={12}>
@@ -289,7 +300,10 @@ class Edit extends Component {
                                 <CardBody>
                                     <Form onSubmit={this.handleUpdateResource}>
                                         {Object.entries(resource).map(([key, value]) => (
-                                            key.indexOf('id') === -1 && key.indexOf('_at') === -1
+                                            (
+                                                key.indexOf('id') === -1
+                                                && key.indexOf('_at') === -1
+                                            )
                                                 ? <FormGroup key={key}>
                                                     <Label htmlFor={key}>{key}</Label>
                                                     <Input
@@ -302,7 +316,8 @@ class Edit extends Component {
                                                     />
                                                 </FormGroup>
                                                 : null
-                                        ))}
+                                            ))
+                                        }
                                         <Button
                                             type="submit"
                                             size="md"
@@ -322,7 +337,7 @@ class Edit extends Component {
                         <DestroyResourceModal
                             destroyButtonIconClassName={destroyButtonIconClassName}
                             disabled={destroying_resource}
-                            isOpen={this.state.is_modal_open}
+                            isOpen={is_modal_open}
                             onDestroyButtonClick={this.handleDestroyResource}
                             toggle={this.toggleDestroyResourceModal}
                         />
