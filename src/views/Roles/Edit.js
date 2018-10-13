@@ -292,10 +292,8 @@ export class Edit extends Component {
                         <Col md={12}>
                             <Card className="card-accent-warning">
                                 <CardHeader className="h1">
-                                    <strong>
-                                        {resource.name}
-                                        <CardHeaderActions actions={actions} />
-                                    </strong>
+                                    {resource.name}
+                                    <CardHeaderActions actions={actions} />
                                 </CardHeader>
                                 <CardBody>
                                     <Form onSubmit={this.handleUpdateResource}>

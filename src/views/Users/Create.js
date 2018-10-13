@@ -135,7 +135,7 @@ export class Create extends Component {
                     <Col lg={12}>
                         <Card className="card-accent-success">
                             <CardHeader className="h1">
-                                <strong>Create Resource</strong>
+                                Create Resource
                             </CardHeader>
                             <CardBody>
                                 <Form onSubmit={this.handleCreateResource}>
