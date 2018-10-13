@@ -33,7 +33,7 @@
         "react-test-renderer": "^16.5.2",
         "react-toastify": "^4.4.0",
         "reactstrap": "^6.5.0",
-        "redux": "^4.0.0",
+        "redux": "^4.0.1",
         "redux-saga": "^0.16.2",
         "simple-line-icons": "^2.4.1"
     },
