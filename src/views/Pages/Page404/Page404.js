@@ -8,12 +8,14 @@ import {
 } from 'reactstrap';
 
 class Page404 extends Component {
+    state = {
+        redirect_home: false
+    };
+
     constructor(props) {
         super(props);
 
-        this.state = {
-            redirect_home: false
-        };
+        this.redirectHome = this.redirectHome.bind(this);
     }
 
     redirectHome() {
@@ -41,7 +43,7 @@ class Page404 extends Component {
                     </Row>
                     <Row className="justify-content-center">
                         <Col md="6">
-                            <Button className="btn-home btn-brand" onClick={() => this.redirectHome()}>
+                            <Button className="btn-home btn-brand" onClick={this.redirectHome}>
                                 <i className="fa fa-home"></i>
                                 <span>Home</span>
                             </Button>
@@ -52,4 +54,5 @@ class Page404 extends Component {
         );
     }
 }
+
 export default Page404;

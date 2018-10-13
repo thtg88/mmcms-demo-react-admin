@@ -18,7 +18,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
 import ApiErrorAlert from '../../Alerts/ApiErrorAlert';
 
-class Register extends Component {
+export class Register extends Component {
     state = {
         redirect_login: false,
         email: '',
@@ -43,6 +43,7 @@ class Register extends Component {
             this.assignRecaptcha = this.assignRecaptcha.bind(this);
             this.reCaptchaOnChange = this.reCaptchaOnChange.bind(this);
         }
+
         this.updateInputValue = this.updateInputValue.bind(this);
     }
 
@@ -76,7 +77,11 @@ class Register extends Component {
     handleRegister(evt) {
         evt.preventDefault();
 
-        const { resetError, errors, register } = this.props;
+        const {
+            errors,
+            register,
+            resetError
+        } = this.props;
         const {
             email,
             g_recaptcha_response,
@@ -92,7 +97,7 @@ class Register extends Component {
             password_confirmation
         };
 
-        console.log(data);
+        // console.log(data);
 
         if(errors.length > 0) {
             resetError();
@@ -102,7 +107,7 @@ class Register extends Component {
     };
 
     updateInputValue(evt) {
-        const { resetError, errors } = this.props;
+        const { errors, resetError } = this.props;
 
         if(errors.length > 0) {
             resetError();
@@ -114,11 +119,16 @@ class Register extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if(prevProps.errors.length !== this.props.errors.length && this.props.errors.length > 0) {
-            if(this.state.recaptcha !== null) {
-                console.log('resetting recaptcha');
+        if(typeof errors !== 'undefined') {
+            if(
+                prevProps.errors.length !== this.props.errors.length
+                && this.props.errors.length > 0
+            ) {
+                if(this.state.recaptcha !== null) {
+                    console.log('resetting recaptcha');
 
-                this.state.recaptcha.reset();
+                    this.state.recaptcha.reset();
+                }
             }
         }
     }

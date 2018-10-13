@@ -17,7 +17,7 @@ import SpinnerLoader from '../../SpinnerLoader';
 import { getApiErrorMessages, isUnauthenticatedError } from '../../../helpers/apiErrorMessages';
 import { apiResourceUpdateSuccessNotification } from '../../../helpers/notification';
 
-class Profile extends Component {
+export class Profile extends Component {
     state = {
         getting_profile: false,
         profile: null,
@@ -163,7 +163,11 @@ class Profile extends Component {
     }
 
     componentWillUnmount() {
-        this.props.clearMetadataProfile();
+        const { clearMetadataProfile } = this.props;
+        
+        if(typeof clearMetadataProfile !== 'undefined') {
+            clearMetadataProfile();
+        }
     }
 
     render() {

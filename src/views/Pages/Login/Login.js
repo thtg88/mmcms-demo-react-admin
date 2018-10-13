@@ -18,7 +18,7 @@ import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
 import ApiErrorAlert from '../../Alerts/ApiErrorAlert';
 import LoggedOutAlert from '../../Alerts/LoggedOutAlert';
 
-class Login extends Component {
+export class Login extends Component {
     state = {
         redirect_register: false,
         email: '',
