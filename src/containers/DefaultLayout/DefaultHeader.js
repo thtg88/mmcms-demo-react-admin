@@ -13,21 +13,29 @@ import logo from '../../assets/img/brand/logo.svg'
 import sygnet from '../../assets/img/brand/sygnet.svg'
 
 export class DefaultHeader extends Component {
+    state = {
+        redirect_profile: false
+    };
+
     constructor(props) {
         super(props);
 
-        this.state = {
-            redirect_profile: false
-        };
+        this.handleLogout = this.handleLogout.bind(this);
+        this.redirectProfile = this.redirectProfile.bind(this);
     }
 
     handleLogout() {
-        const { token } = this.props
-        const data = token;
-        console.log(token);
-        console.log(data);
-        console.log('handling logout');
-        this.props.logout({ data });
+        const { logout, token } = this.props;
+
+        // console.log(token);
+        // console.log(data);
+        // console.log('handling logout');
+
+        if(typeof logout !== 'undefined') {
+            const data = token;
+
+            logout({ data });
+        }
     }
 
     redirectProfile() {
@@ -54,11 +62,19 @@ export class DefaultHeader extends Component {
                 <Nav className="ml-auto" navbar>
                     <AppHeaderDropdown direction="down">
                         <DropdownToggle nav>
-                            <img src={process.env.PUBLIC_URL+"/assets/img/avatars/6.jpg"} className="img-avatar" alt="admin@bootstrapmaster.com" />
+                            <img
+                                src={process.env.PUBLIC_URL+"/assets/img/avatars/6.jpg"}
+                                className="img-avatar"
+                                alt="admin@bootstrapmaster.com"
+                            />
                         </DropdownToggle>
                         <DropdownMenu right style={{ right: 'auto' }}>
-                            <DropdownItem onClick={() => this.redirectProfile()}><i className="fa fa-user"></i> Profile</DropdownItem>
-                            <DropdownItem onClick={() => this.handleLogout()}><i className="fa fa-sign-out"></i> Logout</DropdownItem>
+                            <DropdownItem onClick={this.redirectProfile}>
+                                <i className="fa fa-user"></i> Profile
+                            </DropdownItem>
+                            <DropdownItem onClick={this.handleLogout}>
+                                <i className="fa fa-sign-out"></i> Logout
+                            </DropdownItem>
                         </DropdownMenu>
                     </AppHeaderDropdown>
                 </Nav>
