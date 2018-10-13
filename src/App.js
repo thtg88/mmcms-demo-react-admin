@@ -69,7 +69,6 @@ class App extends Component {
                 </BrowserRouter>
                 <ToastContainer
                     hideProgressBar
-                    autoClose={false}
                     bodyClassName="color-black"
                 />
             </React.Fragment>
