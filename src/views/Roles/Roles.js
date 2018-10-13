@@ -8,10 +8,13 @@ import {
     Row
 } from 'reactstrap';
 import ApiErrorCard from '../Cards/ApiErrorCard';
-import ApiResourceDestroySuccessCard from '../Cards/ApiResourceDestroySuccessCard';
 import CardHeaderActions from '../CardHeaderActions';
 import DataTable from '../DataTable';
-import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';
+import {
+    getApiErrorMessages,
+    isUnauthenticatedError
+} from '../../helpers/apiErrorMessages';
+import { apiResourceDestroySuccessNotification } from '../../helpers/notification';
 import { columns, pageSize } from './tableConfig';
 
 const actions = [
@@ -79,11 +82,17 @@ class Roles extends Component {
         // console.log(this.state);
 
         if(destroyed === true) {
+            apiResourceDestroySuccessNotification({});
+
+            // If resource is destroyed
+            // we set the timeout to clear the destroyed data
+            // So that when another resource is open,
+            // I don't get redirected to the main resources page
             setTimeout(() => {
                 const { query } = this.state;
                 const data = { query };
                 clearMetadataResources({ data });
-            }, 1000);
+            }, 500);
         }
 
         // if query page is not valid
@@ -204,7 +213,6 @@ class Roles extends Component {
 
     render() {
         const {
-            destroyed,
             errors,
             fetching_resources,
             history,
@@ -241,11 +249,6 @@ class Roles extends Component {
                 <Row>
                     <Col xl={12}>
                         <ApiErrorCard errors={errors} />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xl={12}>
-                        <ApiResourceDestroySuccessCard success={destroyed} />
                     </Col>
                 </Row>
                 <Row>

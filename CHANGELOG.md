@@ -6,13 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 
 ## [Unreleased]
 ### Added
-- React Toastify to provide notification capabilities
 - Terms and conditions of use
 - Yup schema validation for form validation
 ### Changed
 - CRUD components to container of Vanilla components, providing props about fields and paths
+
+## [0.8.0] - 2018-10-13
+### Added
+- React Toastify to provide notification capabilities
 ### Removed
-- Cards as messages (replace with toaster notification)
+- Cards as messages (replace with toaster notification) for API resource CRUD success
 
 ## [0.7.6] - 2018-10-03
 ### Fixed

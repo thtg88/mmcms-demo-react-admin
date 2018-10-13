@@ -13,13 +13,15 @@ import {
     Label,
     Row,
 } from 'reactstrap';
-import ApiErrorCard from '../ApiErrorCard';
-import ApiResourceCreateSuccessCard from '../ApiResourceCreateSuccessCard';
-import ApiResourceUpdateSuccessCard from '../ApiResourceUpdateSuccessCard';
+import ApiErrorCard from '../Cards/ApiErrorCard';
 import CardHeaderActions from '../CardHeaderActions';
 import DestroyResourceModal from '../DestroyResourceModal';
 import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';
 import getResourceFromPaginatedResourcesAndId from '../../helpers/getResourceFromPaginatedResourcesAndId';
+import {
+    apiResourceCreateSuccessNotification,
+    apiResourceUpdateSuccessNotification
+} from '../../helpers/notification';
 import { pageSize } from './tableConfig';
 
 class Edit extends Component {
@@ -124,6 +126,8 @@ class Edit extends Component {
         // so that when the user goes back to the list
         // he can see the latest changes
         if(created === true) {
+            apiResourceCreateSuccessNotification({});
+
             const data = {
                 token,
                 page: 1,
@@ -165,20 +169,28 @@ class Edit extends Component {
         }
 
         // This means that I was updating the resource,
-        // And I received either an updated or errors from the store
+        // And I received errors from the store
         // So it's time to restore the Update button
         else if(
             updating_resource === true
-            && (
-                // Either I received errors
-                (
-                    typeof errors.length !== 'undefined'
-                    && errors.length !== 0
-                )
-                // Or I received a confirmation of the update
-                || updated === true
-            )
+            && typeof errors.length !== 'undefined'
+            && errors.length !== 0
         ) {
+            this.setState({
+                getting_resource: false,
+                updating_resource: false
+            });
+        }
+
+        // This means that I was updating the resource,
+        // And I received an updated from the store
+        // So it's time to restore the Update button
+        else if(
+            updating_resource === true
+            && updated === true
+        ) {
+            apiResourceUpdateSuccessNotification({});
+
             this.setState({
                 getting_resource: false,
                 updating_resource: false
@@ -217,10 +229,8 @@ class Edit extends Component {
 
     render() {
         const {
-            created,
             destroyed,
-            errors,
-            updated
+            errors
         } = this.props;
         const {
             destroying_resource,
@@ -263,16 +273,6 @@ class Edit extends Component {
                 <Row>
                     <Col md="12">
                         <ApiErrorCard errors={errors} />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md="12">
-                        <ApiResourceCreateSuccessCard success={created} />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md="12">
-                        <ApiResourceUpdateSuccessCard success={updated} />
                     </Col>
                 </Row>
                 {resource === null
