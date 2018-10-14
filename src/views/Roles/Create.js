@@ -220,17 +220,11 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    clearMetadataResourceCreate() {
-        dispatch(clearMetadataResourceCreate());
-    },
-    createResource(data) {
-        dispatch(createResource(data));
-    },
-    loggedOut() {
-        dispatch(loggedOut());
-    },
-});
+const mapDispatchToProps = {
+    clearMetadataResourceCreate,
+    createResource,
+    loggedOut
+};
 
 export default connect(
     mapStateToProps,

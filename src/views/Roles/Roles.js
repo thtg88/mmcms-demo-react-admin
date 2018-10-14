@@ -328,20 +328,12 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    changePageResources(data) {
-        dispatch(changePageResources(data));
-    },
-    clearMetadataResources(data) {
-        dispatch(clearMetadataResources(data));
-    },
-    getPaginatedResources(data) {
-        dispatch(getPaginatedResources(data));
-    },
-    loggedOut() {
-        dispatch(loggedOut());
-    },
-});
+const mapDispatchToProps = {
+    changePageResources,
+    clearMetadataResources,
+    getPaginatedResources,
+    loggedOut
+};
 
 export default connect(
     mapStateToProps,

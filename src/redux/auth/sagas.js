@@ -90,7 +90,7 @@ export function* logoutRequest() {
         // console.log('data', data);
 
         try {
-            const result = yield call(logout, data);
+            yield call(logout, data);
             // console.log('logout result: ', result);
             yield put({
                 type: 'LOGOUT_SUCCESS'

@@ -390,26 +390,14 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    clearMetadataResourceEdit() {
-        dispatch(clearMetadataResourceEdit());
-    },
-    destroyResource(data) {
-        dispatch(destroyResource(data));
-    },
-    getPaginatedResources(data) {
-        dispatch(getPaginatedResources(data));
-    },
-    getResource(data) {
-        dispatch(getResource(data));
-    },
-    loggedOut() {
-        dispatch(loggedOut());
-    },
-    updateResource(data) {
-        dispatch(updateResource(data));
-    }
-});
+const mapDispatchToProps = {
+    clearMetadataResourceEdit,
+    destroyResource,
+    getPaginatedResources,
+    getResource,
+    loggedOut,
+    updateResource
+};
 
 export default connect(
     mapStateToProps,

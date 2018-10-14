@@ -285,14 +285,10 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    register(data) {
-        dispatch(register(data));
-    },
-    resetRegisterError() {
-        dispatch(resetRegisterError());
-    }
-});
+const mapDispatchToProps = {
+    register,
+    resetRegisterError
+};
 
 export default connect(
     mapStateToProps,

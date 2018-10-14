@@ -187,14 +187,10 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    login(data) {
-        dispatch(login(data));
-    },
-    resetLoginError() {
-        dispatch(resetLoginError());
-    }
-});
+const mapDispatchToProps = {
+    login,
+    resetLoginError
+};
 
 export default connect(
     mapStateToProps,

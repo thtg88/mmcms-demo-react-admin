@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Changed
 - CRUD components to container of Vanilla components, providing props about fields and paths
 
+## [0.8.3] - 2018-10-14
+### Changed
+- Re-factoring of Redux code
+
 ## [0.8.2] - 2018-10-14
 ### Changed
 - react-scripts to version 2

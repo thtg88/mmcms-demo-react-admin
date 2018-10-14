@@ -299,20 +299,12 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    clearMetadataProfile() {
-        dispatch(clearMetadataProfile());
-    },
-    getProfile(data) {
-        dispatch(getProfile(data));
-    },
-    loggedOut() {
-        dispatch(loggedOut());
-    },
-    updateProfile(data) {
-        dispatch(updateProfile(data));
-    }
-});
+const mapDispatchToProps = {
+    clearMetadataProfile,
+    getProfile,
+    loggedOut,
+    updateProfile
+};
 
 export default connect(
     mapStateToProps,
