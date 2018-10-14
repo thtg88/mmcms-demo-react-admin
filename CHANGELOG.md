@@ -6,10 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 
 ## [Unreleased]
 ### Added
+- Responsive layout for resources index
 - Terms and conditions of use
 - Yup schema validation for form validation
 ### Changed
 - CRUD components to container of Vanilla components, providing props about fields and paths
+
+## [0.8.2] - 2018-10-14
+### Changed
+- react-scripts to version 2
+- scripts in composer.json to match SCSS transpiling out of the box with new react-scripts and node-sass
+- SCSS structure to match SCSS transpiling out of the box with new react-scripts and node-sass
+- Service Worker configuration
 
 ## [0.8.1] - 2018-10-13
 ### Fixed
