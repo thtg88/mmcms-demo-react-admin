@@ -14,9 +14,10 @@ import {
 	InputGroupText,
 	Row
 } from 'reactstrap';
-import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
 import ApiErrorAlert from '../../Alerts/ApiErrorAlert';
 import LoggedOutAlert from '../../Alerts/LoggedOutAlert';
+import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
+import { login, resetLoginError } from '../../../redux/auth/actions';
 
 export class Login extends Component {
     state = {
@@ -33,10 +34,10 @@ export class Login extends Component {
     }
 
     redirectRegister() {
-        const { resetError, errors } = this.props;
+        const { resetLoginError, errors } = this.props;
 
         if(errors.length > 0) {
-            resetError();
+            resetLoginError();
         }
 
         this.setState({
@@ -47,24 +48,24 @@ export class Login extends Component {
     handleLogin(evt) {
         evt.preventDefault();
 
-        const { resetError, errors, login } = this.props;
+        const { resetLoginError, errors, login } = this.props;
         const { email, password } = this.state;
         const data = { email, password };
 
         // console.log(data);
 
         if(errors.length > 0) {
-            resetError();
+            resetLoginError();
         }
 
         login({ data });
     };
 
     updateInputValue(evt) {
-        const { resetError, errors } = this.props;
+        const { resetLoginError, errors } = this.props;
 
         if(errors.length > 0) {
-            resetError();
+            resetLoginError();
             // console.log('reset error');
         }
 
@@ -188,15 +189,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     login(data) {
-        dispatch({
-            type: 'LOGIN_REQUEST',
-            payload: data
-        });
+        dispatch(login(data));
     },
-    resetError() {
-        dispatch({
-            type: 'LOGIN_ERROR_RESET'
-        });
+    resetLoginError() {
+        dispatch(resetLoginError());
     }
 });
 

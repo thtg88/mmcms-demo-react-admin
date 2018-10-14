@@ -1,8 +1,9 @@
 import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
+import actions from './actions';
 import { getProfile, login, logout, register, updateProfile } from './helper';
 
 export function* getProfileRequest() {
-    yield takeEvery('GET_PROFILE_REQUEST', function*({ payload }) {
+    yield takeEvery(actions.GET_PROFILE_REQUEST, function*({ payload }) {
         const { data } = payload;
 
         // console.log('getProfile taken!', payload);
@@ -13,12 +14,12 @@ export function* getProfileRequest() {
             // console.log('getProfile result: ', result);
             if (result.resource) {
                 yield put({
-                    type: 'GET_PROFILE_SUCCESS',
+                    type: actions.GET_PROFILE_SUCCESS,
                     payload: result
                 });
             } else {
                 yield put({
-                    type: 'GET_PROFILE_ERROR',
+                    type: actions.GET_PROFILE_ERROR,
                     error: result.error || result.errors || result
                 });
             }
@@ -26,7 +27,7 @@ export function* getProfileRequest() {
         } catch(err) {
             // console.log('getProfile error caught: ', err);
             yield put({
-                type: 'GET_PROFILE_ERROR',
+                type: actions.GET_PROFILE_ERROR,
                 error: err
             });
         }
@@ -34,15 +35,15 @@ export function* getProfileRequest() {
 }
 
 export function* getProfileSuccess() {
-    yield takeEvery('GET_PROFILE_SUCCESS', function*({ payload }) {});
+    yield takeEvery(actions.GET_PROFILE_SUCCESS, function*({ payload }) {});
 }
 
 export function* getProfileError() {
-    yield takeEvery('GET_PROFILE_ERROR', function*() {});
+    yield takeEvery(actions.GET_PROFILE_ERROR, function*() {});
 }
 
 export function* loginRequest() {
-    yield takeEvery('LOGIN_REQUEST', function*({ payload }) {
+    yield takeEvery(actions.LOGIN_REQUEST, function*({ payload }) {
         const { data } = payload;
 
         // console.log('login taken!', payload);
@@ -53,12 +54,12 @@ export function* loginRequest() {
             // console.log('login result: ', result);
             if (result.access_token) {
                 yield put({
-                    type: 'LOGIN_SUCCESS',
+                    type: actions.LOGIN_SUCCESS,
                     payload: result
                 });
             } else {
                 yield put({
-                    type: 'LOGIN_ERROR',
+                    type: actions.LOGIN_ERROR,
                     error: result.error || result.errors || result
                 });
             }
@@ -66,7 +67,7 @@ export function* loginRequest() {
         } catch(err) {
             // console.log('login error caught: ', err);
             yield put({
-                type: 'LOGIN_ERROR',
+                type: actions.LOGIN_ERROR,
                 error: err
             });
         }
@@ -74,15 +75,15 @@ export function* loginRequest() {
 }
 
 export function* loginSuccess() {
-    yield takeEvery('LOGIN_SUCCESS', function*({ payload }) {});
+    yield takeEvery(actions.LOGIN_SUCCESS, function*({ payload }) {});
 }
 
 export function* loginError() {
-    yield takeEvery('LOGIN_ERROR', function*() {});
+    yield takeEvery(actions.LOGIN_ERROR, function*() {});
 }
 
 export function* logoutRequest() {
-    yield takeEvery('LOGOUT_REQUEST', function*({ payload }) {
+    yield takeEvery(actions.LOGOUT_REQUEST, function*({ payload }) {
         const { data } = payload;
 
         // console.log('logout taken!', payload);
@@ -106,15 +107,15 @@ export function* logoutRequest() {
 }
 
 export function* logoutSuccess() {
-    yield takeEvery('LOGOUT_SUCCESS', function*({ payload }) {});
+    yield takeEvery(actions.LOGOUT_SUCCESS, function*({ payload }) {});
 }
 
 export function* logoutError() {
-    yield takeEvery('LOGOUT_ERROR', function*() {});
+    yield takeEvery(actions.LOGOUT_ERROR, function*() {});
 }
 
 export function* registerRequest() {
-    yield takeEvery('REGISTER_REQUEST', function*({ payload }) {
+    yield takeEvery(actions.REGISTER_REQUEST, function*({ payload }) {
         const { data } = payload;
 
         // console.log('register taken!', payload);
@@ -127,12 +128,12 @@ export function* registerRequest() {
 
             if (result.access_token) {
                 yield put({
-                    type: 'REGISTER_SUCCESS',
+                    type: actions.REGISTER_SUCCESS,
                     payload: result
                 });
             } else {
                 yield put({
-                    type: 'REGISTER_ERROR',
+                    type: actions.REGISTER_ERROR,
                     error: result.error || result.errors || result
                 });
             }
@@ -140,7 +141,7 @@ export function* registerRequest() {
         } catch(err) {
             // console.log('register error caught: ', err);
             yield put({
-                type: 'REGISTER_ERROR',
+                type: actions.REGISTER_ERROR,
                 error: err
             });
         }
@@ -148,15 +149,15 @@ export function* registerRequest() {
 }
 
 export function* registerSuccess() {
-    yield takeEvery('REGISTER_SUCCESS', function*({ payload }) {});
+    yield takeEvery(actions.REGISTER_SUCCESS, function*({ payload }) {});
 }
 
 export function* registerError() {
-    yield takeEvery('REGISTER_ERROR', function*() {});
+    yield takeEvery(actions.REGISTER_ERROR, function*() {});
 }
 
 export function* updateProfileRequest() {
-    yield takeEvery('UPDATE_PROFILE_REQUEST', function*({ payload }) {
+    yield takeEvery(actions.UPDATE_PROFILE_REQUEST, function*({ payload }) {
         const { data } = payload;
 
         // console.log('updateProfile taken!', payload);
@@ -169,12 +170,12 @@ export function* updateProfileRequest() {
 
             if (result.resource) {
                 yield put({
-                    type: 'UPDATE_PROFILE_SUCCESS',
+                    type: actions.UPDATE_PROFILE_SUCCESS,
                     payload: result
                 });
             } else {
                 yield put({
-                    type: 'UPDATE_PROFILE_ERROR',
+                    type: actions.UPDATE_PROFILE_ERROR,
                     error: result.error || result.errors || result
                 });
             }
@@ -182,7 +183,7 @@ export function* updateProfileRequest() {
         } catch(err) {
             // console.log('updateProfile error caught: ', err);
             yield put({
-                type: 'UPDATE_PROFILE_ERROR',
+                type: actions.UPDATE_PROFILE_ERROR,
                 error: err
             });
         }
@@ -190,11 +191,11 @@ export function* updateProfileRequest() {
 }
 
 export function* updateProfileSuccess() {
-    yield takeEvery('UPDATE_PROFILE_SUCCESS', function*({ payload }) {});
+    yield takeEvery(actions.UPDATE_PROFILE_SUCCESS, function*({ payload }) {});
 }
 
 export function* updateProfileError() {
-    yield takeEvery('UPDATE_PROFILE_ERROR', function*() {});
+    yield takeEvery(actions.UPDATE_PROFILE_ERROR, function*() {});
 }
 
 export default function* rootSaga() {

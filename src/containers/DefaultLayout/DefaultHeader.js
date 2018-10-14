@@ -8,9 +8,14 @@ import {
     Nav,
     NavItem
 } from 'reactstrap';
-import { AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
-import logo from '../../assets/img/brand/logo.svg'
-import sygnet from '../../assets/img/brand/sygnet.svg'
+import {
+    AppHeaderDropdown,
+    AppNavbarBrand,
+    AppSidebarToggler
+} from '@coreui/react';
+import logo from '../../assets/img/brand/logo.svg';
+import sygnet from '../../assets/img/brand/sygnet.svg';
+import { logout } from '../../redux/auth/actions';
 
 export class DefaultHeader extends Component {
     state = {
@@ -91,10 +96,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     logout(data) {
-        dispatch({
-            type: 'LOGOUT_REQUEST',
-            payload: data
-        });
+        dispatch(logout(data));
     }
 });
 

@@ -12,15 +12,16 @@ import {
     Label,
     Row,
 } from 'reactstrap';
-import {
-    clearMetadataResourceCreate,
-    createResource
-} from '../../redux/role/actions';
 import ApiErrorCard from '../Cards/ApiErrorCard';
 import {
     getApiErrorMessages,
     isUnauthenticatedError
 } from '../../helpers/apiErrorMessages';
+import { loggedOut } from '../../redux/auth/actions';
+import {
+    clearMetadataResourceCreate,
+    createResource
+} from '../../redux/role/actions';
 
 export class Create extends Component {
     state = {
@@ -74,16 +75,17 @@ export class Create extends Component {
 
     componentDidUpdate(prevProps) {
         const {
-            errors,
-            resource,
             created,
+            errors,
             history,
+            loggedOut,
+            resource,
             unauthenticated
         } = this.props;
 
         // if unauthenticated redirect to login
         if(prevProps.unauthenticated === false && unauthenticated === true) {
-            this.props.loggedOut();
+            loggedOut();
         }
 
         // If I am receiving errors and I am creating the resource
@@ -225,11 +227,8 @@ const mapDispatchToProps = (dispatch) => ({
     createResource(data) {
         dispatch(createResource(data));
     },
-    loggedOut(data) {
-        dispatch({
-            type: 'LOGGED_OUT',
-            payload: data
-        })
+    loggedOut() {
+        dispatch(loggedOut());
     },
 });
 

@@ -14,8 +14,17 @@ import {
 } from 'reactstrap';
 import ApiErrorCard from '../../Cards/ApiErrorCard';
 import SpinnerLoader from '../../SpinnerLoader';
-import { getApiErrorMessages, isUnauthenticatedError } from '../../../helpers/apiErrorMessages';
+import {
+    getApiErrorMessages,
+    isUnauthenticatedError
+} from '../../../helpers/apiErrorMessages';
 import { apiResourceUpdateSuccessNotification } from '../../../helpers/notification';
+import {
+    clearMetadataProfile,
+    getProfile,
+    loggedOut,
+    updateProfile
+} from '../../../redux/auth/actions';
 
 export class Profile extends Component {
     state = {
@@ -66,7 +75,11 @@ export class Profile extends Component {
     }
 
     componentDidMount() {
-        const { profile, token } = this.props;
+        const {
+            getProfile,
+            profile,
+            token
+        } = this.props;
 
         // console.log(profile);
 
@@ -75,7 +88,7 @@ export class Profile extends Component {
         if(profile === null) {
             const data = { token };
 
-            this.props.getProfile({ data });
+            getProfile({ data });
 
             this.setState({
                 getting_profile: true
@@ -88,6 +101,7 @@ export class Profile extends Component {
     componentDidUpdate(prevProps) {
         const {
             errors,
+            loggedOut,
             profile,
             unauthenticated,
             updated_profile
@@ -98,7 +112,7 @@ export class Profile extends Component {
 
         // if unauthenticated redirect to login
         if(prevProps.unauthenticated === false && unauthenticated === true) {
-            this.props.loggedOut();
+            loggedOut();
         }
 
         // This means that I was updating the resource,
@@ -164,7 +178,7 @@ export class Profile extends Component {
 
     componentWillUnmount() {
         const { clearMetadataProfile } = this.props;
-        
+
         if(typeof clearMetadataProfile !== 'undefined') {
             clearMetadataProfile();
         }
@@ -286,28 +300,17 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    clearMetadataProfile(data) {
-        dispatch({
-            type: 'CLEAR_METADATA_PROFILE'
-        })
+    clearMetadataProfile() {
+        dispatch(clearMetadataProfile());
     },
     getProfile(data) {
-        dispatch({
-            type: 'GET_PROFILE_REQUEST',
-            payload: data
-        })
+        dispatch(getProfile(data));
     },
-    loggedOut(data) {
-        dispatch({
-            type: 'LOGGED_OUT',
-            payload: data
-        })
+    loggedOut() {
+        dispatch(loggedOut());
     },
     updateProfile(data) {
-        dispatch({
-            type: 'UPDATE_PROFILE_REQUEST',
-            payload: data
-        })
+        dispatch(updateProfile(data));
     }
 });
 

@@ -16,12 +16,16 @@ import {
 import ApiErrorCard from '../Cards/ApiErrorCard';
 import CardHeaderActions from '../CardHeaderActions';
 import DestroyResourceModal from '../DestroyResourceModal';
-import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';
+import {
+    getApiErrorMessages,
+    isUnauthenticatedError
+} from '../../helpers/apiErrorMessages';
 import getResourceFromPaginatedResourcesAndId from '../../helpers/getResourceFromPaginatedResourcesAndId';
 import {
     apiResourceCreateSuccessNotification,
     apiResourceUpdateSuccessNotification
 } from '../../helpers/notification';
+import { loggedOut } from '../../redux/auth/actions';
 import {
     clearMetadataResourceEdit,
     destroyResource,
@@ -148,6 +152,7 @@ export class Edit extends Component {
         const {
             destroyed,
             errors,
+            loggedOut,
             resource,
             unauthenticated,
             updated
@@ -156,7 +161,7 @@ export class Edit extends Component {
 
         // if unauthenticated redirect to login
         if(prevProps.unauthenticated === false && unauthenticated === true) {
-            this.props.loggedOut();
+            loggedOut();
         }
 
         // This means that I was destroying the resource,
@@ -398,11 +403,8 @@ const mapDispatchToProps = (dispatch) => ({
     getResource(data) {
         dispatch(getResource(data));
     },
-    loggedOut(data) {
-        dispatch({
-            type: 'LOGGED_OUT',
-            payload: data
-        })
+    loggedOut() {
+        dispatch(loggedOut());
     },
     updateResource(data) {
         dispatch(updateResource(data));

@@ -16,7 +16,7 @@ const initial_state = {
 };
 
 const role = (state = initial_state, action) => {
-    console.log('action dispatched', action);
+    // console.log('action dispatched', action);
     switch(action.type) {
         case actions.CHANGE_PAGE_ROLES:
             return {

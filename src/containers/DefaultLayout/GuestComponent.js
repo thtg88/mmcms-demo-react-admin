@@ -16,8 +16,10 @@ class GuestComponent extends Component {
 }
 
 const mapStateToProps = (state) => {
+    const { token } = state.auth;
+
     return {
-        logged_in: typeof state.auth.token !== 'undefined' && state.auth.token !== null
+        logged_in: typeof token !== 'undefined' && token !== null
     }
 };
 

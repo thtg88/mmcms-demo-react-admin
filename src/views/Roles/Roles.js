@@ -15,6 +15,7 @@ import {
     isUnauthenticatedError
 } from '../../helpers/apiErrorMessages';
 import { apiResourceDestroySuccessNotification } from '../../helpers/notification';
+import { loggedOut } from '../../redux/auth/actions';
 import {
     changePageResources,
     clearMetadataResources,
@@ -150,6 +151,7 @@ export class Roles extends Component {
     componentDidUpdate(prevProps) {
         const {
             fetching_resources,
+            loggedOut,
             query,
             resources,
             token,
@@ -164,7 +166,7 @@ export class Roles extends Component {
 
         // if unauthenticated redirect to login
         if(prevProps.unauthenticated === false && unauthenticated === true) {
-            this.props.loggedOut();
+            loggedOut();
         }
 
         else if(
@@ -336,11 +338,8 @@ const mapDispatchToProps = (dispatch) => ({
     getPaginatedResources(data) {
         dispatch(getPaginatedResources(data));
     },
-    loggedOut(data) {
-        dispatch({
-            type: 'LOGGED_OUT',
-            payload: data
-        })
+    loggedOut() {
+        dispatch(loggedOut());
     },
 });
 

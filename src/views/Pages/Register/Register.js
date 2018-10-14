@@ -15,8 +15,9 @@ import {
     Row
 } from 'reactstrap';
 import ReCAPTCHA from "react-google-recaptcha";
-import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
 import ApiErrorAlert from '../../Alerts/ApiErrorAlert';
+import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
+import { register, resetRegisterError } from '../../../redux/auth/actions';
 
 export class Register extends Component {
     state = {
@@ -63,10 +64,10 @@ export class Register extends Component {
     }
 
     redirectLogin() {
-        const { resetError, errors } = this.props;
+        const { resetRegisterError, errors } = this.props;
 
         if(errors.length > 0) {
-            resetError();
+            resetRegisterError();
         }
 
         this.setState({
@@ -80,7 +81,7 @@ export class Register extends Component {
         const {
             errors,
             register,
-            resetError
+            resetRegisterError
         } = this.props;
         const {
             email,
@@ -100,17 +101,17 @@ export class Register extends Component {
         // console.log(data);
 
         if(errors.length > 0) {
-            resetError();
+            resetRegisterError();
         }
 
         register({ data });
     };
 
     updateInputValue(evt) {
-        const { errors, resetError } = this.props;
+        const { errors, resetRegisterError } = this.props;
 
         if(errors.length > 0) {
-            resetError();
+            resetRegisterError();
         }
 
         this.setState({
@@ -286,15 +287,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     register(data) {
-        dispatch({
-            type: 'REGISTER_REQUEST',
-            payload: data
-        });
+        dispatch(register(data));
     },
-    resetError() {
-        dispatch({
-            type: 'REGISTER_ERROR_RESET'
-        });
+    resetRegisterError() {
+        dispatch(resetRegisterError());
     }
 });
 
