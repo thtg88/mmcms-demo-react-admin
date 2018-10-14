@@ -1,25 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import {
-    Card,
-    Button,
-    CardBody,
-    CardHeader,
-    Col,
-    Form,
-    FormGroup,
-    Input,
-    Label,
-    Row,
-} from 'reactstrap';
-import ApiErrorCard from '../Cards/ApiErrorCard';
-import CardHeaderActions from '../CardHeaderActions';
-import DestroyResourceModal from '../DestroyResourceModal';
+import EditResource from '../EditResource';
 import {
     getApiErrorMessages,
     isUnauthenticatedError
 } from '../../helpers/apiErrorMessages';
+import getFormResourceFromValues from '../../helpers/getFormResourceFromValues';
 import getResourceFromPaginatedResourcesAndId from '../../helpers/getResourceFromPaginatedResourcesAndId';
 import {
     apiResourceCreateSuccessNotification,
@@ -281,83 +268,21 @@ export class Edit extends Component {
             return <Redirect to="/users" />;
         }
 
-        let destroyButtonIconClassName = "fa fa-trash";
-        if(destroying_resource === true) {
-            destroyButtonIconClassName = "fa fa-spinner fa-spin";
-        }
-
-        let updateButtonIconClassName = "fa fa-save";
-        if(updating_resource === true) {
-            updateButtonIconClassName = "fa fa-spinner fa-spin";
-        }
-
         return (
-            <div className="animated fadeIn">
-                <Row>
-                    <Col md="12">
-                        <ApiErrorCard errors={errors} />
-                    </Col>
-                </Row>
-                {
-                    (
-                        typeof resource === 'undefined'
-                        || resource === null
-                    )
-                    ? null
-                    : <Row>
-                        <Col md={12}>
-                            <Card className="card-accent-warning">
-                                <CardHeader className="h1">
-                                    {resource.name}
-                                    <CardHeaderActions actions={actions} />
-                                </CardHeader>
-                                <CardBody>
-                                    <Form onSubmit={this.handleUpdateResource}>
-                                        {Object.entries(resource).map(([key, value]) => (
-                                            (
-                                                key.indexOf('id') === -1
-                                                && key.indexOf('_at') === -1
-                                            )
-                                                ? <FormGroup key={key}>
-                                                    <Label htmlFor={key}>{key}</Label>
-                                                    <Input
-                                                        type="text"
-                                                        id={key}
-                                                        name={key}
-                                                        value={value ? value : ''}
-                                                        placeholder={`Enter your ${key}`}
-                                                        onChange={this.updateInputValue}
-                                                    />
-                                                </FormGroup>
-                                                : null
-                                            ))
-                                        }
-                                        <Button
-                                            type="submit"
-                                            size="md"
-                                            color="warning"
-                                            block
-                                            disabled={resource_unchanged || updating_resource}
-                                            onClick={this.handleUpdateResource}
-                                        >
-                                            <i className={updateButtonIconClassName}></i>
-                                            {' '}
-                                            Update
-                                        </Button>
-                                    </Form>
-                                </CardBody>
-                            </Card>
-                        </Col>
-                        <DestroyResourceModal
-                            destroyButtonIconClassName={destroyButtonIconClassName}
-                            disabled={destroying_resource}
-                            isOpen={is_modal_open}
-                            onDestroyButtonClick={this.handleDestroyResource}
-                            toggle={this.toggleDestroyResourceModal}
-                        />
-                    </Row>
-                }
-            </div>
+            <EditResource
+                actions={actions}
+                destroyingResource={destroying_resource}
+                errors={errors}
+                gettingResource={getting_resource}
+                handleDestroyResource={this.handleDestroyResource}
+                handleUpdateResource={this.handleUpdateResource}
+                isDestroyResourceModalOpen={is_modal_open}
+                resource={getFormResourceFromValues(resource)}
+                resourceUnchanged={resource_unchanged}
+                toggleDestroyResourceModal={this.toggleDestroyResourceModal}
+                updateInputValue={this.updateInputValue}
+                updatingResource={updating_resource}
+            />
         );
     }
 }

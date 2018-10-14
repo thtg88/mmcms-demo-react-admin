@@ -1,22 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    Button,
-    Card,
-    CardBody,
-    CardHeader,
-    Col,
-    Form,
-    FormGroup,
-    Input,
-    Label,
-    Row,
-} from 'reactstrap';
-import ApiErrorCard from '../Cards/ApiErrorCard';
+import CreateResource from '../CreateResource';
 import {
     getApiErrorMessages,
     isUnauthenticatedError
 } from '../../helpers/apiErrorMessages';
+import getValuesFromFormResource from '../../helpers/getValuesFromFormResource';
 import { loggedOut } from '../../redux/auth/actions';
 import {
     clearMetadataResourceCreate,
@@ -26,10 +15,24 @@ import {
 export class Create extends Component {
     state = {
         resource: {
-            name: '',
-            email: '',
-            password: '',
-            password_confirmation: '',
+            name: {
+                type: 'text',
+                value: '',
+            },
+            email: {
+                type: 'email',
+                value: '',
+            },
+            password: {
+                type: 'password',
+                value: '',
+            },
+            password_confirmation: {
+                label: "Confirm Password",
+                placeholder: "Confirm your password",
+                type: 'password',
+                value: '',
+            },
         },
         resource_unchanged: true,
         creating_resource: false
@@ -48,10 +51,14 @@ export class Create extends Component {
                 resource_unchanged: false,
             });
         }
+
         this.setState({
             resource: {
                 ...this.state.resource,
-                [evt.target.name]: evt.target.value,
+                [evt.target.name]: {
+                    ...this.state.resource[evt.target.name],
+                    value: evt.target.value
+                },
             }
         });
     }
@@ -61,7 +68,8 @@ export class Create extends Component {
 
         const { createResource, token } = this.props;
         const { resource } = this.state;
-        const data = { token, ...resource };
+        const values = getValuesFromFormResource(resource);
+        const data = { token, ...values };
 
         this.setState({
             creating_resource: true
@@ -128,88 +136,15 @@ export class Create extends Component {
         // console.log('resource_unchanged', resource_unchanged);
         // console.log('creating_resource', creating_resource);
 
-        let createButtonIconClassName = "fa fa-plus";
-        if(creating_resource === true) {
-            createButtonIconClassName = "fa fa-spinner fa-spin";
-        }
-
         return (
-            <div className="animated fadeIn">
-                <Row>
-                    <Col md="12">
-                        <ApiErrorCard errors={errors} />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg={12}>
-                        <Card className="card-accent-success">
-                            <CardHeader className="h1">
-                                Create Resource
-                            </CardHeader>
-                            <CardBody>
-                                <Form onSubmit={this.handleCreateResource}>
-                                    <FormGroup>
-                                        <Label htmlFor="name">Name</Label>
-                                        <Input
-                                            type="text"
-                                            id="name"
-                                            name="name"
-                                            value={resource.name}
-                                            placeholder="Enter your name"
-                                            onChange={this.updateInputValue}
-                                        />
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label htmlFor="email">Email</Label>
-                                        <Input
-                                            type="email"
-                                            id="email"
-                                            name="email"
-                                            value={resource.email}
-                                            placeholder="Enter your email"
-                                            onChange={this.updateInputValue}
-                                        />
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label htmlFor="password">Password</Label>
-                                        <Input
-                                            type="password"
-                                            id="password"
-                                            name="password"
-                                            value={resource.password}
-                                            placeholder="Enter your password"
-                                            onChange={this.updateInputValue}
-                                        />
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label htmlFor="password_confirmation">Confirm Password</Label>
-                                        <Input
-                                            type="password"
-                                            id="password_confirmation"
-                                            name="password_confirmation"
-                                            value={resource.password_confirmation}
-                                            placeholder="Confirm your password"
-                                            onChange={this.updateInputValue}
-                                        />
-                                    </FormGroup>
-                                    <Button
-                                        type="submit"
-                                        size="md"
-                                        color="success"
-                                        block
-                                        disabled={resource_unchanged || creating_resource}
-                                        onClick={this.handleCreateResource}
-                                    >
-                                        <i className={createButtonIconClassName}></i>
-                                        {' '}
-                                        Create
-                                    </Button>
-                                </Form>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
-            </div>
+            <CreateResource
+                creatingResource={creating_resource}
+                errors={errors}
+                handleCreateResource={this.handleCreateResource}
+                resource={resource}
+                resourceUnchanged={resource_unchanged}
+                updateInputValue={this.updateInputValue}
+            />
         );
     }
 }
