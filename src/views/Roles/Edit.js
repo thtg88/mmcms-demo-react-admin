@@ -16,12 +16,22 @@ import {
 import ApiErrorCard from '../Cards/ApiErrorCard';
 import CardHeaderActions from '../CardHeaderActions';
 import DestroyResourceModal from '../DestroyResourceModal';
-import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';
+import {
+    getApiErrorMessages,
+    isUnauthenticatedError
+} from '../../helpers/apiErrorMessages';
 import getResourceFromPaginatedResourcesAndId from '../../helpers/getResourceFromPaginatedResourcesAndId';
 import {
     apiResourceCreateSuccessNotification,
     apiResourceUpdateSuccessNotification
 } from '../../helpers/notification';
+import {
+    clearMetadataResourceEdit,
+    destroyResource,
+    getPaginatedResources,
+    getResource,
+    updateResource
+} from '../../redux/role/actions';
 import { pageSize } from './tableConfig';
 
 export class Edit extends Component {
@@ -380,27 +390,16 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => ({
     clearMetadataResourceEdit() {
-        dispatch({
-            type: 'CLEAR_METADATA_ROLE_EDIT'
-        })
+        dispatch(clearMetadataResourceEdit());
     },
     destroyResource(data) {
-        dispatch({
-            type: 'DESTROY_ROLE_REQUEST',
-            payload: data
-        })
+        dispatch(destroyResource(data));
     },
     getPaginatedResources(data) {
-        dispatch({
-            type: 'GET_PAGINATED_ROLES_REQUEST',
-            payload: data
-        })
+        dispatch(getPaginatedResources(data));
     },
     getResource(data) {
-        dispatch({
-            type: 'GET_ROLE_REQUEST',
-            payload: data
-        })
+        dispatch(getResource(data));
     },
     loggedOut(data) {
         dispatch({
@@ -409,10 +408,7 @@ const mapDispatchToProps = (dispatch) => ({
         })
     },
     updateResource(data) {
-        dispatch({
-            type: 'UPDATE_ROLE_REQUEST',
-            payload: data
-        })
+        dispatch(updateResource(data));
     }
 });
 

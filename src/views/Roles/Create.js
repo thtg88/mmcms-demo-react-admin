@@ -12,8 +12,15 @@ import {
     Label,
     Row,
 } from 'reactstrap';
+import {
+    clearMetadataResourceCreate,
+    createResource
+} from '../../redux/role/actions';
 import ApiErrorCard from '../Cards/ApiErrorCard';
-import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';
+import {
+    getApiErrorMessages,
+    isUnauthenticatedError
+} from '../../helpers/apiErrorMessages';
 
 export class Create extends Component {
     state = {
@@ -213,15 +220,10 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => ({
     clearMetadataResourceCreate() {
-        dispatch({
-            type: 'CLEAR_METADATA_ROLE_CREATE'
-        })
+        dispatch(clearMetadataResourceCreate());
     },
     createResource(data) {
-        dispatch({
-            type: 'CREATE_ROLE_REQUEST',
-            payload: data
-        })
+        dispatch(createResource(data));
     },
     loggedOut(data) {
         dispatch({

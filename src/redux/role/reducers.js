@@ -1,3 +1,4 @@
+import actions from './actions';
 import updatePaginatedResourcesFromResource from '../../helpers/updatePaginatedResourcesFromResource';
 
 const initial_state = {
@@ -15,14 +16,14 @@ const initial_state = {
 };
 
 const role = (state = initial_state, action) => {
-    // console.log('action dispatched', action);
+    console.log('action dispatched', action);
     switch(action.type) {
-        case 'CHANGE_PAGE_ROLES':
+        case actions.CHANGE_PAGE_ROLES:
             return {
                 ...state,
                 current_page: action.payload.data.page
             };
-        case 'CLEAR_METADATA_ROLES': {
+        case actions.CLEAR_METADATA_ROLES: {
             const { data } = action.payload;
             // console.log(action.type);
             return {
@@ -47,7 +48,7 @@ const role = (state = initial_state, action) => {
                     }
             };
         }
-        case 'CLEAR_METADATA_ROLE_EDIT':
+        case actions.CLEAR_METADATA_ROLE_EDIT:
             return {
                 ...state,
                 error: null,
@@ -55,56 +56,57 @@ const role = (state = initial_state, action) => {
                 created: false,
                 resource: null
             };
-        case 'CLEAR_METADATA_ROLE_CREATE':
+        case actions.CLEAR_METADATA_ROLE_CREATE:
             return {
                 ...state,
                 error: null,
                 // created: false,
                 resource: null
             };
-        case 'CREATE_ROLE_REQUEST':
-            // console.log('creatingRole dispatched');
+        case actions.CREATE_ROLE_REQUEST: {
+            console.log('creatingRole dispatched');
             return {
                 ...state,
                 error: null,
                 created: false
             };
-        case 'CREATE_ROLE_SUCCESS':
+        }
+        case actions.CREATE_ROLE_SUCCESS:
             return {
                 ...state,
                 error: null,
                 created: true,
                 resource: action.payload.resource,
             };
-        case 'CREATE_ROLE_ERROR':
+        case actions.CREATE_ROLE_ERROR:
             // console.log('creatingRole error:', action);
             return {
                 ...state,
                 error: action.error,
                 created: false
             };
-        case 'DESTROY_ROLE_REQUEST':
+        case actions.DESTROY_ROLE_REQUEST:
             // console.log('deletingRole dispatched');
             return {
                 ...state,
                 error: null,
                 destroyed: false
             };
-        case 'DESTROY_ROLE_SUCCESS':
+        case actions.DESTROY_ROLE_SUCCESS:
             return {
                 ...state,
                 error: null,
                 destroyed: true,
                 // resource: action.payload.resource,
             };
-        case 'DESTROY_ROLE_ERROR':
+        case actions.DESTROY_ROLE_ERROR:
             // console.log('deletingRole error:', action);
             return {
                 ...state,
                 error: action.error,
                 destroyed: false
             };
-        case 'GET_PAGINATED_ROLES_REQUEST': {
+        case actions.GET_PAGINATED_ROLES_REQUEST: {
             // console.log('getRoles state', state);
             // console.log('getRoles dispatched', action);
             const { data } = action.payload;
@@ -120,7 +122,7 @@ const role = (state = initial_state, action) => {
                 total: 0,
             };
         }
-        case 'GET_PAGINATED_ROLES_SUCCESS': {
+        case actions.GET_PAGINATED_ROLES_SUCCESS: {
             const { data, total, current_page } = action.payload;
             return {
                 ...state,
@@ -134,7 +136,7 @@ const role = (state = initial_state, action) => {
                 total: total,
             };
         }
-        case 'GET_PAGINATED_ROLES_ERROR':
+        case actions.GET_PAGINATED_ROLES_ERROR:
             // console.log('getRoles error:', action);
             return {
                 ...state,
@@ -142,25 +144,25 @@ const role = (state = initial_state, action) => {
                 fetching_resources: false,
                 total: 0
             };
-        case 'GET_ROLE_REQUEST':
+        case actions.GET_ROLE_REQUEST:
             // console.log('getRole dispatched');
             return {
                 ...state,
                 error: null
             };
-        case 'GET_ROLE_SUCCESS':
+        case actions.GET_ROLE_SUCCESS:
             return {
                 ...state,
                 error: null,
                 resource: action.payload.resource,
             };
-        case 'GET_ROLE_ERROR':
+        case actions.GET_ROLE_ERROR:
             // console.log('getRole error:', action);
             return {
                 ...state,
                 error: action.error
             };
-        case 'UPDATE_ROLE_REQUEST':
+        case actions.UPDATE_ROLE_REQUEST:
             // console.log('updatingRole dispatched');
             return {
                 ...state,
@@ -168,7 +170,7 @@ const role = (state = initial_state, action) => {
                 error: null,
                 updated: false
             };
-        case 'UPDATE_ROLE_SUCCESS': {
+        case actions.UPDATE_ROLE_SUCCESS: {
             const { resource } = action.payload;
             return {
                 ...state,
@@ -178,7 +180,7 @@ const role = (state = initial_state, action) => {
                 resources: updatePaginatedResourcesFromResource(state.resources, resource)
             };
         }
-        case 'UPDATE_ROLE_ERROR':
+        case actions.UPDATE_ROLE_ERROR:
             // console.log('updatingRole error:', action);
             return {
                 ...state,
