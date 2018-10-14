@@ -13,7 +13,14 @@ import {
     Row,
 } from 'reactstrap';
 import ApiErrorCard from '../Cards/ApiErrorCard';
-import { getApiErrorMessages, isUnauthenticatedError } from '../../helpers/apiErrorMessages';
+import {
+    getApiErrorMessages,
+    isUnauthenticatedError
+} from '../../helpers/apiErrorMessages';
+import {
+    clearMetadataResourceCreate,
+    createResource
+} from '../../redux/user/actions';
 
 export class Create extends Component {
     state = {
@@ -225,15 +232,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     clearMetadataResourceCreate() {
-        dispatch({
-            type: 'CLEAR_METADATA_USER_CREATE'
-        })
+        dispatch(clearMetadataResourceCreate());
     },
     createResource(data) {
-        dispatch({
-            type: 'CREATE_USER_REQUEST',
-            payload: data
-        })
+        dispatch(createResource(data));
     },
     loggedOut(data) {
         dispatch({

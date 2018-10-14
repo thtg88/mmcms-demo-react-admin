@@ -22,6 +22,13 @@ import {
     apiResourceCreateSuccessNotification,
     apiResourceUpdateSuccessNotification
 } from '../../helpers/notification';
+import {
+    clearMetadataResourceEdit,
+    destroyResource,
+    getPaginatedResources,
+    getResource,
+    updateResource
+} from '../../redux/user/actions';
 import { pageSize } from './tableConfig';
 
 export class Edit extends Component {
@@ -380,27 +387,16 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => ({
     clearMetadataResourceEdit() {
-        dispatch({
-            type: 'CLEAR_METADATA_USER_EDIT'
-        })
+        dispatch(clearMetadataResourceEdit());
     },
     destroyResource(data) {
-        dispatch({
-            type: 'DESTROY_USER_REQUEST',
-            payload: data
-        })
+        dispatch(destroyResource(data));
     },
     getPaginatedResources(data) {
-        dispatch({
-            type: 'GET_PAGINATED_USERS_REQUEST',
-            payload: data
-        })
+        dispatch(getPaginatedResources(data));
     },
     getResource(data) {
-        dispatch({
-            type: 'GET_USER_REQUEST',
-            payload: data
-        })
+        dispatch(getResource(data));
     },
     loggedOut(data) {
         dispatch({
@@ -409,10 +405,7 @@ const mapDispatchToProps = (dispatch) => ({
         })
     },
     updateResource(data) {
-        dispatch({
-            type: 'UPDATE_USER_REQUEST',
-            payload: data
-        })
+        dispatch(updateResource(data));
     }
 });
 

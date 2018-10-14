@@ -15,6 +15,11 @@ import {
     isUnauthenticatedError
 } from '../../helpers/apiErrorMessages';
 import { apiResourceDestroySuccessNotification } from '../../helpers/notification';
+import {
+    changePageResources,
+    clearMetadataResources,
+    getPaginatedResources
+} from '../../redux/user/actions';
 import { columns, pageSize } from './tableConfig';
 
 const actions = [
@@ -325,22 +330,13 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     changePageResources(data) {
-        dispatch({
-            type: 'CHANGE_PAGE_USERS',
-            payload: data
-        })
+        dispatch(changePageResources(data));
     },
     clearMetadataResources(data) {
-        dispatch({
-            type: 'CLEAR_METADATA_USERS',
-            payload: data
-        })
+        dispatch(clearMetadataResources(data));
     },
     getPaginatedResources(data) {
-        dispatch({
-            type: 'GET_PAGINATED_USERS_REQUEST',
-            payload: data
-        })
+        dispatch(getPaginatedResources(data));
     },
     loggedOut(data) {
         dispatch({
@@ -348,12 +344,6 @@ const mapDispatchToProps = (dispatch) => ({
             payload: data
         })
     },
-    updateResource(data) {
-        dispatch({
-            type: 'UPDATE_USER_REQUEST',
-            payload: data
-        })
-    }
 });
 
 export default connect(

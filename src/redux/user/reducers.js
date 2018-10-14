@@ -1,3 +1,4 @@
+import actions from './actions';
 import updatePaginatedResourcesFromResource from '../../helpers/updatePaginatedResourcesFromResource';
 
 const initial_state = {
@@ -17,12 +18,12 @@ const initial_state = {
 const user = (state = initial_state, action) => {
     // console.log('action dispatched', action);
     switch(action.type) {
-        case 'CHANGE_PAGE_USERS':
+        case actions.CHANGE_PAGE_USERS:
             return {
                 ...state,
                 current_page: action.payload.data.page
             };
-        case 'CLEAR_METADATA_USERS': {
+        case actions.CLEAR_METADATA_USERS: {
             const { data } = action.payload;
             // console.log(action.type);
             return {
@@ -47,7 +48,7 @@ const user = (state = initial_state, action) => {
                     }
             };
         }
-        case 'CLEAR_METADATA_USER_EDIT':
+        case actions.CLEAR_METADATA_USER_EDIT:
             return {
                 ...state,
                 error: null,
@@ -55,56 +56,56 @@ const user = (state = initial_state, action) => {
                 created: false,
                 resource: null
             };
-        case 'CLEAR_METADATA_USER_CREATE':
+        case actions.CLEAR_METADATA_USER_CREATE:
             return {
                 ...state,
                 error: null,
                 // created: false,
                 resource: null
             };
-        case 'CREATE_USER_REQUEST':
+        case actions.CREATE_USER_REQUEST:
             // console.log('creatingUser dispatched');
             return {
                 ...state,
                 error: null,
                 created: false
             };
-        case 'CREATE_USER_SUCCESS':
+        case actions.CREATE_USER_SUCCESS:
             return {
                 ...state,
                 error: null,
                 created: true,
                 resource: action.payload.resource,
             };
-        case 'CREATE_USER_ERROR':
+        case actions.CREATE_USER_ERROR:
             console.log('createUser error:', action);
             return {
                 ...state,
                 error: action.error,
                 created: false
             };
-        case 'DESTROY_USER_REQUEST':
+        case actions.DESTROY_USER_REQUEST:
             // console.log('destroyUser dispatched');
             return {
                 ...state,
                 error: null,
                 destroyed: false
             };
-        case 'DESTROY_USER_SUCCESS':
+        case actions.DESTROY_USER_SUCCESS:
             return {
                 ...state,
                 error: null,
                 destroyed: true,
                 // resource: action.payload.resource,
             };
-        case 'DESTROY_USER_ERROR':
+        case actions.DESTROY_USER_ERROR:
             // console.log('destroyUser error:', action);
             return {
                 ...state,
                 error: action.error,
                 destroyed: false
             };
-        case 'GET_PAGINATED_USERS_REQUEST': {
+        case actions.GET_PAGINATED_USERS_REQUEST: {
             // console.log('getUsers state', state);
             // console.log('getUsers dispatched', action);
             const { data } = action.payload;
@@ -129,7 +130,7 @@ const user = (state = initial_state, action) => {
                 total: 0,
             };
         }
-        case 'GET_PAGINATED_USERS_SUCCESS': {
+        case actions.GET_PAGINATED_USERS_SUCCESS: {
             const { data, total, current_page } = action.payload;
             return {
                 ...state,
@@ -143,7 +144,7 @@ const user = (state = initial_state, action) => {
                 total: total,
             };
         }
-        case 'GET_PAGINATED_USERS_ERROR':
+        case actions.GET_PAGINATED_USERS_ERROR:
             // console.log('getUsers error:', action);
             return {
                 ...state,
@@ -151,25 +152,25 @@ const user = (state = initial_state, action) => {
                 fetching_resources: false,
                 total: 0
             };
-        case 'GET_USER_REQUEST':
+        case actions.GET_USER_REQUEST:
             // console.log('getUser dispatched');
             return {
                 ...state,
                 error: null
             };
-        case 'GET_USER_SUCCESS':
+        case actions.GET_USER_SUCCESS:
             return {
                 ...state,
                 error: null,
                 resource: action.payload.resource,
             };
-        case 'GET_USER_ERROR':
+        case actions.GET_USER_ERROR:
             // console.log('getUser error:', action);
             return {
                 ...state,
                 error: action.error
             };
-        case 'UPDATE_USER_REQUEST':
+        case actions.UPDATE_USER_REQUEST:
             // console.log('updateUser dispatched');
             return {
                 ...state,
@@ -177,7 +178,7 @@ const user = (state = initial_state, action) => {
                 error: null,
                 updated: false
             };
-        case 'UPDATE_USER_SUCCESS': {
+        case actions.UPDATE_USER_SUCCESS: {
             const { resource } = action.payload;
             return {
                 ...state,
@@ -187,7 +188,7 @@ const user = (state = initial_state, action) => {
                 resources: updatePaginatedResourcesFromResource(state.resources, resource)
             };
         }
-        case 'UPDATE_USER_ERROR':
+        case actions.UPDATE_USER_ERROR:
             // console.log('updateUser error:', action);
             return {
                 ...state,
