@@ -1,8 +1,8 @@
-export const createUser = async (data) => {
+export const createResource = async (data) => {
     const { token, ...rest } = data;
 
     // console.log(token, rest);
-    // console.log('createUser rest', rest);
+    // console.log('createResource rest', rest);
 
     return await fetch(process.env.REACT_APP_API_BASE_URL+'/users', {
         method: 'POST',
@@ -16,11 +16,11 @@ export const createUser = async (data) => {
     .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
-export const destroyUser = async (data) => {
+export const destroyResource = async (data) => {
     const { token, id } = data;
 
     // console.log(token, id);
-    // console.log('destroyUser', id);
+    // console.log('destroyResource', id);
 
     return await fetch(process.env.REACT_APP_API_BASE_URL+'/users/'+id, {
         method: 'DELETE',
@@ -33,7 +33,24 @@ export const destroyUser = async (data) => {
     .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
-export const getPaginatedUsers = async (data) => {
+export const findResource = async (data) => {
+    const { token, id } = data;
+    const url = process.env.REACT_APP_API_BASE_URL+'/users/'+id;
+
+    // console.log('findResource data', data);
+
+    return await fetch(url, {
+        method: 'GET',
+        headers: new Headers({
+            "Authorization": "Bearer "+token.access_token,
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }),
+    })
+    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+};
+
+export const getPaginatedResources = async (data) => {
     const { token, page, pageSize, q } = data;
     const url = process.env.REACT_APP_API_BASE_URL
         +'/users/paginate'
@@ -47,7 +64,7 @@ export const getPaginatedUsers = async (data) => {
                 : ''
         );
 
-    // console.log('getPaginatedUsers data', data);
+    // console.log('getPaginatedResources data', data);
 
     return await fetch(url, {
         method: 'GET',
@@ -60,28 +77,11 @@ export const getPaginatedUsers = async (data) => {
     .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
-export const getUser = async (data) => {
-    const { token, id } = data;
-    const url = process.env.REACT_APP_API_BASE_URL+'/users/'+id;
-
-    // console.log('getUser data', data);
-
-    return await fetch(url, {
-        method: 'GET',
-        headers: new Headers({
-            "Authorization": "Bearer "+token.access_token,
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        }),
-    })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
-};
-
-export const updateUser = async (data) => {
+export const updateResource = async (data) => {
     const { token, id, ...rest } = data;
 
     // console.log(token, id, rest);
-    // console.log('updateUser rest', rest);
+    // console.log('updateResource rest', rest);
 
     return await fetch(process.env.REACT_APP_API_BASE_URL+'/users/'+id, {
         method: 'PUT',

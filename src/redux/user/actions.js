@@ -1,67 +1,91 @@
+import createActionName from '../createActionName';
+
+export const reducerName = 'user';
+
+export const CHANGE_PAGE_RESOURCES = createActionName(reducerName, 'CHANGE_PAGE_RESOURCES');
+export const CLEAR_METADATA_RESOURCES = createActionName(reducerName, 'CLEAR_METADATA_RESOURCES');
+export const CLEAR_METADATA_RESOURCE_EDIT = createActionName(reducerName, 'CLEAR_METADATA_RESOURCE_EDIT');
+export const CLEAR_METADATA_RESOURCE_CREATE = createActionName(reducerName, 'CLEAR_METADATA_RESOURCE_CREATE');
+export const CREATE_RESOURCE_REQUEST = createActionName(reducerName, 'CREATE_RESOURCE_REQUEST');
+export const CREATE_RESOURCE_SUCCESS = createActionName(reducerName, 'CREATE_RESOURCE_SUCCESS');
+export const CREATE_RESOURCE_ERROR = createActionName(reducerName, 'CREATE_RESOURCE_ERROR');
+export const DESTROY_RESOURCE_REQUEST = createActionName(reducerName, 'DESTROY_RESOURCE_REQUEST');
+export const DESTROY_RESOURCE_SUCCESS = createActionName(reducerName, 'DESTROY_RESOURCE_SUCCESS');
+export const DESTROY_RESOURCE_ERROR = createActionName(reducerName, 'DESTROY_RESOURCE_ERROR');
+export const FIND_RESOURCE_REQUEST = createActionName(reducerName, 'FIND_RESOURCE_REQUEST');
+export const FIND_RESOURCE_SUCCESS = createActionName(reducerName, 'FIND_RESOURCE_SUCCESS');
+export const FIND_RESOURCE_ERROR = createActionName(reducerName, 'FIND_RESOURCE_ERROR');
+export const GET_PAGINATED_RESOURCES_REQUEST = createActionName(reducerName, 'GET_PAGINATED_RESOURCES_REQUEST');
+export const GET_PAGINATED_RESOURCES_SUCCESS = createActionName(reducerName, 'GET_PAGINATED_RESOURCES_SUCCESS');
+export const GET_PAGINATED_RESOURCES_ERROR = createActionName(reducerName, 'GET_PAGINATED_RESOURCES_ERROR');
+export const UPDATE_RESOURCE_REQUEST = createActionName(reducerName, 'UPDATE_RESOURCE_REQUEST');
+export const UPDATE_RESOURCE_SUCCESS = createActionName(reducerName, 'UPDATE_RESOURCE_SUCCESS');
+export const UPDATE_RESOURCE_ERROR = createActionName(reducerName, 'UPDATE_RESOURCE_ERROR');
+
 // actions
 const actions = {
-    CHANGE_PAGE_USERS: 'CHANGE_PAGE_USERS',
-    CLEAR_METADATA_USERS: 'CLEAR_METADATA_USERS',
-    CLEAR_METADATA_USER_EDIT: 'CLEAR_METADATA_USER_EDIT',
-    CLEAR_METADATA_USER_CREATE: 'CLEAR_METADATA_USER_CREATE',
-    CREATE_USER_REQUEST: 'CREATE_USER_REQUEST',
-    CREATE_USER_SUCCESS: 'CREATE_USER_SUCCESS',
-    CREATE_USER_ERROR: 'CREATE_USER_ERROR',
-    DESTROY_USER_REQUEST: 'DESTROY_USER_REQUEST',
-    DESTROY_USER_SUCCESS: 'DESTROY_USER_SUCCESS',
-    DESTROY_USER_ERROR: 'DESTROY_USER_ERROR',
-    GET_PAGINATED_USERS_REQUEST: 'GET_PAGINATED_USERS_REQUEST',
-    GET_PAGINATED_USERS_SUCCESS: 'GET_PAGINATED_USERS_SUCCESS',
-    GET_PAGINATED_USERS_ERROR: 'GET_PAGINATED_USERS_ERROR',
-    GET_USER_REQUEST: 'GET_USER_REQUEST',
-    GET_USER_SUCCESS: 'GET_USER_SUCCESS',
-    GET_USER_ERROR: 'GET_USER_ERROR',
-    UPDATE_USER_REQUEST: 'UPDATE_USER_REQUEST',
-    UPDATE_USER_SUCCESS: 'UPDATE_USER_SUCCESS',
-    UPDATE_USER_ERROR: 'UPDATE_USER_ERROR',
+  	CHANGE_PAGE_RESOURCES,
+  	CLEAR_METADATA_RESOURCES,
+  	CLEAR_METADATA_RESOURCE_EDIT,
+  	CLEAR_METADATA_RESOURCE_CREATE,
+  	CREATE_RESOURCE_REQUEST,
+  	CREATE_RESOURCE_SUCCESS,
+  	CREATE_RESOURCE_ERROR,
+  	DESTROY_RESOURCE_REQUEST,
+  	DESTROY_RESOURCE_SUCCESS,
+  	DESTROY_RESOURCE_ERROR,
+  	FIND_RESOURCE_REQUEST,
+  	FIND_RESOURCE_SUCCESS,
+  	FIND_RESOURCE_ERROR,
+  	GET_PAGINATED_RESOURCES_REQUEST,
+  	GET_PAGINATED_RESOURCES_SUCCESS,
+  	GET_PAGINATED_RESOURCES_ERROR,
+  	UPDATE_RESOURCE_REQUEST,
+  	UPDATE_RESOURCE_SUCCESS,
+  	UPDATE_RESOURCE_ERROR,
 };
 
 // action creators
 export const changePageResources = payload => ({
-    type: actions.CHANGE_PAGE_USERS,
+    type: actions.CHANGE_PAGE_RESOURCES,
     payload
 });
 
 export const clearMetadataResourceCreate = payload => ({
-    type: actions.CLEAR_METADATA_USER_CREATE
+    type: actions.CLEAR_METADATA_RESOURCE_CREATE
 });
 
 export const clearMetadataResourceEdit = payload => ({
-    type: actions.CLEAR_METADATA_USER_EDIT
+    type: actions.CLEAR_METADATA_RESOURCE_EDIT
 });
 
 export const clearMetadataResources = payload => ({
-    type: actions.CLEAR_METADATA_USERS,
+    type: actions.CLEAR_METADATA_RESOURCES,
     payload
 });
 
 export const createResource = payload => ({
-    type: actions.CREATE_USER_REQUEST,
+    type: actions.CREATE_RESOURCE_REQUEST,
     payload
 });
 
 export const destroyResource = payload => ({
-    type: actions.DESTROY_USER_REQUEST,
+    type: actions.DESTROY_RESOURCE_REQUEST,
+    payload
+});
+
+export const findResource = payload => ({
+    type: actions.FIND_RESOURCE_REQUEST,
     payload
 });
 
 export const getPaginatedResources = payload => ({
-    type: actions.GET_PAGINATED_USERS_REQUEST,
-    payload
-});
-
-export const getResource = payload => ({
-    type: actions.GET_USER_REQUEST,
+    type: actions.GET_PAGINATED_RESOURCES_REQUEST,
     payload
 });
 
 export const updateResource = payload => ({
-    type: actions.UPDATE_USER_REQUEST,
+    type: actions.UPDATE_RESOURCE_REQUEST,
     payload
 });
 

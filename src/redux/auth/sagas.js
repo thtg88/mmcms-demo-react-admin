@@ -93,13 +93,13 @@ export function* logoutRequest() {
             yield call(logout, data);
             // console.log('logout result: ', result);
             yield put({
-                type: 'LOGOUT_SUCCESS'
+                type: actions.LOGOUT_SUCCESS,
             });
 
         } catch(err) {
             // console.log(err);
             yield put({
-                type: 'LOGOUT_SUCCESS'
+                type: actions.LOGOUT_SUCCESS,
             });
         }
 

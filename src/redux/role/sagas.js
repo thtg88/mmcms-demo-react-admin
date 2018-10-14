@@ -1,219 +1,219 @@
 import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
 import actions from './actions';
 import {
-    createRole,
-    destroyRole,
-    getPaginatedRoles,
-    getRole,
-    updateRole
+    createResource,
+    destroyResource,
+    findResource,
+    getPaginatedResources,
+    updateResource
 } from './helper';
 
-export function* createRoleRequest() {
-    yield takeEvery(actions.CREATE_ROLE_REQUEST, function*({ payload }) {
-        // console.log('createRole taken!', payload);
+export function* createResourceRequest() {
+    yield takeEvery(actions.CREATE_RESOURCE_REQUEST, function*({ payload }) {
+        // console.log('createResource taken!', payload);
         const { data } = payload;
         // console.log('data', data);
         try {
-            const result = yield call(createRole, data);
-            // console.log('createRole result: ', result);
+            const result = yield call(createResource, data);
+            // console.log('createResource result: ', result);
             if (result.resource) {
                 yield put({
-                    type: actions.CREATE_ROLE_SUCCESS,
+                    type: actions.CREATE_RESOURCE_SUCCESS,
                     payload: result
                 });
             } else {
                 yield put({
-                    type: actions.CREATE_ROLE_ERROR,
+                    type: actions.CREATE_RESOURCE_ERROR,
                     error: result.error || result.errors || result
                 });
             }
 
         } catch(err) {
-            // console.log('createRole error caught: ', err);
+            // console.log('createResource error caught: ', err);
             yield put({
-                type: actions.CREATE_ROLE_ERROR,
+                type: actions.CREATE_RESOURCE_ERROR,
                 error: err
             });
         }
     });
 }
 
-export function* createRoleSuccess() {
-    yield takeEvery(actions.CREATE_ROLE_SUCCESS, function*({ payload }) {});
+export function* createResourceSuccess() {
+    yield takeEvery(actions.CREATE_RESOURCE_SUCCESS, function*({ payload }) {});
 }
 
-export function* createRoleError() {
-    yield takeEvery(actions.CREATE_ROLE_ERROR, function*() {});
+export function* createResourceError() {
+    yield takeEvery(actions.CREATE_RESOURCE_ERROR, function*() {});
 }
 
-export function* destroyRoleRequest() {
-    yield takeEvery(actions.DESTROY_ROLE_REQUEST, function*({ payload }) {
-        // console.log('destroyRole taken!', payload);
+export function* destroyResourceRequest() {
+    yield takeEvery(actions.DESTROY_RESOURCE_REQUEST, function*({ payload }) {
+        // console.log('destroyResource taken!', payload);
         const { data } = payload;
         // console.log('data', data);
         try {
-            const result = yield call(destroyRole, data);
-            // console.log('destroyRole result: ', result);
+            const result = yield call(destroyResource, data);
+            // console.log('destroyResource result: ', result);
             if (result.resource) {
                 yield put({
-                    type: actions.DESTROY_ROLE_SUCCESS,
+                    type: actions.DESTROY_RESOURCE_SUCCESS,
                     payload: result
                 });
             } else {
                 yield put({
-                    type: actions.DESTROY_ROLE_ERROR,
+                    type: actions.DESTROY_RESOURCE_ERROR,
                     error: result.error || result.errors || result
                 });
             }
 
         } catch(err) {
-            // console.log('destroyRole error caught: ', err);
+            // console.log('destroyResource error caught: ', err);
             yield put({
-                type: actions.DESTROY_ROLE_ERROR,
+                type: actions.DESTROY_RESOURCE_ERROR,
                 error: err
             });
         }
     });
 }
 
-export function* destroyRoleSuccess() {
-    yield takeEvery(actions.DESTROY_ROLE_SUCCESS, function*({ payload }) {});
+export function* destroyResourceSuccess() {
+    yield takeEvery(actions.DESTROY_RESOURCE_SUCCESS, function*({ payload }) {});
 }
 
-export function* destroyRoleError() {
-    yield takeEvery(actions.DESTROY_ROLE_ERROR, function*() {});
+export function* destroyResourceError() {
+    yield takeEvery(actions.DESTROY_RESOURCE_ERROR, function*() {});
 }
 
-export function* getPaginatedRolesRequest() {
-    yield takeEvery(actions.GET_PAGINATED_ROLES_REQUEST, function*({ payload }) {
-        // console.log('getPaginatedRoles taken!', payload);
+export function* findResourceRequest() {
+    yield takeEvery(actions.FIND_RESOURCE_REQUEST, function*({ payload }) {
+        // console.log('findResource taken!', payload);
         const { data } = payload;
         // console.log('data', data);
         try {
-            const result = yield call(getPaginatedRoles, data);
-            // console.log('getPaginatedRoles result: ', result);
+            const result = yield call(findResource, data);
+            // console.log('findResource result: ', result);
+            if (result.resource) {
+                yield put({
+                    type: actions.FIND_RESOURCE_SUCCESS,
+                    payload: result
+                });
+            } else {
+                yield put({
+                    type: actions.FIND_RESOURCE_ERROR,
+                    error: result.error || result.errors || result
+                });
+            }
+
+        } catch(err) {
+            // console.log('findResource error caught: ', err);
+            yield put({
+                type: actions.FIND_RESOURCE_ERROR,
+                error: err
+            });
+        }
+    });
+}
+
+export function* findResourceSuccess() {
+    yield takeEvery(actions.FIND_RESOURCE_SUCCESS, function*({ payload }) {});
+}
+
+export function* findResourceError() {
+    yield takeEvery(actions.FIND_RESOURCE_ERROR, function*() {});
+}
+
+export function* getPaginatedResourcesRequest() {
+    yield takeEvery(actions.GET_PAGINATED_RESOURCES_REQUEST, function*({ payload }) {
+        // console.log('getPaginatedResources taken!', payload);
+        const { data } = payload;
+        // console.log('data', data);
+        try {
+            const result = yield call(getPaginatedResources, data);
+            // console.log('getPaginatedResources result: ', result);
             if (result.data) {
                 yield put({
-                    type: actions.GET_PAGINATED_ROLES_SUCCESS,
+                    type: actions.GET_PAGINATED_RESOURCES_SUCCESS,
                     payload: result
                 });
             } else {
                 yield put({
-                    type: actions.GET_PAGINATED_ROLES_ERROR,
+                    type: actions.GET_PAGINATED_RESOURCES_ERROR,
                     error: result.error || result.errors || result
                 });
             }
 
         } catch(err) {
-            // console.log('getPaginatedRoles error caught: ', err);
+            // console.log('getPaginatedResources error caught: ', err);
             yield put({
-                type: actions.GET_PAGINATED_ROLES_ERROR,
+                type: actions.GET_PAGINATED_RESOURCES_ERROR,
                 error: err
             });
         }
     });
 }
 
-export function* getPaginatedRolesSuccess() {
-    yield takeEvery(actions.GET_PAGINATED_ROLES_SUCCESS, function*({ payload }) {});
+export function* getPaginatedResourcesSuccess() {
+    yield takeEvery(actions.GET_PAGINATED_RESOURCES_SUCCESS, function*({ payload }) {});
 }
 
-export function* getPaginatedRolesError() {
-    yield takeEvery(actions.GET_PAGINATED_ROLES_ERROR, function*() {});
+export function* getPaginatedResourcesError() {
+    yield takeEvery(actions.GET_PAGINATED_RESOURCES_ERROR, function*() {});
 }
 
-export function* getRoleRequest() {
-    yield takeEvery(actions.GET_ROLE_REQUEST, function*({ payload }) {
-        // console.log('getRole taken!', payload);
+export function* updateResourceRequest() {
+    yield takeEvery(actions.UPDATE_RESOURCE_REQUEST, function*({ payload }) {
+        // console.log('updateResource taken!', payload);
         const { data } = payload;
         // console.log('data', data);
         try {
-            const result = yield call(getRole, data);
-            // console.log('getRole result: ', result);
+            const result = yield call(updateResource, data);
+            // console.log('updateResource result: ', result);
             if (result.resource) {
                 yield put({
-                    type: actions.GET_ROLE_SUCCESS,
+                    type: actions.UPDATE_RESOURCE_SUCCESS,
                     payload: result
                 });
             } else {
                 yield put({
-                    type: actions.GET_ROLE_ERROR,
+                    type: actions.UPDATE_RESOURCE_ERROR,
                     error: result.error || result.errors || result
                 });
             }
 
         } catch(err) {
-            // console.log('getRole error caught: ', err);
+            // console.log('updateResource error caught: ', err);
             yield put({
-                type: actions.GET_ROLE_ERROR,
+                type: actions.UPDATE_RESOURCE_ERROR,
                 error: err
             });
         }
     });
 }
 
-export function* getRoleSuccess() {
-    yield takeEvery(actions.GET_ROLE_SUCCESS, function*({ payload }) {});
+export function* updateResourceSuccess() {
+    yield takeEvery(actions.UPDATE_RESOURCE_SUCCESS, function*({ payload }) {});
 }
 
-export function* getRoleError() {
-    yield takeEvery(actions.GET_ROLE_ERROR, function*() {});
-}
-
-export function* updateRoleRequest() {
-    yield takeEvery(actions.UPDATE_ROLE_REQUEST, function*({ payload }) {
-        // console.log('updateRole taken!', payload);
-        const { data } = payload;
-        // console.log('data', data);
-        try {
-            const result = yield call(updateRole, data);
-            // console.log('updateRole result: ', result);
-            if (result.resource) {
-                yield put({
-                    type: actions.UPDATE_ROLE_SUCCESS,
-                    payload: result
-                });
-            } else {
-                yield put({
-                    type: actions.UPDATE_ROLE_ERROR,
-                    error: result.error || result.errors || result
-                });
-            }
-
-        } catch(err) {
-            // console.log('updateRole error caught: ', err);
-            yield put({
-                type: actions.UPDATE_ROLE_ERROR,
-                error: err
-            });
-        }
-    });
-}
-
-export function* updateRoleSuccess() {
-    yield takeEvery(actions.UPDATE_ROLE_SUCCESS, function*({ payload }) {});
-}
-
-export function* updateRoleError() {
-    yield takeEvery(actions.UPDATE_ROLE_ERROR, function*() {});
+export function* updateResourceError() {
+    yield takeEvery(actions.UPDATE_RESOURCE_ERROR, function*() {});
 }
 
 export default function* rootSaga() {
     yield all([
-        fork(createRoleRequest),
-        fork(createRoleSuccess),
-        fork(createRoleError),
-        fork(destroyRoleRequest),
-        fork(destroyRoleSuccess),
-        fork(destroyRoleError),
-        fork(getPaginatedRolesRequest),
-        fork(getPaginatedRolesSuccess),
-        fork(getPaginatedRolesError),
-        fork(getRoleRequest),
-        fork(getRoleSuccess),
-        fork(getRoleError),
-        fork(updateRoleRequest),
-        fork(updateRoleSuccess),
-        fork(updateRoleError),
+        fork(createResourceRequest),
+        fork(createResourceSuccess),
+        fork(createResourceError),
+        fork(destroyResourceRequest),
+        fork(destroyResourceSuccess),
+        fork(destroyResourceError),
+        fork(findResourceRequest),
+        fork(findResourceSuccess),
+        fork(findResourceError),
+        fork(getPaginatedResourcesRequest),
+        fork(getPaginatedResourcesSuccess),
+        fork(getPaginatedResourcesError),
+        fork(updateResourceRequest),
+        fork(updateResourceSuccess),
+        fork(updateResourceError),
     ]);
 }

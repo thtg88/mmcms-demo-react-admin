@@ -11,7 +11,7 @@ const initial_state = {
     user: null
 };
 
-const login = (state = initial_state, action) => {
+const reducer = (state = initial_state, action) => {
     // console.log('action dispatched', action);
     switch(action.type) {
         case actions.CLEAR_METADATA_PROFILE:
@@ -149,4 +149,5 @@ const login = (state = initial_state, action) => {
             return state;
     }
 };
-export default login;
+
+export default reducer;

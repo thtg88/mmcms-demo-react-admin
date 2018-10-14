@@ -30,7 +30,7 @@ import {
     clearMetadataResourceEdit,
     destroyResource,
     getPaginatedResources,
-    getResource,
+    findResource,
     updateResource
 } from '../../redux/role/actions';
 import { pageSize } from './tableConfig';
@@ -111,6 +111,7 @@ export class Edit extends Component {
     componentDidMount() {
         const {
             created,
+            findResource,
             match,
             resource,
             token
@@ -125,10 +126,13 @@ export class Edit extends Component {
                 token,
                 id: match.params.id
             };
-            this.props.getResource({ data });
+
             this.setState({
                 getting_resource: true
             });
+
+            findResource({ data });
+
         } else {
             this.setState({ resource });
         }
@@ -393,8 +397,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {
     clearMetadataResourceEdit,
     destroyResource,
+    findResource,
     getPaginatedResources,
-    getResource,
     loggedOut,
     updateResource
 };
