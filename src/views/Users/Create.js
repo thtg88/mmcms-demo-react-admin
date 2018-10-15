@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import * as yup from 'yup';
 import CreateResource from '../CreateResource';
 import {
     getApiErrorMessages,
     isUnauthenticatedError
 } from '../../helpers/apiErrorMessages';
-import getValuesFromFormResource from '../../helpers/getValuesFromFormResource';
+import {
+    getValidationSchemaFromFormResource,
+    getValuesFromFormResource,
+    updateFormResourceFromErrors,
+} from '../../helpers/formResources';
 import { loggedOut } from '../../redux/auth/actions';
 import {
     clearMetadataResourceCreate,
@@ -18,20 +23,39 @@ export class Create extends Component {
             name: {
                 type: 'text',
                 value: '',
+                rules: yup.string()
+                    .required()
+                    .max(255),
+                errors: [],
             },
             email: {
                 type: 'email',
                 value: '',
+                rules: yup.string()
+                    .required()
+                    .email()
+                    .max(255),
+                errors: [],
             },
             password: {
                 type: 'password',
                 value: '',
+                rules: yup.string()
+                    .required()
+                    .min(6)
+                    .max(255),
+                errors: [],
             },
             password_confirmation: {
                 label: "Confirm Password",
                 placeholder: "Confirm your password",
                 type: 'password',
                 value: '',
+                rules: yup.string()
+                    .required()
+                    .min(6)
+                    .max(255),
+                errors: [],
             },
         },
         resource_unchanged: true,
@@ -63,19 +87,58 @@ export class Create extends Component {
         });
     }
 
-    handleCreateResource(evt) {
+    async handleCreateResource(evt) {
         evt.preventDefault();
 
         const { createResource, token } = this.props;
         const { resource } = this.state;
         const values = getValuesFromFormResource(resource);
+        const schema = getValidationSchemaFromFormResource(resource);
         const data = { token, ...values };
 
-        this.setState({
-            creating_resource: true
-        });
+        this.resetErrors();
 
-        createResource({ data });
+        await yup.object(schema)
+            .validate(
+                values,
+                { abortEarly: false }
+            )
+            .then(() => {
+                this.setState({
+                    creating_resource: true
+                });
+
+                createResource({ data });
+            })
+            .catch((errors) => {
+                const { resource } = this.state;
+
+                this.setState({
+                    resource: updateFormResourceFromErrors(resource, errors)
+                });
+            });
+    }
+
+    resetErrors() {
+        const { resource } = this.state;
+        const new_resource = Object.entries(resource).reduce(
+            (result, [name, parameters]) => {
+                // console.log(result, name, parameters);
+
+                return {
+                    ...result,
+                    [name]: {
+                        ...parameters,
+                        errors: []
+                    }
+                };
+            },
+            {}
+        );
+
+        this.setState({
+            resource: new_resource
+        });
     }
 
     componentDidMount() {
@@ -134,7 +197,7 @@ export class Create extends Component {
 
         // console.log('resource', resource);
         // console.log('resource_unchanged', resource_unchanged);
-        // console.log('creating_resource', creating_resource);
+        console.log('errors', this.state.resource);
 
         return (
             <CreateResource
