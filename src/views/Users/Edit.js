@@ -7,6 +7,7 @@ import {
     isUnauthenticatedError
 } from '../../helpers/apiErrorMessages';
 import getFormResourceFromValues from '../../helpers/getFormResourceFromValues';
+import getValuesFromFormResource from '../../helpers/getValuesFromFormResource';
 import getResourceFromPaginatedResourcesAndId from '../../helpers/getResourceFromPaginatedResourcesAndId';
 import {
     apiResourceCreateSuccessNotification,
@@ -45,8 +46,11 @@ export class Edit extends Component {
         evt.preventDefault();
 
         const { destroyResource, token } = this.props;
-        const { id } = this.state.resource;
-        const data = { id, token };
+        const { resource } = this.state;
+        const data = {
+            id: resource.id.value,
+            token
+        };
 
         this.setState({
             destroying_resource: true,
@@ -60,10 +64,11 @@ export class Edit extends Component {
 
         const { updateResource, token } = this.props;
         const { resource } = this.state;
+        const values = getValuesFromFormResource(resource);
         const data = {
-            id: resource.id,
+            id: resource.id.value,
             token,
-            ...resource
+            ...values
         };
 
         this.setState({
@@ -87,10 +92,14 @@ export class Edit extends Component {
                 resource_unchanged: false,
             });
         }
+
         this.setState({
             resource: {
                 ...this.state.resource,
-                [evt.target.name]: evt.target.value,
+                [evt.target.name]: {
+                    ...this.state.resource[evt.target.name],
+                    value: evt.target.value
+                },
             }
         });
     }
@@ -99,6 +108,7 @@ export class Edit extends Component {
         const {
             created,
             findResource,
+            getPaginatedResources,
             match,
             resource,
             token
@@ -121,7 +131,7 @@ export class Edit extends Component {
             findResource({ data });
 
         } else {
-            this.setState({ resource });
+            this.setState({ resource: getFormResourceFromValues(resource) });
         }
 
         // Get all the resources in the background
@@ -135,7 +145,7 @@ export class Edit extends Component {
                 page: 1,
                 pageSize
             };
-            this.props.getPaginatedResources({ data });
+            getPaginatedResources({ data });
         }
     }
 
@@ -221,7 +231,7 @@ export class Edit extends Component {
         // avoiding blank fields for ones that do not get updated
         else if(resource !== null && prevProps.resource === null) {
             this.setState({
-                resource,
+                resource: getFormResourceFromValues(resource),
                 getting_resource: false,
                 updating_resource: false
             });
@@ -277,7 +287,7 @@ export class Edit extends Component {
                 handleDestroyResource={this.handleDestroyResource}
                 handleUpdateResource={this.handleUpdateResource}
                 isDestroyResourceModalOpen={is_modal_open}
-                resource={getFormResourceFromValues(resource)}
+                resource={resource}
                 resourceUnchanged={resource_unchanged}
                 toggleDestroyResourceModal={this.toggleDestroyResourceModal}
                 updateInputValue={this.updateInputValue}

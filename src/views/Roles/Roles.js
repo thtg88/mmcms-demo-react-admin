@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    Card,
-    CardHeader,
-    CardBody,
-    Col,
-    Row
-} from 'reactstrap';
-import ApiErrorCard from '../Cards/ApiErrorCard';
-import CardHeaderActions from '../CardHeaderActions';
-import DataTable from '../DataTable';
+import IndexResource from '../IndexResource';
 import {
     getApiErrorMessages,
     isUnauthenticatedError
@@ -126,6 +117,7 @@ export class Roles extends Component {
                 ) {
                     // Fetch first page
                     const data = {
+                        q: this.state.query,
                         token,
                         page,
                         pageSize
@@ -139,6 +131,7 @@ export class Roles extends Component {
             } else {
                 // Fetch page data
                 const data = {
+                    q: this.state.query,
                     token,
                     page: parseInt(query.page, 10),
                     pageSize
@@ -150,7 +143,9 @@ export class Roles extends Component {
 
     componentDidUpdate(prevProps) {
         const {
+            changePageResources,
             fetching_resources,
+            getPaginatedResources,
             loggedOut,
             query,
             resources,
@@ -191,7 +186,7 @@ export class Roles extends Component {
                     pageSize
                 };
 
-                this.props.getPaginatedResources({ data });
+                getPaginatedResources({ data });
 
             } else {
                 // If changing page and data is preloaded into state
@@ -200,7 +195,7 @@ export class Roles extends Component {
                     page: query_page,
                 };
 
-                this.props.changePageResources({ data });
+                changePageResources({ data });
             }
         }
 
@@ -237,67 +232,32 @@ export class Roles extends Component {
             resources,
             total
         } = this.props;
-        const { searching } = this.state;
+        const {
+            query,
+            searching
+        } = this.state;
 
         // console.log(this.props);
         // console.log(this.state);
 
-        if(
-            (
-                (
-                    typeof resources === 'undefined'
-                    || typeof current_page === 'undefined'
-                    || typeof resources[current_page] === 'undefined'
-                )
-                && !fetching_resources
-            )
-            || typeof total === 'undefined'
-        ) {
-            return (null);
-        }
-
-        let searchButtonIconClassName = "fa fa-search";
-        if(searching === true && fetching_resources === true) {
-            searchButtonIconClassName = "fa fa-spinner fa-spin";
-        }
-
         return (
-            <div className="animated fadeIn">
-                <Row>
-                    <Col xl={12}>
-                        <ApiErrorCard errors={errors} />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xl={12}>
-                        <Card className="card-accent-primary">
-                            <CardHeader className="h1">
-                                Roles
-                                <CardHeaderActions actions={actions} />
-                            </CardHeader>
-                            <CardBody>
-                                <DataTable
-                                    columns={columns}
-                                    data={resources[current_page]}
-                                    history={history}
-                                    hover={!fetching_resources}
-                                    keyField="id"
-                                    loading={fetching_resources}
-                                    page={current_page}
-                                    pageSize={pageSize}
-                                    total={total}
-                                    urlBuilder={(entity) => '/roles/'+entity.id}
-                                    onSearchButtonClick={this.handleSearchResources}
-                                    onSearchInputChange={this.updateSearchInputValue}
-                                    query={this.state.query}
-                                    searchButtonDisabled={this.state.searching}
-                                    searchButtonIconClassName={searchButtonIconClassName}
-                                />
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
-            </div>
+            <IndexResource
+                actions={actions}
+                columns={columns}
+                currentPage={current_page}
+                errors={errors}
+                fetchingResources={fetching_resources}
+                history={history}
+                onSearchButtonClick={this.handleSearchResources}
+                onSearchInputChange={this.updateSearchInputValue}
+                pageSize={pageSize}
+                resources={resources}
+                resourcesName="Roles"
+                searching={searching}
+                searchQuery={query}
+                total={total}
+                urlBuilder={(entity) => '/roles/'+entity.id}
+            />
         );
     }
 }

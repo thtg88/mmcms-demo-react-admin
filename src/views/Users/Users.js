@@ -143,7 +143,9 @@ export class Users extends Component {
 
     componentDidUpdate(prevProps) {
         const {
+            changePageResources,
             fetching_resources,
+            getPaginatedResources,
             loggedOut,
             query,
             resources,
@@ -184,7 +186,7 @@ export class Users extends Component {
                     page: query_page,
                     pageSize
                 };
-                this.props.getPaginatedResources({ data });
+                getPaginatedResources({ data });
 
             } else {
                 // If changing page and data is preloaded into state
@@ -193,7 +195,7 @@ export class Users extends Component {
                     page: query_page,
                 };
 
-                this.props.changePageResources({ data });
+                changePageResources({ data });
             }
         }
 
