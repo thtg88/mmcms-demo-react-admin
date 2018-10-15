@@ -6,9 +6,11 @@ import {
     getApiErrorMessages,
     isUnauthenticatedError
 } from '../../helpers/apiErrorMessages';
-import getFormResourceFromValues from '../../helpers/getFormResourceFromValues';
-import getValuesFromFormResource from '../../helpers/getValuesFromFormResource';
-import getResourceFromPaginatedResourcesAndId from '../../helpers/getResourceFromPaginatedResourcesAndId';
+import {
+    getFormResourceFromValues,
+    getValuesFromFormResource,
+} from '../../helpers/formResources';
+import { getResourceFromPaginatedResourcesAndId } from '../../helpers/paginatedResources';
 import {
     apiResourceCreateSuccessNotification,
     apiResourceUpdateSuccessNotification

@@ -1,7 +1,31 @@
+export const getResourceFromPaginatedResourcesAndId = (resources, id) => {
+    if(
+        resources === null
+        || typeof resources === 'undefined'
+        || (Object.keys(resources).length === 0 && resources.constructor === Object)
+    ) {
+        return null;
+    }
+
+    let resource = null;
+    Object.entries(resources).forEach(([page, paginated_resources]) => {
+        const resource_search = paginated_resources.find(resource => resource.id === parseInt(id, 10));
+
+        // console.log(resource_search);
+
+        if(resource_search !== null) {
+            resource = resource_search;
+            return false;
+        }
+    });
+
+    return resource;
+};
+
 /**
  * Replaces the updated resource in the paginated set of resources.
  */
-const updatePaginatedResourcesFromResource = (paginated_resources, new_resource) => {
+export const updatePaginatedResourcesFromResource = (paginated_resources, new_resource) => {
 
     // Create new object
     let new_resources = {};
@@ -37,5 +61,3 @@ const updatePaginatedResourcesFromResource = (paginated_resources, new_resource)
 
     return new_resources;
 };
-
-export default updatePaginatedResourcesFromResource;

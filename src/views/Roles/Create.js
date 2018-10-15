@@ -5,7 +5,7 @@ import {
     getApiErrorMessages,
     isUnauthenticatedError
 } from '../../helpers/apiErrorMessages';
-import getValuesFromFormResource from '../../helpers/getValuesFromFormResource';
+import { getValuesFromFormResource } from '../../helpers/formResources';
 import { loggedOut } from '../../redux/auth/actions';
 import {
     clearMetadataResourceCreate,

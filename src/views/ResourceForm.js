@@ -2,6 +2,7 @@ import React from 'react';
 import {
     Button,
     Form,
+    FormFeedback,
     FormGroup,
     Input,
     Label,
@@ -18,12 +19,12 @@ const ResourceForm = ({
     submitButtonIconClassName,
     submitButtonText,
 }) => {
+    // console.log('resource', resource);
+
     return (
         <Form onSubmit={onSubmit}>
             {
-                Object.entries(resource).map((formElement, idx) => {
-                    const name = formElement[0];
-                    const params = formElement[1];
+                Object.entries(resource).map(([name, params], idx) => {
                     const disabled = params.disabled
                         ? params.disabled
                         : false;
@@ -37,6 +38,7 @@ const ResourceForm = ({
                         ? params.type
                         : "text";
 
+                    // console.log(name, 'errors', params.errors);
                     // console.log(name.indexOf('_id') === name.length - 3, typeof params.value);
 
                     if(
@@ -63,7 +65,13 @@ const ResourceForm = ({
                                 disabled={disabled}
                                 placeholder={placeholder}
                                 onChange={onInputChange}
+                                invalid={params.errors.length > 0}
                             />
+                            {
+                                params.errors.length
+                                ? <FormFeedback>{params.errors.join('. ')}</FormFeedback>
+                                : null
+                            }
                         </FormGroup>
                     );
                 })

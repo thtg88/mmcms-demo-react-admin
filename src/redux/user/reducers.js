@@ -1,5 +1,5 @@
 import actions from './actions';
-import updatePaginatedResourcesFromResource from '../../helpers/updatePaginatedResourcesFromResource';
+import { updatePaginatedResourcesFromResource } from '../../helpers/paginatedResources';
 
 const initial_state = {
     created: false,
