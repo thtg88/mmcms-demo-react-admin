@@ -217,9 +217,7 @@ export class Profile extends Component {
                     : <Row>
                         <Col md="12">
                             <Card>
-                                <CardHeader>
-                                    <strong>Edit Profile</strong>
-                                </CardHeader>
+                                <CardHeader className="h1">Edit Profile</CardHeader>
                                 <CardBody>
                                     {getting_profile
                                         ? <SpinnerLoader />

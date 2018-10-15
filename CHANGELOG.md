@@ -10,7 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 - Terms and conditions of use
 - Yup schema validation for form validation
 ### Changed
-- CRUD components to container of Vanilla components, providing props about fields and paths
+- Move query search so it appears in URL query
+- Upgrade to FontAwesome Icons v5
+
+## [0.9.0] - 2018-10-14
+### Changed
+- CRUD components to container of Vanilla functional components
 
 ## [0.8.4] - 2018-10-14
 ### Changed
