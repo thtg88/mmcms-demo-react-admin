@@ -46,12 +46,21 @@ export class Users extends Component {
             token
         } = this.props;
         const { query } = this.state;
+        let search_arr = [
+            'page=1',
+        ];
+        if(query) {
+            search_arr.push('q='+query);
+        }
 
         this.setState({
-            searching: true,
+            searching: true
         });
 
-        history.push({pathname: '/users', search: 'page=1'});
+        history.push({
+            pathname: '/users',
+            search: search_arr.join('&')
+        });
 
         // Fetch first page
         const data = {
@@ -117,7 +126,7 @@ export class Users extends Component {
                 ) {
                     // Fetch first page
                     const data = {
-                        q: this.state.query,
+                        q: query.q,
                         token,
                         page,
                         pageSize,
@@ -129,9 +138,16 @@ export class Users extends Component {
                     // avoid re-fetching
                 }
             } else {
+                if(query.q && query.q !== this.state.query) {
+                    this.setState({
+                        query: query.q,
+                        searching: true
+                    });
+                }
+
                 // Fetch page data
                 const data = {
-                    q: this.state.query,
+                    q: query.q,
                     token,
                     page: parseInt(query.page, 10),
                     pageSize,
@@ -154,6 +170,7 @@ export class Users extends Component {
         } = this.props;
         const { searching } = this.state;
         const query_page = parseInt(query.page, 10);
+        const { q } = query;
 
         // console.log('this.state', this.state);
         // console.log('this.props', this.props);
@@ -177,11 +194,10 @@ export class Users extends Component {
                 // Or was empty (worth re-fetching)
                 || resources[query_page].length === 0
             ) {
-
                 // If changing page and page is valid
                 // Re-fetch page
                 const data = {
-                    q: this.state.query,
+                    q,
                     token,
                     page: query_page,
                     pageSize
@@ -194,7 +210,6 @@ export class Users extends Component {
                 const data = {
                     page: query_page,
                 };
-
                 changePageResources({ data });
             }
         }

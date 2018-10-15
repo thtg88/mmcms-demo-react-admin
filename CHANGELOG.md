@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 - Move query search so it appears in URL query
 - Upgrade to FontAwesome Icons v5
 
+## [0.9.1] - 2018-10-15
+### Changed
+- Search is handled from props so it can appear in URL query
+
 ## [0.9.0] - 2018-10-14
 ### Changed
 - CRUD components to container of Vanilla functional components
