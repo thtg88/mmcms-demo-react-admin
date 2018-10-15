@@ -1,6 +1,6 @@
 {
-  "short_name": "CoreUI-React",
-  "name": "CoreUI-React sample",
+  "short_name": "mmCMS",
+  "name": "mmCMS React Admin",
   "icons": [
     {
       "src": "./assets/favicon.png",

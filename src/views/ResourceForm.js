@@ -29,7 +29,7 @@ const ResourceForm = ({
                         : false;
                     const label = params.label
                         ? params.label
-                        : name.charAt(0).toUpperCase()+name.substr(1);
+                        : name.charAt(0).toUpperCase()+name.substr(1).replace('_', ' ');
                     const placeholder = params.placeholder
                         ? params.placeholder
                         : `Enter your ${label}`;

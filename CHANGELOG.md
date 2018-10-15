@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 - Terms and conditions of use
 - Yup schema validation for form validation
 ### Changed
-- Move query search so it appears in URL query
 - Upgrade to FontAwesome Icons v5
 
 ## [0.9.1] - 2018-10-15
