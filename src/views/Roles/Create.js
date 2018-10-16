@@ -1,33 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import * as yup from 'yup';
 import CreateResource from '../CreateResource';
 import {
     getApiErrorMessages,
     isUnauthenticatedError
 } from '../../helpers/apiErrorMessages';
-import { getValuesFromFormResource } from '../../helpers/formResources';
+import {
+    getValidationSchemaFromFormResource,
+    getValuesFromFormResource,
+    updateFormResourceFromErrors,
+} from '../../helpers/formResources';
 import { loggedOut } from '../../redux/auth/actions';
 import {
     clearMetadataResourceCreate,
     createResource
 } from '../../redux/role/actions';
+import schema from '../../redux/role/schema';
 
 export class Create extends Component {
     state = {
-        resource: {
-            display_name: {
-                type: 'text',
-                value: ''
-            },
-            name: {
-                type: 'text',
-                value: ''
-            },
-            priority: {
-                type: 'number',
-                value: ''
-            },
-        },
+        resource: schema,
         resource_unchanged: true,
         creating_resource: false
     };
@@ -57,19 +50,42 @@ export class Create extends Component {
         });
     }
 
-    handleCreateResource(evt) {
+    async handleCreateResource(evt) {
         evt.preventDefault();
 
         const { createResource, token } = this.props;
         const { resource } = this.state;
         const values = getValuesFromFormResource(resource);
+        const validationSchema = getValidationSchemaFromFormResource(resource);
         const data = { token, ...values };
 
+        // Reset errors
         this.setState({
-            creating_resource: true
+            resource: updateFormResourceFromErrors(resource, {inner:[]})
         });
 
-        createResource({ data });
+        await yup.object(validationSchema)
+            .validate(
+                values,
+                { abortEarly: false }
+            )
+            .then(() => {
+                // If validation passes
+                // Create resource
+
+                this.setState({
+                    creating_resource: true
+                });
+
+                createResource({ data });
+            })
+            .catch((errors) => {
+                // If validation does not passes
+                // Set errors in the form
+                this.setState({
+                    resource: updateFormResourceFromErrors(resource, errors)
+                });
+            });
     }
 
     componentDidMount() {
@@ -127,8 +143,6 @@ export class Create extends Component {
         } = this.state;
 
         // console.log('resource', resource);
-        // console.log('resource_unchanged', resource_unchanged);
-        // console.log('creating_resource', creating_resource);
 
         return (
             <CreateResource
@@ -143,7 +157,7 @@ export class Create extends Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     const {
         created,
         error,
@@ -164,7 +178,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {
     clearMetadataResourceCreate,
     createResource,
-    loggedOut
+    loggedOut,
 };
 
 export default connect(

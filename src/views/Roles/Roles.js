@@ -129,7 +129,7 @@ export class Roles extends Component {
                         q: query.q,
                         token,
                         page,
-                        pageSize
+                        pageSize,
                     };
                     getPaginatedResources({ data });
 
@@ -150,7 +150,7 @@ export class Roles extends Component {
                     q: query.q,
                     token,
                     page: parseInt(query.page, 10),
-                    pageSize
+                    pageSize,
                 };
                 getPaginatedResources({ data });
             }
@@ -289,8 +289,6 @@ const mapStateToProps = (state) => {
     const errors = getApiErrorMessages(error);
     const unauthenticated = isUnauthenticatedError(error);
 
-    // console.log(state.roles);
-
     return {
         current_page: current_page,
         destroyed: destroyed,
@@ -307,7 +305,7 @@ const mapDispatchToProps = {
     changePageResources,
     clearMetadataResources,
     getPaginatedResources,
-    loggedOut
+    loggedOut,
 };
 
 export default connect(

@@ -8,9 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Added
 - Responsive layout for resources index
 - Terms and conditions of use
-- Yup schema validation for form validation
 ### Changed
 - Upgrade to FontAwesome Icons v5
+
+## [0.10.0] - 2018-10-16
+### Added
+- Yup schema validation for CRUD form validation
 
 ## [0.9.1] - 2018-10-15
 ### Changed

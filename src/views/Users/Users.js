@@ -54,7 +54,7 @@ export class Users extends Component {
         }
 
         this.setState({
-            searching: true
+            searching: true,
         });
 
         history.push({
@@ -288,8 +288,6 @@ const mapStateToProps = (state) => {
     } = state.users;
     const errors = getApiErrorMessages(error);
     const unauthenticated = isUnauthenticatedError(error);
-
-    // console.log(state.users);
 
     return {
         current_page: current_page,

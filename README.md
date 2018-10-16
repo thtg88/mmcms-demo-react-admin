@@ -64,6 +64,7 @@ $ npm run build
     - [Redux-Saga](https://redux-saga.js.org/)
 - [Sentry](https://sentry.io)
 - [Webpack Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/)
+- [Yup](https://github.com/jquense/yup)
 
 ## Versioning
 

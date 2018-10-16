@@ -16,48 +16,11 @@ import {
     clearMetadataResourceCreate,
     createResource
 } from '../../redux/user/actions';
+import schema from '../../redux/user/schema';
 
 export class Create extends Component {
     state = {
-        resource: {
-            name: {
-                type: 'text',
-                value: '',
-                rules: yup.string()
-                    .required()
-                    .max(255),
-                errors: [],
-            },
-            email: {
-                type: 'email',
-                value: '',
-                rules: yup.string()
-                    .required()
-                    .email()
-                    .max(255),
-                errors: [],
-            },
-            password: {
-                type: 'password',
-                value: '',
-                rules: yup.string()
-                    .required()
-                    .min(6)
-                    .max(255),
-                errors: [],
-            },
-            password_confirmation: {
-                label: "Confirm Password",
-                placeholder: "Confirm your password",
-                type: 'password',
-                value: '',
-                rules: yup.string()
-                    .required()
-                    .min(6)
-                    .max(255),
-                errors: [],
-            },
-        },
+        resource: schema,
         resource_unchanged: true,
         creating_resource: false
     };
@@ -93,17 +56,23 @@ export class Create extends Component {
         const { createResource, token } = this.props;
         const { resource } = this.state;
         const values = getValuesFromFormResource(resource);
-        const schema = getValidationSchemaFromFormResource(resource);
+        const validationSchema = getValidationSchemaFromFormResource(resource);
         const data = { token, ...values };
 
-        this.resetErrors();
+        // Reset errors
+        this.setState({
+            resource: updateFormResourceFromErrors(resource, {inner:[]})
+        });
 
-        await yup.object(schema)
+        await yup.object(validationSchema)
             .validate(
                 values,
                 { abortEarly: false }
             )
             .then(() => {
+                // If validation passes
+                // Create resource
+
                 this.setState({
                     creating_resource: true
                 });
@@ -111,34 +80,12 @@ export class Create extends Component {
                 createResource({ data });
             })
             .catch((errors) => {
-                const { resource } = this.state;
-
+                // If validation does not passes
+                // Set errors in the form
                 this.setState({
                     resource: updateFormResourceFromErrors(resource, errors)
                 });
             });
-    }
-
-    resetErrors() {
-        const { resource } = this.state;
-        const new_resource = Object.entries(resource).reduce(
-            (result, [name, parameters]) => {
-                // console.log(result, name, parameters);
-
-                return {
-                    ...result,
-                    [name]: {
-                        ...parameters,
-                        errors: []
-                    }
-                };
-            },
-            {}
-        );
-
-        this.setState({
-            resource: new_resource
-        });
     }
 
     componentDidMount() {
@@ -147,8 +94,8 @@ export class Create extends Component {
 
     componentDidUpdate(prevProps) {
         const {
-            errors,
             created,
+            errors,
             history,
             loggedOut,
             resource,
@@ -196,8 +143,6 @@ export class Create extends Component {
         } = this.state;
 
         // console.log('resource', resource);
-        // console.log('resource_unchanged', resource_unchanged);
-        console.log('errors', this.state.resource);
 
         return (
             <CreateResource

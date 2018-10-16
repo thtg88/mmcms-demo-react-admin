@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import * as yup from 'yup';
 import EditResource from '../EditResource';
 import {
     getApiErrorMessages,
@@ -8,7 +9,9 @@ import {
 } from '../../helpers/apiErrorMessages';
 import {
     getFormResourceFromValues,
+    getValidationSchemaFromFormResource,
     getValuesFromFormResource,
+    updateFormResourceFromErrors,
 } from '../../helpers/formResources';
 import { getResourceFromPaginatedResourcesAndId } from '../../helpers/paginatedResources';
 import {
@@ -21,8 +24,9 @@ import {
     destroyResource,
     findResource,
     getPaginatedResources,
-    updateResource
+    updateResource,
 } from '../../redux/user/actions';
+import schema from '../../redux/user/schema';
 import { pageSize } from './tableConfig';
 
 export class Edit extends Component {
@@ -61,23 +65,46 @@ export class Edit extends Component {
         destroyResource({ data });
     }
 
-    handleUpdateResource(evt) {
+    async handleUpdateResource(evt) {
         evt.preventDefault();
 
         const { updateResource, token } = this.props;
         const { resource } = this.state;
         const values = getValuesFromFormResource(resource);
+        const validationSchema = getValidationSchemaFromFormResource(resource);
         const data = {
             id: resource.id.value,
             token,
             ...values
         };
 
+        // Reset errors
         this.setState({
-            updating_resource: true
+            resource: updateFormResourceFromErrors(resource, {inner:[]})
         });
 
-        updateResource({ data });
+        await yup.object(validationSchema)
+            .validate(
+                values,
+                { abortEarly: false }
+            )
+            .then(() => {
+                // If validation passes
+                // Update resource
+
+                this.setState({
+                    updating_resource: true
+                });
+
+                updateResource({ data });
+            })
+            .catch((errors) => {
+                // If validation does not passes
+                // Set errors in the form
+                this.setState({
+                    resource: updateFormResourceFromErrors(resource, errors)
+                });
+            });
     }
 
     toggleDestroyResourceModal(evt) {
@@ -133,7 +160,7 @@ export class Edit extends Component {
             findResource({ data });
 
         } else {
-            this.setState({ resource: getFormResourceFromValues(resource) });
+            this.setState({ resource: getFormResourceFromValues(resource, schema) });
         }
 
         // Get all the resources in the background
@@ -233,7 +260,7 @@ export class Edit extends Component {
         // avoiding blank fields for ones that do not get updated
         else if(resource !== null && prevProps.resource === null) {
             this.setState({
-                resource: getFormResourceFromValues(resource),
+                resource: getFormResourceFromValues(resource, schema),
                 getting_resource: false,
                 updating_resource: false
             });

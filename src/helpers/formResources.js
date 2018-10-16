@@ -1,4 +1,4 @@
-export const getFormResourceFromValues = (values) => {
+export const getFormResourceFromValues = (values, schema) => {
     if(
         typeof values === 'undefined'
         || values === null
@@ -14,7 +14,9 @@ export const getFormResourceFromValues = (values) => {
                 ...result,
                 [key]: {
                     type: 'text',
-                    value: value
+                    value: value,
+                    errors: [],
+                    rules: getValidationRulesFromKey(schema, key)
                 }
             };
         },
@@ -22,6 +24,11 @@ export const getFormResourceFromValues = (values) => {
     );
 
     return resource;
+};
+
+export const getValidationRulesFromKey = (schema, key) => {
+    // console.log(schema, key, schema[key]);
+    return schema[key] && schema[key].rules ? schema[key].rules : undefined;
 };
 
 export const getValidationSchemaFromFormResource = (resource) => {
@@ -33,9 +40,17 @@ export const getValidationSchemaFromFormResource = (resource) => {
         (result, [name, parameters]) => {
             // console.log(result);
 
+            if(parameters.rules) {
+                return {
+                    ...result,
+                    [name]: parameters.rules
+                };
+            }
+
+            // If no rules set,
+            // avoid setting rules
             return {
-                ...result,
-                [name]: parameters.rules
+                ...result
             };
         },
         {}
@@ -81,8 +96,11 @@ export const updateFormResourceFromErrors = (resource, errors) => {
                 [name]: {
                     ...parameters,
                     errors: errors.inner.filter((error) => {
-                        return name === error.path;
-                    })
+                            return name === error.path;
+                        })
+                        .map((error) => {
+                            return error.message;
+                        })
                 }
             };
         },
