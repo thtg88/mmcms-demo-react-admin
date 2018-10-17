@@ -4,8 +4,8 @@ import { Table } from 'reactstrap';
 import LoaderRow from './LoaderRow';
 import EmptyRow from './EmptyRow';
 import Row from './Row';
-import Pagination from './Pagination';
-import SearchBar from './SearchBar';
+import Pagination from '../Pagination';
+import SearchBar from '../SearchBar';
 
 const DataTable = ({
     columns,

@@ -290,7 +290,7 @@ export class Edit extends Component {
         } = this.state;
         const actions = [
             {
-                className: 'btn-outline-danger',
+                className: 'btn-danger',
                 disabled: getting_resource,
                 iconClassName: 'fa fa-trash',
                 onClick: this.toggleDestroyResourceModal,

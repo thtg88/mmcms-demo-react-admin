@@ -2,11 +2,11 @@ import React from 'react';
 import {
     Card,
     CardBody,
-    CardHeader,
     Col,
     Row,
 } from 'reactstrap';
 import ApiErrorCard from './Cards/ApiErrorCard';
+import PageTitle from './PageTitle';
 import ResourceForm from './ResourceForm';
 
 const CreateResource = ({
@@ -31,10 +31,10 @@ const CreateResource = ({
                     <ApiErrorCard errors={errors} />
                 </Col>
             </Row>
+            <PageTitle text="Create Resource" />
             <Row>
                 <Col lg={12}>
                     <Card className="card-accent-success">
-                        <CardHeader className="h1">Create Resource</CardHeader>
                         <CardBody>
                             <ResourceForm
                                 onInputChange={updateInputValue}

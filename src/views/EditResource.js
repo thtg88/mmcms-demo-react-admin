@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
     Card,
     CardBody,
-    CardHeader,
     Col,
     Row,
 } from 'reactstrap';
 import ApiErrorCard from './Cards/ApiErrorCard';
-import CardHeaderActions from './CardHeaderActions';
 import DestroyResourceModal from './DestroyResourceModal';
+import PageTitle from './PageTitle';
 import ResourceForm from './ResourceForm';
 import SpinnerLoader from './SpinnerLoader';
 
@@ -67,38 +66,37 @@ const EditResource = ({
                     && gettingResource !== true
                 )
                 ? null
-                : <Row>
-                    <Col md={12}>
-                        <Card className="card-accent-warning">
-                            <CardHeader className="h1">
-                                {resourceName}
-                                <CardHeaderActions actions={actions} />
-                            </CardHeader>
-                            <CardBody>
-                            {
-                                gettingResource
-                                    ? <SpinnerLoader />
-                                    : <ResourceForm
-                                        onInputChange={updateInputValue}
-                                        onSubmit={handleUpdateResource}
-                                        resource={resource}
-                                        submitButtonClassName="warning"
-                                        submitButtonDisabled={resourceUnchanged || updatingResource}
-                                        submitButtonIconClassName={updateButtonIconClassName}
-                                        submitButtonText="Update"
-                                    />
-                            }
-                            </CardBody>
-                        </Card>
-                    </Col>
-                    <DestroyResourceModal
-                        destroyButtonIconClassName={destroyButtonIconClassName}
-                        disabled={destroyingResource}
-                        isOpen={isDestroyResourceModalOpen}
-                        onDestroyButtonClick={handleDestroyResource}
-                        toggle={toggleDestroyResourceModal}
-                    />
-                </Row>
+                : <Fragment>
+                    <PageTitle text={resourceName} actions={actions} />
+                    <Row>
+                        <Col md={12}>
+                            <Card className="card-accent-warning">
+                                <CardBody>
+                                {
+                                    gettingResource
+                                        ? <SpinnerLoader />
+                                        : <ResourceForm
+                                            onInputChange={updateInputValue}
+                                            onSubmit={handleUpdateResource}
+                                            resource={resource}
+                                            submitButtonClassName="warning"
+                                            submitButtonDisabled={resourceUnchanged || updatingResource}
+                                            submitButtonIconClassName={updateButtonIconClassName}
+                                            submitButtonText="Update"
+                                        />
+                                }
+                                </CardBody>
+                            </Card>
+                        </Col>
+                        <DestroyResourceModal
+                            destroyButtonIconClassName={destroyButtonIconClassName}
+                            disabled={destroyingResource}
+                            isOpen={isDestroyResourceModalOpen}
+                            onDestroyButtonClick={handleDestroyResource}
+                            toggle={toggleDestroyResourceModal}
+                        />
+                    </Row>
+                </Fragment>
             }
         </div>
     );
