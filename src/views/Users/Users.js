@@ -16,7 +16,7 @@ import { columns, pageSize } from './tableConfig';
 
 const actions = [
     {
-        className: 'btn-outline-success',
+        className: 'btn-success',
         href: '/users/create',
         title: 'New Resource',
         type: 'link',
@@ -263,6 +263,7 @@ export class Users extends Component {
                 errors={errors}
                 fetchingResources={fetching_resources}
                 history={history}
+                listType="list"
                 onSearchButtonClick={this.handleSearchResources}
                 onSearchInputChange={this.updateSearchInputValue}
                 pageSize={pageSize}

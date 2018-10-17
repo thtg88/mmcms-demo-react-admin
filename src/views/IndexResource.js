@@ -2,13 +2,12 @@ import React from 'react';
 import {
     Card,
     CardBody,
-    CardHeader,
     Col,
     Row
 } from 'reactstrap';
 import ApiErrorCard from './Cards/ApiErrorCard';
-import CardHeaderActions from './CardHeaderActions';
-import DataTable from './DataTable';
+import ResourceList from './ResourceList/ResourceList';
+import PageTitle from './PageTitle';
 
 const IndexResource = ({
     actions,
@@ -18,6 +17,7 @@ const IndexResource = ({
     fetchingResources,
     handleSearchResources,
     history,
+    listType,
     onSearchButtonClick,
     onSearchInputChange,
     pageSize,
@@ -50,6 +50,7 @@ const IndexResource = ({
 
     return (
         <div className="animated fadeIn">
+            <PageTitle text={resourcesName} actions={actions} />
             <Row>
                 <Col xl={12}>
                     <ApiErrorCard errors={errors} />
@@ -58,27 +59,24 @@ const IndexResource = ({
             <Row>
                 <Col xl={12}>
                     <Card className="card-accent-primary">
-                        <CardHeader className="h1">
-                            {resourcesName}
-                            <CardHeaderActions actions={actions} />
-                        </CardHeader>
                         <CardBody>
-                            <DataTable
+                            <ResourceList
+                                type={listType}
                                 columns={columns}
                                 data={resources[currentPage]}
                                 history={history}
                                 hover={!fetchingResources}
                                 keyField="id"
                                 loading={fetchingResources}
-                                page={currentPage}
-                                pageSize={pageSize}
-                                total={total}
-                                urlBuilder={urlBuilder}
                                 onSearchButtonClick={onSearchButtonClick}
                                 onSearchInputChange={onSearchInputChange}
+                                page={currentPage}
+                                pageSize={pageSize}
                                 query={searchQuery}
                                 searchButtonDisabled={searching}
                                 searchButtonIconClassName={searchButtonIconClassName}
+                                total={total}
+                                urlBuilder={urlBuilder}
                             />
                         </CardBody>
                     </Card>

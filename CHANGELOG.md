@@ -6,10 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 
 ## [Unreleased]
 ### Added
-- Responsive layout for resources index
+- Animated background loading state (Facebook-style)
 - Terms and conditions of use
 ### Changed
 - Upgrade to FontAwesome Icons v5
+
+## [0.11.0] - 2018-10-17
+### Added
+- Responsive layout for resources index
 
 ## [0.10.0] - 2018-10-16
 ### Added
