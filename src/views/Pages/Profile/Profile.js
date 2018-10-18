@@ -1,23 +1,26 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import * as yup from 'yup';
 import {
-    Button,
     Card,
     CardBody,
-    CardHeader,
     Col,
-    Form,
-    FormGroup,
-    Input,
-    Label,
     Row,
 } from 'reactstrap';
 import ApiErrorCard from '../../Cards/ApiErrorCard';
+import PageTitle from '../../PageTitle';
+import ResourceForm from '../../ResourceForm';
 import SpinnerLoader from '../../SpinnerLoader';
 import {
     getApiErrorMessages,
     isUnauthenticatedError
 } from '../../../helpers/apiErrorMessages';
+import {
+    getFormResourceFromValues,
+    getValidationSchemaFromFormResource,
+    getValuesFromFormResource,
+    updateFormResourceFromErrors,
+} from '../../../helpers/formResources';
 import { apiResourceUpdateSuccessNotification } from '../../../helpers/notification';
 import {
     clearMetadataProfile,
@@ -25,6 +28,8 @@ import {
     loggedOut,
     updateProfile
 } from '../../../redux/auth/actions';
+import schema from '../../../redux/user/schema';
+
 
 export class Profile extends Component {
     state = {
@@ -51,27 +56,53 @@ export class Profile extends Component {
         this.setState({
             profile: {
                 ...this.state.profile,
-                [evt.target.name]: evt.target.value,
+                [evt.target.name]: {
+                    ...this.state.profile[evt.target.name],
+                    value: evt.target.value
+                },
             }
         });
     }
 
-    handleUpdateProfile(evt) {
+    async handleUpdateProfile(evt) {
         evt.preventDefault();
 
         const { updateProfile, token } = this.props;
         const { profile } = this.state;
+        const values = getValuesFromFormResource(profile);
+        const validationSchema = getValidationSchemaFromFormResource(profile);
         const data = {
-            email: profile.email,
-            name: profile.name,
-            token
+            token,
+            ...values
         };
 
+        // Reset errors
         this.setState({
-            updating_profile: true
+            profile: updateFormResourceFromErrors(profile, {inner:[]})
         });
 
-        updateProfile({ data });
+        await yup.object(validationSchema)
+            .validate(
+                values,
+                { abortEarly: false }
+            )
+            .then(() => {
+                // If validation passes
+                // Update profile
+
+                this.setState({
+                    updating_profile: true
+                });
+
+                updateProfile({ data });
+            })
+            .catch((errors) => {
+                // If validation does not passes
+                // Set errors in the form
+                this.setState({
+                    profile: updateFormResourceFromErrors(profile, errors)
+                });
+            });
     }
 
     componentDidMount() {
@@ -88,13 +119,14 @@ export class Profile extends Component {
         if(profile === null) {
             const data = { token };
 
-            getProfile({ data });
-
             this.setState({
                 getting_profile: true
             });
+
+            getProfile({ data });
+
         } else {
-            this.setState({ profile });
+            this.setState({ profile: getFormResourceFromValues(profile, schema) });
         }
     }
 
@@ -152,7 +184,7 @@ export class Profile extends Component {
             && profile !== null
         ) {
             this.setState({
-                profile,
+                profile: getFormResourceFromValues(profile, schema),
                 getting_profile: false,
                 updating_profile: false
             });
@@ -169,7 +201,6 @@ export class Profile extends Component {
                 resourceDisplayName: 'Profile'
             });
             this.setState({
-                profile,
                 getting_profile: false,
                 updating_profile: false
             });
@@ -196,10 +227,12 @@ export class Profile extends Component {
         // console.log(this.state);
         // console.log(this.props);
 
-        let updateButtonIconClassName = "fa fa-check";
+        let updateButtonIconClassName = "fa fa-save";
         if(updating_profile === true) {
             updateButtonIconClassName = "fa fa-spinner fa-spin";
         }
+
+        const profileTitle = getting_profile ? 'Loading...' : 'Edit Profile';
 
         return (
             <div className="animated fadeIn">
@@ -210,73 +243,52 @@ export class Profile extends Component {
                 </Row>
                 {
                     (
-                        (profile === null || typeof profile === 'undefined')
+                        (
+                            typeof profile === 'undefined'
+                            || profile === null
+                            || (
+                                Object.keys(profile).length === 0
+                                && profile.constructor === Object
+                            )
+                        )
                         && getting_profile !== true
                     )
                     ? null
-                    : <Row>
-                        <Col md="12">
-                            <Card>
-                                <CardHeader className="h1">Edit Profile</CardHeader>
-                                <CardBody>
-                                    {getting_profile
-                                        ? <SpinnerLoader />
-                                        : <Form onSubmit={() => this.handleUpdateProfile()}>
-                                            <FormGroup>
-                                                <Label htmlFor="name">Name</Label>
-                                                <Input
-                                                    type="text"
-                                                    id="name"
-                                                    name="name"
-                                                    value={profile.name}
-                                                    placeholder="Enter your name"
-                                                    onChange={this.updateInputValue}
-                                                />
-                                                {/*<FormFeedback>Houston, we have a problem...</FormFeedback>*/}
-                                            </FormGroup>
-                                            <FormGroup>
-                                                <Label htmlFor="email">Email</Label>
-                                                <Input
-                                                    type="email"
-                                                    id="email"
-                                                    name="email"
-                                                    value={profile.email}
-                                                    placeholder="Enter your email"
-                                                    onChange={this.updateInputValue}
-                                                />
-                                            {/*<FormFeedback>Houston, we have a problem...</FormFeedback>*/}
-                                            </FormGroup>
-                                            <FormGroup>
-                                                <Label>Role</Label>
-                                                <p className="form-control-static">{(
-                                                    profile.role !== null
-                                                    ? profile.role.display_name
-                                                    : 'N/A'
-                                                )}</p>
-                                            </FormGroup>
-                                            <Button
-                                                type="submit"
-                                                size="md"
-                                                color="success"
-                                                block
-                                                disabled={profile_unchanged || updating_profile}
-                                                onClick={this.handleUpdateProfile}
-                                            >
-                                                <i className={updateButtonIconClassName}></i>
-                                                {' '}
-                                                Update
-                                            </Button>
-                                        </Form>
-                                    }
-                                </CardBody>
-                            </Card>
-                        </Col>
-                    </Row>
+                    : <Fragment>
+                        <PageTitle text={profileTitle} />
+                        <Row>
+                            <Col md={12}>
+                                <Card className="card-accent-warning">
+                                    <CardBody>
+                                    {
+                                        getting_profile
+                                            ? <SpinnerLoader />
+                                            : <ResourceForm
+                                                onInputChange={this.updateInputValue}
+                                                onSubmit={this.handleUpdateProfile}
+                                                resource={profile}
+                                                submitButtonClassName="warning"
+                                                submitButtonDisabled={profile_unchanged || updating_profile}
+                                                submitButtonIconClassName={updateButtonIconClassName}
+                                                submitButtonText="Update"
+                                            />
+                                        }
+                                    </CardBody>
+                                </Card>
+                            </Col>
+                        </Row>
+                    </Fragment>
                 }
             </div>
         );
     }
 }
+
+// <ResourceForm
+// onInputChange={this.updateInputValue}
+//
+// resource={profile}
+// />
 
 const mapStateToProps = (state) => {
     const {

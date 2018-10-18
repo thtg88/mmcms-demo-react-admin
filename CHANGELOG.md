@@ -5,10 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/) (or at least it tries to).
 
 ## [Unreleased]
+### Added
+- Disable ability of deletion of resource via props
 - Terms and conditions of use
 ### Changed
-- Move profile to new layout
 - Upgrade to FontAwesome Icons v5
+
+## [0.12.1] - 2018-10-18
+### Changed
+- Profile update to new layout
 
 ## [0.12.0] - 2018-10-18
 ### Added
