@@ -4,31 +4,31 @@ export const columns = [
     {
         dataField: 'id',
         text: 'ID',
-        className: 'col-sm-12',
+        className: 'col-md-12',
         sort: true
     },
     {
         dataField: 'name',
         text: 'Name',
-        className: 'col-sm-5',
+        className: 'col-md-5 col-12',
         sort: true
     },
     {
         dataField: 'email',
         text: 'Email',
-        className: 'col-sm-5',
+        className: 'col-md-5 col-12',
         sort: true
     },
     {
         dataField: 'role.display_name',
         text: 'Role',
-        className: 'col-sm-2',
+        className: 'col-md-2 col-12',
         editable: false
     },
     {
         dataField: 'created_at',
         text: 'Registered',
-        className: 'col-sm-12',
+        className: 'col-md-12',
         editable: false,
         // formatter: createdAtFormatter,
     }

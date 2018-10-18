@@ -128,13 +128,6 @@ div.notification-container {
     }
 }
 
-@media only screen and (max-width: 767px) {
-    .title {
-        margin: 0 10px;
-        margin-bottom: 30px;
-    }
-}
-
 @media only screen and (max-width: 480px) {
     .Toastify__toast-container {
         width: 100%;

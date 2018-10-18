@@ -1,6 +1,6 @@
 {
     "name": "mmcms-admin",
-    "version": "0.11.0",
+    "version": "0.11.1",
     "description": "Admin area of mmCMS",
     "author": "Marco Marassi",
     "copyright": "Copyright 2018 Marco Marassi",
@@ -11,7 +11,7 @@
         "url": "git@github.com:thtg88/mmcms-demo-react-admin.git"
     },
     "dependencies": {
-        "@coreui/coreui": "^2.0.19",
+        "@coreui/coreui": "^2.0.20",
         "@coreui/coreui-plugin-chartjs-custom-tooltips": "^1.2.0",
         "@coreui/icons": "0.2.0",
         "@coreui/react": "^2.0.9",

@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Changed
 - Upgrade to FontAwesome Icons v5
 
+## [0.11.1] - 2018-10-18
+### Fixed
+- CRUD module title on small screens
+- List layout on small screens
+
 ## [0.11.0] - 2018-10-17
 ### Added
 - Responsive layout for resources index
