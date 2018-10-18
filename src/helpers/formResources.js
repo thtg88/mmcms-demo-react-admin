@@ -16,7 +16,8 @@ export const getFormResourceFromValues = (values, schema) => {
                     type: 'text',
                     value: value,
                     errors: [],
-                    rules: getValidationRulesFromKey(schema, key)
+                    rules: getValidationRulesFromKey(schema, key),
+                    disabled: key.length > 3 && key.indexOf('_at') === key.length -3 ? true : false
                 }
             };
         },
