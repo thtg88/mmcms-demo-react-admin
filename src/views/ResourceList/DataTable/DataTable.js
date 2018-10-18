@@ -31,8 +31,8 @@ const DataTable = ({
             <SearchBar
                 buttonDisabled={searchButtonDisabled}
                 iconClassName={searchButtonIconClassName}
-                onSubmit={onSearchButtonClick}
                 onChange={onSearchInputChange}
+                onSubmit={onSearchButtonClick}
                 query={query}
             />
             <Table responsive hover={hover}>
@@ -43,7 +43,12 @@ const DataTable = ({
                 </thead>
                 <tbody>
                     {loading
-                        ? (<LoaderRow colSpan={columns.length} />)
+                        ? (
+                            <LoaderRow
+                                colSpan={columns.length}
+                                type="spinner"
+                            />
+                        )
                         : data.length > 0
                             ? data.map((entity, index) => (
                                 <Row

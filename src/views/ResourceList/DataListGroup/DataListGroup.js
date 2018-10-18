@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { ListGroup } from 'reactstrap';
-import LoaderRow from './LoaderRow';
-import EmptyRow from './EmptyRow';
+import LoaderListGroupItem from './LoaderListGroupItem';
+import EmptyListGroupItem from './EmptyListGroupItem';
 import ResourceListGroupItem from './ResourceListGroupItem';
 import Pagination from '../Pagination';
 import SearchBar from '../SearchBar';
@@ -31,13 +31,18 @@ const DataListGroup = ({
             <SearchBar
                 buttonDisabled={searchButtonDisabled}
                 iconClassName={searchButtonIconClassName}
-                onSubmit={onSearchButtonClick}
                 onChange={onSearchInputChange}
+                onSubmit={onSearchButtonClick}
                 query={query}
             />
             <ListGroup flush className="mb-3">
                 {loading
-                    ? (<LoaderRow colSpan={columns.length} />)
+                    ? (
+                        <LoaderListGroupItem
+                            columns={columns}
+                            type="placeholderShimmer"
+                        />
+                    )
                     : data.length > 0
                         ? data.map((entity, index) => (
                             <ResourceListGroupItem
@@ -49,7 +54,7 @@ const DataListGroup = ({
                                 urlBuilder={urlBuilder}
                             />
                         ))
-                        : (<EmptyRow colSpan={columns.length} />)
+                        : (<EmptyListGroupItem />)
                 }
             </ListGroup>
             {loading

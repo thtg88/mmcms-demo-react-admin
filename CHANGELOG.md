@@ -5,11 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/) (or at least it tries to).
 
 ## [Unreleased]
-### Added
-- Animated background loading state (Facebook-style)
 - Terms and conditions of use
 ### Changed
+- Move profile to new layout
 - Upgrade to FontAwesome Icons v5
+
+## [0.12.0] - 2018-10-18
+### Added
+- Animated background loading state with placeholder shimmer (Facebook style) for CRUD resources
 
 ## [0.11.1] - 2018-10-18
 ### Fixed
