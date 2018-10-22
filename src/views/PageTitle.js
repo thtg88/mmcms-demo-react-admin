@@ -22,7 +22,7 @@ const PageTitle = ({
     return (
         <Row>
             <Col {...titleColProps}>
-                <h1 className="title">
+                <h1 className="page-title">
                     <span>{text}</span>
                 </h1>
             </Col>

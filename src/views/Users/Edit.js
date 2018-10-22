@@ -187,7 +187,11 @@ export class Edit extends Component {
             unauthenticated,
             updated
         } = this.props;
-        const { destroying_resource, updating_resource } = this.state;
+        const {
+            destroying_resource,
+            getting_resource,
+            updating_resource,
+        } = this.state;
 
         // if unauthenticated redirect to login
         if(prevProps.unauthenticated === false && unauthenticated === true) {
@@ -216,6 +220,20 @@ export class Edit extends Component {
         // So it's time to restore the Update button
         else if(
             updating_resource === true
+            && typeof errors.length !== 'undefined'
+            && errors.length !== 0
+        ) {
+            this.setState({
+                getting_resource: false,
+                updating_resource: false
+            });
+        }
+
+        // This means that I was getting the resource,
+        // And I received errors from the store
+        // So it's time to restore the Update button
+        else if(
+            getting_resource === true
             && typeof errors.length !== 'undefined'
             && errors.length !== 0
         ) {

@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Changed
 - Upgrade to FontAwesome Icons v5
 
+## [0.12.2] - 2018-10-22
+### Fixed
+- Class title conflicting with existing CoreUI's
+- Spinner not disappearing on edit resource form if error occurred
+
 ## [0.12.1] - 2018-10-18
 ### Changed
 - Profile update to new layout
