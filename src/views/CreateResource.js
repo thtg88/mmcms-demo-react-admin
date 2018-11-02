@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Card,
     CardBody,
@@ -17,8 +18,6 @@ const CreateResource = ({
     resourceUnchanged,
     updateInputValue,
 }) => {
-    // console.log('resourceUnchanged', resourceUnchanged);
-
     let createButtonIconClassName = "fa fa-plus";
     if(creatingResource === true) {
         createButtonIconClassName = "fa fa-spinner fa-spin";
@@ -51,6 +50,15 @@ const CreateResource = ({
             </Row>
         </div>
     );
+};
+
+CreateResource.proptTypes = {
+    creatingResource: PropTypes.bool,
+    handleCreateResource: PropTypes.func,
+    errors: PropTypes.array,
+    resource: PropTypes.object,
+    resourceUnchanged: PropTypes.bool,
+    updateInputValue: PropTypes.func,
 };
 
 export default CreateResource;

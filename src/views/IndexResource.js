@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Card,
     CardBody,
@@ -84,6 +85,27 @@ const IndexResource = ({
             </Row>
         </div>
     );
+};
+
+IndexResource.propTypes = {
+    actions: PropTypes.array,
+    columns: PropTypes.array,
+    currentPage: PropTypes.number,
+    errors: PropTypes.array,
+    fetchingResources: PropTypes.bool,
+    handleSearchResources: PropTypes.func,
+    history: PropTypes.object,
+    listType: PropTypes.string,
+    onSearchButtonClick: PropTypes.func,
+    onSearchInputChange: PropTypes.func,
+    pageSize: PropTypes.number,
+    resources: PropTypes.object,
+    resourcesName: PropTypes.string,
+    searching: PropTypes.bool,
+    searchQuery: PropTypes.string,
+    total: PropTypes.number,
+    updateSearchInputValue: PropTypes.func,
+    urlBuilder: PropTypes.func,
 };
 
 export default IndexResource;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Button,
     Form,
@@ -19,8 +20,6 @@ const ResourceForm = ({
     submitButtonIconClassName,
     submitButtonText,
 }) => {
-    // console.log('resource', resource);
-
     return (
         <Form onSubmit={onSubmit}>
             {
@@ -33,13 +32,10 @@ const ResourceForm = ({
                         : name.charAt(0).toUpperCase()+name.substr(1).replace('_', ' ');
                     const placeholder = params.placeholder
                         ? params.placeholder
-                        : `Enter your ${label}`;
+                        : `Enter the ${label}`;
                     const type = params.type
                         ? params.type
                         : "text";
-
-                    // console.log(name, 'errors', params.errors);
-                    // console.log(name.indexOf('_id') === name.length - 3, typeof params.value);
 
                     if(
                         name === 'id'
@@ -91,5 +87,17 @@ const ResourceForm = ({
         </Form>
     );
 }
+
+ResourceForm.propTypes = {
+    createButtonIconClassName: PropTypes.string,
+    disabled: PropTypes.bool,
+    onInputChange: PropTypes.func,
+    onSubmit: PropTypes.func,
+    resource: PropTypes.object,
+    submitButtonClassName: PropTypes.string,
+    submitButtonDisabled: PropTypes.bool,
+    submitButtonIconClassName: PropTypes.string,
+    submitButtonText: PropTypes.string,
+};
 
 export default ResourceForm;

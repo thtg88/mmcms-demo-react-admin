@@ -6,13 +6,6 @@ import {
     PaginationLink
 } from 'reactstrap';
 
-const propTypes = {
-    history: PropTypes.object,
-    page: PropTypes.number,
-    pageSize: PropTypes.number,
-    total: PropTypes.number,
-};
-
 const Pagination = ({ history, page, pageSize, total }) => {
 
     // Create last page from total and page size
@@ -46,7 +39,7 @@ const Pagination = ({ history, page, pageSize, total }) => {
                         }
                     }}
                 >
-                    <PaginationLink>{value+1}</PaginationLink>
+                    <PaginationLink tag="button">{value+1}</PaginationLink>
                 </PaginationItem>
             ))}
             <PaginationItem
@@ -64,7 +57,13 @@ const Pagination = ({ history, page, pageSize, total }) => {
             </PaginationItem>
         </BootstrapPagination>
     );
-}
-Pagination.propTypes = propTypes;
+};
+
+Pagination.propTypes = {
+    history: PropTypes.object,
+    page: PropTypes.number,
+    pageSize: PropTypes.number,
+    total: PropTypes.number,
+};
 
 export default Pagination;
