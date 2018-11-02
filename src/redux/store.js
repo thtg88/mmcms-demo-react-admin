@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
 import throttle from 'lodash/throttle';
 import { loadState, saveState } from './localStorage';
@@ -15,7 +16,9 @@ export const configureStore = () => {
         store = createStore(
             rootReducers,
             persistedState,
-            applyMiddleware(sagaMiddleware)
+            composeWithDevTools(
+                applyMiddleware(sagaMiddleware)
+            )
         );
 
         store.subscribe(throttle(() => {
@@ -25,7 +28,9 @@ export const configureStore = () => {
     } else {
         store = createStore(
             rootReducers,
-            applyMiddleware(sagaMiddleware)
+            composeWithDevTools(
+                applyMiddleware(sagaMiddleware)
+            )
         );
     }
 
