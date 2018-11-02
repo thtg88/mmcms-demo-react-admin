@@ -6,10 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 
 ## [Unreleased]
 ### Added
-- Disable ability of deletion of resource via props
 - Terms and conditions of use
 ### Changed
 - Upgrade to FontAwesome Icons v5
+
+## [0.13.0]
+### Added
+- Disable ability of deletion of resource via props
 
 ## [0.12.2] - 2018-10-22
 ### Fixed

@@ -306,20 +306,19 @@ export class Edit extends Component {
             resource_unchanged,
             updating_resource
         } = this.state;
-        const actions = [
-            {
+        const canDestroy = true;
+        let actions = [];
+
+        if(canDestroy === true) {
+            actions.push({
                 className: 'btn-danger',
                 disabled: getting_resource,
                 iconClassName: 'fa fa-trash',
                 onClick: this.toggleDestroyResourceModal,
                 title: 'Remove Resource',
                 type: 'button',
-            }
-        ];
-
-        // console.log('resource', resource);
-        // console.log('resource_unchanged', resource_unchanged);
-        // console.log('updating_resource', updating_resource);
+            });
+        }
 
         if(destroyed === true) {
             return <Redirect to="/users" />;
@@ -328,6 +327,7 @@ export class Edit extends Component {
         return (
             <EditResource
                 actions={actions}
+                canDestroy={canDestroy}
                 destroyingResource={destroying_resource}
                 errors={errors}
                 gettingResource={getting_resource}

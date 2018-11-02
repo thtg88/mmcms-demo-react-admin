@@ -1,10 +1,11 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import {
     Card,
     CardBody,
     Col,
     Row,
 } from 'reactstrap';
+import PropTypes from 'prop-types';
 import ApiErrorCard from './Cards/ApiErrorCard';
 import DestroyResourceModal from './DestroyResourceModal';
 import PageTitle from './PageTitle';
@@ -13,6 +14,7 @@ import SpinnerLoader from './SpinnerLoader';
 
 const EditResource = ({
     actions,
+    canDestroy,
     destroyingResource,
     errors,
     gettingResource,
@@ -25,8 +27,6 @@ const EditResource = ({
     updateInputValue,
     updatingResource,
 }) => {
-    // console.log('resourceUnchanged', resourceUnchanged);
-
     let destroyButtonIconClassName = "fa fa-trash";
     if(destroyingResource === true) {
         destroyButtonIconClassName = "fa fa-spinner fa-spin";
@@ -38,11 +38,11 @@ const EditResource = ({
     }
 
     const resourceName = (
-            typeof resource === 'undefined'
-            || resource === null
-            || typeof resource.name === 'undefined'
-            || typeof resource.name.value === 'undefined'
-        )
+        typeof resource === 'undefined'
+        || resource === null
+        || typeof resource.name === 'undefined'
+        || typeof resource.name.value === 'undefined'
+    )
         ? 'Loading...'
         : resource.name.value;
 
@@ -66,7 +66,7 @@ const EditResource = ({
                     && gettingResource !== true
                 )
                 ? null
-                : <Fragment>
+                : <>
                     <PageTitle text={resourceName} actions={actions} />
                     <Row>
                         <Col md={12}>
@@ -88,18 +88,40 @@ const EditResource = ({
                                 </CardBody>
                             </Card>
                         </Col>
-                        <DestroyResourceModal
-                            destroyButtonIconClassName={destroyButtonIconClassName}
-                            disabled={destroyingResource}
-                            isOpen={isDestroyResourceModalOpen}
-                            onDestroyButtonClick={handleDestroyResource}
-                            toggle={toggleDestroyResourceModal}
-                        />
+                        {
+                            canDestroy
+                            ? (
+                                <DestroyResourceModal
+                                    destroyButtonIconClassName={destroyButtonIconClassName}
+                                    disabled={destroyingResource}
+                                    isOpen={isDestroyResourceModalOpen}
+                                    onDestroyButtonClick={handleDestroyResource}
+                                    toggle={toggleDestroyResourceModal}
+                                />
+                            )
+                            : (null)
+                        }
                     </Row>
-                </Fragment>
+                </>
             }
         </div>
     );
+};
+
+EditResource.propTypes = {
+    actions: PropTypes.array,
+    canDestroy: PropTypes.bool,
+    destroyingResource: PropTypes.bool,
+    errors: PropTypes.array,
+    gettingResource: PropTypes.bool,
+    handleDestroyResource: PropTypes.func,
+    handleUpdateResource: PropTypes.func,
+    isDestroyResourceModalOpen: PropTypes.bool,
+    resource: PropTypes.object,
+    resourceUnchanged: PropTypes.bool,
+    toggleDestroyResourceModal: PropTypes.func,
+    updateInputValue: PropTypes.func,
+    updatingResource: PropTypes.bool,
 };
 
 export default EditResource;
