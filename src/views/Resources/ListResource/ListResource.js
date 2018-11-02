@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import DataListGroup from './DataListGroup';
 import DataTable from './DataTable';
 
-const ResourceList = ({
+const ListResource = ({
     type,
     ...props
 }) => {
@@ -17,4 +18,8 @@ const ResourceList = ({
     return (null);
 };
 
-export default ResourceList;
+ListResource.propTypes = {
+    type: PropTypes.string
+};
+
+export default ListResource;

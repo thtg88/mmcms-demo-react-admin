@@ -5,18 +5,18 @@ import CreateResource from '../CreateResource';
 import {
     getApiErrorMessages,
     isUnauthenticatedError
-} from '../../helpers/apiErrorMessages';
+} from '../../../helpers/apiErrorMessages';
 import {
     getValidationSchemaFromFormResource,
     getValuesFromFormResource,
     updateFormResourceFromErrors,
-} from '../../helpers/formResources';
-import { loggedOut } from '../../redux/auth/actions';
+} from '../../../helpers/formResources';
+import { loggedOut } from '../../../redux/auth/actions';
 import {
     clearMetadataResourceCreate,
     createResource
-} from '../../redux/role/actions';
-import schema from '../../redux/role/schema';
+} from '../../../redux/user/actions';
+import schema from '../../../redux/user/schema';
 
 export class Create extends Component {
     state = {
@@ -122,7 +122,7 @@ export class Create extends Component {
             && created === true
             && typeof resource.id !== 'undefined'
         ) {
-            history.push('/roles/'+resource.id);
+            history.push('/users/'+resource.id);
         }
     }
 
@@ -162,7 +162,7 @@ const mapStateToProps = (state) => {
         created,
         error,
         resource
-    } = state.roles;
+    } = state.users;
     const errors = getApiErrorMessages(error);
     const unauthenticated = isUnauthenticatedError(error);
 

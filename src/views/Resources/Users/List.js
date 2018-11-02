@@ -4,14 +4,14 @@ import IndexResource from '../IndexResource';
 import {
     getApiErrorMessages,
     isUnauthenticatedError
-} from '../../helpers/apiErrorMessages';
-import { apiResourceDestroySuccessNotification } from '../../helpers/notification';
-import { loggedOut } from '../../redux/auth/actions';
+} from '../../../helpers/apiErrorMessages';
+import { apiResourceDestroySuccessNotification } from '../../../helpers/notification';
+import { loggedOut } from '../../../redux/auth/actions';
 import {
     changePageResources,
     clearMetadataResources,
     getPaginatedResources
-} from '../../redux/user/actions';
+} from '../../../redux/user/actions';
 import { columns, pageSize } from './tableConfig';
 
 const actions = [
@@ -24,7 +24,7 @@ const actions = [
     }
 ];
 
-export class Users extends Component {
+export class List extends Component {
     state = {
         query: '',
         searching: false,
@@ -312,4 +312,4 @@ const mapDispatchToProps = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Users);
+)(List);

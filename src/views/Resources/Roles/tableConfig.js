@@ -46,10 +46,6 @@ const defaultSorted = [
     }
 ];
 
-export const cellEditProps = {
-    mode: 'click'
-};
-
 export const pageSize = 10;
 
 const tableConfig = {

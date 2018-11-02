@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroupItem } from 'reactstrap';
-import PlaceholderShimmerLoader from '../../PlaceholderShimmerLoader';
-import SpinnerLoader from '../../SpinnerLoader';
+import PlaceholderShimmerLoader from '../../../PlaceholderShimmerLoader';
+import SpinnerLoader from '../../../SpinnerLoader';
 
 const LoaderListGroupItem = ({
     columns,

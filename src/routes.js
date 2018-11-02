@@ -14,32 +14,32 @@ const Dashboard = Loadable({
 });
 
 const Roles = Loadable({
-    loader: () => import('./views/Roles/Roles'),
+    loader: () => import('./views/Resources/Roles/List'),
     loading: Loading,
 });
 
 const RoleEdit = Loadable({
-    loader: () => import('./views/Roles/Edit'),
+    loader: () => import('./views/Resources/Roles/Edit'),
     loading: Loading,
 });
 
 const RoleCreate = Loadable({
-    loader: () => import('./views/Roles/Create'),
+    loader: () => import('./views/Resources/Roles/Create'),
     loading: Loading,
 });
 
 const Users = Loadable({
-    loader: () => import('./views/Users/Users'),
+    loader: () => import('./views/Resources/Users/List'),
     loading: Loading,
 });
 
 const UserEdit = Loadable({
-    loader: () => import('./views/Users/Edit'),
+    loader: () => import('./views/Resources/Users/Edit'),
     loading: Loading,
 });
 
 const UserCreate = Loadable({
-    loader: () => import('./views/Users/Create'),
+    loader: () => import('./views/Resources/Users/Create'),
     loading: Loading,
 });
 

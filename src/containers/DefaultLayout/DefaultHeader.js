@@ -48,8 +48,6 @@ export class DefaultHeader extends Component {
     }
 
     render() {
-        const { logout } = this.props;
-
         return (
             <>
                 <AppSidebarToggler className="d-lg-none" display="md" mobile />

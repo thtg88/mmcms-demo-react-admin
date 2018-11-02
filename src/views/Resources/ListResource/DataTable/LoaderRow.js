@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SpinnerLoader from '../../SpinnerLoader';
+import SpinnerLoader from '../../../SpinnerLoader';
 
 const LoaderRow = ({
     colSpan,

@@ -9,7 +9,7 @@ import {
 } from 'reactstrap';
 import ApiErrorCard from '../../Cards/ApiErrorCard';
 import PageTitle from '../../PageTitle';
-import ResourceForm from '../../ResourceForm';
+import ResourceForm from '../../Resources/ResourceForm';
 import SpinnerLoader from '../../SpinnerLoader';
 import {
     getApiErrorMessages,

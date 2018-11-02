@@ -6,27 +6,27 @@ import EditResource from '../EditResource';
 import {
     getApiErrorMessages,
     isUnauthenticatedError
-} from '../../helpers/apiErrorMessages';
+} from '../../../helpers/apiErrorMessages';
 import {
     getFormResourceFromValues,
     getValidationSchemaFromFormResource,
     getValuesFromFormResource,
     updateFormResourceFromErrors,
-} from '../../helpers/formResources';
-import { getResourceFromPaginatedResourcesAndId } from '../../helpers/paginatedResources';
+} from '../../../helpers/formResources';
+import { getResourceFromPaginatedResourcesAndId } from '../../../helpers/paginatedResources';
 import {
     apiResourceCreateSuccessNotification,
     apiResourceUpdateSuccessNotification
-} from '../../helpers/notification';
-import { loggedOut } from '../../redux/auth/actions';
+} from '../../../helpers/notification';
+import { loggedOut } from '../../../redux/auth/actions';
 import {
     clearMetadataResourceEdit,
     destroyResource,
     findResource,
     getPaginatedResources,
     updateResource,
-} from '../../redux/user/actions';
-import schema from '../../redux/user/schema';
+} from '../../../redux/role/actions';
+import schema from '../../../redux/role/schema';
 import { pageSize } from './tableConfig';
 
 export class Edit extends Component {
@@ -187,11 +187,7 @@ export class Edit extends Component {
             unauthenticated,
             updated
         } = this.props;
-        const {
-            destroying_resource,
-            getting_resource,
-            updating_resource,
-        } = this.state;
+        const { destroying_resource, updating_resource } = this.state;
 
         // if unauthenticated redirect to login
         if(prevProps.unauthenticated === false && unauthenticated === true) {
@@ -220,20 +216,6 @@ export class Edit extends Component {
         // So it's time to restore the Update button
         else if(
             updating_resource === true
-            && typeof errors.length !== 'undefined'
-            && errors.length !== 0
-        ) {
-            this.setState({
-                getting_resource: false,
-                updating_resource: false
-            });
-        }
-
-        // This means that I was getting the resource,
-        // And I received errors from the store
-        // So it's time to restore the Update button
-        else if(
-            getting_resource === true
             && typeof errors.length !== 'undefined'
             && errors.length !== 0
         ) {
@@ -321,7 +303,7 @@ export class Edit extends Component {
         }
 
         if(destroyed === true) {
-            return <Redirect to="/users" />;
+            return <Redirect to="/roles" />;
         }
 
         return (
@@ -351,11 +333,11 @@ const mapStateToProps = (state, ownProps) => {
         error,
         resources,
         updated
-    } = state.users;
+    } = state.roles;
     const errors = getApiErrorMessages(error);
     const unauthenticated = isUnauthenticatedError(error);
     const params_id = parseInt(ownProps.match.params.id, 10);
-    let { resource } = state.users;
+    let { resource } = state.roles;
 
     if(
         resource === null

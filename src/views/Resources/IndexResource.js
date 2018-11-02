@@ -6,9 +6,9 @@ import {
     Col,
     Row
 } from 'reactstrap';
-import ApiErrorCard from './Cards/ApiErrorCard';
-import ResourceList from './ResourceList/ResourceList';
-import PageTitle from './PageTitle';
+import ApiErrorCard from '../Cards/ApiErrorCard';
+import ListResource from './ListResource/ListResource';
+import PageTitle from '../PageTitle';
 
 const IndexResource = ({
     actions,
@@ -61,7 +61,7 @@ const IndexResource = ({
                 <Col xl={12}>
                     <Card className="card-accent-primary">
                         <CardBody>
-                            <ResourceList
+                            <ListResource
                                 type={listType}
                                 columns={columns}
                                 data={resources[currentPage]}
