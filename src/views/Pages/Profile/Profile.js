@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
 import {
@@ -29,7 +29,6 @@ import {
     updateProfile
 } from '../../../redux/auth/actions';
 import schema from '../../../redux/user/schema';
-
 
 export class Profile extends Component {
     state = {
@@ -254,7 +253,7 @@ export class Profile extends Component {
                         && getting_profile !== true
                     )
                     ? null
-                    : <Fragment>
+                    : <>
                         <PageTitle text={profileTitle} />
                         <Row>
                             <Col md={12}>
@@ -277,7 +276,7 @@ export class Profile extends Component {
                                 </Card>
                             </Col>
                         </Row>
-                    </Fragment>
+                    </>
                 }
             </div>
         );

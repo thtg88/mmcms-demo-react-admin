@@ -36,7 +36,7 @@ class App extends Component {
 
     render() {
         return (
-            <React.Fragment>
+            <>
                 <BrowserRouter>
                     <Switch>
                         <Route exact path="/login" name="Login Page" render={(props) => (
@@ -60,7 +60,7 @@ class App extends Component {
                     hideProgressBar
                     bodyClassName="color-black"
                 />
-            </React.Fragment>
+            </>
         );
     }
 }

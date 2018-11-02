@@ -48,11 +48,10 @@ export class DefaultHeader extends Component {
     }
 
     render() {
-        // eslint-disable-next-line
-        const { children, logout, ...attributes } = this.props;
+        const { logout } = this.props;
 
         return (
-            <React.Fragment>
+            <>
                 <AppSidebarToggler className="d-lg-none" display="md" mobile />
                 <AppNavbarBrand
                     full={{ src: logo, width: 89, height: 25, alt: 'CoreUI Logo' }}
@@ -83,7 +82,7 @@ export class DefaultHeader extends Component {
                         </DropdownMenu>
                     </AppHeaderDropdown>
                 </Nav>
-            </React.Fragment>
+            </>
         );
     }
 }

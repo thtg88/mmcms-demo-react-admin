@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
 
@@ -6,7 +6,7 @@ const PlaceholderShimmerLoader = ({ columns }) => {
     const lastColumnIdx = columns.length - 1;
 
     return (
-        <Fragment>
+        <>
             <Row className="placeholder-shimmer-loader-row">
                 <Col className="col-3">
                     <div className="animated-background" style={{height: '20px', marginBottom: '15px'}}></div>
@@ -35,7 +35,7 @@ const PlaceholderShimmerLoader = ({ columns }) => {
                     );
                 })}
             </Row>
-        </Fragment>
+        </>
     );
 };
 

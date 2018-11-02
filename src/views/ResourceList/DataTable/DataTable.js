@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'reactstrap';
 import LoaderRow from './LoaderRow';
@@ -27,7 +27,7 @@ const DataTable = ({
     // console.log(query);
 
     return (
-        <Fragment>
+        <>
             <SearchBar
                 buttonDisabled={searchButtonDisabled}
                 iconClassName={searchButtonIconClassName}
@@ -72,7 +72,7 @@ const DataTable = ({
                     history={history}
                 />
             }
-        </Fragment>
+        </>
     )
 };
 

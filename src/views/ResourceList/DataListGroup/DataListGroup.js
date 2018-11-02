@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroup } from 'reactstrap';
 import LoaderListGroupItem from './LoaderListGroupItem';
@@ -27,7 +27,7 @@ const DataListGroup = ({
     // console.log(query);
 
     return (
-        <Fragment>
+        <>
             <SearchBar
                 buttonDisabled={searchButtonDisabled}
                 iconClassName={searchButtonIconClassName}
@@ -66,7 +66,7 @@ const DataListGroup = ({
                     history={history}
                 />
             }
-        </Fragment>
+        </>
     )
 };
 
