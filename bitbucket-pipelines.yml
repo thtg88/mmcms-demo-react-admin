@@ -1,0 +1,24 @@
+# This is a sample build configuration for PHP.
+# Check our guides at https://confluence.atlassian.com/x/e8YWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: php:5.6.31
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - composer
+        script:
+          - apt-get update && apt-get install -y unzip
+          - echo "Installing composer..."
+          - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+          - echo "composer installed."
+          - composer install
+          - echo "Installing PHPloy..."
+          - composer global require "banago/phploy"
+          - echo "PHPloy installed."
+          - echo "PHPloying..."
+          - PHPLOY_USER="$PHPLOY_USER" PHPLOY_PATH="$PHPLOY_PATH" PHPLOY_PRIVKEY="$PHPLOY_PRIVKEY" phploy -l
+          - echo "PHPloyed."
