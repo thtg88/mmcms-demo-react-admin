@@ -15,7 +15,6 @@ pipelines:
           - echo "Installing composer..."
           - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
           - echo "composer installed."
-          - composer install
           - echo "Installing PHPloy..."
           - composer global require "banago/phploy"
           - echo "PHPloy installed."
