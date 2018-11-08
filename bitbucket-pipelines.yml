@@ -6,7 +6,7 @@ pipelines:
         caches:
           - composer
         script:
-          - apt-get update && apt-get install -y ca-certificates bash git php-bz2 php-cli php-ftp php-mcrypt php-openssl php-phar php-zip php-ctype php-xmlrpc php-zlib
+          - apt-get update && apt-get install -y ca-certificates bash git
           - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
           - git clone --depth 1 https://github.com/banago/PHPloy.git && mv PHPloy/bin/phploy /usr/bin/phploy && rm -rf PHPloy
           - phploy -l
