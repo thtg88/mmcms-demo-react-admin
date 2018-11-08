@@ -8,4 +8,5 @@ pipelines:
         script:
           - apt-get update && apt-get install -y ca-certificates bash git
           - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-          - git clone --depth 1 https://github.com/banago/PHPloy.git && ./PHPloy/bin/phploy -l && rm -rf PHPloy
+          - composer global require "banago/phploy" | php -- --install-dir=/usr/local/bin --filename=phploy
+          - bash phploy -l
