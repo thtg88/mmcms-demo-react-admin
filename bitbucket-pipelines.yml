@@ -9,4 +9,4 @@ pipelines:
           - apt-get update && apt-get install -y zip unzip ca-certificates bash git
           - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
           - composer global require "banago/phploy" | php -- --install-dir=/usr/local/bin --filename=phploy
-          - bash /usr/local/bin/phploy -l
+          - find / -name 'phploy'
