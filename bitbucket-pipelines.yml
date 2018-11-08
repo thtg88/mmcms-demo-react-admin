@@ -6,7 +6,7 @@ pipelines:
         caches:
           - composer
         script:
-          - apt-get update && apt-get install -y ca-certificates bash git
+          - apt-get update && apt-get install -y zip unzip ca-certificates bash git
           - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
           - composer global require "banago/phploy" | php -- --install-dir=/usr/local/bin --filename=phploy
-          - bash phploy -l
+          - bash /usr/local/bin/phploy -l
