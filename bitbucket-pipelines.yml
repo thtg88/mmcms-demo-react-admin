@@ -3,23 +3,16 @@ image: php:5.6.31
 pipelines:
     branches:
         master:
+            caches:
+                - composer
             - step:
-                name: Bootstrap and setup
-                caches:
-                    - composer
+                name: Build and deploy
                 script:
-                    - apt-get update && apt-get install -y zip unzip ca-certificates bash git
+                    - apt-get update && apt-get install -y zip unzip ca-certificates bash git nodejs
+                    - npm install
+                    - npm run build
+                    - ls -la
                     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
                     - composer global require "banago/phploy"
                     - ln -s /root/.composer/vendor/banago/phploy/bin/phploy /usr/local/bin/phploy
-            - step:
-                name: Build
-                image: node:10.12.0
-                script:
-                    - npm install
-                    - npm run build
-            - step:
-                name: Deploy
-                script:
-                    - ls -la
                     - phploy -l
