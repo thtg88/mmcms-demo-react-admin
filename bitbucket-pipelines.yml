@@ -6,7 +6,7 @@ pipelines:
             - step:
                 name: Build and deploy
                 caches:
-                    composer
+                    - composer
                 script:
                     - apt-get update && apt-get install -y zip unzip ca-certificates bash git nodejs
                     - npm install
