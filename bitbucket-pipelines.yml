@@ -1,0 +1,14 @@
+image: php:5.6.31
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - composer
+        script:
+          - apt-get update && apt-get install -y zip unzip ca-certificates bash git
+          - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+          - composer global require "banago/phploy"
+          - ln -s /root/.composer/vendor/banago/phploy/bin/phploy /usr/local/bin/phploy
+          - find / -name 'phploy'
+          - phploy -l
