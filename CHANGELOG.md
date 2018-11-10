@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Changed
 - Upgrade to FontAwesome Icons v5
 
+## [0.13.1]
+### Added
+- Bitbucket pipeline setup
+
 ## [0.13.0]
 ### Added
 - Disable ability of deletion of resource via props
