@@ -9,6 +9,7 @@ pipelines:
                     - composer
                 script:
                     - apt-get update && apt-get install -y zip unzip ca-certificates bash git nodejs
+                    - find / -name npm
                     - npm install
                     - npm run build
                     - ls -la
