@@ -1,14 +1,24 @@
 image: php:5.6.31
 
 pipelines:
-  default:
-    - step:
-        caches:
-          - composer
-        script:
-          - apt-get update && apt-get install -y zip unzip ca-certificates bash git
-          - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-          - composer global require "banago/phploy"
-          - ln -s /root/.composer/vendor/banago/phploy/bin/phploy /usr/local/bin/phploy
-          - find / -name 'phploy'
-          - phploy -l
+    branches:
+        master:
+            - step:
+                name: Bootstrap and setup
+                caches:
+                    - composer
+                script:
+                    - apt-get update && apt-get install -y zip unzip ca-certificates bash git
+                    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+                    - composer global require "banago/phploy"
+                    - ln -s /root/.composer/vendor/banago/phploy/bin/phploy /usr/local/bin/phploy
+            - step:
+                name: Build
+                image: node:10.12.0
+                script:
+                    - npm run build
+            - step:
+                name: Deploy
+                script:
+                    - ls -la
+                    - phploy -l
