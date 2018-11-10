@@ -8,6 +8,7 @@ pipelines:
                 caches:
                     - composer
                 script:
+                    - curl -sL https://deb.nodesource.com/setup_10.x | bash -
                     - apt-get update && apt-get install -y zip unzip ca-certificates bash git nodejs
                     - find / -name npm
                     - npm install
