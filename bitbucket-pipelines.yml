@@ -3,10 +3,10 @@ image: php:5.6.31
 pipelines:
     branches:
         master:
-            caches:
-                - composer
             - step:
                 name: Build and deploy
+                caches:
+                    composer
                 script:
                     - apt-get update && apt-get install -y zip unzip ca-certificates bash git nodejs
                     - npm install
