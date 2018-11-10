@@ -25,8 +25,8 @@ import {
     findResource,
     getPaginatedResources,
     updateResource,
-} from '../../../redux/user/actions';
-import schema from '../../../redux/user/schema';
+} from '../../../redux/users/actions';
+import schema from '../../../redux/users/schema';
 import { pageSize } from './tableConfig';
 
 export class Edit extends Component {

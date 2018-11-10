@@ -28,7 +28,7 @@ import {
     loggedOut,
     updateProfile
 } from '../../../redux/auth/actions';
-import schema from '../../../redux/user/schema';
+import schema from '../../../redux/users/schema';
 
 export class Profile extends Component {
     state = {
