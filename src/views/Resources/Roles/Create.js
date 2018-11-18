@@ -15,8 +15,8 @@ import { loggedOut } from '../../../redux/auth/actions';
 import {
     clearMetadataResourceCreate,
     createResource
-} from '../../../redux/role/actions';
-import schema from '../../../redux/role/schema';
+} from '../../../redux/roles/actions';
+import schema from '../../../redux/roles/schema';
 
 export class Create extends Component {
     state = {

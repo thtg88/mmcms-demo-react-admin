@@ -11,7 +11,7 @@ import {
     changePageResources,
     clearMetadataResources,
     getPaginatedResources
-} from '../../../redux/role/actions';
+} from '../../../redux/roles/actions';
 import { columns, pageSize } from './tableConfig';
 
 const actions = [
