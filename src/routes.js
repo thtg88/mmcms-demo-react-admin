@@ -1,5 +1,5 @@
 import React from 'react';
-import Loadable from 'react-loadable'
+import Loadable from 'react-loadable';
 
 const Loading = () => (<div>Loading...</div>);
 
@@ -13,31 +13,29 @@ const Dashboard = Loadable({
     loading: Loading,
 });
 
+// Roles Loadables...
 const Roles = Loadable({
     loader: () => import('./views/Resources/Roles/List'),
     loading: Loading,
 });
-
 const RoleEdit = Loadable({
     loader: () => import('./views/Resources/Roles/Edit'),
     loading: Loading,
 });
-
 const RoleCreate = Loadable({
     loader: () => import('./views/Resources/Roles/Create'),
     loading: Loading,
 });
 
+// Users Loadables...
 const Users = Loadable({
     loader: () => import('./views/Resources/Users/List'),
     loading: Loading,
 });
-
 const UserEdit = Loadable({
     loader: () => import('./views/Resources/Users/Edit'),
     loading: Loading,
 });
-
 const UserCreate = Loadable({
     loader: () => import('./views/Resources/Users/Create'),
     loading: Loading,
