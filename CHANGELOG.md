@@ -10,15 +10,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Changed
 - Upgrade to FontAwesome Icons v5
 
-## [0.13.2]
+## [0.14.0] - 2018-11-18
+### Added
+- Route-based code splitting with React lazy and Suspense
+### Removed
+- React Loadable dependency
+
+## [0.13.2] - 2018-11-18
 ### Changed
 - Lifecycle methods of CRUD resources are now dealt by HOCs
 
-## [0.13.1]
+## [0.13.1] - 2018-11-10
 ### Added
 - Bitbucket pipeline setup
 
-## [0.13.0]
+## [0.13.0] - 2018-11-02
 ### Added
 - Disable ability of deletion of resource via props
 

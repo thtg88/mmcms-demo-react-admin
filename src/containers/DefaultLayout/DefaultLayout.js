@@ -20,6 +20,7 @@ import LoggingOutCard from '../../views/Cards/LoggingOutCard';
 import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
 import RestrictedComponent from './RestrictedComponent';
+import waitingComponent from '../../views/waitingComponent';
 // sidebar nav config
 import navigation from '../../_nav';
 // routes config
@@ -56,17 +57,20 @@ class DefaultLayout extends Component {
                                                 render={props => (
                                                     <ErrorBoundary>
                                                         <RestrictedComponent>
-                                                            <route.component
-                                                                query={queryString.parse(this.props.location.search)}
-                                                                {...props}
-                                                            />
+                                                            {
+                                                                waitingComponent(
+                                                                    route.component,
+                                                                    queryString.parse(this.props.location.search),
+                                                                    {...props}
+                                                                )
+                                                            }
                                                         </RestrictedComponent>
                                                     </ErrorBoundary>
                                                 )}
                                             />
                                         )
                                         : (null);
-                                },)}
+                                })}
                                 <Route name="Page 404" component={Page404} />
                             </Switch>
                         </Container>

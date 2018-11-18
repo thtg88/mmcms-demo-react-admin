@@ -1,45 +1,18 @@
-import React from 'react';
-import Loadable from 'react-loadable';
+import { lazy } from 'react';
 
-const Loading = () => (<div>Loading...</div>);
+const Profile = lazy(() => import('./views/Pages/Profile'));
 
-const Profile = Loadable({
-    loader: () => import('./views/Pages/Profile'),
-    loading: Loading,
-})
-
-const Dashboard = Loadable({
-    loader: () => import('./views/Dashboard'),
-    loading: Loading,
-});
+const Dashboard = lazy(() => import('./views/Dashboard'));
 
 // Roles Loadables...
-const Roles = Loadable({
-    loader: () => import('./views/Resources/Roles/List'),
-    loading: Loading,
-});
-const RoleEdit = Loadable({
-    loader: () => import('./views/Resources/Roles/Edit'),
-    loading: Loading,
-});
-const RoleCreate = Loadable({
-    loader: () => import('./views/Resources/Roles/Create'),
-    loading: Loading,
-});
+const Roles = lazy(() => import('./views/Resources/Roles/List'));
+const RoleEdit = lazy(() => import('./views/Resources/Roles/Edit'));
+const RoleCreate = lazy(() => import('./views/Resources/Roles/Create'));
 
 // Users Loadables...
-const Users = Loadable({
-    loader: () => import('./views/Resources/Users/List'),
-    loading: Loading,
-});
-const UserEdit = Loadable({
-    loader: () => import('./views/Resources/Users/Edit'),
-    loading: Loading,
-});
-const UserCreate = Loadable({
-    loader: () => import('./views/Resources/Users/Create'),
-    loading: Loading,
-});
+const Users = lazy(() => import('./views/Resources/Users/List'));
+const UserEdit = lazy(() => import('./views/Resources/Users/Edit'));
+const UserCreate = lazy(() => import('./views/Resources/Users/Create'));
 
 const routes = [
     { path: '/', exact: true, name: 'Home', component: Dashboard },
@@ -52,4 +25,5 @@ const routes = [
     { path: '/users/create', exact: true,  name: 'Create', component: UserCreate },
     { path: '/users/:id', exact: true, name: 'Edit User', component: UserEdit },
 ];
+
 export default routes;
