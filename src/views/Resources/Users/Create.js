@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import CreateResource from '../CreateResource';
-import withCreateResource from '../withCreateResource';
+import withCreate from '../withCreate';
 import {
     clearMetadataResourceCreate,
     createResource,
@@ -30,7 +30,7 @@ const Create = ({
     );
 };
 
-export default withCreateResource(
+export default withCreate(
     Create,
     {
         clearMetadataResourceCreate,

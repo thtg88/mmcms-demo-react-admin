@@ -12,7 +12,7 @@ import {
 } from '../../helpers/formResources';
 import { loggedOut } from '../../redux/auth/actions';
 
-const withCreateResource = (
+const withCreate = (
     ComponentToWrap,
     {
         clearMetadataResourceCreate,
@@ -181,4 +181,4 @@ const withCreateResource = (
 
 };
 
-export default withCreateResource;
+export default withCreate;
