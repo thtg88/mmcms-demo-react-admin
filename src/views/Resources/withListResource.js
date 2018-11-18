@@ -9,7 +9,7 @@ import {
 } from '../../helpers/notification';
 import { loggedOut } from '../../redux/auth/actions';
 
-const withList = (
+const withListResource = (
     ComponentToWrap,
     {
         changePageResources,
@@ -283,4 +283,4 @@ const withList = (
     )(ListHOC);
 };
 
-export default withList;
+export default withListResource;

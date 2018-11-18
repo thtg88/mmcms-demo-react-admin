@@ -1,6 +1,6 @@
 import React from 'react';
 import IndexResource from '../IndexResource';
-import withList from '../withList';
+import withListResource from '../withListResource';
 import {
     changePageResources,
     clearMetadataResources,
@@ -57,7 +57,7 @@ const List = ({
     );
 };
 
-export default withList(
+export default withListResource(
     List,
     {
         changePageResources,

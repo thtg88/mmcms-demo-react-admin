@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Changed
 - Upgrade to FontAwesome Icons v5
 
+## [0.13.2]
+### Changed
+- Lifecycle methods of CRUD resources are now dealt by HOCs
+
 ## [0.13.1]
 ### Added
 - Bitbucket pipeline setup
