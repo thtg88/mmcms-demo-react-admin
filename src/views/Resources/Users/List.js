@@ -21,7 +21,7 @@ const actions = [
     },
 ];
 
-const List = ({
+export const List = ({
     current_page,
     errors,
     fetching_resources,

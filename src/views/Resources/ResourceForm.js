@@ -23,7 +23,8 @@ const ResourceForm = ({
     return (
         <Form onSubmit={onSubmit}>
             {
-                Object.entries(resource).map(([name, params], idx) => {
+                resource
+                 ? Object.entries(resource).map(([name, params], idx) => {
                     const disabled = params.disabled
                         ? params.disabled
                         : false;
@@ -71,6 +72,7 @@ const ResourceForm = ({
                         </FormGroup>
                     );
                 })
+                : null
             }
             <Button
                 type="submit"

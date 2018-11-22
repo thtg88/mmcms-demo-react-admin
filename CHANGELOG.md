@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Changed
 - Upgrade to FontAwesome Icons v5
 
+## [0.14.1] - 2018-11-22
+### Fixed
+- Test issues
+
 ## [0.14.0] - 2018-11-18
 ### Added
 - Route-based code splitting with React lazy and Suspense

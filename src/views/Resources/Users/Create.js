@@ -8,7 +8,7 @@ import {
 } from '../../../redux/users/actions';
 import schema from '../../../redux/users/schema';
 
-const Create = ({
+export const Create = ({
     creating_resource,
     errors,
     handleCreateResource,

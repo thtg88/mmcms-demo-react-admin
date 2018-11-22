@@ -33,8 +33,8 @@ export const sanitizeState = (state) => {
     // } = state.users;
     return {
         auth: { token },
-        users: {
-            //
-        }
+        // users: {
+        //     //
+        // }
     }
 };

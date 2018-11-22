@@ -15,7 +15,7 @@ import { pageSize } from './tableConfig';
 
 const canDestroy = true;
 
-const Edit = ({
+export const Edit = ({
     destroyed,
     destroying_resource,
     errors,
