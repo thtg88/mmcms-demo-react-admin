@@ -283,12 +283,6 @@ export class Profile extends Component {
     }
 }
 
-// <ResourceForm
-// onInputChange={this.updateInputValue}
-//
-// resource={profile}
-// />
-
 const mapStateToProps = (state) => {
     const {
         error,

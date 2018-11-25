@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Changed
 - Upgrade to FontAwesome Icons v5
 
+## [0.15.2] - 2018-11-25
+### Changed
+- General bug fixes and improvements
+
 ## [0.15.1] - 2018-11-25
 ### Changed
 - Guest component is now functional

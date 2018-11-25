@@ -103,7 +103,7 @@ export class Login extends Component {
                         <Col md="6">
                             <Card className="p-2">
                                 <CardBody>
-                                    <Form innerRef={"login-form"}>
+                                    <Form innerRef="login-form">
                                         <h1>Login</h1>
                                         <p className="text-muted">Sign In to your account</p>
                                         <LoggedOutAlert logged_out={logged_out} />
@@ -176,7 +176,6 @@ const mapStateToProps = (state) => {
         logging_in,
         token
     } = state.auth;
-
     const errors = getApiErrorMessages(error);
 
     return {

@@ -137,7 +137,13 @@ export class Register extends Component {
     render() {
         const { REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY } = process.env;
         const { errors, registering, logged_in } = this.props;
-        const { redirect_login } = this.state;
+        const {
+            email,
+            name,
+            password,
+            password_confirmation,
+            redirect_login,
+        } = this.state;
 
         if(redirect_login === true) {
             return <Redirect to="/login" />
@@ -172,7 +178,7 @@ export class Register extends Component {
                                             <Input
                                                 type="text"
                                                 name="name"
-                                                value={this.state.name}
+                                                value={name}
                                                 autoComplete="name"
                                                 placeholder="e.g. John Smith"
                                                 onChange={this.updateInputValue}
@@ -185,7 +191,7 @@ export class Register extends Component {
                                             <Input
                                                 type="email"
                                                 name="email"
-                                                value={this.state.email}
+                                                value={email}
                                                 autoComplete="email"
                                                 placeholder="e.g. john.smith@domain.com"
                                                 onChange={this.updateInputValue}
@@ -200,7 +206,7 @@ export class Register extends Component {
                                             <Input
                                                 type="password"
                                                 name="password"
-                                                value={this.state.password}
+                                                value={password}
                                                 placeholder="Password"
                                                 onChange={this.updateInputValue}
                                             />
@@ -214,7 +220,7 @@ export class Register extends Component {
                                             <Input
                                                 type="password"
                                                 name="password_confirmation"
-                                                value={this.state.password_confirmation}
+                                                value={password_confirmation}
                                                 placeholder="Confirm password"
                                                 onChange={this.updateInputValue}
                                             />
