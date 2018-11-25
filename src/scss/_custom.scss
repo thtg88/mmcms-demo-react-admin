@@ -139,12 +139,23 @@ div.notification-container {
         content: '';
         width: 100%;
         height: 1px;
-        background-color: #acb5bc;
+        background: #acb5bc;
         display: -webkit-box;
         display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
         margin: 0 0 0 15px;
+    }
+}
+
+@media only screen and (max-width:480px) {
+    .page-title {
+        font-size: 1.875rem;
+
+        &:before {
+            background: none;
+            margin: 0;
+        }
     }
 }
 
