@@ -86,8 +86,8 @@ class DefaultLayout extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        logging_out: state.auth.logging_out === true
-    }
+        logging_out: state.auth && state.auth.logging_out === true
+    };
 };
 
 export default connect(

@@ -87,8 +87,8 @@ export class DefaultHeader extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        token: state.auth.token
-    }
+        token: state.auth && state.auth.token ? state.auth.token : null,
+    };
 };
 
 const mapDispatchToProps = {
