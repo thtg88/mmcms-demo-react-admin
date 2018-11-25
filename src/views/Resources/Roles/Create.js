@@ -1,12 +1,16 @@
 import React from 'react';
 import CreateResource from '../CreateResource';
 import withCreateResource from '../withCreateResource';
+import reducerRegistry from '../../../redux/reducerRegistry';
 import {
     clearMetadataResourceCreate,
     createResource,
     reducerName,
 } from '../../../redux/roles/actions';
+import roles from '../../../redux/roles/reducers';
 import schema from '../../../redux/roles/schema';
+
+reducerRegistry.register(reducerName, roles);
 
 export const Create = ({
     creating_resource,

@@ -1,12 +1,20 @@
-import { combineReducers } from 'redux';
+import reducerRegistry from './reducerRegistry';
 import auth from './auth/reducers';
-import roles from './roles/reducers';
-import users from './users/reducers';
 
-const rootReducers = combineReducers({
+// We only register the initial defaul reducers here,
+// Leaving the other ones for async loading
+
+export const defaultReducers = {
     auth,
-    roles,
-    users
-});
+};
 
-export default rootReducers;
+const registerDefaultReducers = () => {
+    Object.entries(defaultReducers).forEach(([name, reducer], idx) => {
+        reducerRegistry.register(name, reducer);
+    });
+
+    // console.log(reducerRegistry.getReducers());
+};
+
+
+export default registerDefaultReducers;

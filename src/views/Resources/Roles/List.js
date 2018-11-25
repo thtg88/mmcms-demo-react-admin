@@ -1,13 +1,17 @@
 import React from 'react';
 import IndexResource from '../IndexResource';
 import withListResource from '../withListResource';
+import reducerRegistry from '../../../redux/reducerRegistry';
 import {
     changePageResources,
     clearMetadataResources,
     getPaginatedResources,
     reducerName,
 } from '../../../redux/roles/actions';
+import roles from '../../../redux/roles/reducers';
 import { columns, pageSize } from './tableConfig';
+
+reducerRegistry.register(reducerName, roles);
 
 const resourcesName = 'Roles';
 
