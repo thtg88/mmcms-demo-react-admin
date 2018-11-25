@@ -1,19 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-class GuestComponent extends Component {
-    render() {
-
-        const { logged_in } = this.props;
-
-        if(logged_in === true) {
-            return <Redirect to="/" />
-        }
-
-        return this.props.children;
+const GuestComponent = ({
+    children,
+    logged_in,
+}) => {
+    if(logged_in) {
+        return <Redirect to="/" />;
     }
-}
+
+    return children;
+};
 
 const mapStateToProps = (state) => {
     return {

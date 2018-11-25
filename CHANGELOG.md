@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Changed
 - Upgrade to FontAwesome Icons v5
 
+## [0.15.1] - 2018-11-25
+### Changed
+- Guest component is now functional
+- Restricted component is now functional
+### Fixed
+- Guest component behaviour
+- Restricted component behaviour
+
 ## [0.15.0] - 2018-11-25
 ### Added
 - Redux code splitting - async reducer loading

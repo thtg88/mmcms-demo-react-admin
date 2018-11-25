@@ -29,7 +29,7 @@ export const configureStore = () => {
 
     const reducers = reducerRegistry.getReducers();
 
-    console.log(reducers);
+    // console.log(reducers);
 
     const rootReducers = combineReducers(reducers);
 

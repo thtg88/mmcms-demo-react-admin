@@ -1,19 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-class RestrictedComponent extends Component {
-    render() {
-
-        const { logged_in } = this.props;
-
-        if(logged_in === false) {
-            return <Redirect to="/login" />
-        }
-
-        return this.props.children;
+const RestrictedComponent = ({logged_in, children}) => {
+    if(!logged_in) {
+        return <Redirect to="/login" />;
     }
-}
+
+    return children;
+};
 
 const mapStateToProps = (state) => {
     return {
