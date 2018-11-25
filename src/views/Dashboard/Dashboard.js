@@ -423,7 +423,7 @@ class Dashboard extends Component {
                                 <ButtonGroup className="float-right">
                                     <ButtonDropdown id='card1' isOpen={this.state.card1} toggle={() => { this.setState({ card1: !this.state.card1 }); }}>
                                         <DropdownToggle caret className="p-0" color="transparent">
-                                            <i className="icon-settings"></i>
+                                            <i className="fa fa-cog"></i>
                                         </DropdownToggle>
                                         <DropdownMenu right>
                                             <DropdownItem>Action</DropdownItem>
@@ -448,7 +448,7 @@ class Dashboard extends Component {
                                 <ButtonGroup className="float-right">
                                     <Dropdown id='card2' isOpen={this.state.card2} toggle={() => { this.setState({ card2: !this.state.card2 }); }}>
                                         <DropdownToggle className="p-0" color="transparent">
-                                            <i className="icon-location-pin"></i>
+                                            <i className="fa fa-map-marker"></i>
                                         </DropdownToggle>
                                         <DropdownMenu right>
                                             <DropdownItem>Action</DropdownItem>
@@ -472,7 +472,7 @@ class Dashboard extends Component {
                                 <ButtonGroup className="float-right">
                                     <Dropdown id='card3' isOpen={this.state.card3} toggle={() => { this.setState({ card3: !this.state.card3 }); }}>
                                         <DropdownToggle caret className="p-0" color="transparent">
-                                            <i className="icon-settings"></i>
+                                            <i className="fa fa-cog"></i>
                                         </DropdownToggle>
                                         <DropdownMenu right>
                                             <DropdownItem>Action</DropdownItem>
@@ -496,7 +496,7 @@ class Dashboard extends Component {
                                 <ButtonGroup className="float-right">
                                     <ButtonDropdown id='card4' isOpen={this.state.card4} toggle={() => { this.setState({ card4: !this.state.card4 }); }}>
                                         <DropdownToggle caret className="p-0" color="transparent">
-                                            <i className="icon-settings"></i>
+                                            <i className="fa fa-cog"></i>
                                         </DropdownToggle>
                                         <DropdownMenu right>
                                             <DropdownItem>Action</DropdownItem>
@@ -525,7 +525,7 @@ class Dashboard extends Component {
                                         <div className="small text-muted">November 2015</div>
                                     </Col>
                                     <Col sm="7" className="d-none d-sm-inline-block">
-                                        <Button color="primary" className="float-right"><i className="icon-cloud-download"></i></Button>
+                                        <Button color="primary" className="float-right"><i className="fa fa-cloud-download"></i></Button>
                                         <ButtonToolbar className="float-right" aria-label="Toolbar with button groups">
                                             <ButtonGroup className="mr-3" aria-label="First group">
                                                 <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(1)} active={this.state.radioSelected === 1}>Day</Button>
@@ -655,7 +655,7 @@ class Dashboard extends Component {
                                 <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
                                     <thead className="thead-light">
                                         <tr>
-                                            <th className="text-center"><i className="icon-people"></i></th>
+                                            <th className="text-center"><i className="fa fa-users"></i></th>
                                             <th>User</th>
                                             <th className="text-center">Country</th>
                                             <th>Usage</th>

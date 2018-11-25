@@ -3,7 +3,7 @@ export default {
         {
             name: 'Dashboard',
             url: '/dashboard',
-            icon: 'icon-speedometer',
+            icon: 'fa fa-tachometer',
         },
         {
             divider: true,

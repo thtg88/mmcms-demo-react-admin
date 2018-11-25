@@ -110,7 +110,9 @@ export class Login extends Component {
                                         <ApiErrorAlert errors={errors} />
                                         <InputGroup className="mb-3">
                                             <InputGroupAddon addonType="prepend">
-                                                <InputGroupText>@</InputGroupText>
+                                                <InputGroupText>
+                                                    <i className="fa fa-fw fa-envelope"></i>
+                                                </InputGroupText>
                                             </InputGroupAddon>
                                             <Input
                                                 type="email"
@@ -123,7 +125,7 @@ export class Login extends Component {
                                         <InputGroup className="mb-4">
                                             <InputGroupAddon addonType="prepend">
                                                 <InputGroupText>
-                                                    <i className="icon-lock"></i>
+                                                    <i className="fa fa-fw fa-key"></i>
                                                 </InputGroupText>
                                             </InputGroupAddon>
                                             <Input

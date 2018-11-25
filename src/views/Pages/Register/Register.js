@@ -172,7 +172,7 @@ export class Register extends Component {
                                         <InputGroup className="mb-3">
                                             <InputGroupAddon addonType="prepend">
                                                 <InputGroupText>
-                                                    <i className="icon-user"></i>
+                                                    <i className="fa fa-fw fa-user"></i>
                                                 </InputGroupText>
                                             </InputGroupAddon>
                                             <Input
@@ -186,7 +186,9 @@ export class Register extends Component {
                                         </InputGroup>
                                         <InputGroup className="mb-3">
                                             <InputGroupAddon addonType="prepend">
-                                                <InputGroupText>@</InputGroupText>
+                                                <InputGroupText>
+                                                    <i className="fa fa-fw fa-envelope"></i>
+                                                </InputGroupText>
                                             </InputGroupAddon>
                                             <Input
                                                 type="email"
@@ -200,7 +202,7 @@ export class Register extends Component {
                                         <InputGroup className="mb-3">
                                             <InputGroupAddon addonType="prepend">
                                                 <InputGroupText>
-                                                    <i className="icon-lock"></i>
+                                                    <i className="fa fa-fw fa-key"></i>
                                                 </InputGroupText>
                                             </InputGroupAddon>
                                             <Input
@@ -214,7 +216,7 @@ export class Register extends Component {
                                         <InputGroup className="mb-4">
                                             <InputGroupAddon addonType="prepend">
                                                 <InputGroupText>
-                                                    <i className="icon-lock"></i>
+                                                    <i className="fa fa-fw fa-key"></i>
                                                 </InputGroupText>
                                             </InputGroupAddon>
                                             <Input

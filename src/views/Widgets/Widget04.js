@@ -17,7 +17,7 @@ const propTypes = {
 
 const defaultProps = {
   header: '87.500',
-  icon: 'icon-people',
+  icon: 'fa fa-users',
   color: 'info',
   value: '25',
   children: 'Visitors',
