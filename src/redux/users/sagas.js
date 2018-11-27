@@ -38,14 +38,6 @@ export function* createResourceRequest() {
     });
 }
 
-export function* createResourceSuccess() {
-    yield takeEvery(actions.CREATE_RESOURCE_SUCCESS, function*({ payload }) {});
-}
-
-export function* createResourceError() {
-    yield takeEvery(actions.CREATE_RESOURCE_ERROR, function*() {});
-}
-
 export function* destroyResourceRequest() {
     yield takeEvery(actions.DESTROY_RESOURCE_REQUEST, function*({ payload }) {
         // console.log('destroyResource taken!', payload);
@@ -74,14 +66,6 @@ export function* destroyResourceRequest() {
             });
         }
     });
-}
-
-export function* destroyResourceSuccess() {
-    yield takeEvery(actions.DESTROY_RESOURCE_SUCCESS, function*({ payload }) {});
-}
-
-export function* destroyResourceError() {
-    yield takeEvery(actions.DESTROY_RESOURCE_ERROR, function*() {});
 }
 
 export function* findResourceRequest() {
@@ -114,14 +98,6 @@ export function* findResourceRequest() {
     });
 }
 
-export function* findResourceSuccess() {
-    yield takeEvery(actions.FIND_RESOURCE_SUCCESS, function*({ payload }) {});
-}
-
-export function* findResourceError() {
-    yield takeEvery(actions.FIND_RESOURCE_ERROR, function*() {});
-}
-
 export function* getPaginatedResourcesRequest() {
     yield takeEvery(actions.GET_PAGINATED_RESOURCES_REQUEST, function*({ payload }) {
         // console.log('getPaginatedResources taken!', payload);
@@ -150,14 +126,6 @@ export function* getPaginatedResourcesRequest() {
             });
         }
     });
-}
-
-export function* getPaginatedResourcesSuccess() {
-    yield takeEvery(actions.GET_PAGINATED_RESOURCES_SUCCESS, function*({ payload }) {});
-}
-
-export function* getPaginatedResourcesError() {
-    yield takeEvery(actions.GET_PAGINATED_RESOURCES_ERROR, function*() {});
 }
 
 export function* updateResourceRequest() {
@@ -190,30 +158,12 @@ export function* updateResourceRequest() {
     });
 }
 
-export function* updateResourceSuccess() {
-    yield takeEvery(actions.UPDATE_RESOURCE_SUCCESS, function*({ payload }) {});
-}
-
-export function* updateResourceError() {
-    yield takeEvery(actions.UPDATE_RESOURCE_ERROR, function*() {});
-}
-
 export default function* rootSaga() {
     yield all([
         fork(createResourceRequest),
-        fork(createResourceSuccess),
-        fork(createResourceError),
         fork(destroyResourceRequest),
-        fork(destroyResourceSuccess),
-        fork(destroyResourceError),
         fork(findResourceRequest),
-        fork(findResourceSuccess),
-        fork(findResourceError),
         fork(getPaginatedResourcesRequest),
-        fork(getPaginatedResourcesSuccess),
-        fork(getPaginatedResourcesError),
         fork(updateResourceRequest),
-        fork(updateResourceSuccess),
-        fork(updateResourceError),
     ]);
 }

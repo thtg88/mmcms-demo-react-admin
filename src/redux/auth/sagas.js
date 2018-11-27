@@ -34,14 +34,6 @@ export function* getProfileRequest() {
     });
 }
 
-export function* getProfileSuccess() {
-    yield takeEvery(actions.GET_PROFILE_SUCCESS, function*({ payload }) {});
-}
-
-export function* getProfileError() {
-    yield takeEvery(actions.GET_PROFILE_ERROR, function*() {});
-}
-
 export function* loginRequest() {
     yield takeEvery(actions.LOGIN_REQUEST, function*({ payload }) {
         const { data } = payload;
@@ -74,14 +66,6 @@ export function* loginRequest() {
     });
 }
 
-export function* loginSuccess() {
-    yield takeEvery(actions.LOGIN_SUCCESS, function*({ payload }) {});
-}
-
-export function* loginError() {
-    yield takeEvery(actions.LOGIN_ERROR, function*() {});
-}
-
 export function* logoutRequest() {
     yield takeEvery(actions.LOGOUT_REQUEST, function*({ payload }) {
         const { data } = payload;
@@ -104,14 +88,6 @@ export function* logoutRequest() {
         }
 
     });
-}
-
-export function* logoutSuccess() {
-    yield takeEvery(actions.LOGOUT_SUCCESS, function*({ payload }) {});
-}
-
-export function* logoutError() {
-    yield takeEvery(actions.LOGOUT_ERROR, function*() {});
 }
 
 export function* registerRequest() {
@@ -148,14 +124,6 @@ export function* registerRequest() {
     });
 }
 
-export function* registerSuccess() {
-    yield takeEvery(actions.REGISTER_SUCCESS, function*({ payload }) {});
-}
-
-export function* registerError() {
-    yield takeEvery(actions.REGISTER_ERROR, function*() {});
-}
-
 export function* updateProfileRequest() {
     yield takeEvery(actions.UPDATE_PROFILE_REQUEST, function*({ payload }) {
         const { data } = payload;
@@ -190,30 +158,12 @@ export function* updateProfileRequest() {
     });
 }
 
-export function* updateProfileSuccess() {
-    yield takeEvery(actions.UPDATE_PROFILE_SUCCESS, function*({ payload }) {});
-}
-
-export function* updateProfileError() {
-    yield takeEvery(actions.UPDATE_PROFILE_ERROR, function*() {});
-}
-
 export default function* rootSaga() {
     yield all([
         fork(getProfileRequest),
-        fork(getProfileSuccess),
-        fork(getProfileError),
         fork(loginRequest),
-        fork(loginSuccess),
-        fork(loginError),
         fork(logoutRequest),
-        fork(logoutSuccess),
-        fork(logoutError),
         fork(registerRequest),
-        fork(registerSuccess),
-        fork(registerError),
         fork(updateProfileRequest),
-        fork(updateProfileSuccess),
-        fork(updateProfileError)
     ]);
 }
