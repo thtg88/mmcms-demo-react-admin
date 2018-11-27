@@ -64,7 +64,7 @@ export const isUnauthenticatedError = (error) => {
     Object.entries(error).forEach(([key, value]) => {
 
         if(key === 'unauthenticated') {
-            unauthenticated = true;
+            // unauthenticated = true;
             return false;
         }
     });

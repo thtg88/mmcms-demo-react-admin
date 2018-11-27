@@ -94,6 +94,29 @@ const reducer = (state = initial_state, action) => {
                 user: null,
                 token: null,
             };
+        case actions.REFRESH_TOKEN_REQUEST:
+            return {
+                ...state,
+                error: null,
+                logged_out: false,
+            };
+        case actions.REFRESH_TOKEN_SUCCESS: {
+            // Destructure object into user and the rest
+            // Which will be the payload
+            const { resource, ...token_payload } = action.payload;
+            return {
+                ...state,
+                error: null,
+                user: resource,
+                token: token_payload,
+            };
+        }
+        case actions.REFRESH_TOKEN_ERROR:
+            // console.log('dispatched error', action);
+            return {
+                ...state,
+                error: action.error,
+            };
         case actions.REGISTER_ERROR_RESET:
             return {
                 ...state,
@@ -106,7 +129,7 @@ const reducer = (state = initial_state, action) => {
                 logged_out: false,
                 registering: true
             };
-        case actions.REGISTER_SUCCESS:
+        case actions.REGISTER_SUCCESS: {
             // Destructure object into user and the rest
             // Which will be the payload
             const { resource, ...token_payload } = action.payload;
@@ -117,6 +140,7 @@ const reducer = (state = initial_state, action) => {
                 user: resource,
                 token: token_payload,
             };
+        }
         case actions.REGISTER_ERROR:
             // console.log('dispatched error', action);
             return {

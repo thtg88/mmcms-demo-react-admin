@@ -1,6 +1,13 @@
 import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
 import actions from './actions';
-import { getProfile, login, logout, register, updateProfile } from './helper';
+import {
+    getProfile,
+    login,
+    logout,
+    refreshToken,
+    register,
+    updateProfile,
+} from './helper';
 
 export function* getProfileRequest() {
     yield takeEvery(actions.GET_PROFILE_REQUEST, function*({ payload }) {
@@ -114,6 +121,48 @@ export function* logoutError() {
     yield takeEvery(actions.LOGOUT_ERROR, function*() {});
 }
 
+export function* refreshTokenRequest() {
+    yield takeEvery(actions.REFRESH_TOKEN_REQUEST, function*({ payload }) {
+        const { data } = payload;
+
+        // console.log('refreshToken taken!', payload);
+        // console.log('data', data);
+
+        try {
+            const result = yield call(refreshToken, data);
+
+            // console.log('refreshToken result: ', result);
+
+            if (result.access_token) {
+                yield put({
+                    type: actions.REFRESH_TOKEN_SUCCESS,
+                    payload: result
+                });
+            } else {
+                yield put({
+                    type: actions.REFRESH_TOKEN_ERROR,
+                    error: result.error || result.errors || result
+                });
+            }
+
+        } catch(err) {
+            // console.log('refreshToken error caught: ', err);
+            yield put({
+                type: actions.REFRESH_TOKEN_ERROR,
+                error: err
+            });
+        }
+    });
+}
+
+export function* refreshTokenSuccess() {
+    yield takeEvery(actions.REFRESH_TOKEN_SUCCESS, function*({ payload }) {});
+}
+
+export function* refreshTokenError() {
+    yield takeEvery(actions.REFRESH_TOKEN_ERROR, function*() {});
+}
+
 export function* registerRequest() {
     yield takeEvery(actions.REGISTER_REQUEST, function*({ payload }) {
         const { data } = payload;
@@ -209,6 +258,9 @@ export default function* rootSaga() {
         fork(logoutRequest),
         fork(logoutSuccess),
         fork(logoutError),
+        fork(refreshTokenRequest),
+        fork(refreshTokenSuccess),
+        fork(refreshTokenError),
         fork(registerRequest),
         fork(registerSuccess),
         fork(registerError),

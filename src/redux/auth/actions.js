@@ -14,6 +14,9 @@ export const LOGIN_ERROR = createActionName(reducerName, 'LOGIN_ERROR');
 export const LOGOUT_REQUEST = createActionName(reducerName, 'LOGOUT_REQUEST');
 export const LOGOUT_SUCCESS = createActionName(reducerName, 'LOGOUT_SUCCESS');
 export const LOGOUT_ERROR = createActionName(reducerName, 'LOGOUT_ERROR');
+export const REFRESH_TOKEN_REQUEST = createActionName(reducerName, 'REFRESH_TOKEN_REQUEST');
+export const REFRESH_TOKEN_SUCCESS = createActionName(reducerName, 'REFRESH_TOKEN_SUCCESS');
+export const REFRESH_TOKEN_ERROR = createActionName(reducerName, 'REFRESH_TOKEN_ERROR');
 export const REGISTER_ERROR_RESET = createActionName(reducerName, 'REGISTER_ERROR_RESET');
 export const REGISTER_REQUEST = createActionName(reducerName, 'REGISTER_REQUEST');
 export const REGISTER_SUCCESS = createActionName(reducerName, 'REGISTER_SUCCESS');
@@ -36,6 +39,9 @@ const actions = {
     LOGOUT_REQUEST,
     LOGOUT_SUCCESS,
     LOGOUT_ERROR,
+    REFRESH_TOKEN_REQUEST,
+    REFRESH_TOKEN_SUCCESS,
+    REFRESH_TOKEN_ERROR,
     REGISTER_ERROR_RESET,
     REGISTER_REQUEST,
     REGISTER_SUCCESS,
@@ -66,6 +72,11 @@ export const loggedOut = payload => ({
 
 export const logout = payload => ({
     type: actions.LOGOUT_REQUEST,
+    payload
+});
+
+export const refreshToken = payload => ({
+    type: actions.REFRESH_TOKEN_REQUEST,
     payload
 });
 

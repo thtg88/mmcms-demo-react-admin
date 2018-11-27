@@ -1,5 +1,6 @@
 import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
 import actions from './actions';
+import authActions from '../auth/actions';
 import {
     createResource,
     destroyResource,
@@ -134,6 +135,12 @@ export function* getPaginatedResourcesRequest() {
                 yield put({
                     type: actions.GET_PAGINATED_RESOURCES_SUCCESS,
                     payload: result
+                });
+            } else if (result.errors && result.errors.unauthenticated) {
+                console.log('unauthenticated');
+                yield put({
+                    type: authActions.REFRESH_TOKEN_REQUEST,
+                    payload,
                 });
             } else {
                 yield put({

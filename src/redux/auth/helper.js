@@ -10,6 +10,23 @@ export const login = async (data) => {
     .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
+export const refreshToken = async (data) => {
+    const { token_data } = data;
+    const { token } = token_data;
+    const { refresh_token } = token;
+    const refreshData = { refresh_token };
+
+    return await fetch(process.env.REACT_APP_API_BASE_URL+'/auth/token', {
+        method: 'POST',
+        headers: new Headers({
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }),
+        body: JSON.stringify(refreshData),
+    })
+    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+};
+
 export const register = async (data) => {
     return await fetch(process.env.REACT_APP_API_BASE_URL+'/auth/register', {
         method: 'POST',
