@@ -52,6 +52,8 @@ export class DefaultHeader extends Component {
             <>
                 <AppSidebarToggler className="d-lg-none" display="md" mobile />
                 <AppNavbarBrand
+                    tag={Link}
+                    to="/dashboard"
                     full={{ src: logo, width: 89, height: 25, alt: 'CoreUI Logo' }}
                     minimized={{ src: sygnet, width: 30, height: 30, alt: 'CoreUI Logo' }}
                 />

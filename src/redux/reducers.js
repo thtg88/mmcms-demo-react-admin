@@ -16,5 +16,4 @@ const registerDefaultReducers = () => {
     // console.log(reducerRegistry.getReducers());
 };
 
-
 export default registerDefaultReducers;

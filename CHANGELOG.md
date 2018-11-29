@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Changed
 - Upgrade to FontAwesome Icons v5
 
+## [0.15.5] - 2018-11-29
+### Added
+- Top logo link component
+
 ## [0.15.4] - 2018-11-27
 ### Removed
 - Unusued redux-saga
