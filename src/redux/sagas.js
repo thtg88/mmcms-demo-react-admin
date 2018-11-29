@@ -1,12 +1,6 @@
-import { all } from 'redux-saga/effects';
+import sagaRegistry from './sagaRegistry';
 import authSagas from './auth/sagas';
-import rolesSagas from './roles/sagas';
-import usersSagas from './users/sagas';
 
-export default function* rootSaga(getState) {
-    yield all([
-        authSagas(),
-        rolesSagas(),
-        usersSagas(),
-    ]);
-}
+export const registerDefaultSagas = () => {
+    sagaRegistry.register('auth', authSagas);
+};

@@ -2,16 +2,19 @@ import React from 'react';
 import IndexResource from '../IndexResource';
 import withListResource from '../withListResource';
 import reducerRegistry from '../../../redux/reducerRegistry';
+import sagaRegistry from '../../../redux/sagaRegistry';
 import {
     changePageResources,
     clearMetadataResources,
     getPaginatedResources,
     reducerName,
 } from '../../../redux/users/actions';
-import users from '../../../redux/users/reducers';
+import reducer from '../../../redux/users/reducers';
+import sagas from '../../../redux/users/sagas';
 import { columns, pageSize } from './tableConfig';
 
-reducerRegistry.register(reducerName, users);
+reducerRegistry.register(reducerName, reducer);
+sagaRegistry.register(reducerName, sagas);
 
 const resourcesName = 'Users';
 

@@ -1,11 +1,13 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
+import { all } from 'redux-saga/effects';
 import throttle from 'lodash/throttle';
 import { loadState, saveState } from './localStorage';
 import reducerRegistry from './reducerRegistry';
 import registerDefaultReducers from './reducers';
-import rootSaga from './sagas';
+import sagaRegistry from './sagaRegistry';
+import { registerDefaultSagas } from './sagas';
 
 export const configureStore = () => {
     const { REACT_APP_STATE_DRIVER } = process.env;
@@ -18,6 +20,7 @@ export const configureStore = () => {
     }
 
     registerDefaultReducers();
+    registerDefaultSagas();
 
     if(persistedState) {
         // We register additional reducers
@@ -64,9 +67,24 @@ export const configureStore = () => {
         store.replaceReducer(combineReducers(reducers));
     });
 
+    // We set an event listener for the saga registry
+    // So that whenever a new saga gets added
+    // We replace the sagas with the new ones
+    sagaRegistry.setChangeListener((sagas) => {
+        function* allSagas(getState) {
+            yield all(sagas);
+        }
+
+        sagaMiddleware.run(allSagas);
+    });
+
     console.log('initial state: ', store.getState());
 
-    sagaMiddleware.run(rootSaga);
+    function* allSagas(getState) {
+        yield all(sagaRegistry.getSagas());
+    }
+
+    sagaMiddleware.run(allSagas);
 
     return store;
 }

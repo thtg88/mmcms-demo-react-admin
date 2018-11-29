@@ -2,15 +2,18 @@ import React from 'react';
 import CreateResource from '../CreateResource';
 import withCreateResource from '../withCreateResource';
 import reducerRegistry from '../../../redux/reducerRegistry';
+import sagaRegistry from '../../../redux/sagaRegistry';
 import {
     clearMetadataResourceCreate,
     createResource,
     reducerName,
 } from '../../../redux/users/actions';
-import users from '../../../redux/users/reducers';
+import reducer from '../../../redux/users/reducers';
+import sagas from '../../../redux/users/sagas';
 import schema from '../../../redux/users/schema';
 
-reducerRegistry.register(reducerName, users);
+reducerRegistry.register(reducerName, reducer);
+sagaRegistry.register(reducerName, sagas);
 
 export const Create = ({
     creating_resource,

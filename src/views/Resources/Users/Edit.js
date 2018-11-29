@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import EditResource from '../EditResource';
 import withEditResource from '../withEditResource';
 import reducerRegistry from '../../../redux/reducerRegistry';
+import sagaRegistry from '../../../redux/sagaRegistry';
 import {
     clearMetadataResourceEdit,
     destroyResource,
@@ -11,11 +12,13 @@ import {
     reducerName,
     updateResource,
 } from '../../../redux/users/actions';
-import users from '../../../redux/users/reducers';
+import reducer from '../../../redux/users/reducers';
+import sagas from '../../../redux/users/sagas';
 import schema from '../../../redux/users/schema';
 import { pageSize } from './tableConfig';
 
-reducerRegistry.register(reducerName, users);
+reducerRegistry.register(reducerName, reducer);
+sagaRegistry.register(reducerName, sagas);
 
 const canDestroy = true;
 
