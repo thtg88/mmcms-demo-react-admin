@@ -1,25 +1,81 @@
-export const getFormResourceFromValues = (values, schema) => {
+export const getFormResourceFromValues = (values, schema, attributesToShow = []) => {
     if(!values) {
         return {};
     }
 
     const resource = Object.entries(values).reduce(
         (result, [key, value]) => {
+            // If I'm not showing the attribute,
+            // Skip the item (just progress with the result object)
+            if(attributesToShow.indexOf(key) === -1) {
+                return {
+                    ...result
+                };
+            }
+
+            // Disabled attribute
+            let disabled = false;
+            if(schema[key] && typeof schema[key].disabled !== 'undefined') {
+                disabled = schema[key].disabled;
+            } else if(key.length > 3 && key.indexOf('_at') === key.length - 3) {
+                disabled = true;
+            }
+
+            // Label text
+            const label = getSchemaValueFromKeyAndParameter(schema, key, 'label');
+
+            // Empty option text (for select inputs)
+            const empty_option = getSchemaValueFromKeyAndParameter(schema, key, 'empty_option');
+
+            // Values array of values and texts (for select inputs)
+            const values = getSchemaValueFromKeyAndParameter(schema, key, 'values');
+
+            // Form Feedback to show additional message below form input
+            const formText = getSchemaValueFromKeyAndParameter(schema, key, 'formText');
+
+            let data = {
+                type: getTypeFromKey(schema, key),
+                value: value,
+                errors: [],
+                rules: getValidationRulesFromKey(schema, key),
+                disabled: disabled
+            };
+            if(typeof label !== 'undefined') {
+                data.label = label;
+            }
+            if(typeof empty_option !== 'undefined') {
+                data.empty_option = empty_option;
+            }
+            if(typeof values !== 'undefined') {
+                data.values = values;
+            }
+            if(typeof formText !== 'undefined') {
+                data.formText = formText;
+            }
+
             return {
                 ...result,
                 [key]: {
-                    type: 'text',
-                    value: value,
-                    errors: [],
-                    rules: getValidationRulesFromKey(schema, key),
-                    disabled: key.length > 3 && key.indexOf('_at') === key.length -3 ? true : false
-                }
+                    ...data
+                },
             };
         },
         {}
     );
 
     return resource;
+};
+
+export const getSchemaValueFromKeyAndParameter = (schema, key, parameter) => {
+    return schema[key] && schema[key][parameter]
+        ? schema[key][parameter]
+        : undefined;
+};
+
+export const getTypeFromKey = (schema, key) => {
+    return schema[key] && schema[key].type
+        ? schema[key].type
+        : 'text';
 };
 
 export const getValidationRulesFromKey = (schema, key) => {
@@ -92,6 +148,16 @@ export const updateFormResourceFromErrors = (resource, errors) => {
     );
 
     return new_resource;
+};
+
+export const setResourceFieldAttributeValue = (schema, field, attribute, value) => {
+    return {
+        ...schema,
+        [field]: {
+            ...schema[field],
+            [attribute]: value
+        }
+    };
 };
 
 export const get = (target, field) => {

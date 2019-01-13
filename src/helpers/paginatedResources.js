@@ -45,3 +45,46 @@ export const updatePaginatedResourcesFromResource = (paginated_resources, new_re
 
     return new_resources;
 };
+
+/**
+ * Paginate a given array of resources,
+ * into an object with the page number as key,
+ * and an array of pageSize resources as a value.
+ */
+export const paginateResources = (resources, pageSize) => {
+    let page = 1;
+
+    if(resources.length === 0) {
+        return {
+            [page]: []
+        };
+    }
+
+    const paginatedResources = resources.reduce(
+        (
+            result,
+            resource
+        ) => {
+            if(result[page]) {
+                if(result[page].length >= pageSize) {
+                    page++;
+                }
+            }
+
+            if(!result[page]){
+                result[page] = [];
+            }
+
+            return {
+                ...result,
+                [page]: [
+                    ...result[page],
+                    resource,
+                ],
+            };
+        },
+        {}
+    );
+
+    return paginatedResources;
+};
