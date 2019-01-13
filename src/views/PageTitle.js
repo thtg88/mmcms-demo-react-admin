@@ -1,28 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Button, Col, Row } from 'reactstrap';
+import {
+    Button,
+    ButtonGroup,
+    Col,
+    Row,
+} from 'reactstrap';
 
 const PageTitle = ({
     actions,
     text,
+    wrap,
 }) => {
     // If there are no actions I will set the different width,
     // otherwise default to full width
-    let titleColProps = {
-        sm: 12
-    };
-    if(actions) {
-        titleColProps = {
-            lg: 10,
-            md: 9,
-            sm: 8
-        };
-    }
+    const titleClassName = actions && actions.length && !wrap
+        ? 'col-md-6 col-12'
+        : 'col-12';
+    const actionsClassName = actions
+        ? (
+            wrap
+                ? 'col-12'
+                : 'col-md-6 col-12'
+        )
+        : null;
 
     return (
         <Row>
-            <Col {...titleColProps}>
+            <Col className={titleClassName}>
                 <h1 className="page-title">
                     <span>{text}</span>
                 </h1>
@@ -30,37 +36,39 @@ const PageTitle = ({
             {
                 actions
                 ? (
-                    <Col lg={2} md={3} sm={4}>
-                        {
-                            actions.map((action, idx) => {
-                                if(action.type === 'button') {
-                                    return (
-                                        <PageTitleButton
-                                            key={idx}
-                                            className={action.className}
-                                            disabled={action.disabled}
-                                            iconClassName={action.iconClassName}
-                                            onClick={action.onClick}
-                                            title={action.title}
-                                        />
-                                    );
-                                }
+                    <Col className={actionsClassName}>
+                        <ButtonGroup className="d-flex">
+                            {
+                                actions.map((action, idx) => {
+                                    if(action.type === 'button') {
+                                        return (
+                                            <PageTitleButton
+                                                key={idx}
+                                                className={action.className}
+                                                disabled={action.disabled}
+                                                iconClassName={action.iconClassName}
+                                                onClick={action.onClick}
+                                                title={action.title}
+                                            />
+                                        );
+                                    }
 
-                                if(action.type === 'link') {
-                                    return (
-                                        <PageTitleLink
-                                            key={idx}
-                                            className={action.className}
-                                            href={action.href}
-                                            iconClassName={action.iconClassName}
-                                            title={action.title}
-                                        />
-                                    );
-                                }
+                                    if(action.type === 'link') {
+                                        return (
+                                            <PageTitleLink
+                                                key={idx}
+                                                className={action.className}
+                                                href={action.href}
+                                                iconClassName={action.iconClassName}
+                                                title={action.title}
+                                            />
+                                        );
+                                    }
 
-                                return null;
-                            })
-                        }
+                                    return null;
+                                })
+                            }
+                        </ButtonGroup>
                     </Col>
                 )
                 : null
@@ -72,6 +80,7 @@ const PageTitle = ({
 PageTitle.propTypes = {
     actions: PropTypes.array,
     text: PropTypes.string,
+    wrap: PropTypes.bool,
 };
 
 export const PageTitleButton = ({
