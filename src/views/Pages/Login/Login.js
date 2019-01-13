@@ -21,9 +21,9 @@ import { login, resetLoginError } from '../../../redux/auth/actions';
 
 export class Login extends Component {
     state = {
-        redirect_register: false,
         email: '',
-        password: ''
+        password: '',
+        redirect_register: false,
     };
 
     constructor(props) {
@@ -41,7 +41,7 @@ export class Login extends Component {
         }
 
         this.setState({
-            redirect_register: true
+            redirect_register: true,
         });
     }
 
@@ -52,8 +52,6 @@ export class Login extends Component {
         const { email, password } = this.state;
         const data = { email, password };
 
-        // console.log(data);
-
         if(errors.length > 0) {
             resetLoginError();
         }
@@ -63,14 +61,14 @@ export class Login extends Component {
 
     updateInputValue(evt) {
         const { resetLoginError, errors } = this.props;
+        const { target } = evt;
 
         if(errors.length > 0) {
             resetLoginError();
-            // console.log('reset error');
         }
 
         this.setState({
-            [evt.target.name]: evt.target.value,
+            [target.name]: target.value,
         });
     }
 
@@ -82,18 +80,16 @@ export class Login extends Component {
             logging_in
         } = this.props;
         const { redirect_register } = this.state;
+        const loginButtonIconClassName = logging_in === true
+            ? 'fa fa-spinner fa-spin'
+            : 'fa fa-sign-in';
 
         if(redirect_register === true) {
-            return <Redirect to="/register" />
+            return <Redirect to="/register" />;
         }
 
         if(logged_in === true) {
-            return <Redirect to="/" />
-        }
-
-        let loginButtonIconClassName = 'fa fa-sign-in';
-        if(typeof logging_in !== 'undefined' && logging_in === true) {
-            loginButtonIconClassName = 'fa fa-spinner fa-spin';
+            return <Redirect to="/" />;
         }
 
         return (
@@ -157,7 +153,9 @@ export class Login extends Component {
                                                     color="link"
                                                     className="px-0"
                                                     onClick={() => this.redirectRegister()}
-                                                >Sign up</Button>
+                                                >
+                                                    Sign up
+                                                </Button>
                                             </Col>
                                         </Row>
                                     </Form>
@@ -176,13 +174,13 @@ const mapStateToProps = state => {
         error,
         logged_out,
         logging_in,
-        token
+        token,
     } = state.auth;
     const errors = getApiErrorMessages(error);
 
     return {
-        errors: errors,
-        logged_in: typeof token !== 'undefined' && token !== null && typeof token.access_token !== 'undefined',
+        errors,
+        logged_in: token && token.access_token,
         logged_out: logged_out === true,
         logging_in: logging_in === true,
     };

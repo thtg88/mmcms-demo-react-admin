@@ -24,55 +24,53 @@ const ResourceForm = ({
         <Form onSubmit={onSubmit}>
             {
                 resource
-                 ? Object.entries(resource).map(([name, params], idx) => {
-                    const disabled = params.disabled
-                        ? params.disabled
-                        : false;
-                    const label = params.label
-                        ? params.label
-                        : name.charAt(0).toUpperCase()+name.substr(1).replace('_', ' ');
-                    const placeholder = params.placeholder
-                        ? params.placeholder
-                        : `Enter the ${label}`;
-                    const type = params.type
-                        ? params.type
-                        : "text";
+                    ? Object.entries(resource).map(([name, params], idx) => {
+                        const disabled = params.disabled
+                            ? params.disabled
+                            : false;
+                        const label = params.label
+                            ? params.label
+                            : name.charAt(0).toUpperCase()+name.substr(1).replace('_', ' ');
+                        const placeholder = params.placeholder
+                            ? params.placeholder
+                            : `Enter the ${label}`;
+                        const type = params.type
+                            ? params.type
+                            : 'text';
 
-                    if(
-                        name === 'id'
-                        || name.indexOf('_id') === name.length - 3
-                        || typeof params.value === 'object'
-                    ) {
-                        // TODO we skip momentarily ids as we do not have
-                        // a handler for selects yet
-                        // We also skip objects as we do not have any way of rendering them
+                        if(
+                            name === 'id'
+                            || name.indexOf('_id') === name.length - 3
+                            || typeof params.value === 'object'
+                        ) {
+                            // TODO we skip momentarily ids as we do not have
+                            // a handler for selects yet
+                            // We also skip objects as we do not have any way of rendering them
+                            return null;
+                        }
+
                         return (
-                            null
+                            <FormGroup key={name}>
+                                <Label htmlFor={name}>{label}</Label>
+                                <Input
+                                    type={type}
+                                    id={name}
+                                    name={name}
+                                    value={params.value}
+                                    disabled={disabled}
+                                    placeholder={placeholder}
+                                    onChange={onInputChange}
+                                    invalid={params.errors.length > 0}
+                                />
+                                {
+                                    params.errors.length
+                                    ? <FormFeedback>{params.errors.join('. ')}</FormFeedback>
+                                    : null
+                                }
+                            </FormGroup>
                         );
-                    }
-
-                    return (
-                        <FormGroup key={name}>
-                            <Label htmlFor={name}>{label}</Label>
-                            <Input
-                                type={type}
-                                id={name}
-                                name={name}
-                                value={params.value}
-                                disabled={disabled}
-                                placeholder={placeholder}
-                                onChange={onInputChange}
-                                invalid={params.errors.length > 0}
-                            />
-                            {
-                                params.errors.length
-                                ? <FormFeedback>{params.errors.join('. ')}</FormFeedback>
-                                : null
-                            }
-                        </FormGroup>
-                    );
-                })
-                : null
+                    })
+                    : null
             }
             <Button
                 type="submit"

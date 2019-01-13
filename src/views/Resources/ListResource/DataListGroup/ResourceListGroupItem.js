@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Col, ListGroupItem, Row } from 'reactstrap';
+import { get } from '../../../../helpers/formResources';
 
 const ResourceListGroupItem = ({
     columns,
     entity,
     history,
     keyField,
-    urlBuilder
+    urlBuilder,
 }) => (
     <ListGroupItem tag="button" action onClick={() => history.push(urlBuilder(entity))}>
         <Row>
@@ -16,20 +17,27 @@ const ResourceListGroupItem = ({
             </Col>
         </Row>
         <Row>
-            {columns.map((column, idx) => {
-                const content = get(entity, column.dataField);
+            {
+                columns.map((column, idx) => {
+                    const {
+                        className,
+                        dataField,
+                        text,
+                    } = column;
+                    const content = get(entity, dataField);
 
-                if(column.dataField === 'id') {
-                    return null;
-                }
+                    if(dataField === 'id') {
+                        return null;
+                    }
 
-                return (
-                    <Col className={column.className} key={'entity_'+entity[keyField]+'_'+column.dataField}>
-                        <strong>{`${column.text}: `}</strong>
-                        {content}
-                    </Col>
-                );
-            })}
+                    return (
+                        <Col className={className} key={'entity_'+entity[keyField]+'_'+dataField}>
+                            <strong>{`${text}: `}</strong>
+                            {content}
+                        </Col>
+                    );
+                })
+            }
         </Row>
     </ListGroupItem>
 );
@@ -37,25 +45,9 @@ const ResourceListGroupItem = ({
 ResourceListGroupItem.propTypes = {
     columns: PropTypes.array,
     entity: PropTypes.object,
+    history: PropTypes.object,
     keyField: PropTypes.string,
-    urlBuilder: PropTypes.func
+    urlBuilder: PropTypes.func,
 };
 
 export default ResourceListGroupItem;
-
-const get = (target, field) => {
-    var pathArray = splitNested(field);
-    var result = void 0;
-
-    try {
-        result = pathArray.reduce(function (curr, path) {
-            return curr[path];
-        }, target);
-    } catch (e) {}
-
-    return result ? result : 'N/A';
-};
-
-const splitNested = (str) => {
-    return [str].join('.').replace(/\[/g, '.').replace(/\]/g, '').split('.');
-};

@@ -7,11 +7,8 @@ import {
 } from 'reactstrap';
 
 const ApiErrorCard = ({ errors }) => {
-
-    if(typeof errors === 'undefined' || errors === null || errors.length === 0) {
-        return (
-            null
-        );
+    if(!errors || errors.length === 0) {
+        return null;
     }
 
     return (
@@ -22,16 +19,14 @@ const ApiErrorCard = ({ errors }) => {
                 There were some problem with your request
             </CardHeader>
             <CardBody>
-                {errors.map((error, idx) => (
-                    <div key={idx}>{error}</div>
-                ))}
+                {errors.map((error, idx) => <div key={idx}>{error}</div>)}
             </CardBody>
         </Card>
     );
 }
 
 ApiErrorCard.propTypes = {
-    columns: PropTypes.arrayOf(PropTypes.string)
+    columns: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default ApiErrorCard;

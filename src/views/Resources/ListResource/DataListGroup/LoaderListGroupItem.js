@@ -13,9 +13,7 @@ const LoaderListGroupItem = ({
 
         return listAmount.map((value, idx) => (
             <ListGroupItem key={idx} tag="button" action onClick={() => {}}>
-                <PlaceholderShimmerLoader
-                    columns={columns}
-                />
+                <PlaceholderShimmerLoader columns={columns} />
             </ListGroupItem>
         ));
     }

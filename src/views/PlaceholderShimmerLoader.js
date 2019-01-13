@@ -13,27 +13,27 @@ const PlaceholderShimmerLoader = ({ columns }) => {
                 </Col>
             </Row>
             <Row className="placeholder-shimmer-loader-row">
-                {columns.map((column, colIdx) => {
-                    if(column.dataField === 'id') {
-                        return null;
-                    }
+                {
+                    columns.map((column, colIdx) => {
+                        const { className, dataField } = column;
+                        const columnClassName = colIdx === lastColumnIdx
+                            ? 'col-4'
+                            : className;
 
-                    let columnClassName;
-                    if(colIdx === lastColumnIdx) {
-                        columnClassName = 'col-4';
-                    } else {
-                        columnClassName = column.className;
-                    }
+                        if(dataField === 'id') {
+                            return null;
+                        }
 
-                    return (
-                        <Col key={colIdx} className={columnClassName}>
-                            <div
-                                className="animated-background"
-                                style={{height: '14px'}}
-                            ></div>
-                        </Col>
-                    );
-                })}
+                        return (
+                            <Col key={colIdx} className={columnClassName}>
+                                <div
+                                    className="animated-background"
+                                    style={{height: '14px'}}
+                                ></div>
+                            </Col>
+                        );
+                    })
+                }
             </Row>
         </>
     );

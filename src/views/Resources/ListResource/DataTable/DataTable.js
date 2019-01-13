@@ -22,10 +22,8 @@ const DataTable = ({
     searchButtonDisabled,
     searchButtonIconClassName,
     total,
-    urlBuilder
+    urlBuilder,
 }) => {
-    // console.log(query);
-
     return (
         <>
             <SearchBar
@@ -38,39 +36,43 @@ const DataTable = ({
             <Table responsive hover={hover}>
                 <thead>
                     <tr className="table-secondary">
-                        {columns.map((column, index) => <th key={"header_"+index} scope="col">{column.text}</th>)}
+                        {columns.map((column, index) => <th key={`header_${index}`} scope="col">{column.text}</th>)}
                     </tr>
                 </thead>
                 <tbody>
-                    {loading
-                        ? (
-                            <LoaderRow
-                                colSpan={columns.length}
-                                type="spinner"
-                            />
-                        )
-                        : data.length > 0
-                            ? data.map((entity, index) => (
-                                <Row
-                                    key={entity[keyField]}
-                                    columns={columns}
-                                    keyField={keyField}
-                                    entity={entity}
-                                    urlBuilder={urlBuilder}
+                    {
+                        loading
+                            ? (
+                                <LoaderRow
+                                    colSpan={columns.length}
+                                    type="spinner"
                                 />
-                            ))
-                            : (<EmptyRow colSpan={columns.length} />)
+                            )
+                            : (
+                                data.length > 0
+                                    ? data.map((entity, index) => (
+                                        <Row
+                                            key={entity[keyField]}
+                                            columns={columns}
+                                            keyField={keyField}
+                                            entity={entity}
+                                            urlBuilder={urlBuilder}
+                                        />
+                                    ))
+                                    : <EmptyRow colSpan={columns.length} />
+                            )
                     }
                 </tbody>
             </Table>
-            {loading
-                ? null
-                : <Pagination
-                    page={page}
-                    total={total}
-                    pageSize={pageSize}
-                    history={history}
-                />
+            {
+                loading
+                    ? null
+                    : <Pagination
+                        page={page}
+                        total={total}
+                        pageSize={pageSize}
+                        history={history}
+                    />
             }
         </>
     )
@@ -83,8 +85,13 @@ DataTable.propTypes = {
     hover: PropTypes.bool,
     keyField: PropTypes.string,
     loading: PropTypes.bool,
+    onSearchButtonClick: PropTypes.func,
+    onSearchInputChange: PropTypes.func,
     page: PropTypes.number,
     pageSize: PropTypes.number,
+    query: PropTypes.string,
+    searchButtonDisabled: PropTypes.bool,
+    searchButtonIconClassName: PropTypes.string,
     total: PropTypes.number,
     urlBuilder: PropTypes.func
 };

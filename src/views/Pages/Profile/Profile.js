@@ -35,7 +35,7 @@ export class Profile extends Component {
         getting_profile: false,
         profile: null,
         profile_unchanged: true,
-        updating_profile: false
+        updating_profile: false,
     };
 
     constructor(props) {
@@ -46,7 +46,10 @@ export class Profile extends Component {
     }
 
     updateInputValue(evt) {
-        if(this.state.profile_unchanged === true) {
+        const { profile, profile_unchanged } = this.state;
+        const { target } = evt;
+
+        if(profile_unchanged === true) {
             this.setState({
                 profile_unchanged: false,
             });
@@ -54,10 +57,10 @@ export class Profile extends Component {
 
         this.setState({
             profile: {
-                ...this.state.profile,
-                [evt.target.name]: {
-                    ...this.state.profile[evt.target.name],
-                    value: evt.target.value
+                ...profile,
+                [target.name]: {
+                    ...profile[target.name],
+                    value: target.value
                 },
             }
         });
@@ -72,12 +75,12 @@ export class Profile extends Component {
         const validationSchema = getValidationSchemaFromFormResource(profile);
         const data = {
             token,
-            ...values
+            ...values,
         };
 
         // Reset errors
         this.setState({
-            profile: updateFormResourceFromErrors(profile, {inner:[]})
+            profile: updateFormResourceFromErrors(profile, {inner:[]}),
         });
 
         await yup.object(validationSchema)
@@ -90,7 +93,7 @@ export class Profile extends Component {
                 // Update profile
 
                 this.setState({
-                    updating_profile: true
+                    updating_profile: true,
                 });
 
                 updateProfile({ data });
@@ -99,7 +102,7 @@ export class Profile extends Component {
                 // If validation does not passes
                 // Set errors in the form
                 this.setState({
-                    profile: updateFormResourceFromErrors(profile, errors)
+                    profile: updateFormResourceFromErrors(profile, errors),
                 });
             });
     }
@@ -108,10 +111,8 @@ export class Profile extends Component {
         const {
             getProfile,
             profile,
-            token
+            token,
         } = this.props;
-
-        // console.log(profile);
 
         // If profile is already in global state
         // Avoid re-fetching
@@ -119,13 +120,15 @@ export class Profile extends Component {
             const data = { token };
 
             this.setState({
-                getting_profile: true
+                getting_profile: true,
             });
 
             getProfile({ data });
 
         } else {
-            this.setState({ profile: getFormResourceFromValues(profile, schema) });
+            this.setState({
+                profile: getFormResourceFromValues(profile, schema),
+            });
         }
     }
 
@@ -135,11 +138,9 @@ export class Profile extends Component {
             loggedOut,
             profile,
             unauthenticated,
-            updated_profile
+            updated_profile,
         } = this.props;
         const { getting_profile, updating_profile } = this.state;
-
-        // console.log('prevProps', prevProps);
 
         // if unauthenticated redirect to login
         if(prevProps.unauthenticated === false && unauthenticated === true) {
@@ -156,7 +157,7 @@ export class Profile extends Component {
         ) {
             this.setState({
                 getting_profile: false,
-                updating_profile: false
+                updating_profile: false,
             });
         }
 
@@ -170,7 +171,7 @@ export class Profile extends Component {
         ) {
             this.setState({
                 getting_profile: false,
-                updating_profile: false
+                updating_profile: false,
             });
         }
 
@@ -185,7 +186,7 @@ export class Profile extends Component {
             this.setState({
                 profile: getFormResourceFromValues(profile, schema),
                 getting_profile: false,
-                updating_profile: false
+                updating_profile: false,
             });
         }
 
@@ -199,9 +200,10 @@ export class Profile extends Component {
             apiResourceUpdateSuccessNotification({
                 resourceDisplayName: 'Profile'
             });
+
             this.setState({
                 getting_profile: false,
-                updating_profile: false
+                updating_profile: false,
             });
         }
     }
@@ -220,18 +222,14 @@ export class Profile extends Component {
             getting_profile,
             profile,
             profile_unchanged,
-            updating_profile
+            updating_profile,
         } = this.state;
-
-        // console.log(this.state);
-        // console.log(this.props);
-
-        let updateButtonIconClassName = "fa fa-save";
-        if(updating_profile === true) {
-            updateButtonIconClassName = "fa fa-spinner fa-spin";
-        }
-
-        const profileTitle = getting_profile ? 'Loading...' : 'Edit Profile';
+        const updateButtonIconClassName = updating_profile === true
+            ? 'fa fa-spinner fa-spin'
+            : 'fa fa-save';
+        const profileTitle = getting_profile
+            ? 'Loading...'
+            : 'Edit Profile';
 
         return (
             <div className="animated fadeIn">
@@ -253,30 +251,32 @@ export class Profile extends Component {
                         && getting_profile !== true
                     )
                     ? null
-                    : <>
-                        <PageTitle text={profileTitle} />
-                        <Row>
-                            <Col md={12}>
-                                <Card className="card-accent-warning">
-                                    <CardBody>
-                                    {
-                                        getting_profile
-                                            ? <SpinnerLoader />
-                                            : <ResourceForm
-                                                onInputChange={this.updateInputValue}
-                                                onSubmit={this.handleUpdateProfile}
-                                                resource={profile}
-                                                submitButtonClassName="warning"
-                                                submitButtonDisabled={profile_unchanged || updating_profile}
-                                                submitButtonIconClassName={updateButtonIconClassName}
-                                                submitButtonText="Update"
-                                            />
-                                        }
-                                    </CardBody>
-                                </Card>
-                            </Col>
-                        </Row>
-                    </>
+                    : (
+                        <>
+                            <PageTitle text={profileTitle} />
+                            <Row>
+                                <Col md={12}>
+                                    <Card className="card-accent-warning">
+                                        <CardBody>
+                                        {
+                                            getting_profile
+                                                ? <SpinnerLoader />
+                                                : <ResourceForm
+                                                    onInputChange={this.updateInputValue}
+                                                    onSubmit={this.handleUpdateProfile}
+                                                    resource={profile}
+                                                    submitButtonClassName="warning"
+                                                    submitButtonDisabled={profile_unchanged || updating_profile}
+                                                    submitButtonIconClassName={updateButtonIconClassName}
+                                                    submitButtonText="Update"
+                                                />
+                                            }
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+                            </Row>
+                        </>
+                    )
                 }
             </div>
         );
@@ -288,25 +288,25 @@ const mapStateToProps = state => {
         error,
         token,
         updated_profile,
-        user
+        user,
     } = state.auth;
     const errors = getApiErrorMessages(error);
     const unauthenticated = isUnauthenticatedError(error);
 
     return {
-        errors: errors,
+        errors,
+        token,
+        unauthenticated,
+        updated_profile,
         profile: typeof user === 'undefined' ? null : user,
-        token: token,
-        unauthenticated: unauthenticated,
-        updated_profile: updated_profile
-    }
+    };
 };
 
 const mapDispatchToProps = {
     clearMetadataProfile,
     getProfile,
     loggedOut,
-    updateProfile
+    updateProfile,
 };
 
 export default connect(

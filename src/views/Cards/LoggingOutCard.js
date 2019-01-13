@@ -3,11 +3,8 @@ import PropTypes from 'prop-types';
 import { Card, CardBody } from 'reactstrap';
 
 const LoggingOutCard = ({ loggingOut }) => {
-
     if(loggingOut !== true) {
-        return (
-            null
-        );
+        return null;
     }
 
     return (
@@ -22,7 +19,7 @@ const LoggingOutCard = ({ loggingOut }) => {
 };
 
 LoggingOutCard.propTypes = {
-    loggingOut: PropTypes.bool
+    loggingOut: PropTypes.bool,
 };
 
 export default LoggingOutCard;

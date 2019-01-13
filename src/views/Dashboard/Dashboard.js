@@ -24,10 +24,10 @@ import Widget03 from '../../views/Widgets/Widget03'
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
 
-const brandPrimary = getStyle('--primary')
-const brandSuccess = getStyle('--success')
-const brandInfo = getStyle('--info')
-const brandDanger = getStyle('--danger')
+const brandPrimary = getStyle('--primary');
+const brandSuccess = getStyle('--success');
+const brandInfo = getStyle('--info');
+const brandDanger = getStyle('--danger');
 
 // Card Chart 1
 const cardChartData1 = {
@@ -45,7 +45,7 @@ const cardChartData1 = {
 const cardChartOpts1 = {
     tooltips: {
         enabled: false,
-        custom: CustomTooltips
+        custom: CustomTooltips,
     },
     maintainAspectRatio: false,
     legend: {
@@ -62,8 +62,7 @@ const cardChartOpts1 = {
                     fontSize: 2,
                     fontColor: 'transparent',
                 },
-
-            }
+            },
         ],
         yAxes: [
             {
@@ -71,9 +70,9 @@ const cardChartOpts1 = {
                 ticks: {
                     display: false,
                     min: Math.min.apply(Math, cardChartData1.datasets[0].data) - 5,
-                    max: Math.max.apply(Math, cardChartData1.datasets[0].data) + 5,
+                    max: Math.max.apply(Math, cardChartData1.datasets[0].data)+5,
                 },
-            }
+            },
         ],
     },
     elements: {
@@ -104,7 +103,7 @@ const cardChartData2 = {
 const cardChartOpts2 = {
     tooltips: {
         enabled: false,
-        custom: CustomTooltips
+        custom: CustomTooltips,
     },
     maintainAspectRatio: false,
     legend: {
@@ -121,7 +120,7 @@ const cardChartOpts2 = {
                     fontSize: 2,
                     fontColor: 'transparent',
                 },
-            }
+            },
         ],
         yAxes: [
             {
@@ -129,9 +128,9 @@ const cardChartOpts2 = {
                 ticks: {
                     display: false,
                     min: Math.min.apply(Math, cardChartData2.datasets[0].data) - 5,
-                    max: Math.max.apply(Math, cardChartData2.datasets[0].data) + 5,
+                    max: Math.max.apply(Math, cardChartData2.datasets[0].data)+5,
                 },
-            }
+            },
         ],
     },
     elements: {
@@ -163,7 +162,7 @@ const cardChartData3 = {
 const cardChartOpts3 = {
     tooltips: {
         enabled: false,
-        custom: CustomTooltips
+        custom: CustomTooltips,
     },
     maintainAspectRatio: false,
     legend: {
@@ -173,12 +172,12 @@ const cardChartOpts3 = {
         xAxes: [
             {
                 display: false,
-            }
+            },
         ],
         yAxes: [
             {
                 display: false,
-            }
+            },
         ],
     },
     elements: {
@@ -209,7 +208,7 @@ const cardChartData4 = {
 const cardChartOpts4 = {
     tooltips: {
         enabled: false,
-        custom: CustomTooltips
+        custom: CustomTooltips,
     },
     maintainAspectRatio: false,
     legend: {
@@ -220,12 +219,12 @@ const cardChartOpts4 = {
             {
                 display: false,
                 barPercentage: 0.6,
-            }
+            },
         ],
         yAxes: [
             {
                 display: false,
-            }
+            },
         ],
     },
 };
@@ -260,7 +259,7 @@ const makeSocialBoxData = (dataSetNo) => {
 const socialChartOpts = {
     tooltips: {
         enabled: false,
-        custom: CustomTooltips
+        custom: CustomTooltips,
     },
     responsive: true,
     maintainAspectRatio: false,
@@ -271,12 +270,12 @@ const socialChartOpts = {
         xAxes: [
             {
                 display: false,
-            }
+            },
         ],
         yAxes: [
             {
                 display: false,
-            }
+            },
         ],
     },
     elements: {
@@ -293,7 +292,7 @@ const socialChartOpts = {
 
 //Random Numbers
 function random(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+    return Math.floor(Math.random() * (max - min+1)+min);
 }
 
 var elements = 27;
@@ -347,9 +346,9 @@ const mainChartOpts = {
         position: 'nearest',
         callbacks: {
             labelColor: function(tooltipItem, chart) {
-                return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor }
-            }
-        }
+                return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor };
+            },
+        },
     },
     maintainAspectRatio: false,
     legend: {
@@ -361,7 +360,7 @@ const mainChartOpts = {
                 gridLines: {
                     drawOnChartArea: false,
                 },
-            }
+            },
         ],
         yAxes: [
             {
@@ -371,7 +370,7 @@ const mainChartOpts = {
                     stepSize: Math.ceil(250 / 5),
                     max: 250,
                 },
-            }
+            },
         ],
     },
     elements: {
@@ -385,16 +384,16 @@ const mainChartOpts = {
 };
 
 class Dashboard extends Component {
+    state = {
+        dropdownOpen: false,
+        radioSelected: 2,
+    };
+
     constructor(props) {
         super(props);
 
         this.toggle = this.toggle.bind(this);
         this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
-
-        this.state = {
-            dropdownOpen: false,
-            radioSelected: 2,
-        };
     }
 
     toggle() {
@@ -410,7 +409,16 @@ class Dashboard extends Component {
     }
 
     render() {
-        if(this.props.location.pathname === '/') {
+        const { location } = this.props;
+        const {
+            card1,
+            card2,
+            card3,
+            card4,
+            radioSelected,
+        } = this.state;
+
+        if(location.pathname === '/') {
             return <Redirect to="/dashboard" />;
         }
 
@@ -421,7 +429,7 @@ class Dashboard extends Component {
                         <Card className="text-white bg-info">
                             <CardBody className="pb-0">
                                 <ButtonGroup className="float-right">
-                                    <ButtonDropdown id='card1' isOpen={this.state.card1} toggle={() => { this.setState({ card1: !this.state.card1 }); }}>
+                                    <ButtonDropdown id="card1" isOpen={card1} toggle={() => { this.setState({ card1: !card1 }); }}>
                                         <DropdownToggle caret className="p-0" color="transparent">
                                             <i className="fa fa-cog"></i>
                                         </DropdownToggle>
@@ -437,16 +445,19 @@ class Dashboard extends Component {
                                 <div>Members online</div>
                             </CardBody>
                             <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
-                                <Line data={cardChartData2} options={cardChartOpts2} height={70} />
+                                <Line
+                                    data={cardChartData2}
+                                    options={cardChartOpts2}
+                                    height={70}
+                                />
                             </div>
                         </Card>
                     </Col>
-
                     <Col xs="12" sm="6" lg="3">
                         <Card className="text-white bg-primary">
                             <CardBody className="pb-0">
                                 <ButtonGroup className="float-right">
-                                    <Dropdown id='card2' isOpen={this.state.card2} toggle={() => { this.setState({ card2: !this.state.card2 }); }}>
+                                    <Dropdown id="card2" isOpen={card2} toggle={() => { this.setState({ card2: !card2 }); }}>
                                         <DropdownToggle className="p-0" color="transparent">
                                             <i className="fa fa-map-marker"></i>
                                         </DropdownToggle>
@@ -461,16 +472,19 @@ class Dashboard extends Component {
                                 <div>Members online</div>
                             </CardBody>
                             <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
-                                <Line data={cardChartData1} options={cardChartOpts1} height={70} />
+                                <Line
+                                    data={cardChartData1}
+                                    options={cardChartOpts1}
+                                    height={70}
+                                />
                             </div>
                         </Card>
                     </Col>
-
                     <Col xs="12" sm="6" lg="3">
                         <Card className="text-white bg-warning">
                             <CardBody className="pb-0">
                                 <ButtonGroup className="float-right">
-                                    <Dropdown id='card3' isOpen={this.state.card3} toggle={() => { this.setState({ card3: !this.state.card3 }); }}>
+                                    <Dropdown id="card3" isOpen={card3} toggle={() => { this.setState({ card3: !card3 }); }}>
                                         <DropdownToggle caret className="p-0" color="transparent">
                                             <i className="fa fa-cog"></i>
                                         </DropdownToggle>
@@ -485,16 +499,19 @@ class Dashboard extends Component {
                                 <div>Members online</div>
                             </CardBody>
                             <div className="chart-wrapper" style={{ height: '70px' }}>
-                                <Line data={cardChartData3} options={cardChartOpts3} height={70} />
+                                <Line
+                                    data={cardChartData3}
+                                    options={cardChartOpts3}
+                                    height={70}
+                                />
                             </div>
                         </Card>
                     </Col>
-
                     <Col xs="12" sm="6" lg="3">
                         <Card className="text-white bg-danger">
                             <CardBody className="pb-0">
                                 <ButtonGroup className="float-right">
-                                    <ButtonDropdown id='card4' isOpen={this.state.card4} toggle={() => { this.setState({ card4: !this.state.card4 }); }}>
+                                    <ButtonDropdown id="card4" isOpen={card4} toggle={() => { this.setState({ card4: !card4 }); }}>
                                         <DropdownToggle caret className="p-0" color="transparent">
                                             <i className="fa fa-cog"></i>
                                         </DropdownToggle>
@@ -509,12 +526,15 @@ class Dashboard extends Component {
                                 <div>Members online</div>
                             </CardBody>
                             <div className="chart-wrapper mx-3" style={{ height: '70px' }}>
-                                <Bar data={cardChartData4} options={cardChartOpts4} height={70} />
+                                <Bar
+                                    data={cardChartData4}
+                                    options={cardChartOpts4}
+                                    height={70}
+                                />
                             </div>
                         </Card>
                     </Col>
                 </Row>
-
                 <Row>
                     <Col>
                         <Card>
@@ -525,18 +545,42 @@ class Dashboard extends Component {
                                         <div className="small text-muted">November 2015</div>
                                     </Col>
                                     <Col sm="7" className="d-none d-sm-inline-block">
-                                        <Button color="primary" className="float-right"><i className="fa fa-cloud-download"></i></Button>
+                                        <Button color="primary" className="float-right">
+                                            <i className="fa fa-cloud-download"></i>
+                                        </Button>
                                         <ButtonToolbar className="float-right" aria-label="Toolbar with button groups">
                                             <ButtonGroup className="mr-3" aria-label="First group">
-                                                <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(1)} active={this.state.radioSelected === 1}>Day</Button>
-                                                <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(2)} active={this.state.radioSelected === 2}>Month</Button>
-                                                <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(3)} active={this.state.radioSelected === 3}>Year</Button>
+                                                <Button
+                                                    color="outline-secondary"
+                                                    onClick={() => this.onRadioBtnClick(1)}
+                                                    active={radioSelected === 1}
+                                                >
+                                                    Day
+                                                </Button>
+                                                <Button
+                                                    color="outline-secondary"
+                                                    onClick={() => this.onRadioBtnClick(2)}
+                                                    active={radioSelected === 2}
+                                                >
+                                                    Month
+                                                </Button>
+                                                <Button
+                                                    color="outline-secondary"
+                                                    onClick={() => this.onRadioBtnClick(3)}
+                                                    active={radioSelected === 3}
+                                                >
+                                                    Year
+                                                </Button>
                                             </ButtonGroup>
                                         </ButtonToolbar>
                                     </Col>
                                 </Row>
-                                <div className="chart-wrapper" style={{ height: 300 + 'px', marginTop: 40 + 'px' }}>
-                                    <Line data={mainChart} options={mainChartOpts} height={300} />
+                                <div className="chart-wrapper" style={{ height: 300+'px', marginTop: 40+'px' }}>
+                                    <Line
+                                        data={mainChart}
+                                        options={mainChartOpts}
+                                        height={300}
+                                    />
                                 </div>
                             </CardBody>
                             <CardFooter>
@@ -544,49 +588,75 @@ class Dashboard extends Component {
                                     <Col sm={12} md className="mb-sm-2 mb-0">
                                         <div className="text-muted">Visits</div>
                                         <strong>29.703 Users (40%)</strong>
-                                        <Progress className="progress-xs mt-2" color="success" value="40" />
+                                        <Progress
+                                            className="progress-xs mt-2"
+                                            color="success"
+                                            value="40"
+                                        />
                                     </Col>
                                     <Col sm={12} md className="mb-sm-2 mb-0 d-md-down-none">
                                         <div className="text-muted">Unique</div>
                                         <strong>24.093 Users (20%)</strong>
-                                        <Progress className="progress-xs mt-2" color="info" value="20" />
+                                        <Progress
+                                            className="progress-xs mt-2"
+                                            color="info"
+                                            value="20"
+                                        />
                                     </Col>
                                     <Col sm={12} md className="mb-sm-2 mb-0">
                                         <div className="text-muted">Pageviews</div>
                                         <strong>78.706 Views (60%)</strong>
-                                        <Progress className="progress-xs mt-2" color="warning" value="60" />
+                                        <Progress
+                                            className="progress-xs mt-2"
+                                            color="warning"
+                                            value="60"
+                                        />
                                     </Col>
                                     <Col sm={12} md className="mb-sm-2 mb-0">
                                         <div className="text-muted">New Users</div>
                                         <strong>22.123 Users (80%)</strong>
-                                        <Progress className="progress-xs mt-2" color="danger" value="80" />
+                                        <Progress
+                                            className="progress-xs mt-2"
+                                            color="danger"
+                                            value="80"
+                                        />
                                     </Col>
                                     <Col sm={12} md className="mb-sm-2 mb-0 d-md-down-none">
                                         <div className="text-muted">Bounce Rate</div>
                                         <strong>Average Rate (40.15%)</strong>
-                                        <Progress className="progress-xs mt-2" color="primary" value="40" />
+                                        <Progress
+                                            className="progress-xs mt-2"
+                                            color="primary"
+                                            value="40"
+                                        />
                                     </Col>
                                 </Row>
                             </CardFooter>
                         </Card>
                     </Col>
                 </Row>
-
                 <Row>
                     <Col xs="6" sm="6" lg="3">
-                        <Widget03 dataBox={() => ({ variant: 'facebook', friends: '89k', feeds: '459' })} >
+                        <Widget03 dataBox={() => ({ variant: 'facebook', friends: '89k', feeds: '459' })}>
                             <div className="chart-wrapper">
-                                <Line data={makeSocialBoxData(0)} options={socialChartOpts} height={90} />
+                                <Line
+                                    data={makeSocialBoxData(0)}
+                                    options={socialChartOpts}
+                                    height={90}
+                                />
                             </div>
                         </Widget03>
                     </Col>
-
                     <Col xs="6" sm="6" lg="3">
                         <div className="brand-card">
                             <div className="brand-card-header bg-twitter">
                                 <i className="fa fa-twitter"></i>
                                 <div className="chart-wrapper">
-                                    <Line data={makeSocialBoxData(1)} options={socialChartOpts} height={90} />
+                                    <Line
+                                        data={makeSocialBoxData(1)}
+                                        options={socialChartOpts}
+                                        height={90}
+                                    />
                                 </div>
                             </div>
                             <div className="brand-card-body">
@@ -601,13 +671,16 @@ class Dashboard extends Component {
                             </div>
                         </div>
                     </Col>
-
                     <Col xs="6" sm="6" lg="3">
                         <div className="brand-card">
                             <div className="brand-card-header bg-linkedin">
                                 <i className="fa fa-linkedin"></i>
                                 <div className="chart-wrapper">
-                                    <Line data={makeSocialBoxData(2)} options={socialChartOpts} height={90} />
+                                    <Line
+                                        data={makeSocialBoxData(2)}
+                                        options={socialChartOpts}
+                                        height={90}
+                                    />
                                 </div>
                             </div>
                             <div className="brand-card-body">
@@ -615,20 +688,23 @@ class Dashboard extends Component {
                                     <div className="text-value">500+</div>
                                     <div className="text-uppercase text-muted small">contacts</div>
                                 </div>
-                            <div>
-                                <div className="text-value">292</div>
+                                <div>
+                                    <div className="text-value">292</div>
                                     <div className="text-uppercase text-muted small">feeds</div>
                                 </div>
                             </div>
                         </div>
                     </Col>
-
                     <Col xs="6" sm="6" lg="3">
                         <div className="brand-card">
                             <div className="brand-card-header bg-google-plus">
                                 <i className="fa fa-google-plus"></i>
                                 <div className="chart-wrapper">
-                                    <Line data={makeSocialBoxData(3)} options={socialChartOpts} height={90} />
+                                    <Line
+                                        data={makeSocialBoxData(3)}
+                                        options={socialChartOpts}
+                                        height={90}
+                                    />
                                 </div>
                             </div>
                             <div className="brand-card-body">
@@ -644,7 +720,6 @@ class Dashboard extends Component {
                         </div>
                     </Col>
                 </Row>
-
                 <Row>
                     <Col>
                         <Card>
@@ -655,7 +730,9 @@ class Dashboard extends Component {
                                 <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
                                     <thead className="thead-light">
                                         <tr>
-                                            <th className="text-center"><i className="fa fa-users"></i></th>
+                                            <th className="text-center">
+                                                <i className="fa fa-users"></i>
+                                            </th>
                                             <th>User</th>
                                             <th className="text-center">Country</th>
                                             <th>Usage</th>
@@ -667,7 +744,11 @@ class Dashboard extends Component {
                                         <tr>
                                             <td className="text-center">
                                                 <div className="avatar">
-                                                    <img src='/assets/img/avatars/1.jpg' className="img-avatar" alt="admin@bootstrapmaster.com" />
+                                                    <img
+                                                        src="/assets/img/avatars/1.jpg"
+                                                        className="img-avatar"
+                                                        alt="admin@bootstrapmaster.com"
+                                                    />
                                                     <span className="avatar-status badge-success"></span>
                                                 </div>
                                             </td>
@@ -689,10 +770,14 @@ class Dashboard extends Component {
                                                         <small className="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
                                                     </div>
                                                 </div>
-                                                <Progress className="progress-xs" color="success" value="50" />
+                                                <Progress
+                                                    className="progress-xs"
+                                                    color="success"
+                                                    value="50"
+                                                />
                                             </td>
                                             <td className="text-center">
-                                                <i className="fa fa-cc-mastercard" style={{ fontSize: 24 + 'px' }}></i>
+                                                <i className="fa fa-cc-mastercard" style={{ fontSize: 24+'px' }}></i>
                                             </td>
                                             <td>
                                                 <div className="small text-muted">Last login</div>
@@ -702,7 +787,11 @@ class Dashboard extends Component {
                                         <tr>
                                             <td className="text-center">
                                                 <div className="avatar">
-                                                    <img src='/assets/img/avatars/2.jpg' className="img-avatar" alt="admin@bootstrapmaster.com" />
+                                                    <img
+                                                        src="/assets/img/avatars/2.jpg"
+                                                        className="img-avatar"
+                                                        alt="admin@bootstrapmaster.com"
+                                                    />
                                                     <span className="avatar-status badge-danger"></span>
                                                 </div>
                                             </td>
@@ -724,10 +813,14 @@ class Dashboard extends Component {
                                                         <small className="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
                                                     </div>
                                                 </div>
-                                                <Progress className="progress-xs" color="info" value="10" />
+                                                <Progress
+                                                    className="progress-xs"
+                                                    color="info"
+                                                    value="10"
+                                                />
                                             </td>
                                             <td className="text-center">
-                                                <i className="fa fa-cc-visa" style={{ fontSize: 24 + 'px' }}></i>
+                                                <i className="fa fa-cc-visa" style={{ fontSize: 24+'px' }}></i>
                                             </td>
                                             <td>
                                                 <div className="small text-muted">Last login</div>
@@ -737,7 +830,11 @@ class Dashboard extends Component {
                                         <tr>
                                             <td className="text-center">
                                                 <div className="avatar">
-                                                    <img src='/assets/img/avatars/3.jpg' className="img-avatar" alt="admin@bootstrapmaster.com" />
+                                                    <img
+                                                        src="/assets/img/avatars/3.jpg"
+                                                        className="img-avatar"
+                                                        alt="admin@bootstrapmaster.com"
+                                                    />
                                                     <span className="avatar-status badge-warning"></span>
                                                 </div>
                                             </td>
@@ -759,10 +856,14 @@ class Dashboard extends Component {
                                                         <small className="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
                                                     </div>
                                                 </div>
-                                                <Progress className="progress-xs" color="warning" value="74" />
+                                                <Progress
+                                                    className="progress-xs"
+                                                    color="warning"
+                                                    value="74"
+                                                />
                                             </td>
                                             <td className="text-center">
-                                                <i className="fa fa-cc-stripe" style={{ fontSize: 24 + 'px' }}></i>
+                                                <i className="fa fa-cc-stripe" style={{ fontSize: 24+'px' }}></i>
                                             </td>
                                             <td>
                                                 <div className="small text-muted">Last login</div>
@@ -772,7 +873,11 @@ class Dashboard extends Component {
                                         <tr>
                                             <td className="text-center">
                                                 <div className="avatar">
-                                                    <img src='/assets/img/avatars/4.jpg' className="img-avatar" alt="admin@bootstrapmaster.com" />
+                                                    <img
+                                                        src="/assets/img/avatars/4.jpg"
+                                                        className="img-avatar"
+                                                        alt="admin@bootstrapmaster.com"
+                                                    />
                                                     <span className="avatar-status badge-secondary"></span>
                                                 </div>
                                             </td>
@@ -794,10 +899,14 @@ class Dashboard extends Component {
                                                         <small className="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
                                                     </div>
                                                 </div>
-                                                <Progress className="progress-xs" color="danger" value="98" />
+                                                <Progress
+                                                    className="progress-xs"
+                                                    color="danger"
+                                                    value="98"
+                                                />
                                             </td>
                                             <td className="text-center">
-                                                <i className="fa fa-paypal" style={{ fontSize: 24 + 'px' }}></i>
+                                                <i className="fa fa-paypal" style={{ fontSize: 24+'px' }}></i>
                                             </td>
                                             <td>
                                                 <div className="small text-muted">Last login</div>
@@ -807,7 +916,11 @@ class Dashboard extends Component {
                                         <tr>
                                             <td className="text-center">
                                                 <div className="avatar">
-                                                    <img src='/assets/img/avatars/5.jpg' className="img-avatar" alt="admin@bootstrapmaster.com" />
+                                                    <img
+                                                        src="/assets/img/avatars/5.jpg"
+                                                        className="img-avatar"
+                                                        alt="admin@bootstrapmaster.com"
+                                                    />
                                                     <span className="avatar-status badge-success"></span>
                                                 </div>
                                             </td>
@@ -829,10 +942,14 @@ class Dashboard extends Component {
                                                         <small className="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
                                                     </div>
                                                 </div>
-                                                <Progress className="progress-xs" color="info" value="22" />
+                                                <Progress
+                                                    className="progress-xs"
+                                                    color="info"
+                                                    value="22"
+                                                />
                                             </td>
                                             <td className="text-center">
-                                                <i className="fa fa-google-wallet" style={{ fontSize: 24 + 'px' }}></i>
+                                                <i className="fa fa-google-wallet" style={{ fontSize: 24+'px' }}></i>
                                             </td>
                                             <td>
                                                 <div className="small text-muted">Last login</div>
@@ -842,7 +959,11 @@ class Dashboard extends Component {
                                         <tr>
                                             <td className="text-center">
                                                 <div className="avatar">
-                                                    <img src='/assets/img/avatars/6.jpg' className="img-avatar" alt="admin@bootstrapmaster.com" />
+                                                    <img
+                                                        src="/assets/img/avatars/6.jpg"
+                                                        className="img-avatar"
+                                                        alt="admin@bootstrapmaster.com"
+                                                    />
                                                     <span className="avatar-status badge-danger"></span>
                                                 </div>
                                             </td>
@@ -864,10 +985,14 @@ class Dashboard extends Component {
                                                         <small className="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
                                                     </div>
                                                 </div>
-                                                <Progress className="progress-xs" color="success" value="43" />
+                                                <Progress
+                                                    className="progress-xs"
+                                                    color="success"
+                                                    value="43"
+                                                />
                                             </td>
                                             <td className="text-center">
-                                                <i className="fa fa-cc-amex" style={{ fontSize: 24 + 'px' }}></i>
+                                                <i className="fa fa-cc-amex" style={{ fontSize: 24+'px' }}></i>
                                             </td>
                                             <td>
                                                 <div className="small text-muted">Last login</div>

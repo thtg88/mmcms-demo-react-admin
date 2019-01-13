@@ -24,34 +24,16 @@ const withCreateResource = (
 ) => {
     class CreateHOC extends Component {
         state = {
+            creating_resource: false,
             resource: schema,
             resource_unchanged: true,
-            creating_resource: false
         };
 
         constructor(props) {
             super(props);
 
-            this.updateInputValue = this.updateInputValue.bind(this);
             this.handleCreateResource = this.handleCreateResource.bind(this);
-        }
-
-        updateInputValue(evt) {
-            if(this.state.resource_unchanged === true) {
-                this.setState({
-                    resource_unchanged: false,
-                });
-            }
-
-            this.setState({
-                resource: {
-                    ...this.state.resource,
-                    [evt.target.name]: {
-                        ...this.state.resource[evt.target.name],
-                        value: evt.target.value
-                    },
-                }
-            });
+            this.updateInputValue = this.updateInputValue.bind(this);
         }
 
         async handleCreateResource(evt) {
@@ -65,7 +47,7 @@ const withCreateResource = (
 
             // Reset errors
             this.setState({
-                resource: updateFormResourceFromErrors(resource, {inner:[]})
+                resource: updateFormResourceFromErrors(resource, {inner:[]}),
             });
 
             await yup.object(validationSchema)
@@ -78,7 +60,7 @@ const withCreateResource = (
                     // Create resource
 
                     this.setState({
-                        creating_resource: true
+                        creating_resource: true,
                     });
 
                     createResource({ data });
@@ -87,13 +69,30 @@ const withCreateResource = (
                     // If validation does not passes
                     // Set errors in the form
                     this.setState({
-                        resource: updateFormResourceFromErrors(resource, errors)
+                        resource: updateFormResourceFromErrors(resource, errors),
                     });
                 });
         }
 
-        componentDidMount() {
-            //
+        updateInputValue(evt) {
+            const { resource, resource_unchanged } = this.state;
+            const { target } = evt;
+
+            if(resource_unchanged === true) {
+                this.setState({
+                    resource_unchanged: false,
+                });
+            }
+
+            this.setState({
+                resource: {
+                    ...resource,
+                    [target.name]: {
+                        ...resource[target.name],
+                        value: target.value
+                    },
+                },
+            });
         }
 
         componentDidUpdate(prevProps) {
@@ -103,7 +102,7 @@ const withCreateResource = (
                 history,
                 loggedOut,
                 resource,
-                unauthenticated
+                unauthenticated,
             } = this.props;
 
             // if unauthenticated redirect to login
@@ -115,7 +114,7 @@ const withCreateResource = (
             // Set the creating resource to false
             else if(errors.length !== 0 && this.state.creating_resource === true) {
                 this.setState({
-                    creating_resource: false
+                    creating_resource: false,
                 });
             }
 
@@ -151,6 +150,7 @@ const withCreateResource = (
     }
 
     const mapStateToProps = state => {
+        const { token } = state.auth;
         const {
             created,
             error,
@@ -160,11 +160,11 @@ const withCreateResource = (
         const unauthenticated = isUnauthenticatedError(error);
 
         return {
-            created: created,
-            errors: errors,
+            created,
+            errors,
+            token,
+            unauthenticated,
             resource: typeof resource === 'undefined' ? null : resource,
-            token: state.auth.token,
-            unauthenticated: unauthenticated
         };
     };
 
@@ -178,7 +178,6 @@ const withCreateResource = (
         mapStateToProps,
         mapDispatchToProps
     )(CreateHOC);
-
 };
 
 export default withCreateResource;

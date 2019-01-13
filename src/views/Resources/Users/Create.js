@@ -23,8 +23,6 @@ export const Create = ({
     resource_unchanged,
     updateInputValue,
 }) => {
-    // console.log('resource', resource);
-
     return (
         <CreateResource
             creatingResource={creating_resource}
@@ -42,8 +40,8 @@ export default withCreateResource(
     {
         clearMetadataResourceCreate,
         createResource,
-        resourceBaseRoute: reducerName,
         schema,
+        resourceBaseRoute: reducerName,
         subStateName: reducerName,
     }
 );

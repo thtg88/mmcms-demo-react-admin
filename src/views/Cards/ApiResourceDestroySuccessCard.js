@@ -5,12 +5,9 @@ import {
     CardBody
 } from 'reactstrap';
 
-const ApiResourceDestroySuccessCard = ({ success, resourceDisplayName }) => {
-
+const ApiResourceDestroySuccessCard = ({ resourceDisplayName, success }) => {
     if(success !== true) {
-        return (
-            null
-        );
+        return null;
     }
 
     return (
@@ -18,15 +15,15 @@ const ApiResourceDestroySuccessCard = ({ success, resourceDisplayName }) => {
             <CardBody>
                 <i className="fa fa-trash"></i>
                 {' '}
-                {resourceDisplayName ? resourceDisplayName : "Resource"} destroyed successfully.
+                {resourceDisplayName ? resourceDisplayName : 'Resource'} destroyed successfully.
             </CardBody>
         </Card>
     );
 }
 
 ApiResourceDestroySuccessCard.propTypes = {
+    resourceDisplayName: PropTypes.string,
     success: PropTypes.bool,
-    resourceDisplayName: PropTypes.string
 };
 
 export default ApiResourceDestroySuccessCard;

@@ -22,10 +22,8 @@ const DataListGroup = ({
     searchButtonDisabled,
     searchButtonIconClassName,
     total,
-    urlBuilder
+    urlBuilder,
 }) => {
-    // console.log(query);
-
     return (
         <>
             <SearchBar
@@ -36,35 +34,39 @@ const DataListGroup = ({
                 query={query}
             />
             <ListGroup flush className="mb-3">
-                {loading
-                    ? (
-                        <LoaderListGroupItem
-                            columns={columns}
-                            type="placeholderShimmer"
-                        />
-                    )
-                    : data.length > 0
-                        ? data.map((entity, index) => (
-                            <ResourceListGroupItem
-                                key={entity[keyField]}
+                {
+                    loading
+                        ? (
+                            <LoaderListGroupItem
                                 columns={columns}
-                                history={history}
-                                keyField={keyField}
-                                entity={entity}
-                                urlBuilder={urlBuilder}
+                                type="placeholderShimmer"
                             />
-                        ))
-                        : (<EmptyListGroupItem />)
+                        )
+                        : (
+                            data.length > 0
+                                ? data.map((entity, index) => (
+                                    <ResourceListGroupItem
+                                        key={entity[keyField]}
+                                        columns={columns}
+                                        history={history}
+                                        keyField={keyField}
+                                        entity={entity}
+                                        urlBuilder={urlBuilder}
+                                    />
+                                ))
+                                : <EmptyListGroupItem />
+                        )
                 }
             </ListGroup>
-            {loading
-                ? null
-                : <Pagination
-                    page={page}
-                    total={total}
-                    pageSize={pageSize}
-                    history={history}
-                />
+            {
+                loading
+                    ? null
+                    : <Pagination
+                        page={page}
+                        total={total}
+                        pageSize={pageSize}
+                        history={history}
+                    />
             }
         </>
     )
@@ -77,10 +79,15 @@ DataListGroup.propTypes = {
     hover: PropTypes.bool,
     keyField: PropTypes.string,
     loading: PropTypes.bool,
+    onSearchButtonClick: PropTypes.func,
+    onSearchInputChange: PropTypes.func,
     page: PropTypes.number,
     pageSize: PropTypes.number,
+    query: PropTypes.string,
+    searchButtonDisabled: PropTypes.bool,
+    searchButtonIconClassName: PropTypes.string,
     total: PropTypes.number,
-    urlBuilder: PropTypes.func
+    urlBuilder: PropTypes.func,
 };
 
 export default DataListGroup;

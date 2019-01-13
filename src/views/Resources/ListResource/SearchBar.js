@@ -15,7 +15,7 @@ export const SearchBar = ({
     iconClassName,
     onSubmit,
     onChange,
-    query
+    query,
 }) => (
     <Form className="form-horizontal">
         <FormGroup row onSubmit={onSubmit}>
@@ -35,7 +35,11 @@ export const SearchBar = ({
                             color="primary"
                             onClick={onSubmit}
                             disabled={buttonDisabled}
-                        ><i className={iconClassName}></i> Search</Button>
+                        >
+                            <i className={iconClassName}></i>
+                            {' '}
+                            Search
+                        </Button>
                     </InputGroupAddon>
                 </InputGroup>
             </Col>
@@ -48,7 +52,7 @@ SearchBar.propTypes = {
     iconClassName: PropTypes.string,
     onSubmit: PropTypes.func,
     onChange: PropTypes.func,
-    query: PropTypes.string
+    query: PropTypes.string,
 };
 
 export default SearchBar;

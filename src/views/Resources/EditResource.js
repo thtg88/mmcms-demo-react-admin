@@ -27,16 +27,12 @@ const EditResource = ({
     updateInputValue,
     updatingResource,
 }) => {
-    let destroyButtonIconClassName = "fa fa-trash";
-    if(destroyingResource === true) {
-        destroyButtonIconClassName = "fa fa-spinner fa-spin";
-    }
-
-    let updateButtonIconClassName = "fa fa-save";
-    if(updatingResource === true) {
-        updateButtonIconClassName = "fa fa-spinner fa-spin";
-    }
-
+    const destroyButtonIconClassName = destroyingResource === true
+        ? 'fa fa-spinner fa-spin'
+        : 'fa fa-trash';
+    const updateButtonIconClassName = updatingResource === true
+        ? 'fa fa-spinner fa-spin'
+        : 'fa fa-save';
     const resourceName = (
         typeof resource === 'undefined'
         || resource === null
@@ -65,44 +61,46 @@ const EditResource = ({
                     )
                     && gettingResource !== true
                 )
-                ? null
-                : <>
-                    <PageTitle text={resourceName} actions={actions} />
-                    <Row>
-                        <Col md={12}>
-                            <Card className="card-accent-warning">
-                                <CardBody>
+                    ? null
+                    : (
+                        <>
+                            <PageTitle text={resourceName} actions={actions} />
+                            <Row>
+                                <Col md={12}>
+                                    <Card className="card-accent-warning">
+                                        <CardBody>
+                                        {
+                                            gettingResource
+                                                ? <SpinnerLoader />
+                                                : <ResourceForm
+                                                    onInputChange={updateInputValue}
+                                                    onSubmit={handleUpdateResource}
+                                                    resource={resource}
+                                                    submitButtonClassName="warning"
+                                                    submitButtonDisabled={resourceUnchanged || updatingResource}
+                                                    submitButtonIconClassName={updateButtonIconClassName}
+                                                    submitButtonText="Update"
+                                                />
+                                        }
+                                        </CardBody>
+                                    </Card>
+                                </Col>
                                 {
-                                    gettingResource
-                                        ? <SpinnerLoader />
-                                        : <ResourceForm
-                                            onInputChange={updateInputValue}
-                                            onSubmit={handleUpdateResource}
-                                            resource={resource}
-                                            submitButtonClassName="warning"
-                                            submitButtonDisabled={resourceUnchanged || updatingResource}
-                                            submitButtonIconClassName={updateButtonIconClassName}
-                                            submitButtonText="Update"
+                                    canDestroy
+                                    ? (
+                                        <DestroyResourceModal
+                                            destroyButtonIconClassName={destroyButtonIconClassName}
+                                            disabled={destroyingResource}
+                                            isOpen={isDestroyResourceModalOpen}
+                                            onDestroyButtonClick={handleDestroyResource}
+                                            toggle={toggleDestroyResourceModal}
                                         />
+                                    )
+                                    : null
                                 }
-                                </CardBody>
-                            </Card>
-                        </Col>
-                        {
-                            canDestroy
-                            ? (
-                                <DestroyResourceModal
-                                    destroyButtonIconClassName={destroyButtonIconClassName}
-                                    disabled={destroyingResource}
-                                    isOpen={isDestroyResourceModalOpen}
-                                    onDestroyButtonClick={handleDestroyResource}
-                                    toggle={toggleDestroyResourceModal}
-                                />
-                            )
-                            : null
-                        }
-                    </Row>
-                </>
+                            </Row>
+                        </>
+                    )
             }
         </div>
     );

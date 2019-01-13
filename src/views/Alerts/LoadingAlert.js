@@ -11,7 +11,7 @@ const LoadingAlert = ({ msg }) => (
 );
 
 LoadingAlert.propTypes = {
-    msg: PropTypes.string
+    msg: PropTypes.string,
 };
 
 export default LoadingAlert;

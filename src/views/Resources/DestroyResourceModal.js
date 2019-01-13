@@ -13,7 +13,7 @@ const DestroyResourceModal = ({
     disabled,
     isOpen,
     onDestroyButtonClick,
-    toggle
+    toggle,
 }) => (
     <Modal
         isOpen={isOpen}
@@ -41,7 +41,7 @@ DestroyResourceModal.propTypes = {
     disabled: PropTypes.bool,
     isOpen: PropTypes.bool,
     onDestroyButtonClick: PropTypes.func,
-    toggle: PropTypes.func
+    toggle: PropTypes.func,
 };
 
 export default DestroyResourceModal;

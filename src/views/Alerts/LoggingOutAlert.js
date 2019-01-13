@@ -3,11 +3,8 @@ import PropTypes from 'prop-types';
 import { Alert } from 'reactstrap';
 
 const LoggingOutAlert = ({ loggingOut }) => {
-
     if(loggingOut !== true) {
-        return (
-            null
-        );
+        return null;
     }
 
     return (
@@ -20,7 +17,7 @@ const LoggingOutAlert = ({ loggingOut }) => {
 };
 
 LoggingOutAlert.propTypes = {
-    loggingOut: PropTypes.bool
+    loggingOut: PropTypes.bool,
 };
 
 export default LoggingOutAlert;

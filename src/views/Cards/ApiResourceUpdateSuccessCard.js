@@ -6,11 +6,8 @@ import {
 } from 'reactstrap';
 
 const ApiResourceUpdateSuccessCard = ({ success, resourceDisplayName }) => {
-
     if(success !== true) {
-        return (
-            null
-        );
+        return null;
     }
 
     return (
@@ -18,15 +15,15 @@ const ApiResourceUpdateSuccessCard = ({ success, resourceDisplayName }) => {
             <CardBody>
                 <i className="fa fa-check"></i>
                 {' '}
-                {resourceDisplayName ? resourceDisplayName : "Resource"} updated successfully.
+                {resourceDisplayName ? resourceDisplayName : 'Resource'} updated successfully.
             </CardBody>
         </Card>
     );
 }
 
 ApiResourceUpdateSuccessCard.propTypes = {
+    resourceDisplayName: PropTypes.string,
     success: PropTypes.bool,
-    resourceDisplayName: PropTypes.string
 };
 
 export default ApiResourceUpdateSuccessCard;

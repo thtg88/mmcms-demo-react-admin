@@ -44,10 +44,9 @@ const IndexResource = ({
         return null;
     }
 
-    let searchButtonIconClassName = "fa fa-search";
-    if(searching === true && fetchingResources === true) {
-        searchButtonIconClassName = "fa fa-spinner fa-spin";
-    }
+    const searchButtonIconClassName = searching === true && fetchingResources === true
+        ? 'fa fa-spinner fa-spin'
+        : 'fa fa-search';
 
     return (
         <div className="animated fadeIn">

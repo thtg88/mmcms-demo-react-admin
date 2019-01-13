@@ -107,7 +107,7 @@ const withListResource = (
                 if(
                     typeof query === 'undefined'
                     || typeof query.page === 'undefined'
-                    || isNaN(query.page)
+                    || Number.isNaN(query.page)
                     || query.page <= 0
                 ) {
                     const page = typeof current_page !== 'undefined' ? current_page : 1;
@@ -178,7 +178,7 @@ const withListResource = (
             }
 
             else if(
-                !isNaN(query_page)
+                !Number.isNaN(query_page)
                 && query_page > 0
                 && query_page !== parseInt(prevProps.query.page, 10)
                 && searching === false

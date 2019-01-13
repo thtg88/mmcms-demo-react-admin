@@ -40,8 +40,6 @@ export const List = ({
     searching,
     total,
 }) => {
-    // console.log(props);
-
     return (
         <IndexResource
             actions={actions}

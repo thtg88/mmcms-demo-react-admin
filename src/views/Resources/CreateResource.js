@@ -18,10 +18,9 @@ const CreateResource = ({
     resourceUnchanged,
     updateInputValue,
 }) => {
-    let createButtonIconClassName = "fa fa-plus";
-    if(creatingResource === true) {
-        createButtonIconClassName = "fa fa-spinner fa-spin";
-    }
+    const createButtonIconClassName = creatingResource === true
+        ? 'fa fa-spinner fa-spin'
+        : 'fa fa-plus';
 
     return (
         <div className="animated fadeIn">

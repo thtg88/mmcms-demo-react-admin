@@ -5,5 +5,5 @@ import Register from './Register';
 export {
     Login,
     Page404,
-    Register
+    Register,
 };

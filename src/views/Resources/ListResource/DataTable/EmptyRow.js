@@ -8,7 +8,7 @@ const EmptyRow = ({ colSpan }) => (
 );
 
 EmptyRow.propTypes = {
-    colSpan: PropTypes.number
+    colSpan: PropTypes.number,
 };
 
 export default EmptyRow;

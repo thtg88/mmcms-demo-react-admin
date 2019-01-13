@@ -93,3 +93,27 @@ export const updateFormResourceFromErrors = (resource, errors) => {
 
     return new_resource;
 };
+
+export const get = (target, field) => {
+    const pathArray = splitNested(field);
+    let result;
+
+    try {
+        result = pathArray.reduce(
+            (curr, path) => {
+                return curr[path];
+            },
+            target
+        );
+    } catch (e) {}
+
+    return result ? result : 'N/A';
+};
+
+const splitNested = (str) => {
+    return [str]
+        .join('.')
+        .replace(/\[/g, '.')
+        .replace(/\]/g, '')
+        .split('.');
+};

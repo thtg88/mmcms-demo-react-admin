@@ -31,43 +31,22 @@ export const columns = [
         className: 'col-md-12',
         editable: false,
         // formatter: createdAtFormatter,
-    }
+    },
 ];
-
-// const selectRow = {
-//     mode: 'checkbox',
-//     clickToSelect: false
-// };
 
 const defaultSorted = [
     {
         dataField: 'id',
         order: 'desc'
-    }
+    },
 ];
-
-export const cellEditProps = {
-    mode: 'click'
-};
 
 export const pageSize = 10;
 
 const tableConfig = {
-    striped: true,
-    hover: true,
-    bordered: false,
-    bootstrap4: true,
-    remote: {
-        filter: false,
-        pagination: true,
-        sort: false,
-        // cellEdit: true
-    },
-    keyField: "id",
     columns,
-    defaultSorted
-    // ,
-    // selectRow
+    defaultSorted,
+    keyField: 'id',
 };
 
 export default tableConfig;

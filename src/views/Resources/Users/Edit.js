@@ -80,7 +80,7 @@ export default withEditResource(
         getPaginatedResources,
         pageSize,
         schema,
-        subStateName: reducerName,
         updateResource,
+        subStateName: reducerName,
     }
 );

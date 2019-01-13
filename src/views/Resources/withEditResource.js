@@ -14,7 +14,7 @@ import {
 import { getResourceFromPaginatedResourcesAndId } from '../../helpers/paginatedResources';
 import {
     apiResourceCreateSuccessNotification,
-    apiResourceUpdateSuccessNotification
+    apiResourceUpdateSuccessNotification,
 } from '../../helpers/toastNotification';
 import { loggedOut } from '../../redux/auth/actions';
 
@@ -38,7 +38,7 @@ const withEditResource = (
             is_modal_open: false,
             resource: null,
             resource_unchanged: true,
-            updating_resource: false
+            updating_resource: false,
         };
 
         constructor(props) {
@@ -56,8 +56,8 @@ const withEditResource = (
             const { destroyResource, token } = this.props;
             const { resource } = this.state;
             const data = {
+                token,
                 id: resource.id.value,
-                token
             };
 
             this.setState({
@@ -82,7 +82,7 @@ const withEditResource = (
 
             // Reset errors
             this.setState({
-                resource: updateFormResourceFromErrors(resource, {inner:[]})
+                resource: updateFormResourceFromErrors(resource, {inner:[]}),
             });
 
             await yup.object(validationSchema)
@@ -95,7 +95,7 @@ const withEditResource = (
                     // Update resource
 
                     this.setState({
-                        updating_resource: true
+                        updating_resource: true,
                     });
 
                     updateResource({ data });
@@ -104,7 +104,7 @@ const withEditResource = (
                     // If validation does not passes
                     // Set errors in the form
                     this.setState({
-                        resource: updateFormResourceFromErrors(resource, errors)
+                        resource: updateFormResourceFromErrors(resource, errors),
                     });
                 });
         }
@@ -113,12 +113,15 @@ const withEditResource = (
             evt.preventDefault();
 
             this.setState({
-                is_modal_open: !this.state.is_modal_open
+                is_modal_open: !this.state.is_modal_open,
             })
         }
 
         updateInputValue(evt) {
-            if(this.state.resource_unchanged === true) {
+            const { resource, resource_unchanged } = this.state;
+            const { target } = evt;
+
+            if(resource_unchanged === true) {
                 this.setState({
                     resource_unchanged: false,
                 });
@@ -126,12 +129,12 @@ const withEditResource = (
 
             this.setState({
                 resource: {
-                    ...this.state.resource,
-                    [evt.target.name]: {
-                        ...this.state.resource[evt.target.name],
-                        value: evt.target.value
+                    ...resource,
+                    [target.name]: {
+                        ...resource[target.name],
+                        value: target.value
                     },
-                }
+                },
             });
         }
 
@@ -140,29 +143,29 @@ const withEditResource = (
                 created,
                 findResource,
                 getPaginatedResources,
-                match,
                 resource,
-                token
+                token,
+                urlResourceId,
             } = this.props;
-
-            // console.log(resource);
 
             // If resource is already in global state
             // Avoid re-fetching
             if(resource === null) {
                 const data = {
                     token,
-                    id: match.params.id
+                    id: urlResourceId,
                 };
 
                 this.setState({
-                    getting_resource: true
+                    getting_resource: true,
                 });
 
                 findResource({ data });
 
             } else {
-                this.setState({ resource: getFormResourceFromValues(resource, schema) });
+                this.setState({
+                    resource: getFormResourceFromValues(resource, schema),
+                });
             }
 
             // Get all the resources in the background
@@ -173,8 +176,8 @@ const withEditResource = (
 
                 const data = {
                     token,
+                    pageSize,
                     page: 1,
-                    pageSize
                 };
                 getPaginatedResources({ data });
             }
@@ -187,7 +190,7 @@ const withEditResource = (
                 loggedOut,
                 resource,
                 unauthenticated,
-                updated
+                updated,
             } = this.props;
             const { destroying_resource, updating_resource } = this.state;
 
@@ -209,7 +212,7 @@ const withEditResource = (
             ) {
                 this.setState({
                     destroying_resource: false,
-                    is_modal_open: false
+                    is_modal_open: false,
                 });
             }
 
@@ -223,7 +226,7 @@ const withEditResource = (
             ) {
                 this.setState({
                     getting_resource: false,
-                    updating_resource: false
+                    updating_resource: false,
                 });
             }
 
@@ -238,7 +241,7 @@ const withEditResource = (
 
                 this.setState({
                     getting_resource: false,
-                    updating_resource: false
+                    updating_resource: false,
                 });
             }
 
@@ -253,7 +256,7 @@ const withEditResource = (
             ) {
                 this.setState({
                     destroying_resource: false,
-                    is_modal_open: false
+                    is_modal_open: false,
                 });
             }
 
@@ -264,7 +267,7 @@ const withEditResource = (
                 this.setState({
                     resource: getFormResourceFromValues(resource, schema),
                     getting_resource: false,
-                    updating_resource: false
+                    updating_resource: false,
                 });
             }
         }
@@ -292,34 +295,36 @@ const withEditResource = (
     }
 
     const mapStateToProps = (state, ownProps) => {
+        const { token } = state.auth;
         const {
             created,
             destroyed,
             error,
             resources,
-            updated
+            updated,
         } = state[subStateName];
         const errors = getApiErrorMessages(error);
         const unauthenticated = isUnauthenticatedError(error);
-        const params_id = parseInt(ownProps.match.params.id, 10);
+        const urlResourceId = parseInt(ownProps.match.params.id, 10);
         let { resource } = state[subStateName];
 
         if(
             resource === null
             || typeof resource === 'undefined'
-            || resource.id !== params_id
+            || resource.id !== urlResourceId
         ) {
-            resource = getResourceFromPaginatedResourcesAndId(resources, params_id);
+            resource = getResourceFromPaginatedResourcesAndId(resources, urlResourceId);
         }
 
         return {
-            created: created,
-            destroyed: destroyed,
-            errors: errors,
+            created,
+            destroyed,
+            errors,
+            token,
+            unauthenticated,
+            updated,
+            urlResourceId,
             resource: typeof resource === 'undefined' ? null : resource,
-            token: state.auth.token,
-            unauthenticated: unauthenticated,
-            updated: updated
         };
     };
 
@@ -329,7 +334,7 @@ const withEditResource = (
         findResource,
         getPaginatedResources,
         loggedOut,
-        updateResource
+        updateResource,
     };
 
     return connect(

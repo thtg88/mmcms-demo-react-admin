@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Button, Col, Row } from 'reactstrap';
 
 const PageTitle = ({
     actions,
-    text
+    text,
 }) => {
     // If there are no actions I will set the different width,
     // otherwise default to full width
@@ -32,9 +33,6 @@ const PageTitle = ({
                     <Col lg={2} md={3} sm={4}>
                         {
                             actions.map((action, idx) => {
-
-                                // console.log(action);
-
                                 if(action.type === 'button') {
                                     return (
                                         <PageTitleButton
@@ -71,6 +69,11 @@ const PageTitle = ({
     );
 };
 
+PageTitle.propTypes = {
+    actions: PropTypes.array,
+    text: PropTypes.string,
+};
+
 export const PageTitleButton = ({
     className,
     disabled,
@@ -91,6 +94,14 @@ export const PageTitleButton = ({
     </Button>
 );
 
+PageTitleButton.propTypes = {
+    className: PropTypes.string,
+    disabled: PropTypes.bool,
+    iconClassName: PropTypes.string,
+    onClick: PropTypes.func,
+    title: PropTypes.string,
+};
+
 export const PageTitleLink = ({
     className,
     href,
@@ -103,5 +114,12 @@ export const PageTitleLink = ({
         {title}
     </Link>
 );
+
+PageTitleLink.propTypes = {
+    className: PropTypes.string,
+    href: PropTypes.string,
+    iconClassName: PropTypes.string,
+    title: PropTypes.string,
+};
 
 export default PageTitle;

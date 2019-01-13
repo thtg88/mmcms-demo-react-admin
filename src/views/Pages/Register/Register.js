@@ -19,23 +19,25 @@ import ApiErrorAlert from '../../Alerts/ApiErrorAlert';
 import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
 import { register, resetRegisterError } from '../../../redux/auth/actions';
 
+const { REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY } = process.env;
+
 export class Register extends Component {
     state = {
-        redirect_login: false,
         email: '',
         g_recaptcha_response: null,
         name: '',
         password: '',
         password_confirmation: '',
-        recaptcha: null
+        recaptcha: null,
+        redirect_login: false,
     };
 
     constructor(props) {
         super(props);
 
-        const { REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY } = process.env;
-
         this.handleRegister = this.handleRegister.bind(this);
+        this.updateInputValue = this.updateInputValue.bind(this);
+
         if(
             typeof REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== 'undefined'
             && REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== null
@@ -44,22 +46,19 @@ export class Register extends Component {
             this.assignRecaptcha = this.assignRecaptcha.bind(this);
             this.reCaptchaOnChange = this.reCaptchaOnChange.bind(this);
         }
-
-        this.updateInputValue = this.updateInputValue.bind(this);
     }
 
     assignRecaptcha(el) {
         if(this.state.recaptcha === null) {
             this.setState({
-                recaptcha: el
+                recaptcha: el,
             });
         }
     }
 
     reCaptchaOnChange(value) {
-        // console.log("Captcha value:", value);
         this.setState({
-            g_recaptcha_response: value
+            g_recaptcha_response: value,
         })
     }
 
@@ -71,7 +70,7 @@ export class Register extends Component {
         }
 
         this.setState({
-            redirect_login: true
+            redirect_login: true,
         });
     }
 
@@ -81,24 +80,22 @@ export class Register extends Component {
         const {
             errors,
             register,
-            resetRegisterError
+            resetRegisterError,
         } = this.props;
         const {
             email,
             g_recaptcha_response,
             name,
             password,
-            password_confirmation
+            password_confirmation,
         } = this.state;
         const data = {
             email,
             g_recaptcha_response,
             name,
             password,
-            password_confirmation
+            password_confirmation,
         };
-
-        // console.log(data);
 
         if(errors.length > 0) {
             resetRegisterError();
@@ -109,33 +106,34 @@ export class Register extends Component {
 
     updateInputValue(evt) {
         const { errors, resetRegisterError } = this.props;
+        const { target } = evt;
 
         if(errors.length > 0) {
             resetRegisterError();
         }
 
         this.setState({
-            [evt.target.name]: evt.target.value,
+            [target.name]: target.value,
         });
     }
 
     componentDidUpdate(prevProps) {
+        const { errors } = this.props;
+        const { recaptcha } = this.state;
+
         if(typeof errors !== 'undefined') {
             if(
-                prevProps.errors.length !== this.props.errors.length
-                && this.props.errors.length > 0
+                prevProps.errors.length !== errors.length
+                && errors.length > 0
             ) {
-                if(this.state.recaptcha !== null) {
-                    console.log('resetting recaptcha');
-
-                    this.state.recaptcha.reset();
+                if(recaptcha !== null) {
+                    recaptcha.reset();
                 }
             }
         }
     }
 
     render() {
-        const { REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY } = process.env;
         const { errors, registering, logged_in } = this.props;
         const {
             email,
@@ -144,18 +142,16 @@ export class Register extends Component {
             password_confirmation,
             redirect_login,
         } = this.state;
+        const registerButtonIconClassName = registering === true
+            ? 'fa fa-spinner fa-spin'
+            : 'fa fa-pencil-square-o';
 
         if(redirect_login === true) {
-            return <Redirect to="/login" />
+            return <Redirect to="/login" />;
         }
 
         if(logged_in === true) {
-            return <Redirect to="/" />
-        }
-
-        let registerButtonIconClassName = 'fa fa-pencil-square-o';
-        if(typeof registering !== 'undefined' && registering === true) {
-            registerButtonIconClassName = 'fa fa-spinner fa-spin';
+            return <Redirect to="/" />;
         }
 
         return (
@@ -227,23 +223,26 @@ export class Register extends Component {
                                                 onChange={this.updateInputValue}
                                             />
                                         </InputGroup>
-                                        {(
-                                            typeof REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== 'undefined'
-                                            && REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== null
-                                            && REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== ''
-                                        )
-                                            ? <Row>
-                                                <Col md="12" className="mb-3 text-center">
-                                                    <div style={{margin: '0 auto', display: 'inline-block'}}>
-                                                        <ReCAPTCHA
-                                                            ref={this.assignRecaptcha}
-                                                            sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}
-                                                            onChange={this.reCaptchaOnChange}
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            : null
+                                        {
+                                            (
+                                                typeof REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== 'undefined'
+                                                && REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== null
+                                                && REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY !== ''
+                                            )
+                                                ? (
+                                                    <Row>
+                                                        <Col className="col-md-12 mb-3 text-center">
+                                                            <div style={{margin: '0 auto', display: 'inline-block'}}>
+                                                                <ReCAPTCHA
+                                                                    ref={this.assignRecaptcha}
+                                                                    sitekey={REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}
+                                                                    onChange={this.reCaptchaOnChange}
+                                                                />
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+                                                )
+                                                : null
                                         }
                                         <Row>
                                             <Col md="6">
@@ -264,7 +263,9 @@ export class Register extends Component {
                                                     color="link"
                                                     className="px-0"
                                                     onClick={() => this.redirectLogin()}
-                                                >Back to Login</Button>
+                                                >
+                                                    Back to Login
+                                                </Button>
                                             </Col>
                                         </Row>
                                     </Form>
@@ -282,20 +283,20 @@ const mapStateToProps = state => {
     const {
         error,
         registering,
-        user
+        user,
     } = state.auth;
     const errors = getApiErrorMessages(error);
 
     return {
-        errors: errors,
+        errors,
         registering: registering === true,
-        logged_in: typeof user !== 'undefined' && user !== null && !isNaN(user.id)
+        logged_in: typeof user !== 'undefined' && user !== null && !Number.isNaN(user.id)
     };
 };
 
 const mapDispatchToProps = {
     register,
-    resetRegisterError
+    resetRegisterError,
 };
 
 export default connect(

@@ -5,21 +5,21 @@ import DataTable from './DataTable';
 
 const ListResource = ({
     type,
-    ...props
+    ...props,
 }) => {
-    if(type === "list") {
-        return (<DataListGroup {...props } />);
+    if(type === 'list') {
+        return <DataListGroup {...props } />;
     }
 
-    if(type === "table") {
-        return (<DataTable {...props} />);
+    if(type === 'table') {
+        return <DataTable {...props} />;
     }
 
     return null;
 };
 
 ListResource.propTypes = {
-    type: PropTypes.string
+    type: PropTypes.string,
 };
 
 export default ListResource;

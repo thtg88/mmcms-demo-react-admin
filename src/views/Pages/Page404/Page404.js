@@ -9,7 +9,7 @@ import {
 
 class Page404 extends Component {
     state = {
-        redirect_home: false
+        redirect_home: false,
     };
 
     constructor(props) {
@@ -20,12 +20,14 @@ class Page404 extends Component {
 
     redirectHome() {
         this.setState({
-            redirect_home: true
+            redirect_home: true,
         });
     }
 
     render() {
-        if(this.state.redirect_home === true) {
+        const { redirect_home } = this.state;
+
+        if(redirect_home === true) {
             return <Redirect push to="/" />;
         }
 

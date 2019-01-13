@@ -6,11 +6,8 @@ import {
 } from 'reactstrap';
 
 const ApiResourceCreateSuccessCard = ({ success }) => {
-
     if(success !== true) {
-        return (
-            null
-        );
+        return null;
     }
 
     return (
@@ -25,7 +22,7 @@ const ApiResourceCreateSuccessCard = ({ success }) => {
 }
 
 ApiResourceCreateSuccessCard.propTypes = {
-    success: PropTypes.bool
+    success: PropTypes.bool,
 };
 
 export default ApiResourceCreateSuccessCard;
