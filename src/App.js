@@ -8,13 +8,14 @@ import GuestComponent from './containers/DefaultLayout/GuestComponent';
 import { Login, Register } from './views/Pages';
 import './scss/style.scss';
 
+const {
+    NODE_ENV,
+    REACT_APP_SENTRY_KEY,
+    REACT_APP_SENTRY_PROJECT_ID,
+} = process.env;
+
 class App extends Component {
     componentDidMount() {
-        const {
-            NODE_ENV,
-            REACT_APP_SENTRY_KEY,
-            REACT_APP_SENTRY_PROJECT_ID
-        } = process.env;
         if(
             NODE_ENV === 'production'
             && typeof REACT_APP_SENTRY_KEY !== 'undefined'
@@ -54,8 +55,8 @@ class App extends Component {
                     </Switch>
                 </BrowserRouter>
                 <ToastContainer
-                    hideProgressBar
                     bodyClassName="color-black"
+                    hideProgressBar
                 />
             </>
         );

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { configureScope, captureException } from '@sentry/browser';
-import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
     Button,
     Col,
@@ -17,20 +17,7 @@ const {
 class ErrorBoundary extends Component {
     state = {
         error: null,
-        redirect_home: false,
     };
-
-    constructor(props) {
-        super(props);
-
-        this.redirectHome = this.redirectHome.bind(this);
-    }
-
-    redirectHome() {
-        this.setState({
-            redirect_home: true,
-        });
-    }
 
     componentDidCatch(error, errorInfo) {
         this.setState({ error });
@@ -57,14 +44,9 @@ class ErrorBoundary extends Component {
 
     render() {
         const { children } = this.props;
-        const { error, redirect_home } = this.state;
+        const { error } = this.state;
 
         if (error !== null) {
-            // Render fallback UI
-            if(redirect_home === true) {
-                return <Redirect to="/" />;
-            }
-
             return (
                 <div className="app flex-row align-items-center">
                     <Container>
@@ -79,7 +61,7 @@ class ErrorBoundary extends Component {
                         </Row>
                         <Row className="justify-content-center">
                             <Col md="6">
-                                <Button className="btn-home btn-brand" onClick={this.redirectHome}>
+                                <Button tag={Link} to="/dashboard" className="btn-home btn-brand">
                                     <i className="fa fa-home"></i>
                                     <span>Home</span>
                                 </Button>
