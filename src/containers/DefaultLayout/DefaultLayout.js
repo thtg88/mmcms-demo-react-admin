@@ -34,14 +34,17 @@ const DefaultLayout = props => {
     return (
         <div className="app">
             <AppHeader fixed>
-                <DefaultHeader history={history} />
+                <DefaultHeader />
             </AppHeader>
             <div className="app-body">
                 <AppSidebar fixed display="lg">
                     <AppSidebarHeader />
-                        <AppSidebarForm />
-                            <AppSidebarNav navConfig={navigation} {...props} />
-                        <AppSidebarFooter />
+                    <AppSidebarForm />
+                    <AppSidebarNav
+                        navConfig={navigation}
+                        {...props}
+                    />
+                    <AppSidebarFooter />
                     <AppSidebarMinimizer />
                 </AppSidebar>
                 <main className="main">

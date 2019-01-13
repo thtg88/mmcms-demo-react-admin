@@ -7,7 +7,9 @@ const DefaultFooter = () => (
                 href="https://github.com/thtg88/mmcms"
                 target="_blank"
                 rel="noopener noreferrer"
-            >mmCMS</a>
+            >
+                mmCMS
+            </a>
             {' '}
             &copy; 2018
             {' '}
@@ -15,7 +17,9 @@ const DefaultFooter = () => (
                 href="https://www.marco-marassi.com"
                 target="_blank"
                 rel="noopener noreferrer"
-            >M. Marassi</a>.
+            >
+                M. Marassi
+            </a>.
         </span>
         <span className="ml-auto">
             Powered by
@@ -24,7 +28,9 @@ const DefaultFooter = () => (
                 href="https://coreui.io/react"
                 target="_blank"
                 rel="noopener noreferrer"
-            >CoreUI for React</a>
+            >
+                CoreUI for React
+            </a>
         </span>
     </>
 );

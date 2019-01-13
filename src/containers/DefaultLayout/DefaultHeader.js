@@ -26,7 +26,6 @@ export class DefaultHeader extends Component {
         super(props);
 
         this.handleLogout = this.handleLogout.bind(this);
-        this.redirectProfile = this.redirectProfile.bind(this);
     }
 
     handleLogout() {
@@ -39,14 +38,14 @@ export class DefaultHeader extends Component {
         }
     }
 
-    redirectProfile() {
-        this.props.history.push('/me');
-    }
-
     render() {
         return (
             <>
-                <AppSidebarToggler className="d-lg-none" display="md" mobile />
+                <AppSidebarToggler
+                    className="d-lg-none"
+                    display="md"
+                    mobile
+                />
                 <AppNavbarBrand
                     tag={Link}
                     to="/dashboard"
@@ -69,8 +68,10 @@ export class DefaultHeader extends Component {
                             />
                         </DropdownToggle>
                         <DropdownMenu right style={{ right: 'auto' }}>
-                            <DropdownItem onClick={this.redirectProfile}>
-                                <i className="fa fa-user"></i> Profile
+                            <DropdownItem tag={Link} to="/me">
+                                <i className="fa fa-user"></i>
+                                {' '}
+                                Profile
                             </DropdownItem>
                             <DropdownItem onClick={this.handleLogout}>
                                 <i className="fa fa-sign-out"></i> Logout
