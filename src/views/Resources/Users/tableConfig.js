@@ -38,6 +38,16 @@ export const sortingOptions = [
         direction: 'desc',
     },
     {
+        display_name: 'Email',
+        name: 'email',
+        direction: 'asc',
+    },
+    {
+        display_name: 'Email',
+        name: 'email',
+        direction: 'desc',
+    },
+    {
         display_name: 'ID',
         name: 'id',
         direction: 'asc',
@@ -53,6 +63,7 @@ export const defaultSortingOption = {...sortingOptions[0]};
 
 export const searchColumns = [
     'ID',
+    'Email',
     'Name',
 ];
 

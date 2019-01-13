@@ -310,8 +310,12 @@ const withListResource = (
         render() {
             return (
                 <ComponentToWrap
+                    onPageClick={this.handlePageClick}
+                    onSortDropdownItemClick={this.handleSortDropdownItem}
                     onSearchButtonClick={this.handleSearchResources}
                     onSearchInputChange={this.updateSearchInputValue}
+                    onSearchInputClear={this.resetSearchInputValue}
+                    toggleSortDropdown={this.toggleSortDropdown}
                     {...this.props}
                     {...this.state}
                 />

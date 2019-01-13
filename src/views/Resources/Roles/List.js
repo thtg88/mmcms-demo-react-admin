@@ -11,7 +11,15 @@ import {
 } from '../../../redux/roles/actions';
 import reducer from '../../../redux/roles/reducers';
 import sagas from '../../../redux/roles/sagas';
-import { columns, pageSize } from './tableConfig';
+import {
+    columns,
+    pageSize,
+    keyField,
+    nameField,
+    sortingOptions,
+    defaultSortingOption,
+    searchColumns,
+} from './tableConfig';
 
 reducerRegistry.register(reducerName, reducer);
 sagaRegistry.register(reducerName, sagas);
@@ -33,11 +41,17 @@ export const List = ({
     errors,
     fetching_resources,
     history,
+    isSortDropdownOpen,
+    onPageClick,
     onSearchButtonClick,
     onSearchInputChange,
-    query,
+    onSearchInputClear,
+    onSortDropdownItemClick,
     resources,
+    query,
     searching,
+    selectedSortingOption,
+    toggleSortDropdown,
     total,
 }) => {
     return (
@@ -48,14 +62,29 @@ export const List = ({
             errors={errors}
             fetchingResources={fetching_resources}
             history={history}
+            isSortDropdownOpen={isSortDropdownOpen}
+            keyField={keyField}
+            listgroupItemTag="button"
             listType="list"
+            nameField={nameField}
+            onPageClick={onPageClick}
             onSearchButtonClick={onSearchButtonClick}
             onSearchInputChange={onSearchInputChange}
+            onSearchInputClear={onSearchInputClear}
+            onSortDropdownItemClick={onSortDropdownItemClick}
             pageSize={pageSize}
+            resourceBaseRoute={reducerName}
             resources={resources}
             resourcesName={resourcesName}
+            searchEnabled={true}
             searching={searching}
             searchQuery={query}
+            searchTextInputPlaceholder={`Search by ${searchColumns.join(', or ')}`}
+            selectedSortingOption={selectedSortingOption}
+            sortButtonDisabled={fetching_resources}
+            sortingEnabled={true}
+            sortingOptions={sortingOptions}
+            toggleSortDropdown={toggleSortDropdown}
             total={total}
             urlBuilder={(entity) => '/'+reducerName+'/'+entity.id}
         />
@@ -67,8 +96,10 @@ export default withListResource(
     {
         changePageResources,
         clearMetadataResources,
+        defaultSortingOption,
         getPaginatedResources,
         pageSize,
+        sortingOptions,
         resourceBaseRoute: reducerName,
         subStateName: reducerName,
     }
