@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
-import {
-    getApiErrorMessages,
-    isUnauthenticatedError
-} from '../../helpers/apiErrorMessages';
+import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
 import {
     getValidationSchemaFromFormResource,
     getValuesFromFormResource,
     updateFormResourceFromErrors,
 } from '../../helpers/formResources';
-import { loggedOut } from '../../redux/auth/actions';
 
 const withCreateResource = (
     ComponentToWrap,
@@ -33,6 +29,7 @@ const withCreateResource = (
             super(props);
 
             this.handleCreateResource = this.handleCreateResource.bind(this);
+            this.setInputValueState = this.setInputValueState.bind(this);
             this.updateInputValue = this.updateInputValue.bind(this);
         }
 
@@ -60,7 +57,7 @@ const withCreateResource = (
                     // Create resource
 
                     this.setState({
-                        creating_resource: true,
+                        creating_resource: true
                     });
 
                     createResource({ data });
@@ -74,9 +71,23 @@ const withCreateResource = (
                 });
         }
 
-        updateInputValue(evt) {
-            const { resource, resource_unchanged } = this.state;
-            const { target } = evt;
+        setInputValueState(name, value) {
+            const { resource } = this.state;
+
+            this.setState({
+                resource: {
+                    ...resource,
+                    [name]: {
+                        ...resource[name],
+                        value,
+                    },
+                }
+            });
+        }
+
+        updateInputValue(evt, extra) {
+            const { resource_unchanged } = this.state;
+            const { label, length, value, target } = evt;
 
             if(resource_unchanged === true) {
                 this.setState({
@@ -84,15 +95,38 @@ const withCreateResource = (
                 });
             }
 
-            this.setState({
-                resource: {
-                    ...resource,
-                    [target.name]: {
-                        ...resource[target.name],
-                        value: target.value
-                    },
-                },
-            });
+            // This means that a monkey-patched React-Select is updating data
+            if(extra && extra.action && extra.name) {
+                // A single-value selected option
+                if(extra.action === 'select-option' && label && value) {
+                    this.setInputValueState(extra.name, value);
+                }
+
+                // A multiple-value selected option
+                else if(extra.action === 'select-option' && typeof length !== 'undefined') {
+                    this.setInputValueState(extra.name, evt.map(option => option.value));
+                }
+
+                // A multiple value has removed a value
+                else if(extra.action === 'remove-value' && typeof length !== 'undefined') {
+                    this.setInputValueState(extra.name, evt.map(option => option.value));
+                }
+
+                // The value has been cleared
+                else if(extra.action === 'clear') {
+                    // For a multiple select, we set the value to an empty array
+                    if(extra.multiple) {
+                        this.setInputValueState(extra.name, []);
+                    }
+
+                    // For a single select, we set it to null
+                    else {
+                        this.setInputValueState(extra.name, null);
+                    }
+                }
+            } else {
+                this.setInputValueState(target.name, target.value);
+            }
         }
 
         componentDidUpdate(prevProps) {
@@ -100,19 +134,12 @@ const withCreateResource = (
                 created,
                 errors,
                 history,
-                loggedOut,
                 resource,
-                unauthenticated,
             } = this.props;
-
-            // if unauthenticated redirect to login
-            if(prevProps.unauthenticated === false && unauthenticated === true) {
-                loggedOut();
-            }
 
             // If I am receiving errors and I am creating the resource
             // Set the creating resource to false
-            else if(errors.length !== 0 && this.state.creating_resource === true) {
+            if(errors.length !== 0 && this.state.creating_resource === true) {
                 this.setState({
                     creating_resource: false,
                 });
@@ -157,13 +184,11 @@ const withCreateResource = (
             resource
         } = state[subStateName];
         const errors = getApiErrorMessages(error);
-        const unauthenticated = isUnauthenticatedError(error);
 
         return {
             created,
             errors,
             token,
-            unauthenticated,
             resource: typeof resource === 'undefined' ? null : resource,
         };
     };
@@ -171,7 +196,6 @@ const withCreateResource = (
     const mapDispatchToProps = {
         clearMetadataResourceCreate,
         createResource,
-        loggedOut,
     };
 
     return connect(
