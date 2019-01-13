@@ -1,67 +1,155 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
-import {
-    apiResourceDestroySuccessNotification,
-} from '../../helpers/toastNotification';
+import { apiResourceDestroySuccessNotification } from '../../helpers/toastNotification';
 
 const withListResource = (
     ComponentToWrap,
     {
         changePageResources,
         clearMetadataResources,
+        defaultSortingOption,
         getPaginatedResources,
         pageSize,
         resourceBaseRoute,
         subStateName,
+        sortingOptions,
     }
 ) => {
     class ListHOC extends Component {
         state = {
+            isSortDropdownOpen: false,
             query: '',
             searching: false,
+            selectedSortingOption: defaultSortingOption,
         };
 
         constructor(props) {
             super(props);
 
+            this.fetchPaginatedResources = this.fetchPaginatedResources.bind(this);
+            this.generateUri = this.generateUri.bind(this);
+            this.handlePageClick = this.handlePageClick.bind(this);
             this.handleSearchResources = this.handleSearchResources.bind(this);
+            this.handleSortDropdownItem = this.handleSortDropdownItem.bind(this);
+            this.resetSearchInputValue = this.resetSearchInputValue.bind(this);
+            this.toggleSortDropdown = this.toggleSortDropdown.bind(this);
             this.updateSearchInputValue = this.updateSearchInputValue.bind(this);
         }
 
-        handleSearchResources(evt) {
-            evt.preventDefault();
-
-            const {
-                getPaginatedResources,
-                history,
-                token
-            } = this.props;
-            const { query } = this.state;
-            let search_arr = [
-                'page=1',
-            ];
-            if(query) {
-                search_arr.push('q='+query);
-            }
-
-            this.setState({
-                searching: true,
-            });
-
-            history.push({
-                pathname: '/'+resourceBaseRoute,
-                search: search_arr.join('&')
-            });
+        fetchPaginatedResources() {
+            const { getPaginatedResources, token } = this.props;
+            const { query, selectedSortingOption } = this.state;
 
             // Fetch first page
             const data = {
                 token,
-                page: 1,
                 pageSize,
-                q: query
+                page: 1,
+                q: query,
+                sort_name: selectedSortingOption.name,
+                sort_direction: selectedSortingOption.direction,
             };
             getPaginatedResources({ data });
+        }
+
+        generateUri(page = 1) {
+            const { query, selectedSortingOption } = this.state;
+            let searchArr = [];
+            if(page) {
+                searchArr.push('page='+page);
+            } else {
+                searchArr.push('page=1');
+            }
+            if(query) {
+                searchArr.push('q='+query);
+            }
+            if(selectedSortingOption.name) {
+                searchArr.push('sort_name='+selectedSortingOption.name);
+            }
+            if(selectedSortingOption.direction) {
+                searchArr.push('sort_direction='+selectedSortingOption.direction);
+            }
+
+            return searchArr.join('&');
+        }
+
+        handlePageClick(page) {
+            const { history } = this.props;
+
+            history.push({
+                pathname: '/'+resourceBaseRoute,
+                search: this.generateUri(page),
+            });
+        }
+
+        handleSearchResources(evt) {
+            const { history } = this.props;
+
+            evt.preventDefault();
+
+            this.setState(
+                { searching: true },
+                () => {
+                    history.push({
+                        pathname: '/'+resourceBaseRoute,
+                        search: this.generateUri(1),
+                    });
+
+                    this.fetchPaginatedResources();
+                }
+            );
+        }
+
+        handleSortDropdownItem(name, direction) {
+            const { history } = this.props;
+
+            const newSortingOption = sortingOptions.filter(sortOption => {
+                return sortOption.name === name && sortOption.direction === direction;
+            });
+
+            if(newSortingOption.length > 0) {
+                this.setState(
+                    { selectedSortingOption: {...newSortingOption[0]}},
+                    () => {
+                        history.push({
+                            pathname: '/'+resourceBaseRoute,
+                            search: this.generateUri(1),
+                        });
+
+                        this.fetchPaginatedResources();
+                    }
+                );
+            }
+        }
+
+        resetSearchInputValue(evt) {
+            const { history } = this.props;
+
+            evt.preventDefault();
+
+            this.setState(
+                {
+                    query: '',
+                    searching: true,
+                },
+                () => {
+                    history.push({
+                        pathname: '/'+resourceBaseRoute,
+                        search: this.generateUri(1),
+                    });
+
+                    this.fetchPaginatedResources();
+                }
+            );
+        }
+
+        toggleSortDropdown() {
+            const { isSortDropdownOpen } = this.state;
+
+            this.setState({
+                isSortDropdownOpen: !isSortDropdownOpen,
+            });
         }
 
         updateSearchInputValue(evt) {
@@ -242,7 +330,7 @@ const withListResource = (
             total
         } = state[subStateName];
         const errors = getApiErrorMessages(error);
-        
+
         return {
             current_page,
             destroyed,
