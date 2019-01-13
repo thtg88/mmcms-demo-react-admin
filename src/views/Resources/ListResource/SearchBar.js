@@ -5,30 +5,43 @@ import {
     Col,
     Form,
     FormGroup,
-    Input,
     InputGroup,
-    InputGroupAddon
+    InputGroupAddon,
 } from 'reactstrap';
+import FormInput from '../../FormInput';
 
 export const SearchBar = ({
     buttonDisabled,
     iconClassName,
     onSubmit,
     onChange,
+    onClear,
     query,
+    textInputPlaceholder,
 }) => (
     <Form className="form-horizontal">
         <FormGroup row onSubmit={onSubmit}>
             <Col className="col-md-12">
                 <InputGroup>
-                    <Input
+                    <FormInput
                         type="text"
-                        id="search"
                         name="search"
                         onChange={onChange}
-                        placeholder="Search"
+                        placeholder={textInputPlaceholder}
                         value={query}
                     />
+                    <InputGroupAddon addonType="append">
+                        <Button
+                            type="button"
+                            color="danger"
+                            onClick={onClear}
+                            disabled={!query || buttonDisabled}
+                        >
+                            <i className="fa fa-times"></i>
+                            {' '}
+                            <span className="d-md-inline-block d-none">Clear</span>
+                        </Button>
+                    </InputGroupAddon>
                     <InputGroupAddon addonType="append">
                         <Button
                             type="submit"
@@ -38,7 +51,7 @@ export const SearchBar = ({
                         >
                             <i className={iconClassName}></i>
                             {' '}
-                            Search
+                            <span className="d-md-inline-block d-none">Search</span>
                         </Button>
                     </InputGroupAddon>
                 </InputGroup>
@@ -52,7 +65,9 @@ SearchBar.propTypes = {
     iconClassName: PropTypes.string,
     onSubmit: PropTypes.func,
     onChange: PropTypes.func,
+    onClear: PropTypes.func,
     query: PropTypes.string,
+    textInputPlaceholder: PropTypes.string,
 };
 
 export default SearchBar;

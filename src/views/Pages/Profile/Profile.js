@@ -255,7 +255,7 @@ export class Profile extends Component {
                         <>
                             <PageTitle text={profileTitle} />
                             <Row>
-                                <Col md={12}>
+                                <Col className="col-md-12">
                                     <Card className="card-accent-warning">
                                         <CardBody>
                                         {

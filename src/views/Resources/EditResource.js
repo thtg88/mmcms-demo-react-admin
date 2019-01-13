@@ -66,22 +66,22 @@ const EditResource = ({
                         <>
                             <PageTitle text={resourceName} actions={actions} />
                             <Row>
-                                <Col md={12}>
+                                <Col className="col-md-12">
                                     <Card className="card-accent-warning">
                                         <CardBody>
-                                        {
-                                            gettingResource
-                                                ? <SpinnerLoader />
-                                                : <ResourceForm
-                                                    onInputChange={updateInputValue}
-                                                    onSubmit={handleUpdateResource}
-                                                    resource={resource}
-                                                    submitButtonClassName="warning"
-                                                    submitButtonDisabled={resourceUnchanged || updatingResource}
-                                                    submitButtonIconClassName={updateButtonIconClassName}
-                                                    submitButtonText="Update"
-                                                />
-                                        }
+                                            {
+                                                gettingResource
+                                                    ? <SpinnerLoader />
+                                                    : <ResourceForm
+                                                        onInputChange={updateInputValue}
+                                                        onSubmit={handleUpdateResource}
+                                                        resource={resource}
+                                                        submitButtonClassName="warning"
+                                                        submitButtonDisabled={resourceUnchanged || updatingResource}
+                                                        submitButtonIconClassName={updateButtonIconClassName}
+                                                        submitButtonText="Update"
+                                                    />
+                                            }
                                         </CardBody>
                                     </Card>
                                 </Col>

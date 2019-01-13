@@ -18,14 +18,29 @@ const IndexResource = ({
     fetchingResources,
     handleSearchResources,
     history,
+    keyField,
+    isSortDropdownOpen,
+    listgroupItemTag,
     listType,
+    nameField,
+    onPageClick,
     onSearchButtonClick,
     onSearchInputChange,
+    onSearchInputClear,
+    onSortDropdownItemClick,
     pageSize,
+    resourceBaseRoute,
+    resourceListGroupItemClassName,
     resources,
     resourcesName,
+    searchEnabled,
     searching,
     searchQuery,
+    searchTextInputPlaceholder,
+    selectedSortingOption,
+    sortingEnabled,
+    sortingOptions,
+    toggleSortDropdown,
     total,
     updateSearchInputValue,
     urlBuilder,
@@ -52,30 +67,45 @@ const IndexResource = ({
         <div className="animated fadeIn">
             <PageTitle text={resourcesName} actions={actions} />
             <Row>
-                <Col xl={12}>
+                <Col className="col-md-12">
                     <ApiErrorCard errors={errors} />
                 </Col>
             </Row>
             <Row>
-                <Col xl={12}>
+                <Col className="col-md-12">
                     <Card className="card-accent-primary">
                         <CardBody>
                             <ListResource
-                                type={listType}
                                 columns={columns}
                                 data={resources[currentPage]}
                                 history={history}
                                 hover={!fetchingResources}
-                                keyField="id"
+                                isSortDropdownOpen={isSortDropdownOpen}
+                                keyField={keyField}
+                                listgroupItemTag={listgroupItemTag}
                                 loading={fetchingResources}
+                                nameField={nameField}
+                                onPageClick={onPageClick}
                                 onSearchButtonClick={onSearchButtonClick}
                                 onSearchInputChange={onSearchInputChange}
+                                onSearchInputClear={onSearchInputClear}
+                                onSortDropdownItemClick={onSortDropdownItemClick}
                                 page={currentPage}
                                 pageSize={pageSize}
                                 query={searchQuery}
-                                searchButtonDisabled={searching}
+                                resourceBaseRoute={resourceBaseRoute}
+                                resourceListGroupItemClassName={resourceListGroupItemClassName}
+                                searchButtonDisabled={searching || fetchingResources}
                                 searchButtonIconClassName={searchButtonIconClassName}
+                                searchEnabled={searchEnabled}
+                                searchTextInputPlaceholder={searchTextInputPlaceholder}
+                                selectedSortingOption={selectedSortingOption}
+                                sortingEnabled={sortingEnabled}
+                                sortingOptions={sortingOptions}
+                                sortButtonDisabled={fetchingResources}
+                                toggleSortDropdown={toggleSortDropdown}
                                 total={total}
+                                type={listType}
                                 urlBuilder={urlBuilder}
                             />
                         </CardBody>
@@ -94,14 +124,29 @@ IndexResource.propTypes = {
     fetchingResources: PropTypes.bool,
     handleSearchResources: PropTypes.func,
     history: PropTypes.object,
+    isSortDropdownOpen: PropTypes.bool,
+    keyField: PropTypes.string,
     listType: PropTypes.string,
+    nameField: PropTypes.string,
+    onPageClick: PropTypes.func,
     onSearchButtonClick: PropTypes.func,
     onSearchInputChange: PropTypes.func,
+    onSearchInputClear: PropTypes.func,
+    onSortDropdownItemClick: PropTypes.func,
     pageSize: PropTypes.number,
     resources: PropTypes.object,
+    resourceBaseRoute: PropTypes.string,
+    resourceListGroupItemClassName: PropTypes.string,
     resourcesName: PropTypes.string,
+    searchEnabled: PropTypes.bool,
     searching: PropTypes.bool,
     searchQuery: PropTypes.string,
+    searchTextInputPlaceholder: PropTypes.string,
+    selectedSortingOption: PropTypes.object,
+    sortButtonDisabled: PropTypes.bool,
+    sortingEnabled: PropTypes.bool,
+    sortingOptions: PropTypes.array,
+    toggleSortDropdown: PropTypes.func,
     total: PropTypes.number,
     updateSearchInputValue: PropTypes.func,
     urlBuilder: PropTypes.func,

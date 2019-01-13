@@ -4,7 +4,7 @@ import { Col, ListGroupItem, Row } from 'reactstrap';
 const EmptyListGroupItem = () => (
     <ListGroupItem tag="button" action onClick={() => {}}>
         <Row>
-            <Col md={12}>
+            <Col className="col-md-12">
                 <h5>No matching records found.</h5>
             </Col>
         </Row>

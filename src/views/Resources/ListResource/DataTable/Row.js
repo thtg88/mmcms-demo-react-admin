@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { get } from '../../../../helpers/formResources';
 
-const Row = ({ columns, entity, keyField, urlBuilder }) => (
+const Row = ({
+    columns,
+    entity,
+    keyField,
+    urlBuilder,
+}) => (
     <tr>
         {
             columns.map((column, idx) => {
