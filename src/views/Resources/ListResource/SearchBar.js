@@ -19,7 +19,7 @@ export const SearchBar = ({
 }) => (
     <Form className="form-horizontal">
         <FormGroup row onSubmit={onSubmit}>
-            <Col md="12">
+            <Col className="col-md-12">
                 <InputGroup>
                     <Input
                         type="text"

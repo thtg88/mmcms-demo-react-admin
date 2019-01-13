@@ -15,23 +15,27 @@ const CreateResource = ({
     handleCreateResource,
     errors,
     resource,
+    resourceName,
     resourceUnchanged,
     updateInputValue,
 }) => {
     const createButtonIconClassName = creatingResource === true
         ? 'fa fa-spinner fa-spin'
         : 'fa fa-plus';
+    const pageTitleText = resourceName
+        ? resourceName
+        : 'Resource';
 
     return (
         <div className="animated fadeIn">
             <Row>
-                <Col md="12">
+                <Col className="col-md-12">
                     <ApiErrorCard errors={errors} />
                 </Col>
             </Row>
-            <PageTitle text="Create Resource" />
+            <PageTitle text={`Create ${pageTitleText}`} />
             <Row>
-                <Col lg={12}>
+                <Col className="col-md-12">
                     <Card className="card-accent-success">
                         <CardBody>
                             <ResourceForm
@@ -56,6 +60,7 @@ CreateResource.proptTypes = {
     handleCreateResource: PropTypes.func,
     errors: PropTypes.array,
     resource: PropTypes.object,
+    resourceName: PropTypes.string,
     resourceUnchanged: PropTypes.bool,
     updateInputValue: PropTypes.func,
 };

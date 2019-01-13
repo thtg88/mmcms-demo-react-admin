@@ -45,7 +45,7 @@ const EditResource = ({
     return (
         <div className="animated fadeIn">
             <Row>
-                <Col md="12">
+                <Col className="col-md-12">
                     <ApiErrorCard errors={errors} />
                 </Col>
             </Row>
