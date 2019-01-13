@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    getApiErrorMessages,
-    isUnauthenticatedError
-} from '../../helpers/apiErrorMessages';
+import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
 import {
     apiResourceDestroySuccessNotification,
 } from '../../helpers/toastNotification';
-import { loggedOut } from '../../redux/auth/actions';
 
 const withListResource = (
     ComponentToWrap,
@@ -158,26 +154,15 @@ const withListResource = (
                 changePageResources,
                 fetching_resources,
                 getPaginatedResources,
-                loggedOut,
                 query,
                 resources,
                 token,
-                unauthenticated
             } = this.props;
             const { searching } = this.state;
             const query_page = parseInt(query.page, 10);
             const { q } = query;
 
-            // console.log('this.state', this.state);
-            // console.log('this.props', this.props);
-            // console.log('prevProps', prevProps);
-
-            // if unauthenticated redirect to login
-            if(prevProps.unauthenticated === false && unauthenticated === true) {
-                loggedOut();
-            }
-
-            else if(
+            if(
                 !Number.isNaN(query_page)
                 && query_page > 0
                 && query_page !== parseInt(prevProps.query.page, 10)
@@ -247,6 +232,7 @@ const withListResource = (
     }
 
     const mapStateToProps = state => {
+        const { token } = state.auth;
         const {
             current_page,
             destroyed,
@@ -256,17 +242,15 @@ const withListResource = (
             total
         } = state[subStateName];
         const errors = getApiErrorMessages(error);
-        const unauthenticated = isUnauthenticatedError(error);
-
+        
         return {
-            current_page: current_page,
-            destroyed: destroyed,
-            errors: errors,
-            fetching_resources: fetching_resources,
-            resources: resources,
-            token: state.auth.token,
-            total: total,
-            unauthenticated: unauthenticated
+            current_page,
+            destroyed,
+            errors,
+            fetching_resources,
+            resources,
+            token,
+            total,
         };
     };
 
@@ -274,7 +258,6 @@ const withListResource = (
         changePageResources,
         clearMetadataResources,
         getPaginatedResources,
-        loggedOut,
     };
 
     return connect(

@@ -11,10 +11,7 @@ import ApiErrorCard from '../../Cards/ApiErrorCard';
 import PageTitle from '../../PageTitle';
 import ResourceForm from '../../Resources/ResourceForm';
 import SpinnerLoader from '../../SpinnerLoader';
-import {
-    getApiErrorMessages,
-    isUnauthenticatedError
-} from '../../../helpers/apiErrorMessages';
+import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
 import {
     getFormResourceFromValues,
     getValidationSchemaFromFormResource,
@@ -25,8 +22,7 @@ import { apiResourceUpdateSuccessNotification } from '../../../helpers/toastNoti
 import {
     clearMetadataProfile,
     getProfile,
-    loggedOut,
-    updateProfile
+    updateProfile,
 } from '../../../redux/auth/actions';
 import schema from '../../../redux/users/schema';
 
@@ -135,22 +131,15 @@ export class Profile extends Component {
     componentDidUpdate(prevProps) {
         const {
             errors,
-            loggedOut,
             profile,
-            unauthenticated,
             updated_profile,
         } = this.props;
         const { getting_profile, updating_profile } = this.state;
 
-        // if unauthenticated redirect to login
-        if(prevProps.unauthenticated === false && unauthenticated === true) {
-            loggedOut();
-        }
-
         // This means that I was updating the resource,
         // And I received errors from the store
         // So it's time to restore the Update button
-        else if (
+        if(
             updating_profile === true
             && typeof errors.length !== 'undefined'
             && errors.length !== 0
@@ -291,12 +280,10 @@ const mapStateToProps = state => {
         user,
     } = state.auth;
     const errors = getApiErrorMessages(error);
-    const unauthenticated = isUnauthenticatedError(error);
 
     return {
         errors,
         token,
-        unauthenticated,
         updated_profile,
         profile: typeof user === 'undefined' ? null : user,
     };
@@ -305,7 +292,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
     clearMetadataProfile,
     getProfile,
-    loggedOut,
     updateProfile,
 };
 

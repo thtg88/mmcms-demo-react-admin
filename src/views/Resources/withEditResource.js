@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
-import {
-    getApiErrorMessages,
-    isUnauthenticatedError
-} from '../../helpers/apiErrorMessages';
+import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
 import {
     getFormResourceFromValues,
     getValidationSchemaFromFormResource,
@@ -16,7 +13,6 @@ import {
     apiResourceCreateSuccessNotification,
     apiResourceUpdateSuccessNotification,
 } from '../../helpers/toastNotification';
-import { loggedOut } from '../../redux/auth/actions';
 
 const withEditResource = (
     ComponentToWrap,
@@ -187,23 +183,16 @@ const withEditResource = (
             const {
                 destroyed,
                 errors,
-                loggedOut,
                 resource,
-                unauthenticated,
                 updated,
             } = this.props;
             const { destroying_resource, updating_resource } = this.state;
-
-            // if unauthenticated redirect to login
-            if(prevProps.unauthenticated === false && unauthenticated === true) {
-                loggedOut();
-            }
 
             // This means that I was destroying the resource,
             // And I received a destroyed from the store
             // So restore the state  - this will trigger a re-render
             // which will redirect us to the index
-            else if(
+            if(
                 typeof errors !== 'undefined'
                 && typeof errors.length !== 'undefined'
                 && errors.length === 0
@@ -304,7 +293,6 @@ const withEditResource = (
             updated,
         } = state[subStateName];
         const errors = getApiErrorMessages(error);
-        const unauthenticated = isUnauthenticatedError(error);
         const urlResourceId = parseInt(ownProps.match.params.id, 10);
         let { resource } = state[subStateName];
 
@@ -321,7 +309,6 @@ const withEditResource = (
             destroyed,
             errors,
             token,
-            unauthenticated,
             updated,
             urlResourceId,
             resource: typeof resource === 'undefined' ? null : resource,
@@ -333,7 +320,6 @@ const withEditResource = (
         destroyResource,
         findResource,
         getPaginatedResources,
-        loggedOut,
         updateResource,
     };
 
