@@ -150,7 +150,7 @@ const withCreateResource = (
         }
     }
 
-    const mapStateToProps = (state) => {
+    const mapStateToProps = state => {
         const {
             created,
             error,

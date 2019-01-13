@@ -18,7 +18,7 @@ const ApiErrorCard = ({ errors }) => {
         <Card className="border-danger">
             <CardHeader>
                 <i className="fa fa-warning"></i>
-                {" "}
+                {' '}
                 There were some problem with your request
             </CardHeader>
             <CardBody>

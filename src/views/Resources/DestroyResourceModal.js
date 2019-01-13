@@ -27,7 +27,7 @@ const DestroyResourceModal = ({
         <ModalFooter>
             <Button color="danger" disabled={disabled} onClick={onDestroyButtonClick}>
                 <i className={destroyButtonIconClassName}></i>
-                {" "}
+                {' '}
                 Yes, Delete
             </Button>
             {' '}

@@ -1,15 +1,10 @@
 export const getFormResourceFromValues = (values, schema) => {
-    if(
-        typeof values === 'undefined'
-        || values === null
-    ) {
+    if(!values) {
         return {};
     }
 
     const resource = Object.entries(values).reduce(
         (result, [key, value]) => {
-            // console.log(result);
-
             return {
                 ...result,
                 [key]: {
@@ -28,8 +23,9 @@ export const getFormResourceFromValues = (values, schema) => {
 };
 
 export const getValidationRulesFromKey = (schema, key) => {
-    // console.log(schema, key, schema[key]);
-    return schema[key] && schema[key].rules ? schema[key].rules : undefined;
+    return schema[key] && schema[key].rules
+        ? schema[key].rules
+        : undefined;
 };
 
 export const getValidationSchemaFromFormResource = (resource) => {
@@ -39,8 +35,6 @@ export const getValidationSchemaFromFormResource = (resource) => {
 
     const schema = Object.entries(resource).reduce(
         (result, [name, parameters]) => {
-            // console.log(result);
-
             if(parameters.rules) {
                 return {
                     ...result,
@@ -57,23 +51,16 @@ export const getValidationSchemaFromFormResource = (resource) => {
         {}
     );
 
-    // console.log(schema);
-
     return schema;
 };
 
 export const getValuesFromFormResource = (resource) => {
-    if(
-        typeof resource === 'undefined'
-        || resource === null
-    ) {
+    if(!resource) {
         return {};
     }
 
     const values = Object.entries(resource).reduce(
         (result, [name, parameters]) => {
-            // console.log(result);
-
             return {
                 ...result,
                 [name]: parameters.value
@@ -82,16 +69,12 @@ export const getValuesFromFormResource = (resource) => {
         {}
     );
 
-    // console.log(values);
-
     return values;
 };
 
 export const updateFormResourceFromErrors = (resource, errors) => {
     const new_resource = Object.entries(resource).reduce(
         (result, [name, parameters]) => {
-            // console.log(result, name, parameters);
-
             return {
                 ...result,
                 [name]: {

@@ -2,7 +2,10 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-const RestrictedComponent = ({logged_in, children}) => {
+const RestrictedComponent = ({
+    children,
+    logged_in,
+}) => {
     if(!logged_in) {
         return <Redirect to="/login" />;
     }
@@ -10,9 +13,11 @@ const RestrictedComponent = ({logged_in, children}) => {
     return children;
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
+    const { token } = state.auth;
+
     return {
-        logged_in: state.auth && state.auth.token,
+        logged_in: typeof token !== 'undefined' && token !== null,
     };
 };
 

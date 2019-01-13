@@ -47,44 +47,44 @@ const actions = {
 
 // action creators
 export const clearMetadataProfile = payload => ({
-    type: actions.CLEAR_METADATA_PROFILE
+    type: actions.CLEAR_METADATA_PROFILE,
 });
 
 export const getProfile = payload => ({
     type: actions.GET_PROFILE_REQUEST,
-    payload
+    payload,
 });
 
 export const login = payload => ({
     type: actions.LOGIN_REQUEST,
-    payload
+    payload,
 });
 
 export const loggedOut = payload => ({
-    type: actions.LOGGED_OUT
+    type: actions.LOGGED_OUT,
 });
 
 export const logout = payload => ({
     type: actions.LOGOUT_REQUEST,
-    payload
+    payload,
 });
 
 export const register = payload => ({
     type: actions.REGISTER_REQUEST,
-    payload
+    payload,
 });
 
 export const resetLoginError = payload => ({
-    type: actions.LOGIN_ERROR_RESET
+    type: actions.LOGIN_ERROR_RESET,
 });
 
 export const resetRegisterError = payload => ({
-    type: actions.REGISTER_ERROR_RESET
+    type: actions.REGISTER_ERROR_RESET,
 });
 
 export const updateProfile = payload => ({
     type: actions.UPDATE_PROFILE_REQUEST,
-    payload
+    payload,
 });
 
 export default actions;

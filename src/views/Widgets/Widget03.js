@@ -25,7 +25,7 @@ class Widget03 extends Component {
     const variant = data.variant;
 
     if (!variant || ['facebook', 'twitter', 'linkedin', 'google-plus'].indexOf(variant) < 0) {
-      return (null);
+      return null;
     }
 
     const back = 'bg-' + variant;

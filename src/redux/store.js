@@ -31,9 +31,6 @@ export const configureStore = () => {
     }
 
     const reducers = reducerRegistry.getReducers();
-
-    // console.log(reducers);
-
     const rootReducers = combineReducers(reducers);
 
     if(persistedState) {
@@ -63,7 +60,6 @@ export const configureStore = () => {
     // So that whenever a new reducer gets added
     // We replace the reducers with the new ones
     reducerRegistry.setChangeListener((reducers) => {
-        // console.log(reducers);
         store.replaceReducer(combineReducers(reducers));
     });
 

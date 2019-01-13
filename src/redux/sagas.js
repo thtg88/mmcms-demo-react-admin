@@ -1,6 +1,12 @@
 import sagaRegistry from './sagaRegistry';
-import authSagas from './auth/sagas';
+import auth from './auth/sagas';
+
+export const defaultSagas = {
+    auth,
+};
 
 export const registerDefaultSagas = () => {
-    sagaRegistry.register('auth', authSagas);
+    Object.entries(defaultSagas).forEach(([name, saga]) => {
+        sagaRegistry.register(name, saga);
+    })
 };

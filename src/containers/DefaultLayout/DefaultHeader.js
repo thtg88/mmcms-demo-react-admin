@@ -13,13 +13,13 @@ import {
     AppNavbarBrand,
     AppSidebarToggler
 } from '@coreui/react';
+import { logout } from '../../redux/auth/actions';
 import logo from '../../assets/img/brand/logo.svg';
 import sygnet from '../../assets/img/brand/sygnet.svg';
-import { logout } from '../../redux/auth/actions';
 
 export class DefaultHeader extends Component {
     state = {
-        redirect_profile: false
+        redirect_profile: false,
     };
 
     constructor(props) {
@@ -32,10 +32,6 @@ export class DefaultHeader extends Component {
     handleLogout() {
         const { logout, token } = this.props;
 
-        // console.log(token);
-        // console.log(data);
-        // console.log('handling logout');
-
         if(typeof logout !== 'undefined') {
             const data = token;
 
@@ -44,7 +40,7 @@ export class DefaultHeader extends Component {
     }
 
     redirectProfile() {
-        this.props.history.push('/me')
+        this.props.history.push('/me');
     }
 
     render() {
@@ -87,14 +83,16 @@ export class DefaultHeader extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
+    const { token } = state.auth;
+
     return {
-        token: state.auth && state.auth.token ? state.auth.token : null,
+        token: token ? token : null,
     };
 };
 
 const mapDispatchToProps = {
-    logout
+    logout,
 };
 
 export default connect(

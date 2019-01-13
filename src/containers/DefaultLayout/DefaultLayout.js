@@ -21,9 +21,7 @@ import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
 import RestrictedComponent from './RestrictedComponent';
 import waitingComponent from '../../views/waitingComponent';
-// sidebar nav config
 import navigation from '../../_nav';
-// routes config
 import routes from '../../routes';
 
 const DefaultLayout = props => {
@@ -51,31 +49,33 @@ const DefaultLayout = props => {
                     <Container fluid>
                         <LoggingOutCard loggingOut={logging_out} />
                         <Switch>
-                            {routes.map((route, idx) => {
-                                return route.component
-                                    ? (
-                                        <Route
-                                            key={idx}
-                                            path={route.path}
-                                            exact={route.exact}
-                                            name={route.name}
-                                            render={routeProps => (
-                                                <ErrorBoundary>
-                                                    <RestrictedComponent>
-                                                        {
-                                                            waitingComponent(
-                                                                route.component,
-                                                                queryString.parse(location.search),
-                                                                {...routeProps}
-                                                            )
-                                                        }
-                                                    </RestrictedComponent>
-                                                </ErrorBoundary>
-                                            )}
-                                        />
-                                    )
-                                    : (null);
-                            })}
+                            {
+                                routes.map((route, idx) => {
+                                    return route.component
+                                        ? (
+                                            <Route
+                                                key={idx}
+                                                path={route.path}
+                                                exact={route.exact}
+                                                name={route.name}
+                                                render={routeProps => (
+                                                    <ErrorBoundary>
+                                                        <RestrictedComponent>
+                                                            {
+                                                                waitingComponent(
+                                                                    route.component,
+                                                                    queryString.parse(location.search),
+                                                                    {...routeProps}
+                                                                )
+                                                            }
+                                                        </RestrictedComponent>
+                                                    </ErrorBoundary>
+                                                )}
+                                            />
+                                        )
+                                        : null;
+                                })
+                            }
                             <Route name="Page 404" component={Page404} />
                         </Switch>
                     </Container>
@@ -89,8 +89,10 @@ const DefaultLayout = props => {
 };
 
 const mapStateToProps = state => {
+    const { logging_out } = state.auth;
+
     return {
-        logging_out: state.auth && state.auth.logging_out === true
+        logging_out: logging_out === true,
     };
 };
 

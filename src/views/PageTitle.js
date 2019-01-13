@@ -60,12 +60,12 @@ const PageTitle = ({
                                     );
                                 }
 
-                                return (null);
+                                return null;
                             })
                         }
                     </Col>
                 )
-                : (null)
+                : null
             }
         </Row>
     );

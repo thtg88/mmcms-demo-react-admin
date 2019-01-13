@@ -2,41 +2,41 @@ import * as yup from 'yup';
 
 const schema = {
     name: {
-        type: 'text',
-        value: '',
+        errors: [],
         rules: yup.string()
             .required()
             .max(255),
-        errors: [],
+        type: 'text',
+        value: '',
     },
     email: {
-        type: 'email',
-        value: '',
+        errors: [],
         rules: yup.string()
             .required()
             .email()
             .max(255),
-        errors: [],
+        type: 'email',
+        value: '',
     },
     password: {
-        type: 'password',
-        value: '',
+        errors: [],
         rules: yup.string()
             .required()
             .min(6)
             .max(255),
-        errors: [],
+        type: 'password',
+        value: '',
     },
     password_confirmation: {
-        label: "Confirm Password",
-        placeholder: "Confirm your password",
-        type: 'password',
-        value: '',
+        errors: [],
+        label: 'Confirm Password',
+        placeholder: 'Confirm your password',
         rules: yup.string()
             .required()
             .min(6)
             .max(255),
-        errors: [],
+        type: 'password',
+        value: '',
     },
 };
 

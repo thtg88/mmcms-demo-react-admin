@@ -17,7 +17,7 @@ const ApiResourceDestroySuccessCard = ({ success, resourceDisplayName }) => {
         <Card className="border-success">
             <CardBody>
                 <i className="fa fa-trash"></i>
-                {" "}
+                {' '}
                 {resourceDisplayName ? resourceDisplayName : "Resource"} destroyed successfully.
             </CardBody>
         </Card>

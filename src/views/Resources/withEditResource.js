@@ -15,7 +15,7 @@ import { getResourceFromPaginatedResourcesAndId } from '../../helpers/paginatedR
 import {
     apiResourceCreateSuccessNotification,
     apiResourceUpdateSuccessNotification
-} from '../../helpers/notification';
+} from '../../helpers/toastNotification';
 import { loggedOut } from '../../redux/auth/actions';
 
 const withEditResource = (

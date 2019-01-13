@@ -15,7 +15,7 @@ const PlaceholderShimmerLoader = ({ columns }) => {
             <Row className="placeholder-shimmer-loader-row">
                 {columns.map((column, colIdx) => {
                     if(column.dataField === 'id') {
-                        return (null);
+                        return null;
                     }
 
                     let columnClassName;

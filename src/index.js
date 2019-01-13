@@ -1,11 +1,11 @@
-import 'react-app-polyfill/ie9'; // For IE 9-11 support
+// For IE 9-11 support
+import 'react-app-polyfill/ie9';
 import './polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from "react-redux";
 import App from './App';
 import store from './redux/store';
-import './index.css';
 import * as serviceWorker from './serviceWorker';
 
 function render(Component) {

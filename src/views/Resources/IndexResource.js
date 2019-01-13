@@ -41,7 +41,7 @@ const IndexResource = ({
         )
         || typeof total === 'undefined'
     ) {
-        return (null);
+        return null;
     }
 
     let searchButtonIconClassName = "fa fa-search";

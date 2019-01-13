@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import { configureScope, captureException } from '@sentry/browser';
+import { Redirect } from 'react-router-dom';
 import {
     Button,
     Col,
@@ -8,10 +8,16 @@ import {
     Row
 } from 'reactstrap';
 
+const {
+    NODE_ENV,
+    REACT_APP_SENTRY_KEY,
+    REACT_APP_SENTRY_PROJECT_ID,
+} = process.env;
+
 class ErrorBoundary extends Component {
     state = {
         error: null,
-        redirect_home: false
+        redirect_home: false,
     };
 
     constructor(props) {
@@ -22,17 +28,11 @@ class ErrorBoundary extends Component {
 
     redirectHome() {
         this.setState({
-            redirect_home: true
+            redirect_home: true,
         });
     }
 
     componentDidCatch(error, errorInfo) {
-        const {
-            NODE_ENV,
-            REACT_APP_SENTRY_KEY,
-            REACT_APP_SENTRY_PROJECT_ID
-        } = process.env;
-
         this.setState({ error });
 
         if(
@@ -56,10 +56,12 @@ class ErrorBoundary extends Component {
     }
 
     render() {
-        if (this.state.error !== null) {
-            // Render fallback UI
+        const { children } = this.props;
+        const { error, redirect_home } = this.state;
 
-            if(this.state.redirect_home === true) {
+        if (error !== null) {
+            // Render fallback UI
+            if(redirect_home === true) {
                 return <Redirect to="/" />;
             }
 
@@ -89,7 +91,7 @@ class ErrorBoundary extends Component {
         }
 
         // when there's not an error, render children untouched
-        return this.props.children;
+        return children;
     }
 }
 

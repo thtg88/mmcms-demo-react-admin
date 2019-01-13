@@ -1,59 +1,54 @@
-export const createResource = async (data) => {
+const { REACT_APP_API_BASE_URL } = process.env;
+const moduleBaseEndpoint = '/users';
+
+export const createResource = async data => {
     const { token, ...rest } = data;
 
-    // console.log(token, rest);
-    // console.log('createResource rest', rest);
-
-    return await fetch(process.env.REACT_APP_API_BASE_URL+'/users', {
+    return await fetch(REACT_APP_API_BASE_URL+moduleBaseEndpoint, {
         method: 'POST',
         headers: new Headers({
-            "Authorization": "Bearer "+token.access_token,
-            "Content-Type": "application/json",
-            "Accept": "application/json"
+            'Authorization': 'Bearer '+token.access_token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
         }),
         body: JSON.stringify(rest),
     })
     .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
-export const destroyResource = async (data) => {
+export const destroyResource = async data => {
     const { token, id } = data;
 
-    // console.log(token, id);
-    // console.log('destroyResource', id);
-
-    return await fetch(process.env.REACT_APP_API_BASE_URL+'/users/'+id, {
+    return await fetch(REACT_APP_API_BASE_URL+moduleBaseEndpoint+'/'+id, {
         method: 'DELETE',
         headers: new Headers({
-            "Authorization": "Bearer "+token.access_token,
-            "Content-Type": "application/json",
-            "Accept": "application/json"
+            'Authorization': 'Bearer '+token.access_token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
         }),
     })
     .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
-export const findResource = async (data) => {
+export const findResource = async data => {
     const { token, id } = data;
-    const url = process.env.REACT_APP_API_BASE_URL+'/users/'+id;
-
-    // console.log('findResource data', data);
+    const url = REACT_APP_API_BASE_URL+moduleBaseEndpoint+'/'+id;
 
     return await fetch(url, {
         method: 'GET',
         headers: new Headers({
-            "Authorization": "Bearer "+token.access_token,
-            "Content-Type": "application/json",
-            "Accept": "application/json"
+            'Authorization': 'Bearer '+token.access_token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
         }),
     })
     .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
-export const getPaginatedResources = async (data) => {
+export const getPaginatedResources = async data => {
     const { token, page, pageSize, q } = data;
-    const url = process.env.REACT_APP_API_BASE_URL
-        +'/users/paginate'
+    const url = REACT_APP_API_BASE_URL
+        +moduleBaseEndpoint+'/paginate'
         +'?page='+page
         +'&page_size='+pageSize
         +(
@@ -64,31 +59,26 @@ export const getPaginatedResources = async (data) => {
                 : ''
         );
 
-    // console.log('getPaginatedResources data', data);
-
     return await fetch(url, {
         method: 'GET',
         headers: new Headers({
-            "Authorization": "Bearer "+token.access_token,
-            "Content-Type": "application/json",
-            "Accept": "application/json"
+            'Authorization': 'Bearer '+token.access_token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
         }),
     })
     .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
-export const updateResource = async (data) => {
+export const updateResource = async data => {
     const { token, id, ...rest } = data;
 
-    // console.log(token, id, rest);
-    // console.log('updateResource rest', rest);
-
-    return await fetch(process.env.REACT_APP_API_BASE_URL+'/users/'+id, {
+    return await fetch(REACT_APP_API_BASE_URL+moduleBaseEndpoint+'/'+id, {
         method: 'PUT',
         headers: new Headers({
-            "Authorization": "Bearer "+token.access_token,
-            "Content-Type": "application/json",
-            "Accept": "application/json"
+            'Authorization': 'Bearer '+token.access_token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
         }),
         body: JSON.stringify(rest),
     })

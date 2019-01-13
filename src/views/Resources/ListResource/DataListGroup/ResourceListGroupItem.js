@@ -20,7 +20,7 @@ const ResourceListGroupItem = ({
                 const content = get(entity, column.dataField);
 
                 if(column.dataField === 'id') {
-                    return (null);
+                    return null;
                 }
 
                 return (

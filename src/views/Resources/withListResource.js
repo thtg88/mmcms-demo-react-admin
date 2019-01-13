@@ -6,7 +6,7 @@ import {
 } from '../../helpers/apiErrorMessages';
 import {
     apiResourceDestroySuccessNotification,
-} from '../../helpers/notification';
+} from '../../helpers/toastNotification';
 import { loggedOut } from '../../redux/auth/actions';
 
 const withListResource = (
@@ -246,7 +246,7 @@ const withListResource = (
         }
     }
 
-    const mapStateToProps = (state) => {
+    const mapStateToProps = state => {
         const {
             current_page,
             destroyed,

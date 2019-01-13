@@ -99,7 +99,7 @@ const EditResource = ({
                                     toggle={toggleDestroyResourceModal}
                                 />
                             )
-                            : (null)
+                            : null
                         }
                     </Row>
                 </>

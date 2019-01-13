@@ -6,7 +6,7 @@ export class ReducerRegistry {
 
     getReducers() {
         return {
-            ...this._reducers
+            ...this._reducers,
         };
     }
 
@@ -14,10 +14,10 @@ export class ReducerRegistry {
         if(this._reducers[name]) {
             return;
         }
-        
+
         this._reducers = {
             ...this._reducers,
-            [name]: reducer
+            [name]: reducer,
         };
 
         if (this._emitChange) {

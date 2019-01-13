@@ -1,7 +1,9 @@
 export const loadState = () => {
     try {
         const serializedState = localStorage.getItem('state');
+
         // console.log('state loaded: ', serializedState);
+
         if(serializedState === null) {
             return undefined;
         }
@@ -12,18 +14,19 @@ export const loadState = () => {
     }
 }
 
-export const saveState = (state) => {
+export const saveState = state => {
     try {
         const serializedState = JSON.stringify(sanitizeState(state));
-        localStorage.setItem('state', serializedState);
-        // console.log('state saved: ', serializedState);
 
+        localStorage.setItem('state', serializedState);
+
+        // console.log('state saved: ', serializedState);
     } catch(err) {
         console.log(err);
     }
 }
 
-export const sanitizeState = (state) => {
+export const sanitizeState = state => {
     const { token } = state.auth;
     // const {
     //     current_page,

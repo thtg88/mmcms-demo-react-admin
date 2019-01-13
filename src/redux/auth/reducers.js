@@ -2,17 +2,16 @@ import actions from './actions';
 
 const initial_state = {
     error: null,
+    logged_out: false,
     logging_in: false,
     logging_out: false,
-    logged_out: false,
     registering: false,
-    updated_profile: false,
     token: null,
-    user: null
+    updated_profile: false,
+    user: null,
 };
 
 const reducer = (state = initial_state, action) => {
-    // console.log('action dispatched', action);
     switch(action.type) {
         case actions.CLEAR_METADATA_PROFILE:
             return {
@@ -21,10 +20,9 @@ const reducer = (state = initial_state, action) => {
                 logging_in: false,
                 logging_out: false,
                 registering: false,
-                updated_profile: false
+                updated_profile: false,
             };
         case actions.GET_PROFILE_REQUEST:
-            // console.log('getProfile dispatched');
             return {
                 ...state,
                 error: null,
@@ -37,7 +35,6 @@ const reducer = (state = initial_state, action) => {
                 user: action.payload.resource,
             };
         case actions.GET_PROFILE_ERROR:
-            // console.log('getProfile error:', action);
             return {
                 ...state,
                 error: action.error,
@@ -47,64 +44,61 @@ const reducer = (state = initial_state, action) => {
             return {
                 ...state,
                 logged_out: true,
+                token: null,
                 user: null,
-                token: null
             };
         case actions.LOGIN_ERROR_RESET:
             return {
                 ...state,
-                error: null
+                error: null,
             };
         case actions.LOGIN_REQUEST:
-            // console.log('dispatched', state);
             return {
                 ...state,
                 error: null,
                 logged_out: false,
-                logging_in: true
+                logging_in: true,
             };
         case actions.LOGIN_SUCCESS:
             return {
                 ...state,
                 error: null,
                 logging_in: false,
-                user: null,
                 token: action.payload,
+                user: null,
             };
         case actions.LOGIN_ERROR:
             return {
                 ...state,
                 error: action.error,
-                logging_in: false
+                logging_in: false,
             };
         case actions.LOGOUT_REQUEST:
-            // console.log(action.type+' taken');
             return {
                 ...state,
                 error: null,
-                logging_out: true
+                logging_out: true,
             };
         case actions.LOGOUT_SUCCESS:
         case actions.LOGOUT_ERROR:
-            // console.log(action.type+' taken');
             return {
                 ...state,
                 error: null,
                 logging_out: false,
-                user: null,
                 token: null,
+                user: null,
             };
         case actions.REGISTER_ERROR_RESET:
             return {
                 ...state,
-                error: null
+                error: null,
             };
         case actions.REGISTER_REQUEST:
             return {
                 ...state,
                 error: null,
                 logged_out: false,
-                registering: true
+                registering: true,
             };
         case actions.REGISTER_SUCCESS:
             // Destructure object into user and the rest
@@ -114,22 +108,20 @@ const reducer = (state = initial_state, action) => {
                 ...state,
                 error: null,
                 registering: false,
-                user: resource,
                 token: token_payload,
+                user: resource,
             };
         case actions.REGISTER_ERROR:
-            // console.log('dispatched error', action);
             return {
                 ...state,
                 error: action.error,
-                registering: false
+                registering: false,
             };
         case actions.UPDATE_PROFILE_REQUEST:
-            // console.log('updatingProfile dispatched');
             return {
                 ...state,
                 error: null,
-                updated_profile: false
+                updated_profile: false,
             };
         case actions.UPDATE_PROFILE_SUCCESS:
             return {
@@ -139,11 +131,10 @@ const reducer = (state = initial_state, action) => {
                 user: action.payload.resource,
             };
         case actions.UPDATE_PROFILE_ERROR:
-            // console.log('updatingProfile error:', action);
             return {
                 ...state,
                 error: action.error,
-                updated_profile: false
+                updated_profile: false,
             };
         default:
             return state;

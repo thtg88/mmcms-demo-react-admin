@@ -147,7 +147,7 @@ export class Login extends Component {
                                                     block
                                                 >
                                                     <i className={loginButtonIconClassName}></i>
-                                                    {" "}
+                                                    {' '}
                                                     Login
                                                 </Button>
                                             </Col>
@@ -171,7 +171,7 @@ export class Login extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     const {
         error,
         logged_out,

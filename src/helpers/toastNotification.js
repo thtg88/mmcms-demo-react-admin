@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
-const notification = ({
+const toastNotification = ({
     iconClassName,
     message,
     onClose,
@@ -13,28 +13,26 @@ const notification = ({
     	<div className="notification-content">
 			<i className={`notification-icon fa fa-fw fa-lg ${iconClassName} notification-icon-${type}`}></i>
             {
-                typeof title !== 'undefined'
-                && title !== null
-                && title !== ''
-                ? <div className="notification-title">{title}</div>
-                : null
+                title
+                    ? <div className="notification-title">{title}</div>
+                    : null
             }
 			<div className="notification-message">{message}</div>
     	</div>
     </div>
 , { onClose });
 
-notification.propTypes = {
+toastNotification.propTypes = {
     iconClassName: PropTypes.string,
     message: PropTypes.string.isRequired,
     onClose: PropTypes.func,
     title: PropTypes.string,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
 };
 
-export default notification;
+export default toastNotification;
 
-export const apiResourceCreateSuccessNotification = ({ resourceDisplayName }) => notification({
+export const apiResourceCreateSuccessNotification = ({ resourceDisplayName }) => toastNotification({
     iconClassName: 'fa-check',
     message: (resourceDisplayName ? resourceDisplayName : "Resource")
         +' created successfully.',
@@ -43,10 +41,10 @@ export const apiResourceCreateSuccessNotification = ({ resourceDisplayName }) =>
 });
 
 apiResourceCreateSuccessNotification.propTypes = {
-    resourceDisplayName: PropTypes.string
+    resourceDisplayName: PropTypes.string,
 };
 
-export const apiResourceDestroySuccessNotification = ({ resourceDisplayName }) => notification({
+export const apiResourceDestroySuccessNotification = ({ resourceDisplayName }) => toastNotification({
     iconClassName: 'fa-trash',
     message: (resourceDisplayName ? resourceDisplayName : "Resource")
         +' destroyed successfully.',
@@ -55,10 +53,10 @@ export const apiResourceDestroySuccessNotification = ({ resourceDisplayName }) =
 });
 
 apiResourceDestroySuccessNotification.propTypes = {
-    resourceDisplayName: PropTypes.string
+    resourceDisplayName: PropTypes.string,
 };
 
-export const apiResourceUpdateSuccessNotification = ({ resourceDisplayName }) => notification({
+export const apiResourceUpdateSuccessNotification = ({ resourceDisplayName }) => toastNotification({
     iconClassName: 'fa-check',
     message: (resourceDisplayName ? resourceDisplayName : "Resource")
         +' updated successfully.',
@@ -67,5 +65,5 @@ export const apiResourceUpdateSuccessNotification = ({ resourceDisplayName }) =>
 });
 
 apiResourceUpdateSuccessNotification.propTypes = {
-    resourceDisplayName: PropTypes.string
+    resourceDisplayName: PropTypes.string,
 };

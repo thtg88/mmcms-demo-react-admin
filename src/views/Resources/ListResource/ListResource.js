@@ -15,7 +15,7 @@ const ListResource = ({
         return (<DataTable {...props} />);
     }
 
-    return (null);
+    return null;
 };
 
 ListResource.propTypes = {

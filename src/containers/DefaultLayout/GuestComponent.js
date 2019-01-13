@@ -13,9 +13,11 @@ const GuestComponent = ({
     return children;
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
+    const { token } = state.auth;
+
     return {
-        logged_in: state.auth && state.auth.token
+        logged_in: typeof token !== 'undefined' && token !== null,
     };
 };
 

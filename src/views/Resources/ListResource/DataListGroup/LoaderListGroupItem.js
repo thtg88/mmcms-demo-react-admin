@@ -28,7 +28,7 @@ const LoaderListGroupItem = ({
         );
     }
 
-    return (null);
+    return null;
 };
 
 LoaderListGroupItem.propTypes =  {

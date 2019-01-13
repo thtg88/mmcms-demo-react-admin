@@ -53,7 +53,7 @@ export const isUnauthenticatedError = (error) => {
         return false;
     }
 
-    // IF error a TypeError
+    // If error a TypeError
     if(error instanceof TypeError) {
         return false;
     }
@@ -62,10 +62,8 @@ export const isUnauthenticatedError = (error) => {
 
     // Loop all the object attributes
     Object.entries(error).forEach(([key, value]) => {
-
         if(key === 'unauthenticated') {
             unauthenticated = true;
-            return false;
         }
     });
 

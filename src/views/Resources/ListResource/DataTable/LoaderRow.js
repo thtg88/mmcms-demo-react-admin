@@ -27,7 +27,7 @@ const LoaderRow = ({
         );
     }
 
-    return (null);
+    return null;
 };
 
 LoaderRow.propTypes =  {

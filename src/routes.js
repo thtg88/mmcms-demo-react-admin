@@ -1,15 +1,14 @@
 import { lazy } from 'react';
 
 const Profile = lazy(() => import('./views/Pages/Profile'));
-
 const Dashboard = lazy(() => import('./views/Dashboard'));
 
-// Roles Loadables...
+// Roles lazies...
 const Roles = lazy(() => import('./views/Resources/Roles/List'));
 const RoleEdit = lazy(() => import('./views/Resources/Roles/Edit'));
 const RoleCreate = lazy(() => import('./views/Resources/Roles/Create'));
 
-// Users Loadables...
+// Users lazies...
 const Users = lazy(() => import('./views/Resources/Users/List'));
 const UserEdit = lazy(() => import('./views/Resources/Users/Edit'));
 const UserCreate = lazy(() => import('./views/Resources/Users/Create'));

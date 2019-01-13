@@ -6,7 +6,7 @@ export class SagaRegistry {
 
     getSagas() {
         return {
-            ...this._sagasMap
+            ...this._sagasMap,
         };
     }
 
@@ -17,7 +17,7 @@ export class SagaRegistry {
 
         this._sagasMap = {
             ...this._sagasMap,
-            [name]: saga()
+            [name]: saga(),
         };
 
         if (this._emitChange) {

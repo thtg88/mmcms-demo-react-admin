@@ -17,7 +17,7 @@ const ApiResourceCreateSuccessCard = ({ success }) => {
         <Card className="border-success">
             <CardBody>
                 <i className="fa fa-check"></i>
-                {" "}
+                {' '}
                 Resource created successfully.
             </CardBody>
         </Card>

@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
+import { init } from '@sentry/browser';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { init } from '@sentry/browser';
-// Styles
-import './App.scss';
-// Containers
 import { DefaultLayout } from './containers';
 import ErrorBoundary from './ErrorBoundary';
 import GuestComponent from './containers/DefaultLayout/GuestComponent';
-// Pages
 import { Login, Register } from './views/Pages';
+import './scss/style.scss';
 
 class App extends Component {
     componentDidMount() {
@@ -64,4 +61,5 @@ class App extends Component {
         );
     }
 }
+
 export default App;

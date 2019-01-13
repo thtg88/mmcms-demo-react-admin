@@ -48,45 +48,45 @@ const actions = {
 // action creators
 export const changePageResources = payload => ({
     type: actions.CHANGE_PAGE_RESOURCES,
-    payload
+    payload,
 });
 
 export const clearMetadataResourceCreate = payload => ({
-    type: actions.CLEAR_METADATA_RESOURCE_CREATE
+    type: actions.CLEAR_METADATA_RESOURCE_CREATE,
 });
 
 export const clearMetadataResourceEdit = payload => ({
-    type: actions.CLEAR_METADATA_RESOURCE_EDIT
+    type: actions.CLEAR_METADATA_RESOURCE_EDIT,
 });
 
 export const clearMetadataResources = payload => ({
     type: actions.CLEAR_METADATA_RESOURCES,
-    payload
+    payload,
 });
 
 export const createResource = payload => ({
     type: actions.CREATE_RESOURCE_REQUEST,
-    payload
+    payload,
 });
 
 export const destroyResource = payload => ({
     type: actions.DESTROY_RESOURCE_REQUEST,
-    payload
+    payload,
 });
 
 export const findResource = payload => ({
     type: actions.FIND_RESOURCE_REQUEST,
-    payload
+    payload,
 });
 
 export const getPaginatedResources = payload => ({
     type: actions.GET_PAGINATED_RESOURCES_REQUEST,
-    payload
+    payload,
 });
 
 export const updateResource = payload => ({
     type: actions.UPDATE_RESOURCE_REQUEST,
-    payload
+    payload,
 });
 
 export default actions;

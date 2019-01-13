@@ -21,7 +21,7 @@ import {
     getValuesFromFormResource,
     updateFormResourceFromErrors,
 } from '../../../helpers/formResources';
-import { apiResourceUpdateSuccessNotification } from '../../../helpers/notification';
+import { apiResourceUpdateSuccessNotification } from '../../../helpers/toastNotification';
 import {
     clearMetadataProfile,
     getProfile,
@@ -283,7 +283,7 @@ export class Profile extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     const {
         error,
         token,

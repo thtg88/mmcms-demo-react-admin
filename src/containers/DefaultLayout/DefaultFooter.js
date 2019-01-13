@@ -8,9 +8,9 @@ const DefaultFooter = () => (
                 target="_blank"
                 rel="noopener noreferrer"
             >mmCMS</a>
-            {" "}
+            {' '}
             &copy; 2018
-            {" "}
+            {' '}
             <a
                 href="https://www.marco-marassi.com"
                 target="_blank"
@@ -19,7 +19,7 @@ const DefaultFooter = () => (
         </span>
         <span className="ml-auto">
             Powered by
-            {" "}
+            {' '}
             <a
                 href="https://coreui.io/react"
                 target="_blank"

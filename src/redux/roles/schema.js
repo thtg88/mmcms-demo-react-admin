@@ -2,29 +2,29 @@ import * as yup from 'yup';
 
 const schema = {
     display_name: {
-        type: 'text',
-        value: '',
+        errors: [],
         rules: yup.string()
             .required()
             .max(255),
-        errors: [],
+        type: 'text',
+        value: '',
     },
     name: {
-        type: 'text',
-        value: '',
+        errors: [],
         rules: yup.string()
             .required()
             .max(255),
-        errors: [],
+        type: 'text',
+        value: '',
     },
     priority: {
-        type: 'number',
-        value: '',
+        errors: [],
         rules: yup.number()
             .required()
             .integer()
             .min(0),
-        errors:[]
+        type: 'number',
+        value: '',
     },
 };
 

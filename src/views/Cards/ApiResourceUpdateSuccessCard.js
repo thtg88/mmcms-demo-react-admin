@@ -17,7 +17,7 @@ const ApiResourceUpdateSuccessCard = ({ success, resourceDisplayName }) => {
         <Card className="border-success">
             <CardBody>
                 <i className="fa fa-check"></i>
-                {" "}
+                {' '}
                 {resourceDisplayName ? resourceDisplayName : "Resource"} updated successfully.
             </CardBody>
         </Card>
