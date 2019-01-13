@@ -1,0 +1,54 @@
+div.notification-container {
+    padding: 10px;
+    border-radius: 4px;
+    background: #fff;
+    line-height: 1.5;
+    position: relative;
+    overflow: hidden;
+
+    .notification-content {
+        .notification-icon {
+            position: absolute;
+            line-height: 24px;
+            margin-left: 4px;
+
+            &.notification-icon-danger {
+                color: $danger_colour;
+            }
+
+            &.notification-icon-primary {
+                color: $primary_colour;
+            }
+
+            &.notification-icon-success {
+                color: $success_colour;
+            }
+
+            &.notification-icon-warning {
+                color: $warning_colour;
+            }
+        }
+
+        .notification-title {
+            font-size: 16px;
+            margin-left: 48px;
+            margin-bottom: 8px;
+            padding-right: 24px;
+            color: rgba(0,0,0,.85);
+            line-height: 24px;
+            display: inline-block;
+        }
+
+        .notification-message {
+            margin-left: 48px;
+            color: rgba(0,0,0,.85);
+            font-size: 14px;
+        }
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .Toastify__toast-container {
+        width: 100%;
+    }
+}

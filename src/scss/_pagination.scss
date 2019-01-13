@@ -1,0 +1,22 @@
+.pagination {
+	// We display block the pagination and inline-block the item
+	// As by default the theme comes with flex and list-item respectively,
+	// But with long pagination e.g. long page numbers, the pagination overflows
+	// the screen becoming unusable
+	// investigate a better solution, perhaps overflox-x: scroll?
+	// Although sometimes people don't realize they have to scroll to reach the
+	// other items
+	display: block;
+
+	.page-item {
+		display: inline-block;
+
+		&.active {
+			.page-link {
+				background-color: #edf4fa;
+				border-color: #c8ced3;
+				color: black;
+			}
+		}
+	}
+}

@@ -1,0 +1,56 @@
+div.row.placeholder-shimmer-loader-row {
+    .animated-background {
+        margin-bottom: 7px;
+    }
+
+    &:last-of-type {
+        .col:last-of-type {
+            .animated-background {
+                margin-bottom: 2px;
+            }
+        }
+    }
+}
+
+/**
+ * Thanks to https://codepen.io/tvararu/pen/zxqeQd?editors=1100#0 for the snippet.
+ * This has been adapted to be used with Bootstrap columns instead of
+ * absolute-positioned placeholders.
+ */
+@keyframes placeHolderShimmer{
+	0% {
+		background-position: -700px 0;
+	}
+	100% {
+		background-position: 0px 0;
+	}
+}
+
+.animated-background {
+    animation-duration: 1.4s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right,  #eeeeee 40%, #dddddd 50%, #eeeeee 40%);
+    background-repeat: no-repeat;
+    background-size: 1200px 160px;
+    transform: translate3d(0, 0, 0);
+    transition: all .4s ease-in-out;
+}
+
+@media (min-width: 768px) {
+    .animated-background:nth-child(2) {
+        margin-right: 8px;
+    }
+
+    .animated-background:nth-last-child(1) {
+        margin-left: 8px;
+    }
+
+    .animated-background:not(nth-child(2),nth-last-child(1)) {
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+}
