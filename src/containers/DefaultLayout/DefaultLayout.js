@@ -25,11 +25,7 @@ import navigation from '../../_nav';
 import routes from '../../routes';
 
 const DefaultLayout = props => {
-    const {
-        history,
-        location,
-        logging_out,
-    } = props;
+    const { location, logging_out } = props;
 
     return (
         <div className="app">

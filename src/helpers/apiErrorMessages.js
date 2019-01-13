@@ -6,7 +6,6 @@ export const getApiErrorMessages = (error) => {
     let errors = [];
 
     if(typeof error !== 'undefined' && error !== null) {
-
         if(typeof error !== 'object') {
             errors.push(error);
 
@@ -24,7 +23,6 @@ export const getApiErrorMessages = (error) => {
                             errors.push(error_arr);
                         } else {
                             Object.entries(error_arr).forEach(([idx, error]) => {
-                                // console.log(idx, error, typeof error);
                                 errors.push(error);
                             });
                         }
@@ -33,8 +31,6 @@ export const getApiErrorMessages = (error) => {
             });
         }
     }
-
-    // console.log('getApiErrorMessages errors normalized:', errors);
 
     return errors;
 };
