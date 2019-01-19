@@ -7,8 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ## [Unreleased]
 ### Added
 - Terms and conditions of use
+
+## [0.17.0] - 2019-01-19
+### Added
+- Netlify redirects config
 ### Changed
-- Upgrade to FontAwesome Icons v5
+- General bug fixes and improvements
+### Removed
+- Bitbucket pipeline config
 
 ## [0.16.0] - 2018-11-29
 ## Added
