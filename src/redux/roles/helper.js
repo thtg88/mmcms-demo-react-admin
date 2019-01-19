@@ -46,11 +46,21 @@ export const findResource = async data => {
 };
 
 export const getPaginatedResources = async data => {
-    const { token, page, pageSize, q } = data;
+    const { token, page, pageSize, q, sort_name, sort_direction } = data;
     const url = REACT_APP_API_BASE_URL
         +moduleBaseEndpoint+'/paginate'
         +'?page='+page
         +'&page_size='+pageSize
+        +(
+            sort_name
+                ? '&sort_name='+sort_name
+                : ''
+        )
+        +(
+            sort_direction
+                ? '&sort_direction='+sort_direction
+                : ''
+        )
         +(
             typeof q !== 'undefined'
             && q !== null

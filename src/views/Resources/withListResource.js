@@ -206,10 +206,12 @@ const withListResource = (
                     ) {
                         // Fetch first page
                         const data = {
-                            q: query.q,
-                            token,
                             page,
                             pageSize,
+                            token,
+                            q: query.q,
+                            sort_direction: query.sort_direction,
+                            sort_name: query.sort_name,
                         };
                         getPaginatedResources({ data });
 
@@ -224,13 +226,36 @@ const withListResource = (
                             searching: true
                         });
                     }
+                    if(
+                        (
+                            query.sort_name
+                            && query.sort_name !== this.state.selectedSortingOption.name
+                        )
+                        || (
+                            query.sort_direction
+                            && query.sort_direction !== this.state.selectedSortingOption.direction
+                        )
+                    ) {
+                        const newSortingOption = sortingOptions.filter(sortOption => {
+                            return sortOption.name === query.sort_name
+                                && sortOption.direction === query.sort_direction;
+                        });
+
+                        if(newSortingOption.length > 0) {
+                            this.setState({
+                                selectedSortingOption: {...newSortingOption[0]},
+                            });
+                        }
+                    }
 
                     // Fetch page data
                     const data = {
-                        q: query.q,
+                        pageSize,
                         token,
                         page: parseInt(query.page, 10),
-                        pageSize,
+                        q: query.q,
+                        sort_direction: query.sort_direction,
+                        sort_name: query.sort_name,
                     };
                     getPaginatedResources({ data });
                 }
