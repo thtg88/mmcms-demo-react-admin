@@ -26,6 +26,14 @@ import {
 } from '../../../redux/auth/actions';
 import schema from '../../../redux/users/schema';
 
+const attributesToShow = [
+    'name',
+    'email',
+    // 'role_id',
+    'password',
+    'password_confirmation',
+];
+
 export class Profile extends Component {
     state = {
         getting_profile: false,
@@ -123,7 +131,7 @@ export class Profile extends Component {
 
         } else {
             this.setState({
-                profile: getFormResourceFromValues(profile, schema),
+                profile: getFormResourceFromValues(profile, schema, attributesToShow),
             });
         }
     }
@@ -173,7 +181,7 @@ export class Profile extends Component {
             && profile !== null
         ) {
             this.setState({
-                profile: getFormResourceFromValues(profile, schema),
+                profile: getFormResourceFromValues(profile, schema, attributesToShow),
                 getting_profile: false,
                 updating_profile: false,
             });
