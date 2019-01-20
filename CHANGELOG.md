@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Added
 - Terms and conditions of use
 
+## [0.17.2] - 2019-01-20
+### Fixed
+- Profile form
+
+## [0.17.1] - 2019-01-20
+### Changed
+- General improvements to edit resource HOC
+- General improvements to list resource HOC
+
 ## [0.17.0] - 2019-01-19
 ### Added
 - Netlify redirects config
