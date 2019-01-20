@@ -31,7 +31,7 @@ export const sanitizeState = state => {
     // const {
     //     current_page,
     //     resource,
-    //     resources,
+    //     paginated_resources,
     //     total
     // } = state.users;
     return {

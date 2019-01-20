@@ -38,6 +38,15 @@ const schema = {
         type: 'password',
         value: '',
     },
+    role_id: {
+        empty_option: 'Please select a role for this user...',
+        errors: [],
+        rules: yup.number()
+            .required(),
+        type: 'select',
+        value: '',
+        values: [],
+    },
 };
 
 export default schema;
