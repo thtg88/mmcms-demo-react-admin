@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ## [Unreleased]
 ### Added
 - Terms and conditions of use
+### Fixed
+- Selection of role for user
+
+## [0.17.3] - 2019-01-20
+### Changed
+- Style improvements
 
 ## [0.17.2] - 2019-01-20
 ### Fixed
