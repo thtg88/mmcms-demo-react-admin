@@ -165,7 +165,7 @@ const withListResource = (
                 destroyed,
                 getPaginatedResources,
                 query,
-                resources,
+                paginated_resources,
                 token
             } = this.props;
 
@@ -196,11 +196,11 @@ const withListResource = (
                 ) {
                     const page = typeof current_page !== 'undefined' ? current_page : 1;
                     if(
-                        // If resources never fetched
-                        typeof resources === 'undefined'
-                        || typeof resources[page] === 'undefined'
+                        // If paginated_resources never fetched
+                        typeof paginated_resources === 'undefined'
+                        || typeof paginated_resources[page] === 'undefined'
                         // Or was empty (worth re-fetching)
-                        || resources[page].length === 0
+                        || paginated_resources[page].length === 0
                         // Or I've just deleted a resource
                         || destroyed === true
                     ) {
@@ -216,7 +216,7 @@ const withListResource = (
                         getPaginatedResources({ data });
 
                     } else {
-                        // If resources for that page have been fetched before
+                        // If paginated_resources for that page have been fetched before
                         // avoid re-fetching
                     }
                 } else {
@@ -268,7 +268,7 @@ const withListResource = (
                 fetching_resources,
                 getPaginatedResources,
                 query,
-                resources,
+                paginated_resources,
                 token,
             } = this.props;
             const { searching } = this.state;
@@ -282,11 +282,11 @@ const withListResource = (
                 && searching === false
             ) {
                 if(
-                    // If resources never fetched
-                    typeof resources === 'undefined'
-                    || typeof resources[query_page] === 'undefined'
+                    // If paginated_resources never fetched
+                    typeof paginated_resources === 'undefined'
+                    || typeof paginated_resources[query_page] === 'undefined'
                     // Or was empty (worth re-fetching)
-                    || resources[query_page].length === 0
+                    || paginated_resources[query_page].length === 0
                 ) {
                     // If changing page and page is valid
                     // Re-fetch page
@@ -308,8 +308,8 @@ const withListResource = (
                 }
             }
 
-            // If I have been searching and fetching the resources,
-            // and now I have received the resources,
+            // If I have been searching and fetching the paginated_resources,
+            // and now I have received the paginated_resources,
             // set search to off
             else if(
                 searching === true
@@ -355,7 +355,7 @@ const withListResource = (
             destroyed,
             error,
             fetching_resources,
-            resources,
+            paginated_resources,
             total
         } = state[subStateName];
         const errors = getApiErrorMessages(error);
@@ -365,7 +365,7 @@ const withListResource = (
             destroyed,
             errors,
             fetching_resources,
-            resources,
+            paginated_resources,
             token,
             total,
         };

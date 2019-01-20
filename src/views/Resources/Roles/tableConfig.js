@@ -1,23 +1,18 @@
 export const columns = [
     {
-        dataField: 'id',
-        text: 'ID',
-        className: 'col-md-12',
+        dataField: 'name',
+        text: 'Name',
+        className: 'col-md-12 col-12',
     },
     {
         dataField: 'display_name',
         text: 'Display Name',
-        className: 'col-md-4 col-12',
-    },
-    {
-        dataField: 'name',
-        text: 'Name',
-        className: 'col-md-2 col-12',
+        className: 'col-md-6 col-12',
     },
     {
         dataField: 'priority',
         text: 'Priority',
-        className: 'col-md-4 col-12',
+        className: 'col-md-6 col-12',
     },
     {
         dataField: 'created_at',

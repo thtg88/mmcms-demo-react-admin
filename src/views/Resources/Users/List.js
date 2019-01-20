@@ -47,7 +47,7 @@ export const List = ({
     onSearchInputChange,
     onSearchInputClear,
     onSortDropdownItemClick,
-    resources,
+    paginated_resources,
     query,
     searching,
     selectedSortingOption,
@@ -74,7 +74,7 @@ export const List = ({
             onSortDropdownItemClick={onSortDropdownItemClick}
             pageSize={pageSize}
             resourceBaseRoute={reducerName}
-            resources={resources}
+            paginated_resources={paginated_resources}
             resourcesName={resourcesName}
             searchEnabled={true}
             searching={searching}
@@ -86,7 +86,7 @@ export const List = ({
             sortingOptions={sortingOptions}
             toggleSortDropdown={toggleSortDropdown}
             total={total}
-            urlBuilder={(entity) => '/'+reducerName+'/'+entity.id}
+            urlBuilder={(entity) => history.push('/'+reducerName+'/'+entity.id)}
         />
     );
 };
