@@ -17,6 +17,7 @@ import {
 const withEditResource = (
     ComponentToWrap,
     {
+        attributesToShow,
         clearMetadataResourceEdit,
         destroyResource,
         findResource,
@@ -49,11 +50,10 @@ const withEditResource = (
         handleDestroyResource(evt) {
             evt.preventDefault();
 
-            const { destroyResource, token } = this.props;
-            const { resource } = this.state;
+            const { destroyResource, token, urlResourceId } = this.props;
             const data = {
                 token,
-                id: resource.id.value,
+                id: urlResourceId,
             };
 
             this.setState({
@@ -66,14 +66,14 @@ const withEditResource = (
         async handleUpdateResource(evt) {
             evt.preventDefault();
 
-            const { updateResource, token } = this.props;
+            const { updateResource, token, urlResourceId } = this.props;
             const { resource } = this.state;
             const values = getValuesFromFormResource(resource);
             const validationSchema = getValidationSchemaFromFormResource(resource);
             const data = {
-                id: resource.id.value,
                 token,
-                ...values
+                id: urlResourceId,
+                ...values,
             };
 
             // Reset errors
@@ -160,11 +160,11 @@ const withEditResource = (
 
             } else {
                 this.setState({
-                    resource: getFormResourceFromValues(resource, schema),
+                    resource: getFormResourceFromValues(resource, schema, attributesToShow),
                 });
             }
 
-            // Get all the resources in the background
+            // Get all the paginated_resources in the background
             // so that when the user goes back to the list
             // he can see the latest changes
             if(created === true) {
@@ -254,7 +254,7 @@ const withEditResource = (
             // avoiding blank fields for ones that do not get updated
             else if(resource !== null && prevProps.resource === null) {
                 this.setState({
-                    resource: getFormResourceFromValues(resource, schema),
+                    resource: getFormResourceFromValues(resource, schema, attributesToShow),
                     getting_resource: false,
                     updating_resource: false,
                 });
@@ -289,7 +289,7 @@ const withEditResource = (
             created,
             destroyed,
             error,
-            resources,
+            paginated_resources,
             updated,
         } = state[subStateName];
         const errors = getApiErrorMessages(error);
@@ -301,7 +301,7 @@ const withEditResource = (
             || typeof resource === 'undefined'
             || resource.id !== urlResourceId
         ) {
-            resource = getResourceFromPaginatedResourcesAndId(resources, urlResourceId);
+            resource = getResourceFromPaginatedResourcesAndId(paginated_resources, urlResourceId);
         }
 
         return {

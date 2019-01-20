@@ -31,7 +31,7 @@ const IndexResource = ({
     pageSize,
     resourceBaseRoute,
     resourceListGroupItemClassName,
-    resources,
+    paginated_resources,
     resourcesName,
     searchEnabled,
     searching,
@@ -48,9 +48,9 @@ const IndexResource = ({
     if(
         (
             (
-                typeof resources === 'undefined'
+                typeof paginated_resources === 'undefined'
                 || typeof currentPage === 'undefined'
-                || typeof resources[currentPage] === 'undefined'
+                || typeof paginated_resources[currentPage] === 'undefined'
             )
             && !fetchingResources
         )
@@ -77,7 +77,7 @@ const IndexResource = ({
                         <CardBody>
                             <ListResource
                                 columns={columns}
-                                data={resources[currentPage]}
+                                data={paginated_resources[currentPage]}
                                 history={history}
                                 hover={!fetchingResources}
                                 isSortDropdownOpen={isSortDropdownOpen}
@@ -134,7 +134,7 @@ IndexResource.propTypes = {
     onSearchInputClear: PropTypes.func,
     onSortDropdownItemClick: PropTypes.func,
     pageSize: PropTypes.number,
-    resources: PropTypes.object,
+    paginated_resources: PropTypes.object,
     resourceBaseRoute: PropTypes.string,
     resourceListGroupItemClassName: PropTypes.string,
     resourcesName: PropTypes.string,

@@ -21,6 +21,11 @@ reducerRegistry.register(reducerName, reducer);
 sagaRegistry.register(reducerName, sagas);
 
 const canDestroy = true;
+const attributesToShow = [
+    'name',
+    'email',
+    // 'role_id',
+];
 
 export const Edit = ({
     destroyed,
@@ -74,6 +79,7 @@ export const Edit = ({
 export default withEditResource(
     Edit,
     {
+        attributesToShow,
         clearMetadataResourceEdit,
         destroyResource,
         findResource,
