@@ -18,10 +18,6 @@ import logo from '../../assets/img/brand/logo.svg';
 import sygnet from '../../assets/img/brand/sygnet.svg';
 
 export class DefaultHeader extends Component {
-    state = {
-        redirect_profile: false,
-    };
-
     constructor(props) {
         super(props);
 

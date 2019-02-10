@@ -5,13 +5,11 @@ import { connect } from 'react-redux';
 const GuestComponent = ({
     children,
     logged_in,
-}) => {
-    if(logged_in) {
-        return <Redirect to="/" />;
-    }
-
-    return children;
-};
+}) => (
+    logged_in
+        ? <Redirect to="/" />
+        : children
+);
 
 const mapStateToProps = state => {
     const { token } = state.auth;
