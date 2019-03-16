@@ -16,11 +16,11 @@ import {
 } from '@coreui/react';
 import { Page404 } from '../../views/Pages';
 import ErrorBoundary from '../../ErrorBoundary';
-import LoggingOutCard from '../../views/Cards/LoggingOutCard';
+import LoggingOutCard from '../../components/Cards/LoggingOutCard';
 import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
 import RestrictedComponent from './RestrictedComponent';
-import waitingComponent from '../../views/waitingComponent';
+import waitingComponent from '../../components/waitingComponent';
 import navigation from '../../_nav';
 import routes from '../../routes';
 
