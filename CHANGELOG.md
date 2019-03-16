@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Fixed
 - Selection of role for user
 
+## [0.18.1] - 2019-03-16
+### Fixed
+- pageSize import in Edit components
+
 ## [0.18.0] - 2019-03-16
 ### Changed
 - Folder re-structure
