@@ -1,6 +1,5 @@
 import React from 'react';
-import ListResource from '../../../components/Resources/ListResource';
-import withListResource from '../../../components/Resources/ListResource/withListResource';
+import ListResource, { withListResource } from '../../../components/Resources/ListResource';
 import reducerRegistry from '../../../redux/reducerRegistry';
 import sagaRegistry from '../../../redux/sagaRegistry';
 import {

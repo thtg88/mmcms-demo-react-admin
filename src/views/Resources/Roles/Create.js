@@ -1,6 +1,5 @@
 import React from 'react';
-import CreateResource from '../../../components/Resources/CreateResource';
-import withCreateResource from '../../../components/Resources/CreateResource/withCreateResource';
+import CreateResource, { withCreateResource } from '../../../components/Resources/CreateResource';
 import reducerRegistry from '../../../redux/reducerRegistry';
 import sagaRegistry from '../../../redux/sagaRegistry';
 import {

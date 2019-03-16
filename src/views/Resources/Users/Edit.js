@@ -1,7 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import EditResource from '../../../components/Resources/EditResource';
-import withEditResource from '../../../components/Resources/EditResource/withEditResource';
+import EditResource, { withEditResource } from '../../../components/Resources/EditResource';
 import reducerRegistry from '../../../redux/reducerRegistry';
 import sagaRegistry from '../../../redux/sagaRegistry';
 import {
