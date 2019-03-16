@@ -16,9 +16,9 @@ import sagas from '../../../redux/roles/sagas';
 import {
     attributesSequenceToShow,
     canDestroy,
+    pageSize,
     schema,
 } from '../../../redux/roles/schema';
-import { pageSize } from './tableConfig';
 
 reducerRegistry.register(reducerName, reducer);
 sagaRegistry.register(reducerName, sagas);
