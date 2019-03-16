@@ -15,7 +15,7 @@ import {
 } from '../../../helpers/toastNotification';
 
 const withEditResource = ({
-    attributesToShow,
+    attributesSequenceToShow,
     clearMetadataResourceEdit,
     destroyResource,
     findResource,
@@ -157,7 +157,7 @@ const withEditResource = ({
 
             } else {
                 this.setState({
-                    resource: getFormResourceFromValues(resource, schema, attributesToShow),
+                    resource: getFormResourceFromValues(resource, schema, attributesSequenceToShow),
                 });
             }
 
@@ -251,7 +251,7 @@ const withEditResource = ({
             // avoiding blank fields for ones that do not get updated
             else if(resource !== null && prevProps.resource === null) {
                 this.setState({
-                    resource: getFormResourceFromValues(resource, schema, attributesToShow),
+                    resource: getFormResourceFromValues(resource, schema, attributesSequenceToShow),
                     getting_resource: false,
                     updating_resource: false,
                 });

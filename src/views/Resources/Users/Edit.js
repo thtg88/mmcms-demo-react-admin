@@ -14,18 +14,15 @@ import {
 } from '../../../redux/users/actions';
 import reducer from '../../../redux/users/reducers';
 import sagas from '../../../redux/users/sagas';
-import schema from '../../../redux/users/schema';
+import {
+    attributesSequenceToShow,
+    canDestroy,
+    schema,
+} from '../../../redux/users/schema';
 import { pageSize } from './tableConfig';
 
 reducerRegistry.register(reducerName, reducer);
 sagaRegistry.register(reducerName, sagas);
-
-const canDestroy = true;
-const attributesToShow = [
-    'name',
-    'email',
-    // 'role_id',
-];
 
 export const Edit = ({
     destroyed,
@@ -77,7 +74,7 @@ export const Edit = ({
 };
 
 export default withEditResource({
-    attributesToShow,
+    attributesSequenceToShow,
     clearMetadataResourceEdit,
     destroyResource,
     findResource,

@@ -1,6 +1,8 @@
 import * as yup from 'yup';
 
-const schema = {
+export const canDestroy = true;
+
+export const schema = {
     display_name: {
         errors: [],
         rules: yup.string()
@@ -27,5 +29,11 @@ const schema = {
         value: '',
     },
 };
+
+export const attributesSequenceToShow = [
+    'display_name',
+    'name',
+    'priority',
+];
 
 export default schema;

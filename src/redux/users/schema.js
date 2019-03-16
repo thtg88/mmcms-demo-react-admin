@@ -1,6 +1,8 @@
 import * as yup from 'yup';
 
-const schema = {
+export const canDestroy = true;
+
+export const schema = {
     name: {
         errors: [],
         rules: yup.string()
@@ -48,5 +50,11 @@ const schema = {
         values: [],
     },
 };
+
+export const attributesSequenceToShow = [
+    'name',
+    'email',
+    // 'role_id',
+];
 
 export default schema;
