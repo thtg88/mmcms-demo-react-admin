@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
-import { apiResourceDestroySuccessNotification } from '../../helpers/toastNotification';
+import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
+import { apiResourceDestroySuccessNotification } from '../../../helpers/toastNotification';
 
 const withListResource = (
     ComponentToWrap,

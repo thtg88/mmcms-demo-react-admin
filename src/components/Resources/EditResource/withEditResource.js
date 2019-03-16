@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
-import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
+import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
 import {
     getFormResourceFromValues,
     getValidationSchemaFromFormResource,
     getValuesFromFormResource,
     updateFormResourceFromErrors,
-} from '../../helpers/formResources';
-import { getResourceFromPaginatedResourcesAndId } from '../../helpers/paginatedResources';
+} from '../../../helpers/formResources';
+import { getResourceFromPaginatedResourcesAndId } from '../../../helpers/paginatedResources';
 import {
     apiResourceCreateSuccessNotification,
     apiResourceUpdateSuccessNotification,
-} from '../../helpers/toastNotification';
+} from '../../../helpers/toastNotification';
 
 const withEditResource = (
     ComponentToWrap,

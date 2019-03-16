@@ -6,11 +6,11 @@ import {
     Col,
     Row
 } from 'reactstrap';
-import ApiErrorCard from '../Cards/ApiErrorCard';
-import ListResource from './ListResource/ListResource';
-import PageTitle from '../PageTitle';
+import ApiErrorCard from '../../Cards/ApiErrorCard';
+import ListResource from './ListResource';
+import PageTitle from '../../PageTitle';
 
-const IndexResource = ({
+const ListResourceContainer = ({
     actions,
     columns,
     currentPage,
@@ -116,7 +116,7 @@ const IndexResource = ({
     );
 };
 
-IndexResource.propTypes = {
+ListResourceContainer.propTypes = {
     actions: PropTypes.array,
     columns: PropTypes.array,
     currentPage: PropTypes.number,
@@ -152,4 +152,4 @@ IndexResource.propTypes = {
     urlBuilder: PropTypes.func,
 };
 
-export default IndexResource;
+export default ListResourceContainer;

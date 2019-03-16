@@ -7,24 +7,24 @@ import {
     Col,
     Row,
 } from 'reactstrap';
-import ApiErrorCard from '../../Cards/ApiErrorCard';
-import PageTitle from '../../PageTitle';
-import ResourceForm from '../../Resources/ResourceForm';
-import SpinnerLoader from '../../SpinnerLoader';
-import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
+import ApiErrorCard from '../../components/Cards/ApiErrorCard';
+import PageTitle from '../../components/PageTitle';
+import ResourceForm from '../../components/Resources/ResourceForm';
+import SpinnerLoader from '../../components/SpinnerLoader';
+import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
 import {
     getFormResourceFromValues,
     getValidationSchemaFromFormResource,
     getValuesFromFormResource,
     updateFormResourceFromErrors,
-} from '../../../helpers/formResources';
-import { apiResourceUpdateSuccessNotification } from '../../../helpers/toastNotification';
+} from '../../helpers/formResources';
+import { apiResourceUpdateSuccessNotification } from '../../helpers/toastNotification';
 import {
     clearMetadataProfile,
     getProfile,
     updateProfile,
-} from '../../../redux/auth/actions';
-import schema from '../../../redux/users/schema';
+} from '../../redux/auth/actions';
+import schema from '../../redux/users/schema';
 
 const attributesToShow = [
     'name',

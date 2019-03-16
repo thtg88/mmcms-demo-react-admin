@@ -15,9 +15,9 @@ import {
     Row
 } from 'reactstrap';
 import ReCAPTCHA from "react-google-recaptcha";
-import ApiErrorAlert from '../../Alerts/ApiErrorAlert';
-import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
-import { register, resetRegisterError } from '../../../redux/auth/actions';
+import ApiErrorAlert from '../../components/Alerts/ApiErrorAlert';
+import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
+import { register, resetRegisterError } from '../../redux/auth/actions';
 
 const { REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY } = process.env;
 

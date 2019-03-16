@@ -6,11 +6,11 @@ import {
     Row,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
-import ApiErrorCard from '../Cards/ApiErrorCard';
-import DestroyResourceModal from './DestroyResourceModal';
-import PageTitle from '../PageTitle';
-import ResourceForm from './ResourceForm';
-import SpinnerLoader from '../SpinnerLoader';
+import ApiErrorCard from '../../Cards/ApiErrorCard';
+import DestroyResourceModal from '../DestroyResourceModal';
+import PageTitle from '../../PageTitle';
+import ResourceForm from '../ResourceForm';
+import SpinnerLoader from '../../SpinnerLoader';
 
 const EditResource = ({
     actions,

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
-import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
+import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
 import {
     getValidationSchemaFromFormResource,
     getValuesFromFormResource,
     updateFormResourceFromErrors,
-} from '../../helpers/formResources';
+} from '../../../helpers/formResources';
 
 const withCreateResource = (
     ComponentToWrap,

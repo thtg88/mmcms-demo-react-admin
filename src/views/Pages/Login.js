@@ -14,10 +14,10 @@ import {
 	InputGroupText,
 	Row
 } from 'reactstrap';
-import ApiErrorAlert from '../../Alerts/ApiErrorAlert';
-import LoggedOutAlert from '../../Alerts/LoggedOutAlert';
-import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
-import { login, resetLoginError } from '../../../redux/auth/actions';
+import ApiErrorAlert from '../../components/Alerts/ApiErrorAlert';
+import LoggedOutAlert from '../../components/Alerts/LoggedOutAlert';
+import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
+import { login, resetLoginError } from '../../redux/auth/actions';
 
 export class Login extends Component {
     state = {

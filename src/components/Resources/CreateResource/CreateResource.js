@@ -6,9 +6,9 @@ import {
     Col,
     Row,
 } from 'reactstrap';
-import ApiErrorCard from '../Cards/ApiErrorCard';
-import PageTitle from '../PageTitle';
-import ResourceForm from './ResourceForm';
+import ApiErrorCard from '../../../components/Cards/ApiErrorCard';
+import PageTitle from '../../../components/PageTitle';
+import ResourceForm from '../ResourceForm';
 
 const CreateResource = ({
     creatingResource,
