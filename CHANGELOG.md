@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Fixed
 - Selection of role for user
 
+## [0.18.0] - 2019-03-16
+### Changed
+- Folder re-structure
+
 ## [0.17.4] - 2019-02-10
 - General code improvements
 
