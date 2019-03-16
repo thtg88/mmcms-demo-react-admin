@@ -1,5 +1,5 @@
 import React from 'react';
-import IndexResource from '../../../components/Resources/ListResource';
+import ListResource from '../../../components/Resources/ListResource';
 import withListResource from '../../../components/Resources/ListResource/withListResource';
 import reducerRegistry from '../../../redux/reducerRegistry';
 import sagaRegistry from '../../../redux/sagaRegistry';
@@ -13,18 +13,17 @@ import reducer from '../../../redux/roles/reducers';
 import sagas from '../../../redux/roles/sagas';
 import {
     columns,
-    pageSize,
+    defaultSortingOption,
     keyField,
     nameField,
-    sortingOptions,
-    defaultSortingOption,
+    pageSize,
+    resourcesName,
     searchColumns,
-} from './tableConfig';
+    sortingOptions,
+} from '../../../redux/roles/schema';
 
 reducerRegistry.register(reducerName, reducer);
 sagaRegistry.register(reducerName, sagas);
-
-const resourcesName = 'Roles';
 
 const actions = [
     {
@@ -55,7 +54,7 @@ export const List = ({
     total,
 }) => {
     return (
-        <IndexResource
+        <ListResource
             actions={actions}
             columns={columns}
             currentPage={current_page}
