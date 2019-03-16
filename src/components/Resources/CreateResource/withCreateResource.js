@@ -8,16 +8,13 @@ import {
     updateFormResourceFromErrors,
 } from '../../../helpers/formResources';
 
-const withCreateResource = (
-    ComponentToWrap,
-    {
-        clearMetadataResourceCreate,
-        createResource,
-        resourceBaseRoute,
-        schema,
-        subStateName,
-    }
-) => {
+const withCreateResource = ({
+    clearMetadataResourceCreate,
+    createResource,
+    resourceBaseRoute,
+    schema,
+    subStateName,
+}) => (ComponentToWrap) => {
     class CreateHOC extends Component {
         state = {
             creating_resource: false,

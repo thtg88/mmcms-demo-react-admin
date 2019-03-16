@@ -91,16 +91,13 @@ export const List = ({
     );
 };
 
-export default withListResource(
-    List,
-    {
-        changePageResources,
-        clearMetadataResources,
-        defaultSortingOption,
-        getPaginatedResources,
-        pageSize,
-        sortingOptions,
-        resourceBaseRoute: reducerName,
-        subStateName: reducerName,
-    }
-);
+export default withListResource({
+    changePageResources,
+    clearMetadataResources,
+    defaultSortingOption,
+    getPaginatedResources,
+    pageSize,
+    sortingOptions,
+    resourceBaseRoute: reducerName,
+    subStateName: reducerName,
+})(List);

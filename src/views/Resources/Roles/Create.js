@@ -35,13 +35,10 @@ export const Create = ({
     );
 };
 
-export default withCreateResource(
-    Create,
-    {
-        clearMetadataResourceCreate,
-        createResource,
-        schema,
-        resourceBaseRoute: reducerName,
-        subStateName: reducerName,
-    }
-);
+export default withCreateResource({
+    clearMetadataResourceCreate,
+    createResource,
+    schema,
+    resourceBaseRoute: reducerName,
+    subStateName: reducerName,
+})(Create);

@@ -76,17 +76,14 @@ export const Edit = ({
     );
 };
 
-export default withEditResource(
-    Edit,
-    {
-        attributesToShow,
-        clearMetadataResourceEdit,
-        destroyResource,
-        findResource,
-        getPaginatedResources,
-        pageSize,
-        schema,
-        updateResource,
-        subStateName: reducerName,
-    }
-);
+export default withEditResource({
+    attributesToShow,
+    clearMetadataResourceEdit,
+    destroyResource,
+    findResource,
+    getPaginatedResources,
+    pageSize,
+    schema,
+    updateResource,
+    subStateName: reducerName,
+})(Edit);

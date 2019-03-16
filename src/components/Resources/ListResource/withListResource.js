@@ -3,19 +3,16 @@ import { connect } from 'react-redux';
 import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
 import { apiResourceDestroySuccessNotification } from '../../../helpers/toastNotification';
 
-const withListResource = (
-    ComponentToWrap,
-    {
-        changePageResources,
-        clearMetadataResources,
-        defaultSortingOption,
-        getPaginatedResources,
-        pageSize,
-        resourceBaseRoute,
-        subStateName,
-        sortingOptions,
-    }
-) => {
+const withListResource = ({
+    changePageResources,
+    clearMetadataResources,
+    defaultSortingOption,
+    getPaginatedResources,
+    pageSize,
+    resourceBaseRoute,
+    subStateName,
+    sortingOptions,
+}) => (ComponentToWrap) => {
     class ListHOC extends Component {
         state = {
             isSortDropdownOpen: false,

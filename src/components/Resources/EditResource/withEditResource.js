@@ -14,20 +14,17 @@ import {
     apiResourceUpdateSuccessNotification,
 } from '../../../helpers/toastNotification';
 
-const withEditResource = (
-    ComponentToWrap,
-    {
-        attributesToShow,
-        clearMetadataResourceEdit,
-        destroyResource,
-        findResource,
-        getPaginatedResources,
-        pageSize,
-        schema,
-        subStateName,
-        updateResource,
-    }
-) => {
+const withEditResource = ({
+    attributesToShow,
+    clearMetadataResourceEdit,
+    destroyResource,
+    findResource,
+    getPaginatedResources,
+    pageSize,
+    schema,
+    subStateName,
+    updateResource,
+}) => (ComponentToWrap) => {
     class EditHOC extends Component {
         state = {
             destroying_resource: false,
