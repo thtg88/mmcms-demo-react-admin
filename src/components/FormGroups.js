@@ -29,10 +29,12 @@ const FormGroups = ({ groups }) => {
             formText,
             inputClassName,
             invalid,
+            isValidDate,
             key,
             label,
             locale,
             multiple,
+            multipleSelectLimit,
             name,
             onChange,
             placeholder,
@@ -114,8 +116,10 @@ const FormGroups = ({ groups }) => {
                     disabled={disabled}
                     emptyOption={emptyOption}
                     invalid={invalid}
+                    isValidDate={isValidDate}
                     locale={locale}
                     multiple={multiple}
+                    multipleSelectLimit={multipleSelectLimit}
                     name={name}
                     onChange={onChange}
                     placeholder={placeholder}
@@ -126,6 +130,11 @@ const FormGroups = ({ groups }) => {
                     values={values}
                     viewMode={viewMode}
                 />
+                {
+                    multipleSelectLimit
+                        ? <FormText>You may select a maximum of {multipleSelectLimit} option(s) from the dropdown.</FormText>
+                        : null
+                }
                 {
                     formText
                         ? <FormText>{formText}</FormText>
@@ -158,11 +167,15 @@ FormGroups.propTypes = {
         ]),
         inputClassName: PropTypes.string,
         invalid: PropTypes.bool,
+        isValidDate: PropTypes.func,
         key: PropTypes.oneOfType([
             PropTypes.number,
             PropTypes.string,
         ]),
         label: PropTypes.string,
+        locale: PropTypes.string,
+        multiple: PropTypes.bool,
+        multipleSelectLimit: PropTypes.number,
         name: PropTypes.string,
         onChange: PropTypes.func,
         placeholder: PropTypes.string,
