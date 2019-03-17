@@ -87,12 +87,13 @@ const FormInput = ({
                 value={value}
                 {...dataAttributes}
             >
-                <option value={null}>{emptyOption}</option>
+                <option value="">{emptyOption}</option>
                 {
                     values.map((option, key) => (
                         <option
                             key={key}
                             value={option.value}
+                            disabled={option.disabled}
                         >
                             {option.text}
                         </option>
@@ -217,6 +218,16 @@ FormInput.propTypes = {
         PropTypes.bool,
         PropTypes.number,
         PropTypes.string,
+        PropTypes.shape({
+            text: PropTypes.oneOfType([
+                PropTypes.number,
+                PropTypes.string,
+            ]),
+            value: PropTypes.oneOfType([
+                PropTypes.number,
+                PropTypes.string,
+            ]),
+        }),
     ]),
     values: PropTypes.array,
     viewMode: PropTypes.string,
