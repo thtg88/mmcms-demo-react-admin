@@ -186,6 +186,16 @@ FormGroups.propTypes = {
             PropTypes.bool,
             PropTypes.number,
             PropTypes.string,
+            PropTypes.shape({
+                text: PropTypes.oneOfType([
+                    PropTypes.number,
+                    PropTypes.string,
+                ]),
+                value: PropTypes.oneOfType([
+                    PropTypes.number,
+                    PropTypes.string,
+                ]),
+            }),
         ]),
         values: PropTypes.arrayOf(PropTypes.shape({
             text: PropTypes.oneOfType([
