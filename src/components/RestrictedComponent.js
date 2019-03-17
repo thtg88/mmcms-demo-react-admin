@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { animateScroll as scroll } from 'react-scroll';
-import { isUnauthenticatedError } from '../../helpers/apiErrorMessages';
-import { loggedOut } from '../../redux/auth/actions';
+import { isUnauthenticatedError } from '../helpers/apiErrorMessages';
+import { loggedOut } from '../redux/auth/actions';
 
 class RestrictedComponent extends Component {
     componentDidMount() {

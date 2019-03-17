@@ -19,7 +19,7 @@ import ErrorBoundary from '../../ErrorBoundary';
 import LoggingOutCard from '../../components/Cards/LoggingOutCard';
 import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
-import RestrictedComponent from './RestrictedComponent';
+import RestrictedComponent from '../../components/RestrictedComponent';
 import WaitingComponent from '../../components/WaitingComponent';
 import navigation from '../../_nav';
 import routes from '../../routes';

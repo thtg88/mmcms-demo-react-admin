@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { DefaultLayout } from './containers';
 import ErrorBoundary from './ErrorBoundary';
-import GuestComponent from './containers/DefaultLayout/GuestComponent';
+import GuestComponent from './components/GuestComponent';
 import { Login, Register } from './views/Pages';
 import './scss/style.scss';
 
