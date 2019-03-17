@@ -79,7 +79,7 @@ const PageTitle = ({
 
 PageTitle.propTypes = {
     actions: PropTypes.array,
-    text: PropTypes.string,
+    text: PropTypes.string.isRequired,
     wrap: PropTypes.bool,
 };
 
