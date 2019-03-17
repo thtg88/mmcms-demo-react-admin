@@ -24,6 +24,12 @@ body {
     }
 }
 
+.btn-group {
+	.btn-block + .btn-block {
+		margin-top: 0;
+	}
+}
+
 .sort-dropdown-menu {
     min-width: 100%;
     text-align: center;
