@@ -16,10 +16,8 @@ const ListResourceContainer = ({
     currentPage,
     errors,
     fetchingResources,
-    handleSearchResources,
     history,
     keyField,
-    isSortDropdownOpen,
     listgroupItemTag,
     listType,
     nameField,
@@ -31,8 +29,8 @@ const ListResourceContainer = ({
     pageSize,
     resourceBaseRoute,
     resourceListGroupItemClassName,
-    paginated_resources,
-    resourcesName,
+    resources,
+    resourcesDisplayName,
     searchEnabled,
     searching,
     searchQuery,
@@ -40,17 +38,15 @@ const ListResourceContainer = ({
     selectedSortingOption,
     sortingEnabled,
     sortingOptions,
-    toggleSortDropdown,
     total,
-    updateSearchInputValue,
     urlBuilder,
 }) => {
     if(
         (
             (
-                typeof paginated_resources === 'undefined'
+                typeof resources === 'undefined'
                 || typeof currentPage === 'undefined'
-                || typeof paginated_resources[currentPage] === 'undefined'
+                || typeof resources[currentPage] === 'undefined'
             )
             && !fetchingResources
         )
@@ -59,13 +55,13 @@ const ListResourceContainer = ({
         return null;
     }
 
-    const searchButtonIconClassName = searching === true && fetchingResources === true
+    const searchButtonIconClassName = (searching === true && fetchingResources === true)
         ? 'fa fa-spinner fa-spin'
         : 'fa fa-search';
 
     return (
         <div className="animated fadeIn">
-            <PageTitle text={resourcesName} actions={actions} />
+            <PageTitle text={resourcesDisplayName} actions={actions} />
             <Row>
                 <Col className="col-md-12">
                     <ApiErrorCard errors={errors} />
@@ -76,11 +72,11 @@ const ListResourceContainer = ({
                     <Card className="card-accent-primary">
                         <CardBody>
                             <ListResource
+                                type={listType}
                                 columns={columns}
-                                data={paginated_resources[currentPage]}
+                                data={resources[currentPage]}
                                 history={history}
                                 hover={!fetchingResources}
-                                isSortDropdownOpen={isSortDropdownOpen}
                                 keyField={keyField}
                                 listgroupItemTag={listgroupItemTag}
                                 loading={fetchingResources}
@@ -103,9 +99,7 @@ const ListResourceContainer = ({
                                 sortingEnabled={sortingEnabled}
                                 sortingOptions={sortingOptions}
                                 sortButtonDisabled={fetchingResources}
-                                toggleSortDropdown={toggleSortDropdown}
                                 total={total}
-                                type={listType}
                                 urlBuilder={urlBuilder}
                             />
                         </CardBody>
@@ -122,9 +116,7 @@ ListResourceContainer.propTypes = {
     currentPage: PropTypes.number,
     errors: PropTypes.array,
     fetchingResources: PropTypes.bool,
-    handleSearchResources: PropTypes.func,
     history: PropTypes.object,
-    isSortDropdownOpen: PropTypes.bool,
     keyField: PropTypes.string,
     listType: PropTypes.string,
     nameField: PropTypes.string,
@@ -134,10 +126,10 @@ ListResourceContainer.propTypes = {
     onSearchInputClear: PropTypes.func,
     onSortDropdownItemClick: PropTypes.func,
     pageSize: PropTypes.number,
-    paginated_resources: PropTypes.object,
+    resources: PropTypes.object,
     resourceBaseRoute: PropTypes.string,
     resourceListGroupItemClassName: PropTypes.string,
-    resourcesName: PropTypes.string,
+    resourcesDisplayName: PropTypes.string,
     searchEnabled: PropTypes.bool,
     searching: PropTypes.bool,
     searchQuery: PropTypes.string,
@@ -146,9 +138,7 @@ ListResourceContainer.propTypes = {
     sortButtonDisabled: PropTypes.bool,
     sortingEnabled: PropTypes.bool,
     sortingOptions: PropTypes.array,
-    toggleSortDropdown: PropTypes.func,
     total: PropTypes.number,
-    updateSearchInputValue: PropTypes.func,
     urlBuilder: PropTypes.func,
 };
 

@@ -88,3 +88,35 @@ export const paginateResources = (resources, pageSize) => {
 
     return paginatedResources;
 };
+
+export const getSortingOptionFromSortNameAndDirection = (
+    options,
+    name,
+    direction,
+    defaultOption
+) => {
+    if(
+        !name
+        || !direction
+        || !options
+        || !options.length
+    ) {
+        if(!defaultOption) {
+            return null;
+        }
+
+        return {...defaultOption};
+    }
+
+    const selectedOptions = options.filter(sortingOption => {
+        return !!(
+            sortingOption
+            && name === sortingOption.name
+            && direction === sortingOption.direction
+        );
+    });
+
+    return selectedOptions.length > 0
+        ? {...selectedOptions[0]}
+        : {...defaultOption};
+};

@@ -16,31 +16,24 @@ import {
     keyField,
     nameField,
     pageSize,
-    resourcesName,
-    sortingOptions,
+    resourceDisplayName,
+    resourcesDisplayName,
     searchColumns,
+    sortingOptions,
 } from '../../../redux/users/schema';
 
 reducerRegistry.register(reducerName, reducer);
 sagaRegistry.register(reducerName, sagas);
-
-const actions = [
-    {
-        className: 'btn-success',
-        href: '/'+reducerName+'/create',
-        title: 'New Resource',
-        type: 'link',
-        iconClassName: 'fa fa-plus',
-    },
-];
 
 export const List = ({
     current_page,
     errors,
     fetching_resources,
     history,
-    isSortDropdownOpen,
+    isRecovering,
     onPageClick,
+    onRecoverClick,
+    onRecoverDoneClick,
     onSearchButtonClick,
     onSearchInputChange,
     onSearchInputClear,
@@ -49,42 +42,65 @@ export const List = ({
     query,
     searching,
     selectedSortingOption,
-    toggleSortDropdown,
     total,
 }) => {
+    const actions = [
+        {
+            className: 'btn-success',
+            href: '/'+reducerName+'/create',
+            title: 'New Resource',
+            type: 'link',
+            iconClassName: 'fa fa-plus',
+        },
+    ];
+    if(isRecovering === true) {
+        actions.push({
+            className: 'btn-primary',
+            onClick: onRecoverDoneClick,
+            title: 'Complete Recovery',
+            type: 'button',
+            iconClassName: 'fa fa-fw fa-check',
+        });
+    } else {
+        actions.push({
+            className: 'btn-warning',
+            onClick: onRecoverClick,
+            title: 'Recover Deleted',
+            type: 'button',
+            iconClassName: 'fa fa-fw fa-recycle',
+        });
+    }
+
     return (
         <ListResource
-            actions={actions}
-            columns={columns}
-            currentPage={current_page}
-            errors={errors}
-            fetchingResources={fetching_resources}
-            history={history}
-            isSortDropdownOpen={isSortDropdownOpen}
-            keyField={keyField}
-            listgroupItemTag="button"
-            listType="list"
-            nameField={nameField}
-            onPageClick={onPageClick}
-            onSearchButtonClick={onSearchButtonClick}
-            onSearchInputChange={onSearchInputChange}
-            onSearchInputClear={onSearchInputClear}
-            onSortDropdownItemClick={onSortDropdownItemClick}
-            pageSize={pageSize}
-            resourceBaseRoute={reducerName}
-            paginated_resources={paginated_resources}
-            resourcesName={resourcesName}
-            searchEnabled={true}
-            searching={searching}
-            searchQuery={query}
-            searchTextInputPlaceholder={`Search by ${searchColumns.join(', or ')}`}
-            selectedSortingOption={selectedSortingOption}
-            sortButtonDisabled={fetching_resources}
-            sortingEnabled={true}
-            sortingOptions={sortingOptions}
-            toggleSortDropdown={toggleSortDropdown}
-            total={total}
-            urlBuilder={(entity) => history.push('/'+reducerName+'/'+entity.id)}
+        actions={actions}
+        columns={columns}
+        currentPage={current_page}
+        errors={errors}
+        fetchingResources={fetching_resources}
+        history={history}
+        keyField={keyField}
+        listgroupItemTag="button"
+        listType="list"
+        nameField={nameField}
+        onPageClick={onPageClick}
+        onSearchButtonClick={onSearchButtonClick}
+        onSearchInputChange={onSearchInputChange}
+        onSearchInputClear={onSearchInputClear}
+        onSortDropdownItemClick={onSortDropdownItemClick}
+        pageSize={pageSize}
+        resourceBaseRoute={reducerName}
+        resources={paginated_resources}
+        resourcesDisplayName={resourcesDisplayName}
+        searchEnabled={true}
+        searching={searching}
+        searchQuery={query}
+        searchTextInputPlaceholder={`Search by ${searchColumns.join(', or ')}`}
+        selectedSortingOption={selectedSortingOption}
+        sortingEnabled={true}
+        sortingOptions={sortingOptions}
+        total={total}
+        urlBuilder={(entity) => history.push(`/${reducerName}/${entity.id}${isRecovering === true ? '?recovery=1' : ''}`)}
         />
     );
 };
@@ -95,6 +111,7 @@ export default withListResource({
     defaultSortingOption,
     getPaginatedResources,
     pageSize,
+    resourceDisplayName,
     sortingOptions,
     resourceBaseRoute: reducerName,
     reducerName,

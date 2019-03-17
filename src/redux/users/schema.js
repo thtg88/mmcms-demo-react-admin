@@ -1,6 +1,8 @@
 import * as yup from 'yup';
 
-export const resourcesName = 'Users';
+export const resourceDisplayName = 'User';
+
+export const resourcesDisplayName = 'Users';
 
 export const keyField = 'id';
 
