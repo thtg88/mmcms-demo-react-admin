@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
 import { animateScroll as scroll } from 'react-scroll';
-import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
-import { getSelectOptions } from '../../helpers/formResources';
+import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
+import { getSelectOptions } from '../../../helpers/formResources';
 import {
     getValidationSchemaFromFormResource,
     getValuesFromFormResource,
     updateFormResourceFromErrors,
-} from '../../helpers/formResources';
+} from '../../../helpers/formResources';
 
 const withCreateResource = ({
     clearMetadataResourceCreate,
