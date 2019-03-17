@@ -48,7 +48,7 @@ export const List = ({
         {
             className: 'btn-success',
             href: '/'+reducerName+'/create',
-            title: 'New Resource',
+            title: 'New '+resourceDisplayName,
             type: 'link',
             iconClassName: 'fa fa-plus',
         },
