@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import DateTime from 'react-datetime';
 import Select from 'react-select';
+import moment from 'moment';
+import { momentSqlFormat } from '../helpers/dates';
 import 'moment/locale/en-gb';
 
 const FormInput = ({
@@ -14,8 +16,10 @@ const FormInput = ({
     disabled,
     emptyOption,
     invalid,
+    isValidDate,
     locale,
     multiple,
+    multipleSelectLimit,
     name,
     onChange,
     placeholder,
@@ -36,9 +40,35 @@ const FormInput = ({
                 isDisabled={disabled}
                 isMulti={multiple}
                 isSearchable={true}
-                onChange={(selectedOption, extra) => onChange(selectedOption, {...extra, name, multiple})}
+                onChange={(selectedOption, extra) => {
+                    // We proceed updating if:
+                    // 1. It's a multiple select and multipleSelectLimit > 0,
+                    // and I do not have already multipleSelectLimit options selected
+                    // 2. It's a multiple select and multipleSelectLimit is false-y
+                    // 3. It's not a multiple select
+                    // 4. I'm removing an option (only possible for multiple selects)
+                    // 5. I'm clearing the selected options (only possible for multiple selects)
+                    if(
+
+                        (
+                            multiple
+                            && multipleSelectLimit > 0
+                            && value.length < multipleSelectLimit
+                        )
+                        || (
+                            multiple
+                            && !multipleSelectLimit
+                        )
+                        || !multiple
+                        || extra.action === 'remove-value'
+                        || extra.action === 'clear'
+                    ) {
+                        onChange(selectedOption, {...extra, name, multiple})
+                    }
+                }}
                 options={values}
                 placeholder={placeholder}
+                isOptionDisabled={option => !!(option.disabled)}
             />
         );
     }
@@ -109,6 +139,14 @@ const FormInput = ({
     }
 
     if(type === 'datetime') {
+        const additionalProps = value
+            ? {
+                value: dateFormat && timeFormat
+                    ? moment(value, momentSqlFormat).format(dateFormat+' '+timeFormat)
+                    : moment(value, momentSqlFormat).format(dateFormat)
+                }
+            : undefined;
+
         return (
             <DateTime
                 closeOnTab
@@ -118,12 +156,21 @@ const FormInput = ({
                 inputProps={{
                     id: name,
                     name: name,
+                    readOnly: true,
                 }}
+                isValidDate={isValidDate}
                 locale={locale}
-                onChange={onChange}
+                onChange={(date) => {
+                    const target = {
+                        name,
+                        value: moment(date).format(momentSqlFormat),
+                    };
+                    onChange({target}, date);
+                }}
                 placeholder={placeholder}
                 timeFormat={timeFormat}
                 viewMode={viewMode}
+                {...additionalProps}
             />
         );
     }
@@ -153,6 +200,7 @@ FormInput.propTypes = {
     disabled: PropTypes.bool,
     emptyOption: PropTypes.string,
     invalid: PropTypes.bool,
+    isValidDate: PropTypes.func,
     locale: PropTypes.string,
     multiple: PropTypes.bool,
     name: PropTypes.string,
