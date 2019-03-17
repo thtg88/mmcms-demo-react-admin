@@ -354,7 +354,7 @@ const withListResource = ({
             fetching_resources,
             paginated_resources,
             total
-        } = state[subStateName];
+        } = state[reducerName];
         const errors = getApiErrorMessages(error);
 
         return {

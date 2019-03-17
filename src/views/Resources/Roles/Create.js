@@ -39,5 +39,5 @@ export default withCreateResource({
     createResource,
     schema,
     resourceBaseRoute: reducerName,
-    subStateName: reducerName,
+    reducerName,
 })(Create);

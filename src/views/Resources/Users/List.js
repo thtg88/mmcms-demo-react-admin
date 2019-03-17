@@ -97,5 +97,5 @@ export default withListResource({
     pageSize,
     sortingOptions,
     resourceBaseRoute: reducerName,
-    subStateName: reducerName,
+    reducerName,
 })(List);

@@ -22,7 +22,7 @@ const withEditResource = ({
     getPaginatedResources,
     pageSize,
     schema,
-    subStateName,
+    reducerName,
     updateResource,
 }) => (ComponentToWrap) => {
     class EditHOC extends Component {
@@ -288,10 +288,10 @@ const withEditResource = ({
             error,
             paginated_resources,
             updated,
-        } = state[subStateName];
+        } = state[reducerName];
         const errors = getApiErrorMessages(error);
         const urlResourceId = parseInt(ownProps.match.params.id, 10);
-        let { resource } = state[subStateName];
+        let { resource } = state[reducerName];
 
         if(
             resource === null

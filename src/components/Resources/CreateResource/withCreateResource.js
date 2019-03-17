@@ -13,7 +13,7 @@ const withCreateResource = ({
     createResource,
     resourceBaseRoute,
     schema,
-    subStateName,
+    reducerName,
 }) => (ComponentToWrap) => {
     class CreateHOC extends Component {
         state = {
@@ -179,7 +179,7 @@ const withCreateResource = ({
             created,
             error,
             resource
-        } = state[subStateName];
+        } = state[reducerName];
         const errors = getApiErrorMessages(error);
 
         return {

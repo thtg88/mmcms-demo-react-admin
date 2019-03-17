@@ -81,5 +81,5 @@ export default withEditResource({
     pageSize,
     schema,
     updateResource,
-    subStateName: reducerName,
+    reducerName,
 })(Edit);
