@@ -142,12 +142,12 @@ const FormGroups = ({ groups }) => {
                 }
                 {
                     formFeedbackText
-                        ? <FormFeedback>{formFeedbackText}</FormFeedback>
+                        ? <FormFeedback style={{display:'block'}}>{formFeedbackText}</FormFeedback>
                         : null
                 }
             </FormGroup>
         );
-})
+    });
 };
 
 FormGroups.propTypes = {
