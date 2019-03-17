@@ -20,7 +20,7 @@ import LoggingOutCard from '../../components/Cards/LoggingOutCard';
 import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
 import RestrictedComponent from './RestrictedComponent';
-import waitingComponent from '../../components/waitingComponent';
+import WaitingComponent from '../../components/WaitingComponent';
 import navigation from '../../_nav';
 import routes from '../../routes';
 
@@ -60,13 +60,11 @@ const DefaultLayout = props => {
                                                 render={routeProps => (
                                                     <ErrorBoundary>
                                                         <RestrictedComponent>
-                                                            {
-                                                                waitingComponent(
-                                                                    route.component,
-                                                                    queryString.parse(location.search),
-                                                                    {...routeProps}
-                                                                )
-                                                            }
+                                                            <WaitingComponent
+                                                                Component={route.component}
+                                                                query={queryString.parse(location.search)}
+                                                                {...routeProps}
+                                                            />
                                                         </RestrictedComponent>
                                                     </ErrorBoundary>
                                                 )}
