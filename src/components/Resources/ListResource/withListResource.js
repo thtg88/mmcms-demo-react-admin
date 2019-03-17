@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import queryString from 'query-string';
 import { connect } from 'react-redux';
+import Nprogress from 'nprogress';
 import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
 import { apiResourceDestroySuccessNotification } from '../../../helpers/toastNotification';
+import { getSortingOptionFromSortNameAndDirection } from '../../../helpers/paginatedResources';
 
 const withListResource = ({
     changePageResources,
@@ -10,54 +13,62 @@ const withListResource = ({
     getPaginatedResources,
     pageSize,
     resourceBaseRoute,
-    subStateName,
+    resourceDisplayName,
+    reducerName,
     sortingOptions,
 }) => (ComponentToWrap) => {
     class ListHOC extends Component {
-        state = {
-            isSortDropdownOpen: false,
-            query: '',
-            searching: false,
-            selectedSortingOption: defaultSortingOption,
-        };
-
         constructor(props) {
             super(props);
 
             this.fetchPaginatedResources = this.fetchPaginatedResources.bind(this);
             this.generateUri = this.generateUri.bind(this);
             this.handlePageClick = this.handlePageClick.bind(this);
+            this.handleRecoverClick = this.handleRecoverClick.bind(this);
+            this.handleRecoverDoneClick = this.handleRecoverDoneClick.bind(this);
             this.handleSearchResources = this.handleSearchResources.bind(this);
             this.handleSortDropdownItem = this.handleSortDropdownItem.bind(this);
             this.resetSearchInputValue = this.resetSearchInputValue.bind(this);
-            this.toggleSortDropdown = this.toggleSortDropdown.bind(this);
             this.updateSearchInputValue = this.updateSearchInputValue.bind(this);
+
+            const uriObj = queryString.parse(props.location.search);
+
+            this.state = {
+                isRecovering: parseInt(uriObj.recovery, 10) === 1,
+                page: 1,
+                query: uriObj.query ? uriObj.query : '',
+                searching: false,
+                selectedSortingOption: getSortingOptionFromSortNameAndDirection(
+                    sortingOptions,
+                    uriObj.sort_name,
+                    uriObj.sort_direction,
+                    defaultSortingOption
+                ),
+            };
         }
 
         fetchPaginatedResources() {
             const { getPaginatedResources, token } = this.props;
-            const { query, selectedSortingOption } = this.state;
+            const { isRecovering, page, query, selectedSortingOption } = this.state;
 
             // Fetch first page
             const data = {
                 token,
+                page,
                 pageSize,
-                page: 1,
                 q: query,
+                recovery: isRecovering === true ? 1 : 0,
                 sort_name: selectedSortingOption.name,
                 sort_direction: selectedSortingOption.direction,
             };
             getPaginatedResources({ data });
         }
 
-        generateUri(page = 1) {
-            const { query, selectedSortingOption } = this.state;
-            let searchArr = [];
-            if(page) {
-                searchArr.push('page='+page);
-            } else {
-                searchArr.push('page=1');
-            }
+        generateUri() {
+            const { isRecovering, page, query, selectedSortingOption } = this.state;
+            const searchArr = [
+                'page='+page,
+            ];
             if(query) {
                 searchArr.push('q='+query);
             }
@@ -67,17 +78,85 @@ const withListResource = ({
             if(selectedSortingOption.direction) {
                 searchArr.push('sort_direction='+selectedSortingOption.direction);
             }
+            if(isRecovering === true) {
+                searchArr.push('recovery='+(isRecovering ? 1 : 0));
+            }
 
             return searchArr.join('&');
+        }
+
+        handleRecoverClick(evt) {
+            const { history } = this.props;
+
+            evt.preventDefault();
+
+            Nprogress.start();
+
+            this.setState(
+                {
+                    isRecovering: true,
+                    query: '',
+                    page: 1,
+                    selectedSortingOption: getSortingOptionFromSortNameAndDirection(
+                        sortingOptions,
+                        null,
+                        null,
+                        defaultSortingOption
+                    )
+                },
+                () => {
+                    history.push('/'+resourceBaseRoute+'?recovery=1');
+
+                    this.fetchPaginatedResources();
+                }
+            );
+
+            Nprogress.inc();
+        }
+
+        handleRecoverDoneClick(evt) {
+            const { history } = this.props;
+
+            evt.preventDefault();
+
+            Nprogress.start();
+
+            this.setState(
+                {
+                    isRecovering: false,
+                    page: 1,
+                    query: '',
+                    selectedSortingOption: getSortingOptionFromSortNameAndDirection(
+                        sortingOptions,
+                        null,
+                        null,
+                        defaultSortingOption
+                    )
+                },
+                () => {
+                    history.push('/'+resourceBaseRoute);
+
+                    this.fetchPaginatedResources();
+                }
+            );
+
+            Nprogress.inc();
         }
 
         handlePageClick(page) {
             const { history } = this.props;
 
-            history.push({
-                pathname: '/'+resourceBaseRoute,
-                search: this.generateUri(page),
-            });
+            this.setState(
+                { page: page > 1 ? page : 1 },
+                () => {
+                    history.push({
+                        pathname: '/'+resourceBaseRoute,
+                        search: this.generateUri(),
+                    });
+
+                    this.fetchPaginatedResources();
+                }
+            );
         }
 
         handleSearchResources(evt) {
@@ -85,39 +164,24 @@ const withListResource = ({
 
             evt.preventDefault();
 
+            Nprogress.start();
+
             this.setState(
-                { searching: true },
+                {
+                    page: 1,
+                    searching: true,
+                },
                 () => {
                     history.push({
                         pathname: '/'+resourceBaseRoute,
-                        search: this.generateUri(1),
+                        search: this.generateUri(),
                     });
 
                     this.fetchPaginatedResources();
                 }
             );
-        }
 
-        handleSortDropdownItem(name, direction) {
-            const { history } = this.props;
-
-            const newSortingOption = sortingOptions.filter(sortOption => {
-                return sortOption.name === name && sortOption.direction === direction;
-            });
-
-            if(newSortingOption.length > 0) {
-                this.setState(
-                    { selectedSortingOption: {...newSortingOption[0]}},
-                    () => {
-                        history.push({
-                            pathname: '/'+resourceBaseRoute,
-                            search: this.generateUri(1),
-                        });
-
-                        this.fetchPaginatedResources();
-                    }
-                );
-            }
+            Nprogress.inc();
         }
 
         resetSearchInputValue(evt) {
@@ -125,28 +189,25 @@ const withListResource = ({
 
             evt.preventDefault();
 
+            Nprogress.start();
+
             this.setState(
                 {
+                    page: 1,
                     query: '',
                     searching: true,
                 },
                 () => {
                     history.push({
                         pathname: '/'+resourceBaseRoute,
-                        search: this.generateUri(1),
+                        search: this.generateUri(),
                     });
 
                     this.fetchPaginatedResources();
                 }
             );
-        }
 
-        toggleSortDropdown() {
-            const { isSortDropdownOpen } = this.state;
-
-            this.setState({
-                isSortDropdownOpen: !isSortDropdownOpen,
-            });
+            Nprogress.inc();
         }
 
         updateSearchInputValue(evt) {
@@ -155,22 +216,38 @@ const withListResource = ({
             });
         }
 
-        componentDidMount() {
-            const {
-                clearMetadataResources,
-                current_page,
-                destroyed,
-                getPaginatedResources,
-                query,
-                paginated_resources,
-                token
-            } = this.props;
+        handleSortDropdownItem(name, direction) {
+            const { history } = this.props;
 
-            // console.log(this.props);
-            // console.log(this.state);
+            Nprogress.start();
+
+            this.setState(
+                {
+                    selectedSortingOption: getSortingOptionFromSortNameAndDirection(
+                        sortingOptions,
+                        name,
+                        direction,
+                        defaultSortingOption
+                    )
+                },
+                () => {
+                    history.push({
+                        pathname: '/'+resourceBaseRoute,
+                        search: this.generateUri(),
+                    });
+
+                    this.fetchPaginatedResources();
+                }
+            );
+
+            Nprogress.inc();
+        }
+
+        componentDidMount() {
+            const { clearMetadataResources, destroyed } = this.props;
 
             if(destroyed === true) {
-                apiResourceDestroySuccessNotification({});
+                apiResourceDestroySuccessNotification({ resourceDisplayName });
 
                 // If resource is destroyed
                 // we set the timeout to clear the destroyed data
@@ -183,139 +260,32 @@ const withListResource = ({
                 }, 500);
             }
 
-            if(typeof getPaginatedResources !== 'undefined') {
-                // if query page is not valid
-                if(
-                    typeof query === 'undefined'
-                    || typeof query.page === 'undefined'
-                    || Number.isNaN(query.page)
-                    || query.page <= 0
-                ) {
-                    const page = typeof current_page !== 'undefined' ? current_page : 1;
-                    if(
-                        // If paginated_resources never fetched
-                        typeof paginated_resources === 'undefined'
-                        || typeof paginated_resources[page] === 'undefined'
-                        // Or was empty (worth re-fetching)
-                        || paginated_resources[page].length === 0
-                        // Or I've just deleted a resource
-                        || destroyed === true
-                    ) {
-                        // Fetch first page
-                        const data = {
-                            page,
-                            pageSize,
-                            token,
-                            q: query.q,
-                            sort_direction: query.sort_direction,
-                            sort_name: query.sort_name,
-                        };
-                        getPaginatedResources({ data });
+            Nprogress.start();
 
-                    } else {
-                        // If paginated_resources for that page have been fetched before
-                        // avoid re-fetching
-                    }
-                } else {
-                    if(query.q && query.q !== this.state.query) {
-                        this.setState({
-                            query: query.q,
-                            searching: true
-                        });
-                    }
-                    if(
-                        (
-                            query.sort_name
-                            && query.sort_name !== this.state.selectedSortingOption.name
-                        )
-                        || (
-                            query.sort_direction
-                            && query.sort_direction !== this.state.selectedSortingOption.direction
-                        )
-                    ) {
-                        const newSortingOption = sortingOptions.filter(sortOption => {
-                            return sortOption.name === query.sort_name
-                                && sortOption.direction === query.sort_direction;
-                        });
+            // Fetch first page
+            this.fetchPaginatedResources();
 
-                        if(newSortingOption.length > 0) {
-                            this.setState({
-                                selectedSortingOption: {...newSortingOption[0]},
-                            });
-                        }
-                    }
-
-                    // Fetch page data
-                    const data = {
-                        pageSize,
-                        token,
-                        page: parseInt(query.page, 10),
-                        q: query.q,
-                        sort_direction: query.sort_direction,
-                        sort_name: query.sort_name,
-                    };
-                    getPaginatedResources({ data });
-                }
-            }
+            Nprogress.inc();
         }
 
         componentDidUpdate(prevProps) {
-            const {
-                changePageResources,
-                fetching_resources,
-                getPaginatedResources,
-                query,
-                paginated_resources,
-                token,
-            } = this.props;
+            const { fetching_resources } = this.props;
             const { searching } = this.state;
-            const query_page = parseInt(query.page, 10);
-            const { q } = query;
 
-            if(
-                !Number.isNaN(query_page)
-                && query_page > 0
-                && query_page !== parseInt(prevProps.query.page, 10)
-                && searching === false
-            ) {
-                if(
-                    // If paginated_resources never fetched
-                    typeof paginated_resources === 'undefined'
-                    || typeof paginated_resources[query_page] === 'undefined'
-                    // Or was empty (worth re-fetching)
-                    || paginated_resources[query_page].length === 0
-                ) {
-                    // If changing page and page is valid
-                    // Re-fetch page
-                    const data = {
-                        q,
-                        token,
-                        page: query_page,
-                        pageSize
-                    };
-                    getPaginatedResources({ data });
-
-                } else {
-                    // If changing page and data is preloaded into state
-                    // Switch page into global state
-                    const data = {
-                        page: query_page,
-                    };
-                    changePageResources({ data });
-                }
-            }
-
-            // If I have been searching and fetching the paginated_resources,
-            // and now I have received the paginated_resources,
+            // If I have been searching and fetching the resources,
+            // and now I have received the resources,
             // set search to off
-            else if(
-                searching === true
-                && prevProps.fetching_resources === true
+            if(
+                prevProps.fetching_resources === true
                 && fetching_resources === false
             ) {
-                this.setState({
-                    searching: false
-                })
+                Nprogress.done();
+
+                if(searching === true) {
+                    this.setState({
+                        searching: false,
+                    });
+                }
             }
         }
 
@@ -324,20 +294,30 @@ const withListResource = ({
             const { query } = this.state;
 
             if(typeof clearMetadataResources !== 'undefined') {
+                // This seems to cause an issue on hot module reload
+                // Where the component gets unmounted and not remounted correctly
+                // If you save a file and the list shows as 0 elements
+                // It's because of this, try reload the page which should re-trigger the fetch
+                // This should work correctly in production
+                // Unless you have a stable solution for development
+                // Please leave in place
                 const data = { query };
                 clearMetadataResources({ data });
             }
+
+            Nprogress.remove();
         }
 
         render() {
             return (
                 <ComponentToWrap
                     onPageClick={this.handlePageClick}
+                    onRecoverClick={this.handleRecoverClick}
+                    onRecoverDoneClick={this.handleRecoverDoneClick}
                     onSortDropdownItemClick={this.handleSortDropdownItem}
                     onSearchButtonClick={this.handleSearchResources}
                     onSearchInputChange={this.updateSearchInputValue}
                     onSearchInputClear={this.resetSearchInputValue}
-                    toggleSortDropdown={this.toggleSortDropdown}
                     {...this.props}
                     {...this.state}
                 />
