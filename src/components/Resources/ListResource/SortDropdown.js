@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types'
 import {
     Dropdown,
@@ -8,19 +8,18 @@ import {
 } from 'reactstrap';
 
 const SortDropdown = ({
-    isDropdownOpen,
     onDropdownItemClick,
     selectedSortingOption,
     sortButtonDisabled,
     sortingOptions,
-    toggleDropdown,
 }) => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const selectedSortingOptionIconClassName = selectedSortingOption.direction === 'desc'
         ? 'fa fa-fw fa-arrow-down'
         : 'fa fa-fw fa-arrow-up';
 
     return (
-        <Dropdown isOpen={isDropdownOpen} toggle={toggleDropdown}>
+        <Dropdown isOpen={isDropdownOpen} toggle={() => setIsDropdownOpen(!isDropdownOpen)}>
             <DropdownToggle block disabled={sortButtonDisabled}>
                 Sorted By:
                 {' '}
@@ -55,12 +54,10 @@ const SortDropdown = ({
 };
 
 SortDropdown.propTypes = {
-    isDropdownOpen: PropTypes.bool,
     onDropdownItemClick: PropTypes.func,
     selectedSortingOption: PropTypes.object,
     sortButtonDisabled: PropTypes.bool,
     sortingOptions: PropTypes.array,
-    toggleDropdown: PropTypes.func,
 };
 
 export default SortDropdown;
