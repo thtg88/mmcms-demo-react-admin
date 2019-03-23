@@ -19,14 +19,20 @@ export default {
             class: ''
         },
         {
-            name: 'Users',
-            url: '/users',
-            icon: 'fa fa-users',
+            name: 'Image Categories',
+            url: '/image-categories',
+            icon: 'fa fa-fw fa-image',
+            role_max_priority: 1,
         },
         {
             name: 'Roles',
             url: '/roles',
             icon: 'fa fa-black-tie',
+        },
+        {
+            name: 'Users',
+            url: '/users',
+            icon: 'fa fa-users',
         },
     ],
 };
