@@ -1,4 +1,4 @@
-const moduleBaseEndpoint = '/api/v1/seo-entries';
+const moduleBaseEndpoint = '/seo-entries';
 const { REACT_APP_API_BASE_URL } = process.env;
 
 export const createResource = async data => {
