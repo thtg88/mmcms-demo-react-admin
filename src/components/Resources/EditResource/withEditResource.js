@@ -32,24 +32,10 @@ import {
     reducerName as seoEntryReducerName,
 } from '../../../redux/seoEntries/actions';
 import {
+    attributesSequenceToShow as seoAttributesToShow,
     resourceDisplayName as seoEntryResourceDisplayName,
     schema as seoEntrySchema,
 } from '../../../redux/seoEntries/schema';
-
-const seoAttributesToShow = [
-    'page_title',
-    'meta_title',
-    'meta_description',
-    'meta_robots_follow',
-    'meta_robots_index',
-    'json_schema',
-    'facebook_description',
-	'facebook_image',
-	'facebook_title',
-	'twitter_description',
-	'twitter_image',
-	'twitter_title',
-];
 
 const withEditResource = ({
     attributesSequenceToShow,
