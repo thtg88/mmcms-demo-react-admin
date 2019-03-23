@@ -23,7 +23,7 @@ const routes = [
     { path: '/', exact: true, name: 'Home', component: Dashboard },
     { path: '/dashboard', exact: true, name: 'Dashboard', component: Dashboard },
     { path: '/me', exact: true, name: 'Profile', component: Profile },
-    { path: '/image-categories', exact: true,  name: 'Roles', component: ImageCategoriesList },
+    { path: '/image-categories', exact: true,  name: 'Image Categories', component: ImageCategoriesList },
     { path: '/image-categories/create', exact: true,  name: 'Create', component: ImageCategoryCreate },
     { path: '/image-categories/:id', exact: true, name: 'Edit Role', component: ImageCategoryEdit },
     { path: '/roles', exact: true,  name: 'Roles', component: RolesList },
