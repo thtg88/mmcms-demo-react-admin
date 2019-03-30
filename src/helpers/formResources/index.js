@@ -1,3 +1,4 @@
+import filterSchemaFromAttributes from './filterSchemaFromAttributes';
 import get from './get';
 import getFormGroupsFromResource from './getFormGroupsFromResource';
 import getFormResourceFromValues from './getFormResourceFromValues';
@@ -9,6 +10,7 @@ import getValuesFromFormResource from './getValuesFromFormResource';
 import updateFormResourceFromErrors from './updateFormResourceFromErrors';
 
 export {
+    filterSchemaFromAttributes,
     get,
     getFormGroupsFromResource,
     getFormResourceFromValues,
