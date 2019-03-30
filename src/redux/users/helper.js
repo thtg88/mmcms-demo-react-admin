@@ -95,6 +95,20 @@ export const getPaginatedResources = async data => {
     .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
+export const recoverResource = async data => {
+    const { token, id } = data;
+
+    return await fetch(REACT_APP_API_BASE_URL+moduleBaseEndpoint+'/'+id+'/restore', {
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': token.token_type+' '+token.access_token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }),
+    })
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
+};
+
 export const updateResource = async data => {
     const { token, id, ...rest } = data;
 

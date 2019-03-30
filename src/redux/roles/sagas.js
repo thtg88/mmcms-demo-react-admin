@@ -6,6 +6,7 @@ import {
     findResource,
     getAllResources,
     getPaginatedResources,
+    recoverResource,
     updateResource
 } from './helper';
 
@@ -144,6 +145,33 @@ export function* getPaginatedResourcesRequest() {
     });
 }
 
+export function* recoverResourceRequest() {
+    yield takeEvery(actions.RECOVER_RESOURCE_REQUEST, function*({ payload }) {
+        const { data } = payload;
+
+        try {
+            const result = yield call(recoverResource, data);
+
+            if (result.resource) {
+                yield put({
+                    type: actions.RECOVER_RESOURCE_SUCCESS,
+                    payload: result
+                });
+            } else {
+                yield put({
+                    type: actions.RECOVER_RESOURCE_ERROR,
+                    error: result.error || result.errors || result
+                });
+            }
+        } catch(err) {
+            yield put({
+                type: actions.RECOVER_RESOURCE_ERROR,
+                error: 'Internal server error'
+            });
+        }
+    });
+}
+
 export function* updateResourceRequest() {
     yield takeEvery(actions.UPDATE_RESOURCE_REQUEST, function* ({ payload }) {
         const { data } = payload;
@@ -178,6 +206,7 @@ export default function* rootSaga() {
         fork(findResourceRequest),
         fork(getAllResourcesRequest),
         fork(getPaginatedResourcesRequest),
+        fork(recoverResourceRequest),
         fork(updateResourceRequest),
     ]);
 }

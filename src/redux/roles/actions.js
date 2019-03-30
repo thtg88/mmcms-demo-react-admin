@@ -21,6 +21,9 @@ export const GET_ALL_RESOURCES_ERROR = createActionName(reducerName, 'GET_ALL_RE
 export const GET_PAGINATED_RESOURCES_REQUEST = createActionName(reducerName, 'GET_PAGINATED_RESOURCES_REQUEST');
 export const GET_PAGINATED_RESOURCES_SUCCESS = createActionName(reducerName, 'GET_PAGINATED_RESOURCES_SUCCESS');
 export const GET_PAGINATED_RESOURCES_ERROR = createActionName(reducerName, 'GET_PAGINATED_RESOURCES_ERROR');
+export const RECOVER_RESOURCE_REQUEST = createActionName(reducerName, 'RECOVER_RESOURCE_REQUEST');
+export const RECOVER_RESOURCE_SUCCESS = createActionName(reducerName, 'RECOVER_RESOURCE_SUCCESS');
+export const RECOVER_RESOURCE_ERROR = createActionName(reducerName, 'RECOVER_RESOURCE_ERROR');
 export const UPDATE_RESOURCE_REQUEST = createActionName(reducerName, 'UPDATE_RESOURCE_REQUEST');
 export const UPDATE_RESOURCE_SUCCESS = createActionName(reducerName, 'UPDATE_RESOURCE_SUCCESS');
 export const UPDATE_RESOURCE_ERROR = createActionName(reducerName, 'UPDATE_RESOURCE_ERROR');
@@ -46,6 +49,9 @@ const actions = {
 	GET_PAGINATED_RESOURCES_REQUEST,
 	GET_PAGINATED_RESOURCES_SUCCESS,
 	GET_PAGINATED_RESOURCES_ERROR,
+	RECOVER_RESOURCE_REQUEST,
+	RECOVER_RESOURCE_SUCCESS,
+	RECOVER_RESOURCE_ERROR,
 	UPDATE_RESOURCE_REQUEST,
 	UPDATE_RESOURCE_SUCCESS,
 	UPDATE_RESOURCE_ERROR,
@@ -91,6 +97,11 @@ export const getAllResources = payload => ({
 
 export const getPaginatedResources = payload => ({
     type: actions.GET_PAGINATED_RESOURCES_REQUEST,
+    payload,
+});
+
+export const recoverResource = payload => ({
+    type: actions.RECOVER_RESOURCE_REQUEST,
     payload,
 });
 

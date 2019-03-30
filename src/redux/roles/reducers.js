@@ -11,6 +11,7 @@ const initial_state = {
     paginated_resources: {
         1: [],
     },
+    recovered: false,
     resources: [],
     total: 0,
     updated: false,
@@ -53,6 +54,7 @@ const reducer = (state = initial_state, action) => {
                 ...state,
                 created: false,
                 error: null,
+                recovered: false,
                 resource: null,
                 updated: false,
             };
@@ -176,6 +178,29 @@ const reducer = (state = initial_state, action) => {
                 error: action.error,
                 fetching_resources: false,
                 total: 0,
+            };
+        case actions.RECOVER_RESOURCE_REQUEST:
+            return {
+                ...state,
+                created: false,
+                error: null,
+                recovered: false,
+            };
+        case actions.RECOVER_RESOURCE_SUCCESS: {
+            const { resource } = action.payload;
+            return {
+                ...state,
+                error: null,
+                paginated_resources: updatePaginatedResourcesFromResource(state.paginated_resources, resource),
+                recovered: true,
+                resource: resource,
+            };
+        }
+        case actions.RECOVER_RESOURCE_ERROR:
+            return {
+                ...state,
+                error: action.error,
+                recovered: false,
             };
         case actions.UPDATE_RESOURCE_REQUEST:
             return {
