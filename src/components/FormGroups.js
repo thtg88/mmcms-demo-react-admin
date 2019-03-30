@@ -36,6 +36,7 @@ const FormGroups = ({ groups }) => {
             multiple,
             multipleSelectLimit,
             name,
+            onCKEditorImageUpload,
             onChange,
             placeholder,
             rows,
@@ -121,6 +122,7 @@ const FormGroups = ({ groups }) => {
                     multiple={multiple}
                     multipleSelectLimit={multipleSelectLimit}
                     name={name}
+                    onCKEditorImageUpload={onCKEditorImageUpload}
                     onChange={onChange}
                     placeholder={placeholder}
                     rows={rows}
@@ -147,7 +149,7 @@ const FormGroups = ({ groups }) => {
                 }
             </FormGroup>
         );
-    });
+    })
 };
 
 FormGroups.propTypes = {
@@ -177,6 +179,7 @@ FormGroups.propTypes = {
         multiple: PropTypes.bool,
         multipleSelectLimit: PropTypes.number,
         name: PropTypes.string,
+        onCKEditorImageUpload: PropTypes.func,
         onChange: PropTypes.func,
         placeholder: PropTypes.string,
         rows: PropTypes.number,
