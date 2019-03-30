@@ -45,6 +45,21 @@ export const findResource = async data => {
     .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
+export const getAllResources = async data => {
+    const { token } = data;
+    const url = moduleBaseEndpoint;
+
+    return await fetch(REACT_APP_API_BASE_URL+url, {
+        method: 'GET',
+        headers: new Headers({
+            'Authorization': token.token_type+' '+token.access_token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }),
+    })
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
+};
+
 export const getPaginatedResources = async data => {
     const { token, page, pageSize, q, sort_name, sort_direction } = data;
     const url = REACT_APP_API_BASE_URL

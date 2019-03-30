@@ -11,6 +11,7 @@ const initial_state = {
     paginated_resources: {
         1: []
     },
+    resources: [],
     total: 0,
     updated: false,
 };

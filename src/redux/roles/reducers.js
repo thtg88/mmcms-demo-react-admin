@@ -11,6 +11,7 @@ const initial_state = {
     paginated_resources: {
         1: [],
     },
+    resources: [],
     total: 0,
     updated: false,
 };
@@ -117,9 +118,31 @@ const reducer = (state = initial_state, action) => {
                 ...state,
                 error: action.error,
             };
+        case actions.GET_ALL_RESOURCES_REQUEST: {
+            return {
+                ...state,
+                error: null,
+                fetching_resources: true,
+                resources: [],
+            };
+        }
+        case actions.GET_ALL_RESOURCES_SUCCESS: {
+            const { resources } = action.payload;
+            return {
+                ...state,
+                resources,
+                error: null,
+                fetching_resources: false,
+            };
+        }
+        case actions.GET_ALL_RESOURCES_ERROR:
+            return {
+                ...state,
+                error: action.error,
+                fetching_resources: false,
+            };
         case actions.GET_PAGINATED_RESOURCES_REQUEST: {
             const { data } = action.payload;
-
             return {
                 ...state,
                 current_page: data.page,
