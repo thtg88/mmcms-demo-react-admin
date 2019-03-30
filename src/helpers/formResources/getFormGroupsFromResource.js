@@ -108,7 +108,7 @@ const getFormGroupsFromResource = (
 
             return {
                 disabled: disabled,
-                formFeedback: errors.length ? errors.join('. ') : null,
+                formFeedbackText: errors.length ? errors.join('. ') : null,
                 key: name,
                 invalid: errors.length > 0,
                 label: label,
@@ -128,7 +128,7 @@ const getFormGroupsFromResource = (
                 checked: value === 1,
                 className: 'pb-3',
                 disabled: disabled,
-                formFeedback: errors.length ? errors.join('. ') : null,
+                formFeedbackText: errors.length ? errors.join('. ') : null,
                 formText: formText,
                 invalid: errors.length > 0,
                 key: name,
@@ -157,7 +157,7 @@ const getFormGroupsFromResource = (
                 closeOnSelect: closeOnSelect,
                 dateFormat: dateFormat,
                 disabled: disabled,
-                formFeedback: errors.length ? errors.join('. ') : null,
+                formFeedbackText: errors.length ? errors.join('. ') : null,
                 formText: formText,
                 invalid: errors.length > 0,
                 isValidDate: isValidDate,
@@ -177,7 +177,7 @@ const getFormGroupsFromResource = (
         return {
             disabled: disabled,
             emptyOption: emptyOption,
-            formFeedback: errors.length ? errors.join('. ') : null,
+            formFeedbackText: errors.length ? errors.join('. ') : null,
             formText: formText,
             invalid: errors.length > 0,
             key: name,
