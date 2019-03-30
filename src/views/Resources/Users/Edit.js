@@ -8,6 +8,7 @@ import {
     destroyResource,
     findResource,
     getPaginatedResources,
+    recoverResource,
     reducerName,
     updateResource,
 } from '../../../redux/users/actions';
@@ -16,7 +17,10 @@ import sagas from '../../../redux/users/sagas';
 import {
     attributesSequenceToShow,
     canDestroy,
+    nameField,
     pageSize,
+    resourceBaseRoute,
+    resourceDisplayName,
     schema,
 } from '../../../redux/users/schema';
 
@@ -64,6 +68,7 @@ export const Edit = ({
             handleUpdateResource={handleUpdateResource}
             isDestroyResourceModalOpen={is_modal_open}
             resource={resource}
+            resourceNameField={nameField}
             resourceUnchanged={resource_unchanged}
             toggleDestroyResourceModal={toggleDestroyResourceModal}
             updateInputValue={updateInputValue}
@@ -78,8 +83,12 @@ export default withEditResource({
     destroyResource,
     findResource,
     getPaginatedResources,
+    nameField,
     pageSize,
+    recoverResource,
+    reducerName,
+    resourceBaseRoute,
+    resourceDisplayName,
     schema,
     updateResource,
-    reducerName,
 })(Edit);

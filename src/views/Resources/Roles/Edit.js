@@ -16,6 +16,7 @@ import sagas from '../../../redux/roles/sagas';
 import {
     attributesSequenceToShow,
     canDestroy,
+    nameField,
     pageSize,
     schema,
 } from '../../../redux/roles/schema';
@@ -64,6 +65,7 @@ export const Edit = ({
             handleUpdateResource={handleUpdateResource}
             isDestroyResourceModalOpen={is_modal_open}
             resource={resource}
+            resourceNameField={nameField}
             resourceUnchanged={resource_unchanged}
             toggleDestroyResourceModal={toggleDestroyResourceModal}
             updateInputValue={updateInputValue}
@@ -78,8 +80,9 @@ export default withEditResource({
     destroyResource,
     findResource,
     getPaginatedResources,
+    nameField,
     pageSize,
+    reducerName,
     schema,
     updateResource,
-    reducerName,
 })(Edit);
