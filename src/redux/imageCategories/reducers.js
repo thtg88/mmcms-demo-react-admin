@@ -18,8 +18,6 @@ const initial_state = {
 };
 
 const reducer = (state = initial_state, action) => {
-    // console.log('action dispatched', action);
-
     switch(action.type) {
         case actions.CHANGE_PAGE_RESOURCES:
             return {
@@ -53,41 +51,41 @@ const reducer = (state = initial_state, action) => {
         case actions.CREATE_RESOURCE_REQUEST: {
             return {
                 ...state,
-                error: null,
                 created: false,
+                error: null,
             };
         }
         case actions.CREATE_RESOURCE_SUCCESS:
             return {
                 ...state,
-                error: null,
                 created: true,
+                error: null,
                 resource: action.payload.resource,
             };
         case actions.CREATE_RESOURCE_ERROR:
             return {
                 ...state,
-                error: action.error,
                 created: false,
+                error: action.error,
             };
         case actions.DESTROY_RESOURCE_REQUEST:
             return {
                 ...state,
-                error: null,
                 destroyed: false,
+                error: null,
             };
         case actions.DESTROY_RESOURCE_SUCCESS:
             return {
                 ...state,
-                error: null,
                 destroyed: true,
+                error: null,
                 // resource: action.payload.resource,
             };
         case actions.DESTROY_RESOURCE_ERROR:
             return {
                 ...state,
-                error: action.error,
                 destroyed: false,
+                error: action.error,
             };
         case actions.FIND_RESOURCE_REQUEST:
             return {
@@ -132,13 +130,22 @@ const reducer = (state = initial_state, action) => {
             const { data } = action.payload;
             return {
                 ...state,
+                current_page: data.page,
                 error: null,
                 fetching_resources: true,
-                current_page: data.page,
-                paginated_resources: {
-                    ...state.paginated_resources,
-                    [data.page]: []
-                },
+                // If searching, reset all pages
+                paginated_resources: (
+                        typeof data.q !== 'undefined'
+                        && data.q !== ''
+                    )
+                    ? {
+                        1: [],
+                    }
+                    // Otherwise reset page I'm fetching
+                    : {
+                        ...state.paginated_resources,
+                        [data.page]: [],
+                    },
                 total: 0,
             };
         }
@@ -146,14 +153,14 @@ const reducer = (state = initial_state, action) => {
             const { data, total, current_page } = action.payload;
             return {
                 ...state,
-                current_page: current_page,
+                current_page,
+                total,
                 error: null,
                 fetching_resources: false,
                 paginated_resources: {
                     ...state.paginated_resources,
                     [current_page]: data
                 },
-                total: total,
             };
         }
         case actions.GET_PAGINATED_RESOURCES_ERROR:
@@ -175,9 +182,9 @@ const reducer = (state = initial_state, action) => {
             return {
                 ...state,
                 error: null,
-                resource: resource,
                 paginated_resources: updatePaginatedResourcesFromResource(state.paginated_resources, resource),
                 recovered: true,
+                resource: resource,
             };
         }
         case actions.RECOVER_RESOURCE_ERROR:
