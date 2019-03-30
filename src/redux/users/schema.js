@@ -4,6 +4,8 @@ export const resourceDisplayName = 'User';
 
 export const resourcesDisplayName = 'Users';
 
+export const resourceBaseRoute = 'users';
+
 export const keyField = 'id';
 
 export const nameField = 'name';
