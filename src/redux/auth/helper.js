@@ -10,7 +10,7 @@ export const login = async data => {
         }),
         body: JSON.stringify(data),
     })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
 export const register = async data => {
@@ -22,7 +22,7 @@ export const register = async data => {
         }),
         body: JSON.stringify(data),
     })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
 export const logout = async data => {
@@ -34,7 +34,7 @@ export const logout = async data => {
             'Accept': 'application/json',
         }),
     })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
 export const getProfile = async data => {
@@ -48,7 +48,7 @@ export const getProfile = async data => {
             'Accept': 'application/json',
         }),
     })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
 export const updateProfile = async data => {
@@ -63,5 +63,5 @@ export const updateProfile = async data => {
         }),
         body: JSON.stringify(rest),
     })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };

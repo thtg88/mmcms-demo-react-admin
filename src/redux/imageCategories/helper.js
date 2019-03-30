@@ -13,7 +13,7 @@ export const createResource = async data => {
         }),
         body: JSON.stringify(rest),
     })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
 export const destroyResource = async data => {
@@ -27,7 +27,7 @@ export const destroyResource = async data => {
             'Accept': 'application/json',
         }),
     })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
 export const findResource = async data => {
@@ -47,7 +47,7 @@ export const findResource = async data => {
             'Accept': 'application/json',
         }),
     })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
 export const getAllResources = async data => {
@@ -62,7 +62,7 @@ export const getAllResources = async data => {
             'Accept': 'application/json',
         }),
     })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
 export const getPaginatedResources = async data => {
@@ -109,7 +109,7 @@ export const getPaginatedResources = async data => {
             'Accept': 'application/json',
         }),
     })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
 export const recoverResource = async data => {
@@ -123,7 +123,7 @@ export const recoverResource = async data => {
             'Accept': 'application/json',
         }),
     })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
 export const updateResource = async data => {
@@ -138,5 +138,5 @@ export const updateResource = async data => {
         }),
         body: JSON.stringify(rest),
     })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
+    .then(response => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
