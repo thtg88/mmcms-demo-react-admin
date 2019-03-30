@@ -43,7 +43,7 @@ export const getProfile = async data => {
     return await fetch(REACT_APP_API_BASE_URL+moduleBaseEndpoint+'/me', {
         method: 'GET',
         headers: new Headers({
-            'Authorization': 'Bearer '+token.access_token,
+            'Authorization': token.token_type+' '+token.access_token,
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }),
@@ -57,7 +57,7 @@ export const updateProfile = async data => {
     return await fetch(REACT_APP_API_BASE_URL+moduleBaseEndpoint+'/me', {
         method: 'PUT',
         headers: new Headers({
-            'Authorization': 'Bearer '+token.access_token,
+            'Authorization': token.token_type+' '+token.access_token,
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }),

@@ -7,7 +7,7 @@ export const createResource = async data => {
     return await fetch(REACT_APP_API_BASE_URL+moduleBaseEndpoint, {
         method: 'POST',
         headers: new Headers({
-            'Authorization': 'Bearer '+token.access_token,
+            'Authorization': token.token_type+' '+token.access_token,
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }),
@@ -22,7 +22,7 @@ export const destroyResource = async data => {
     return await fetch(REACT_APP_API_BASE_URL+moduleBaseEndpoint+'/'+id, {
         method: 'DELETE',
         headers: new Headers({
-            'Authorization': 'Bearer '+token.access_token,
+            'Authorization': token.token_type+' '+token.access_token,
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }),
@@ -37,7 +37,7 @@ export const findResource = async data => {
     return await fetch(url, {
         method: 'GET',
         headers: new Headers({
-            'Authorization': 'Bearer '+token.access_token,
+            'Authorization': token.token_type+' '+token.access_token,
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }),
@@ -72,7 +72,7 @@ export const getPaginatedResources = async data => {
     return await fetch(url, {
         method: 'GET',
         headers: new Headers({
-            'Authorization': 'Bearer '+token.access_token,
+            'Authorization': token.token_type+' '+token.access_token,
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }),
@@ -86,7 +86,7 @@ export const updateResource = async data => {
     return await fetch(REACT_APP_API_BASE_URL+moduleBaseEndpoint+'/'+id, {
         method: 'PUT',
         headers: new Headers({
-            'Authorization': 'Bearer '+token.access_token,
+            'Authorization': token.token_type+' '+token.access_token,
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }),
