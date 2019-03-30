@@ -7,11 +7,11 @@ const initial_state = {
     destroyed: false,
     error: null,
     fetching_resources: false,
-    resource: null,
     paginated_resources: {
         1: []
     },
     recovered: false,
+    resource: null,
     resources: [],
     total: 0,
     updated: false,
@@ -25,28 +25,11 @@ const reducer = (state = initial_state, action) => {
                 current_page: action.payload.data.page,
             };
         case actions.CLEAR_METADATA_RESOURCES: {
-            const { data } = action.payload;
-
             return {
                 ...state,
-                current_page: 1,
                 destroyed: false,
                 error: null,
                 fetching_resources: false,
-                paginated_resources: (
-                        data.query !== ''
-                        && data.query !== null
-                        && typeof data.query !== 'undefined'
-                    )
-                    // If I've searched before,
-                    // Clear the paginated resources so on next reload
-                    // A re-fetch will be needed
-                    ? {
-                        1: []
-                    }
-                    : {
-                        ...state.paginated_resources
-                    }
             };
         }
         case actions.CLEAR_METADATA_RESOURCE_EDIT:
@@ -121,7 +104,6 @@ const reducer = (state = initial_state, action) => {
             };
         case actions.GET_PAGINATED_RESOURCES_REQUEST: {
             const { data } = action.payload;
-
             return {
                 ...state,
                 current_page: data.page,
@@ -196,13 +178,12 @@ const reducer = (state = initial_state, action) => {
             };
         case actions.UPDATE_RESOURCE_SUCCESS: {
             const { resource } = action.payload;
-
             return {
                 ...state,
                 error: null,
                 updated: true,
-                resource: action.payload.resource,
                 paginated_resources: updatePaginatedResourcesFromResource(state.paginated_resources, resource),
+                resource: action.payload.resource,
             };
         }
         case actions.UPDATE_RESOURCE_ERROR:
