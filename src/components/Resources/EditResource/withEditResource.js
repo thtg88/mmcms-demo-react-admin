@@ -12,6 +12,7 @@ import {
     updateFormResourceFromErrors,
 } from '../../../helpers/formResources';
 import { getResourceFromPaginatedResourcesAndId } from '../../../helpers/paginatedResources';
+import slugify from '../../../helpers/slugify';
 import {
     apiResourceCreateSuccessNotification,
     apiResourceDestroySuccessNotification,
@@ -37,6 +38,8 @@ import {
     schema as seoEntrySchema,
 } from '../../../redux/seoEntries/schema';
 
+const { REACT_APP_API_BASE_URL } = process.env;
+
 const withEditResource = ({
     attributesSequenceToShow,
     clearMetadataResourceEdit,
@@ -45,6 +48,7 @@ const withEditResource = ({
     unpublishResource,
     findResource,
     getPaginatedResources,
+    nameField,
     pageSize,
     recoverResource,
     resourceBaseRoute,
@@ -69,6 +73,7 @@ const withEditResource = ({
             super(props);
 
             this.forceUpdateSchema = this.forceUpdateSchema.bind(this);
+            this.handleCKEditorImageFileUpload = this.handleCKEditorImageFileUpload.bind(this);
             this.handleCreateSeoEntry = this.handleCreateSeoEntry.bind(this);
             this.handleDestroyResource = this.handleDestroyResource.bind(this);
             this.handleImageFileRemove = this.handleImageFileRemove.bind(this);
@@ -97,6 +102,8 @@ const withEditResource = ({
                 hasSeo: false,
                 images: [],
                 imageCategories: [],
+                imageUploadRejectPromise: null,
+                imageUploadResolvePromise: null,
                 isDestroyResourceModalOpen: false,
                 isPublishResourceModalOpen: false,
                 isRecoverResourceModalOpen: false,
@@ -139,13 +146,31 @@ const withEditResource = ({
             createSeoEntry({ data })
         }
 
+        handleCKEditorImageFileUpload(file, resolvePromise, rejectPromise) {
+            const { createImage, token, urlResourceId } = this.props;
+
+            this.setState({
+                imageUploadResolvePromise: resolvePromise,
+                imageUploadRejectPromise: rejectPromise,
+            });
+
+            // add/upload file
+            const data = {
+                token,
+                data: file,
+                target_id: urlResourceId,
+                target_table: resourceTableName,
+            };
+            createImage({ data });
+        }
+
         handleDestroyResource(evt) {
             evt.preventDefault();
 
             const { destroyResource, token, urlResourceId } = this.props;
             const data = {
-                token,
                 id: urlResourceId,
+                token,
             };
 
             this.setState({
@@ -174,7 +199,7 @@ const withEditResource = ({
 
                 // We set the given category id as uploading so that UI can react accordingly
                 this.setState({
-                    imageCategories: imageCategories.map((imageCategory) => {
+                    imageCategories: imageCategories.map(imageCategory => {
                         if(imageCategory.id === imageCategoryId) {
                             return {
                                 ...imageCategory,
@@ -258,14 +283,14 @@ const withEditResource = ({
             const values = getValuesFromFormResource(resource);
             const validationSchema = getValidationSchemaFromFormResource(resource);
             const data = {
-                token,
                 id: urlResourceId,
+                token,
                 ...values,
             };
 
             // Reset errors
             this.setState({
-                resource: updateFormResourceFromErrors(resource, {inner:[]}),
+                resource: updateFormResourceFromErrors(resource, {inner:[]})
             });
 
             await yup.object(validationSchema)
@@ -288,7 +313,7 @@ const withEditResource = ({
                     // If validation does not passes
                     // Set errors in the form
                     this.setState({
-                        resource: updateFormResourceFromErrors(resource, errors),
+                        resource: updateFormResourceFromErrors(resource, errors)
                     });
                 });
         }
@@ -357,18 +382,35 @@ const withEditResource = ({
             const resource = this.state[resourceKey];
             const resourceUnchangedKey = resourceKey+'Unchanged';
             const resourceUnchanged = this.state[resourceUnchangedKey];
-
-            if(resourceUnchanged === true) {
-                this.setState({
-                    [resourceUnchangedKey]: false,
-                });
-            }
-
-            this.setState({
+            const newValue = {
                 [resourceKey]: Object.assign(resource, {
                     [name]: Object.assign(resource[name], { value }),
                 }),
-            });
+            };
+
+            if(name !== 'slug' && name === nameField && resource.slug) {
+                newValue.resource.slug = {
+                    ...resource.slug,
+                    value: slugify(value),
+                };
+            }
+
+            // Please don't split this set state into 2 separate ones,
+            // As doing so may introduce slightly odd bugs on CKEditor implementation
+            // Where 2 state updates in succession may fire the update with the old value
+            if(resourceUnchanged === true) {
+                // If the resource has not been changed
+                // We set the state to cater for that
+                this.setState({
+                    ...newValue,
+                    [resourceUnchangedKey]: false,
+                });
+            } else {
+                // Otherwise we simply set the new value
+                this.setState({
+                    ...newValue,
+                });
+            }
         }
 
         toggleDestroyResourceModal(evt) {
@@ -563,6 +605,8 @@ const withEditResource = ({
                 destroying_resource,
                 imageCategories,
                 images,
+                imageUploadRejectPromise,
+                imageUploadResolvePromise,
                 publishing_resource,
                 recoveringResource,
                 unpublishing_resource,
@@ -684,6 +728,7 @@ const withEditResource = ({
                     isRecoverResourceModalOpen: false,
                     recoveringResource: false,
                     resource: getFormResourceFromValues(resource, schema, attributesSequenceToShow),
+                    resourceUnchanged: true,
                 });
 
                 history.push('/'+resourceBaseRoute+'/'+urlResourceId);
@@ -783,8 +828,13 @@ const withEditResource = ({
                 && imageErrors.length
                 && imageErrors.length > 0
             ) {
+                if(imageUploadRejectPromise) {
+                    imageUploadRejectPromise(imageErrors.join('. '));
+                }
+
                 this.setState({
-                    imageCategories: imageCategories.map((imageCategory) => ({...imageCategory, isUploading: false})),
+                    imageCategories: imageCategories.map(imageCategory => ({...imageCategory, isUploading: false})),
+                    imageUploadRejectPromise: null,
                 });
             }
 
@@ -808,12 +858,19 @@ const withEditResource = ({
                     iconClassName: 'fa-image',
                 });
 
+                if(imageUploadResolvePromise) {
+                    imageUploadResolvePromise({
+                        default: `${REACT_APP_API_BASE_URL}${image.url}`,
+                    });
+                }
+
                 this.setState({
-                    imageCategories: imageCategories.map((imageCategory) => ({...imageCategory, isUploading: false})),
+                    imageCategories: imageCategories.map(imageCategory => ({...imageCategory, isUploading: false})),
                     images: [
                         ...images,
                         image,
                     ],
+                    imageUploadResolvePromise: null,
                 });
             }
 
@@ -945,6 +1002,7 @@ const withEditResource = ({
             return (
                 <ComponentToWrap
                     forceUpdateSchema={this.forceUpdateSchema}
+                    handleCKEditorImageFileUpload={this.handleCKEditorImageFileUpload}
                     handleCreateSeoEntry={this.handleCreateSeoEntry}
                     handleDestroyResource={this.handleDestroyResource}
                     handleImageFileRemove={this.handleImageFileRemove}
