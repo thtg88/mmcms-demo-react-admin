@@ -6,25 +6,23 @@ import {
     Col,
     Row,
 } from 'reactstrap';
-import ApiErrorCard from '../../../components/Cards/ApiErrorCard';
-import PageTitle from '../../../components/PageTitle';
+import ApiErrorCard from '../../Cards/ApiErrorCard';
+import PageTitle from '../../PageTitle';
 import ResourceForm from '../ResourceForm';
 
 const CreateResource = ({
     creatingResource,
+    handleCKEditorImageFileUpload,
     handleCreateResource,
     errors,
     resource,
-    resourceName,
+    resourceDisplayName,
     resourceUnchanged,
     updateInputValue,
 }) => {
     const createButtonIconClassName = creatingResource === true
         ? 'fa fa-spinner fa-spin'
         : 'fa fa-plus';
-    const pageTitleText = resourceName
-        ? resourceName
-        : 'Resource';
 
     return (
         <div className="animated fadeIn">
@@ -33,12 +31,13 @@ const CreateResource = ({
                     <ApiErrorCard errors={errors} />
                 </Col>
             </Row>
-            <PageTitle text={`Create ${pageTitleText}`} />
+            <PageTitle text={`Create ${resourceDisplayName}`} />
             <Row>
                 <Col className="col-md-12">
                     <Card className="card-accent-success">
                         <CardBody>
                             <ResourceForm
+                                onCKEditorImageUpload={handleCKEditorImageFileUpload}
                                 onInputChange={updateInputValue}
                                 onSubmit={handleCreateResource}
                                 resource={resource}
@@ -57,12 +56,17 @@ const CreateResource = ({
 
 CreateResource.proptTypes = {
     creatingResource: PropTypes.bool,
+    handleCKEditorImageFileUpload: PropTypes.func,
     handleCreateResource: PropTypes.func,
     errors: PropTypes.array,
     resource: PropTypes.object,
-    resourceName: PropTypes.string,
+    resourceDisplayName: PropTypes.string,
     resourceUnchanged: PropTypes.bool,
     updateInputValue: PropTypes.func,
+};
+
+CreateResource.defaultProps = {
+    resourceDisplayName: 'Resource',
 };
 
 export default CreateResource;

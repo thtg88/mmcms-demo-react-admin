@@ -1,4 +1,9 @@
-const getFormGroupsFromResource = (resource, onInputChange, isRecovering) => {
+const getFormGroupsFromResource = (
+    resource,
+    onInputChange,
+    isRecovering,
+    onCKEditorImageUpload
+) => {
     if(!resource) {
         return [];
     }
@@ -179,6 +184,7 @@ const getFormGroupsFromResource = (resource, onInputChange, isRecovering) => {
             label: label,
             multiple: multiple,
             name: name,
+            onCKEditorImageUpload: onCKEditorImageUpload,
             onChange: onInputChange,
             placeholder: placeholder,
             rows: rows,
