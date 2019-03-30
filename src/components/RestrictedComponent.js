@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import NProgress from 'nprogress';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { animateScroll as scroll } from 'react-scroll';
@@ -22,6 +23,8 @@ class RestrictedComponent extends Component {
 
         // if unauthenticated redirect to login
         if(prevProps.unauthenticated === false && unauthenticated === true) {
+            NProgress.done();
+            NProgress.remove();
             loggedOut();
         }
     }
