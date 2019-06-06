@@ -6,13 +6,13 @@ import {
     CardHeader
 } from 'reactstrap';
 
-const ApiErrorCard = ({ errors }) => {
-    if(typeof errors === 'undefined' || errors === null || errors.length === 0) {
+const ApiWarningCard = ({ warnings }) => {
+    if(typeof warnings === 'undefined' || warnings === null || warnings.length === 0) {
         return null;
     }
 
     return (
-        <Card className="border-danger">
+        <Card className="border-warning">
             <CardHeader>
                 <i className="fa fa-warning"></i>
                 {' '}
@@ -20,8 +20,8 @@ const ApiErrorCard = ({ errors }) => {
             </CardHeader>
             <CardBody>
                 {
-                    errors.map((error, idx) => (
-                        <div key={idx}>{error}</div>
+                    warnings.map((warning, idx) => (
+                        <div key={idx}>{warning}</div>
                     ))
                 }
             </CardBody>
@@ -29,8 +29,8 @@ const ApiErrorCard = ({ errors }) => {
     );
 }
 
-ApiErrorCard.propTypes = {
-    errors: PropTypes.arrayOf(PropTypes.string)
+ApiWarningCard.propTypes = {
+    warnings: PropTypes.arrayOf(PropTypes.string)
 };
 
-export default ApiErrorCard;
+export default ApiWarningCard;
