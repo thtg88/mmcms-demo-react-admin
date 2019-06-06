@@ -28,6 +28,7 @@ const FormInput = ({
     onReactSelectAsyncLoadOptions,
     placeholder,
     rows,
+    step,
     timeFormat,
     type,
     value,
@@ -185,7 +186,7 @@ const FormInput = ({
         );
     }
 
-    if(type === 'datetime') {
+    if(type === 'react-datetime') {
         const additionalProps = value
             ? {
                 value: dateFormat && timeFormat
