@@ -5,7 +5,7 @@ import {
     Modal,
     ModalBody,
     ModalFooter,
-    ModalHeader
+    ModalHeader,
 } from 'reactstrap';
 
 const DestroyResourceModal = ({
@@ -13,6 +13,7 @@ const DestroyResourceModal = ({
     disabled,
     isOpen,
     onDestroyButtonClick,
+    resourceDisplayName,
     toggle,
 }) => (
     <Modal
@@ -20,15 +21,20 @@ const DestroyResourceModal = ({
         toggle={toggle}
         className="modal-danger"
     >
-        <ModalHeader toggle={toggle}>Delete Resource</ModalHeader>
+        <ModalHeader toggle={toggle}>Remove {resourceDisplayName}</ModalHeader>
         <ModalBody>
-            Are you sure you want to delete this resource?
+            Are you sure you want to remove this {resourceDisplayName}?
         </ModalBody>
         <ModalFooter>
-            <Button color="danger" disabled={disabled} onClick={onDestroyButtonClick}>
+            <Button
+                type="button"
+                color="danger"
+                disabled={disabled}
+                onClick={onDestroyButtonClick}
+            >
                 <i className={destroyButtonIconClassName}></i>
                 {' '}
-                Yes, Delete
+                Yes, Remove
             </Button>
             {' '}
             <Button color="secondary" onClick={toggle}>Cancel</Button>
@@ -41,7 +47,12 @@ DestroyResourceModal.propTypes = {
     disabled: PropTypes.bool,
     isOpen: PropTypes.bool,
     onDestroyButtonClick: PropTypes.func,
+    resourceDisplayName: PropTypes.string,
     toggle: PropTypes.func,
 };
+
+DestroyResourceModal.defaultProps = {
+    resourceDisplayName: 'resource',
+}
 
 export default DestroyResourceModal;
