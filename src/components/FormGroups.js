@@ -1,12 +1,16 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
+    Col,
     FormFeedback,
     FormGroup,
     FormText,
     Label,
+    Row,
 } from 'reactstrap';
 import FormInput from './FormInput';
+
+const { REACT_APP_API_BASE_URL } = process.env;
 
 const FormGroups = ({ groups }) => {
     if(
@@ -40,12 +44,27 @@ const FormGroups = ({ groups }) => {
             onChange,
             placeholder,
             rows,
+            step,
             timeFormat,
             type,
             value,
             values,
             viewMode,
         } = group;
+
+        if(type === 'img') {
+            return (
+                <Row key={key}>
+                    <Col className="col-md-6 col-12 mb-3">
+                        <img
+                            src={`${REACT_APP_API_BASE_URL}${value}`}
+                            alt=""
+                            className="img-fluid"
+                        />
+                    </Col>
+                </Row>
+            );
+        }
 
         if(type === 'checkbox') {
             return (
