@@ -6,7 +6,7 @@ import {
     Form,
     FormGroup,
     InputGroup,
-    InputGroupAddon,
+    InputGroupAddon
 } from 'reactstrap';
 import FormInput from '../../FormInput';
 
@@ -21,7 +21,7 @@ export const SearchBar = ({
 }) => (
     <Form className="form-horizontal">
         <FormGroup row onSubmit={onSubmit}>
-            <Col className="col-md-12">
+            <Col className="col-12">
                 <InputGroup>
                     <FormInput
                         type="text"
@@ -33,9 +33,11 @@ export const SearchBar = ({
                     <InputGroupAddon addonType="append">
                         <Button
                             type="button"
-                            color="danger"
-                            onClick={onClear}
+                            className="clear-search-bar-button"
+                            color="secondary"
                             disabled={!query || buttonDisabled}
+                            onClick={onClear}
+                            outline
                         >
                             <i className="fa fa-times"></i>
                             {' '}

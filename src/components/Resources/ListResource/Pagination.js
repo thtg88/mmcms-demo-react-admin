@@ -7,6 +7,7 @@ import {
     PaginationLink,
     Row,
 } from 'reactstrap';
+import { replaceUrlParameters } from '../../../helpers/url';
 
 const Pagination = ({
     history,
@@ -15,6 +16,7 @@ const Pagination = ({
     pageSize,
     resourceBaseRoute,
     total,
+    urlParams,
 }) => {
     // Create last page from total and page size
     const last_page = parseInt((total - 1) / pageSize, 10) + 1;
@@ -91,8 +93,8 @@ const Pagination = ({
 
     if(!onPageClick) {
         onPageClick = (page) => history.push({
-            pathname: '/'+resourceBaseRoute,
-            search: 'page='+page
+            pathname: '/'+replaceUrlParameters(resourceBaseRoute, urlParams),
+            search: 'page='+page,
         });
     }
 
@@ -151,7 +153,7 @@ const Pagination = ({
 };
 
 Pagination.propTypes = {
-    history: PropTypes.object.isRequired,
+    history: PropTypes.object,
     onPageClick: PropTypes.func,
     page: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
@@ -160,6 +162,7 @@ Pagination.propTypes = {
         PropTypes.string,
     ]),
     total: PropTypes.number.isRequired,
+    urlParams: PropTypes.object,
 };
 
 export default Pagination;

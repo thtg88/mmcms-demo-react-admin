@@ -9,8 +9,9 @@ import registerDefaultReducers from './reducers';
 import sagaRegistry from './sagaRegistry';
 import { registerDefaultSagas } from './sagas';
 
+const { NODE_ENV, REACT_APP_STATE_DRIVER } = process.env;
+
 export const configureStore = () => {
-    const { REACT_APP_STATE_DRIVER } = process.env;
     const sagaMiddleware = createSagaMiddleware();
     let store;
     let persistedState;
@@ -74,7 +75,9 @@ export const configureStore = () => {
         sagaMiddleware.run(allSagas);
     });
 
+    if(NODE_ENV !== 'production') {
     console.log('initial state: ', store.getState());
+    }
 
     function* allSagas(getState) {
         yield all(sagaRegistry.getSagas());

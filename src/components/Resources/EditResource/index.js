@@ -1,8 +1,10 @@
-import EditResource from './EditResource';
+import EditResourceContainer from './EditResourceContainer';
+import SeoTabContent from './SeoTabContent';
 import withEditResource from './withEditResource';
 
 export {
+    SeoTabContent,
     withEditResource,
 };
 
-export default EditResource;
+export default EditResourceContainer;

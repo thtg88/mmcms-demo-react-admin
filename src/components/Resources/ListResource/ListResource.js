@@ -1,12 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DataListGroup from './DataListGroup';
+import DataListGroupDraggable from './DataListGroupDraggable';
 import DataTable from './DataTable';
+import DataGrid from './DataGrid';
 
 const ListResource = ({
     type,
-    ...props,
+    ...props
 }) => {
+    if(type === 'grid') {
+        return <DataGrid {...props } />;
+    }
+
+    if(type === 'list-draggable') {
+        return <DataListGroupDraggable {...props } />;
+    }
+
     if(type === 'list') {
         return <DataListGroup {...props } />;
     }
@@ -19,7 +29,7 @@ const ListResource = ({
 };
 
 ListResource.propTypes = {
-    type: PropTypes.string,
+    type: PropTypes.string
 };
 
 export default ListResource;

@@ -1,23 +1,27 @@
 import React, { Component } from 'react';
+import cloneDeep from 'lodash/cloneDeep';
+import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
 import { animateScroll as scroll } from 'react-scroll';
-import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
+import { getApiErrorMessages } from '../../../helpers/apiMessages';
 import {
     filterSchemaFromAttributes,
     getSelectOptions,
-    getValidationSchemaFromFormResource,
-    getValuesFromFormResource,
+    getValidationSchemaFromFormSchema,
+    getValuesFromFormSchema,
     updateFormResourceFromErrors,
+    updateFormSchemaValuesWithUrlParameters,
 } from '../../../helpers/formResources';
 import slugify from '../../../helpers/slugify';
 import { apiResourceCreateSuccessNotification } from '../../../helpers/toastNotification';
+import { replaceUrlParameters } from '../../../helpers/url';
 import {
     createResource as createImage,
     // destroyResource as destroyImage,
-    reducerName as imageReducerName,
     updateResource as updateImage,
 } from '../../../redux/images/actions';
+import { reducerName as imageReducerName } from '../../../redux/images/schema';
 
 const { REACT_APP_API_BASE_URL } = process.env;
 
@@ -25,32 +29,40 @@ const withCreateResource = ({
     attributesSequenceToShow,
     clearMetadataResourceCreate,
     createResource,
+    dontRedirectAfterCreate,
     nameField,
-    resourceBaseRoute,
-    resourceTableName,
+    redirectUrlAfterCreate,
     reducerName,
+    resourceBaseRoute,
+    resourceDisplayName,
+    resourceTableName,
     schema,
 }) => (ComponentToWrap) => {
-    // We loop all the schema entries,
+    // We deep copy schema so we are sure we are working with a fresh copy
+    // e.g. no wiriting on old references or for next time we use schema
+    const updatedSchema = cloneDeep(schema);
+
+    // We loop all the updatedSchema entries,
     // in order to get valuesFetchers from them
     // These will allow us to dispatch Redux actions,
-    // Which ultimately will allow us to update the schema with the transformed
+    // Which ultimately will allow us to update the updatedSchema with the transformed
     // resources returned
     // This is mainly used to populate select values with data coming from the API
-    const valuesFetchers = Object.entries(schema)
+    const valuesFetchers = Object.entries(updatedSchema)
         .filter(([name, params], idx) => typeof params.valuesFetcher !== 'undefined')
         .map(([name, params], idx) => ({...params.valuesFetcher, name: name}));
 
-    class CreateHOC extends Component {
-        state = {
-            creating_resource: false,
-            imageUploadRejectPromise: null,
-            imageUploadResolvePromise: null,
-            resource: filterSchemaFromAttributes(schema, attributesSequenceToShow),
-            resourceUnchanged: true,
-            toUpdateImages: [],
-        };
+    // We loop all the updatedSchema entries,
+    // in order to get valuesSearchers from them
+    // These will allow us to dispatch Redux actions,
+    // Which ultimately will allow us to update the updatedSchema with the transformed
+    // resources returned
+    // This is mainly used to populate select values with data coming from the API
+    const valuesSearchers = Object.entries(updatedSchema)
+        .filter(([name, params], idx) => typeof params.valuesSearcher !== 'undefined')
+        .map(([name, params], idx) => ({...params.valuesSearcher, name: name}));
 
+    class CreateHOC extends Component {
         constructor(props) {
             super(props);
 
@@ -59,11 +71,26 @@ const withCreateResource = ({
             this.handleCreateResource = this.handleCreateResource.bind(this);
             this.setInputValueState = this.setInputValueState.bind(this);
             this.updateInputValue = this.updateInputValue.bind(this);
+
+            this.state = {
+                creatingResource: false,
+                imageUploadRejectPromise: null,
+                imageUploadResolvePromise: null,
+                formSchema: updateFormSchemaValuesWithUrlParameters(
+                    filterSchemaFromAttributes(updatedSchema, attributesSequenceToShow),
+                    props.urlParams
+                ),
+                resourceUnchanged: true,
+                toUpdateImages: [],
+                valuesSearcherCallbacks: {},
+            };
         }
 
         forceUpdateSchema() {
+            const { formSchema } = this.state;
+
             this.setState({
-                resource: filterSchemaFromAttributes(schema, attributesSequenceToShow),
+                formSchema: filterSchemaFromAttributes(formSchema, attributesSequenceToShow),
             });
         }
 
@@ -93,14 +120,14 @@ const withCreateResource = ({
             evt.preventDefault();
 
             const { createResource, token } = this.props;
-            const { resource } = this.state;
-            const values = getValuesFromFormResource(resource);
-            const validationSchema = getValidationSchemaFromFormResource(resource);
+            const { formSchema } = this.state;
+            const values = getValuesFromFormSchema(formSchema);
+            const validationSchema = getValidationSchemaFromFormSchema(formSchema);
             const data = { token, ...values };
 
             // Reset errors
             this.setState({
-                resource: updateFormResourceFromErrors(resource, {inner:[]})
+                formSchema: updateFormResourceFromErrors(formSchema, {inner:[]})
             });
 
             await yup.object(validationSchema)
@@ -114,7 +141,7 @@ const withCreateResource = ({
                     scroll.scrollToTop();
 
                     this.setState({
-                        creating_resource: true
+                        creatingResource: true
                     });
 
                     createResource({ data });
@@ -123,28 +150,28 @@ const withCreateResource = ({
                     // If validation does not passes
                     // Set errors in the form
                     this.setState({
-                        resource: updateFormResourceFromErrors(resource, errors)
+                        formSchema: updateFormResourceFromErrors(formSchema, errors),
                     });
                 });
         }
 
         setInputValueState(name, value) {
-            const { resource, resourceUnchanged } = this.state;
+            const { formSchema, resourceUnchanged } = this.state;
             const newValue = {
-                resource: {
-                    ...resource,
+                formSchema: {
+                    ...formSchema,
                     [name]: {
-                        ...resource[name],
+                        ...formSchema[name],
                         value,
                     },
                 },
             };
 
             // We update the slug if it's the nameField
-            // and there is a slug available in the schema
-            if(name !== 'slug' && name === nameField && resource.slug) {
-                newValue.resource.slug = {
-                    ...resource.slug,
+            // and there is a slug available in the formSchema
+            if(name !== 'slug' && name === nameField && formSchema.slug) {
+                newValue.formSchema.slug = {
+                    ...formSchema.slug,
                     value: slugify(value),
                 };
             }
@@ -209,9 +236,10 @@ const withCreateResource = ({
 
         componentDidMount() {
             const { token } = this.props;
+            const { formSchema } = this.state;
 
             if(valuesFetchers.length > 0) {
-                // We loop the valuesFetchers from the schema
+                // We loop the valuesFetchers from the formSchema
                 // In order to check if we had resources in state,
                 // If not we re-fetch them
                 valuesFetchers.forEach((valuesFetcher, idx) => {
@@ -226,22 +254,24 @@ const withCreateResource = ({
                         };
                         this.props[valuesFetcher.fetcherName]({ data });
 
-                        // While we fetch them, we disable the input
-                        // to give a visual feedback to the user
-                        schema[valuesFetcher.name].disabled = true;
+                        if(!formSchema[valuesFetcher.name].dontEnable) {
+                            // While we fetch them, we disable the input
+                            // to give a visual feedback to the user
+                            formSchema[valuesFetcher.name].disabled = true;
+                        }
 
                     } else {
-                        // Otherwise we get them from state and update the schema,
-                        schema[valuesFetcher.name].values = getSelectOptions(
+                        // Otherwise we get them from state and update the formSchema,
+                        formSchema[valuesFetcher.name].values = getSelectOptions(
                             this.props[valuesFetcher.reducerName].resources,
-                            schema[valuesFetcher.name].selectOptionText,
-                            schema[valuesFetcher.name].selectOptionValue
+                            formSchema[valuesFetcher.name].selectOptionText,
+                            formSchema[valuesFetcher.name].selectOptionValue
                         );
                     }
                 });
 
                 // This function triggers a setState,
-                // Which will re-render the component with the updated schema
+                // Which will re-render the component with the updated formSchema
                 this.forceUpdateSchema();
             }
         }
@@ -257,18 +287,22 @@ const withCreateResource = ({
                 resource,
                 token,
                 updateImage,
+                urlParams,
             } = this.props;
             const {
-                toUpdateImages,
+                creatingResource,
+                formSchema,
                 imageUploadRejectPromise,
                 imageUploadResolvePromise,
+                toUpdateImages,
+                valuesSearcherCallbacks,
             } = this.state;
 
             // If I am receiving errors and I am creating the resource
             // Set the creating resource to false
-            if(errors.length !== 0 && this.state.creating_resource === true) {
+            if(errors.length !== 0 && creatingResource === true) {
                 this.setState({
-                    creating_resource: false,
+                    creatingResource: false,
                 });
             }
 
@@ -292,7 +326,25 @@ const withCreateResource = ({
                     updateImage({ data });
                 });
 
-                history.push('/'+resourceBaseRoute+'/'+resource.id);
+                apiResourceCreateSuccessNotification({ resourceDisplayName });
+
+                if(!dontRedirectAfterCreate) {
+                    if(redirectUrlAfterCreate) {
+                        // If redirectUrlAfterCreate is provided
+                        // We push to that URL with the parameters replaced
+
+                        // We cast as string as replaceUrlParameters only accept string parameters
+                        urlParams.id = resource.id+'';
+
+                        history.push(replaceUrlParameters(redirectUrlAfterCreate, urlParams));
+                    } else {
+                        history.push('/'+resourceBaseRoute+'/'+resource.id);
+                    }
+                } else {
+                    this.setState({
+                        creatingResource: false,
+                    });
+                }
             }
 
             // This means that if I was creating the image,
@@ -319,7 +371,6 @@ const withCreateResource = ({
             // This means we were creating an image
             // and it's been created correctly
             // So we append it to the existing images array
-            // and we set all image categories uploading to false
             else if(prevProps.imageCreated === false && imageCreated === true) {
                 apiResourceCreateSuccessNotification({
                     resourceDisplayName: 'Image',
@@ -341,26 +392,28 @@ const withCreateResource = ({
                 }
             }
 
-            let forceUpdateSchema = false;
-
             if(valuesFetchers.length > 0) {
-                // We loop the valuesFetchers from the schema
+                let forceUpdateSchema = false;
+
+                // We loop the valuesFetchers from the formSchema
                 // In order to check if we had resources or errors coming back
-                // so we can update the schema
+                // so we can update the formSchema
                 valuesFetchers.forEach(valuesFetcher => {
                     // If I was fetching this.props[`${valuesFetcher.reducerName}`].fetching_resources,
                     // and they have come back,
-                    // We update the schema
+                    // We update the formSchema
                     if(
                         prevProps[`${valuesFetcher.reducerName}`].fetching_resources === true
                         && this.props[`${valuesFetcher.reducerName}`].fetching_resources === false
                     ) {
-                        schema[valuesFetcher.name].values = getSelectOptions(
+                        formSchema[valuesFetcher.name].values = getSelectOptions(
                             this.props[valuesFetcher.reducerName].resources,
-                            schema[valuesFetcher.name].selectOptionText,
-                            schema[valuesFetcher.name].selectOptionValue
+                            formSchema[valuesFetcher.name].selectOptionText,
+                            formSchema[valuesFetcher.name].selectOptionValue
                         );
-                        schema[valuesFetcher.name].disabled = false;
+                        if(!formSchema[valuesFetcher.name].dontEnable) {
+                            formSchema[valuesFetcher.name].disabled = false;
+                        }
 
                         forceUpdateSchema = true;
                     }
@@ -368,8 +421,93 @@ const withCreateResource = ({
 
                 if(forceUpdateSchema === true) {
                     // This function triggers a setState,
-                    // Which will re-render the component with the updated schema
+                    // Which will re-render the component with the updated formSchema
                     this.forceUpdateSchema();
+                }
+            }
+
+            if(valuesSearchers.length > 0) {
+                const newValues = {};
+                const newCallbacks = {};
+
+                // We loop the valuesSearchers from the formSchema
+                // In order to check if we had resources or errors coming back
+                // so we can update the formSchema
+                valuesSearchers.forEach(valuesSearcher => {
+                    // If I was fetching this.props[`${valuesSearcher.reducerName}`].fetching_resources,
+                    // and they have come back,
+                    // We update the formSchema
+                    if(
+                        prevProps[`${valuesSearcher.reducerName}`].fetching_resources === true
+                        && this.props[`${valuesSearcher.reducerName}`].fetching_resources === false
+                    ) {
+                        if(typeof newValues[valuesSearcher.name] === 'undefined') {
+                            newValues[valuesSearcher.name] = {};
+                        }
+
+                        newValues[valuesSearcher.name].values = getSelectOptions(
+                            this.props[valuesSearcher.reducerName].resources,
+                            formSchema[valuesSearcher.name].selectOptionText,
+                            formSchema[valuesSearcher.name].selectOptionValue
+                        );
+                        if(!formSchema[valuesSearcher.name].dontEnable) {
+                            newValues[valuesSearcher.name].disabled = false;
+                        }
+
+                        if(this.state.valuesSearcherCallbacks[valuesSearcher.searcherName]) {
+                            this.state.valuesSearcherCallbacks[valuesSearcher.searcherName](
+                                // format as react-select wants the values
+                                newValues[valuesSearcher.name].values.map(option => ({
+                                    ...option,
+                                    label: option.text,
+                                }))
+                            );
+
+                            newCallbacks[valuesSearcher.searcherName] = null;
+                        }
+                    }
+                });
+
+                if(Object.entries(newValues).length > 0) {
+                    // This function triggers a setState,
+                    // Which will re-render the component with the updated schema
+                    this.setState({
+                        formSchema: Object.entries(formSchema).reduce(
+                            (result, [name, fieldSchema]) => {
+                                if(!newValues[name]) {
+                                    return {
+                                        ...result,
+                                        [name]: fieldSchema,
+                                    };
+                                }
+
+                                return {
+                                    ...result,
+                                    [name]: {
+                                        ...formSchema[name],
+                                        ...newValues[name],
+                                    },
+                                };
+                            },
+                            {}
+                        ),
+                        valuesSearcherCallbacks: Object.entries(valuesSearcherCallbacks).reduce(
+                            (result, [name, callback]) => {
+                                if(!newCallbacks[name]) {
+                                    return {
+                                        ...result,
+                                        [name]: callback,
+                                    };
+                                }
+
+                                return {
+                                    ...result,
+                                    [name]: newCallbacks[name],
+                                };
+                            },
+                            {}
+                        ),
+                    });
                 }
             }
         }
@@ -383,12 +521,37 @@ const withCreateResource = ({
         }
 
         render() {
+            const { token } = this.props;
+            const { valuesSearcherCallbacks } = this.state;
+            const dispatchedValuesSearchers = valuesSearchers.reduce(
+                (result, valuesSearcher) => ({
+                    ...result,
+                    [valuesSearcher.searcherName]: debounce((inputValue, callback) => {
+                        this.setState({
+                            valuesSearcherCallbacks: {
+                                ...valuesSearcherCallbacks,
+                                [valuesSearcher.searcherName]: callback,
+                            }
+                        });
+
+                        const data = {
+                            token,
+                            q: inputValue,
+                        };
+                        this.props[valuesSearcher.searcherName]({ data });
+                    }, 500),
+                }),
+                {}
+            );
+
             return (
                 <ComponentToWrap
+                    dispatchedValuesSearchers={dispatchedValuesSearchers}
                     forceUpdateSchema={this.forceUpdateSchema}
                     handleCKEditorImageFileUpload={this.handleCKEditorImageFileUpload}
                     handleCreateResource={this.handleCreateResource}
                     updateInputValue={this.updateInputValue}
+                    updateFormSchemaValuesWithUrlParameters={this.updateFormSchemaValuesWithUrlParameters}
                     {...this.props}
                     {...this.state}
                 />
@@ -396,7 +559,7 @@ const withCreateResource = ({
         }
     }
 
-    const mapStateToProps = state => {
+    const mapStateToProps = (state, ownProps) => {
         const { token } = state.auth;
         const {
             created,
@@ -404,6 +567,7 @@ const withCreateResource = ({
             resource
         } = state[reducerName];
         const errors = getApiErrorMessages(error);
+        const urlParams = ownProps.match.params;
 
         // Get images data
         const imageCreated = state[imageReducerName].created;
@@ -420,18 +584,32 @@ const withCreateResource = ({
             // imageDestroyed,
             imageErrors,
             token,
+            urlParams,
             resource: typeof resource === 'undefined' ? null : resource,
         };
 
-        // We loop the valuesFetchers from the schema
+        // We loop the valuesFetchers from the updatedSchema
         // So we can add for each one of them additional resources and errors props
         valuesFetchers.forEach(valuesFetcher => {
             newProps[valuesFetcher.reducerName] = {};
             newProps[valuesFetcher.reducerName].fetching_resources = state[valuesFetcher.reducerName].fetching_resources;
             newProps[valuesFetcher.reducerName].resources = state[valuesFetcher.reducerName].resources;
-            newProps[`${valuesFetcher.reducerName}`].errors = getApiErrorMessages(
+            newProps[valuesFetcher.reducerName].errors = getApiErrorMessages(
                 state[valuesFetcher.reducerName].error
             );
+        });
+
+        // We loop the valuesFetchers from the updatedSchema
+        // So we can add for each one of them additional resources and errors props
+        valuesSearchers.forEach(valuesSearcher => {
+            if(!newProps[valuesSearcher.reducerName]) {
+                newProps[valuesSearcher.reducerName] = {};
+                newProps[valuesSearcher.reducerName].fetching_resources = state[valuesSearcher.reducerName].fetching_resources;
+                newProps[valuesSearcher.reducerName].resources = state[valuesSearcher.reducerName].resources;
+                newProps[valuesSearcher.reducerName].errors = getApiErrorMessages(
+                    state[valuesSearcher.reducerName].error
+                );
+            }
         });
 
         return newProps;
@@ -444,9 +622,14 @@ const withCreateResource = ({
         updateImage,
     };
 
-    // We add additional dispatch actions for each valuesFetcher from the schema
+    // We add additional dispatch actions for each valuesFetcher from the updatedSchema
     valuesFetchers.forEach(valuesFetcher => {
         mapDispatchToProps[valuesFetcher.fetcherName] = valuesFetcher.fetcher;
+    });
+
+    // We add additional dispatch actions for each valuesSearcher from the updatedSchema
+    valuesSearchers.forEach(valuesSearcher => {
+        mapDispatchToProps[valuesSearcher.searcherName] = valuesSearcher.searcher;
     });
 
     return connect(

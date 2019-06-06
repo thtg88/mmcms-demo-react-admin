@@ -16,19 +16,22 @@ const ListResourceContainer = ({
     currentPage,
     errors,
     fetchingResources,
+    filters,
     history,
     keyField,
     listgroupItemTag,
     listType,
     nameField,
+    onDragEnd,
     onPageClick,
     onSearchButtonClick,
     onSearchInputChange,
     onSearchInputClear,
+    onSimpleFilterDropdownItemClick,
     onSortDropdownItemClick,
     pageSize,
     resourceBaseRoute,
-    resourceListGroupItemClassName,
+    resourceItemClassName,
     resources,
     resourcesDisplayName,
     searchEnabled,
@@ -36,10 +39,10 @@ const ListResourceContainer = ({
     searchQuery,
     searchTextInputPlaceholder,
     selectedSortingOption,
-    sortingEnabled,
     sortingOptions,
     total,
     urlBuilder,
+    urlParams,
 }) => {
     if(
         (
@@ -74,33 +77,36 @@ const ListResourceContainer = ({
                             <ListResource
                                 type={listType}
                                 columns={columns}
-                                data={resources[currentPage]}
+                                data={resources.constructor === Array ? resources : resources[currentPage]}
+                                filters={filters}
                                 history={history}
                                 hover={!fetchingResources}
                                 keyField={keyField}
                                 listgroupItemTag={listgroupItemTag}
                                 loading={fetchingResources}
                                 nameField={nameField}
+                                onDragEnd={onDragEnd}
                                 onPageClick={onPageClick}
                                 onSearchButtonClick={onSearchButtonClick}
                                 onSearchInputChange={onSearchInputChange}
                                 onSearchInputClear={onSearchInputClear}
+                                onSimpleFilterDropdownItemClick={onSimpleFilterDropdownItemClick}
                                 onSortDropdownItemClick={onSortDropdownItemClick}
                                 page={currentPage}
                                 pageSize={pageSize}
                                 query={searchQuery}
                                 resourceBaseRoute={resourceBaseRoute}
-                                resourceListGroupItemClassName={resourceListGroupItemClassName}
+                                resourceItemClassName={resourceItemClassName}
                                 searchButtonDisabled={searching || fetchingResources}
                                 searchButtonIconClassName={searchButtonIconClassName}
                                 searchEnabled={searchEnabled}
                                 searchTextInputPlaceholder={searchTextInputPlaceholder}
                                 selectedSortingOption={selectedSortingOption}
-                                sortingEnabled={sortingEnabled}
                                 sortingOptions={sortingOptions}
                                 sortButtonDisabled={fetchingResources}
                                 total={total}
                                 urlBuilder={urlBuilder}
+                                urlParams={urlParams}
                             />
                         </CardBody>
                     </Card>
@@ -116,6 +122,37 @@ ListResourceContainer.propTypes = {
     currentPage: PropTypes.number,
     errors: PropTypes.array,
     fetchingResources: PropTypes.bool,
+    filters: PropTypes.arrayOf(
+        PropTypes.shape({
+            disabled: PropTypes.bool,
+            label: PropTypes.string,
+            name: PropTypes.string,
+            operator: PropTypes.string,
+            selectOptionText: PropTypes.oneOfType([
+                PropTypes.func,
+                PropTypes.string,
+            ]),
+            selectOptionValue: PropTypes.string,
+            value: PropTypes.oneOfType([
+                PropTypes.number,
+                PropTypes.string,
+            ]),
+            values: PropTypes.arrayOf(
+                PropTypes.shape({
+                    text: PropTypes.string,
+                    value: PropTypes.oneOfType([
+                        PropTypes.number,
+                        PropTypes.string,
+                    ]),
+                }),
+            ),
+            valuesFetcher: PropTypes.shape({
+                reducerName: PropTypes.string,
+                fetcher: PropTypes.func,
+                fetcherName: PropTypes.string,
+            }),
+        }),
+    ),
     history: PropTypes.object,
     keyField: PropTypes.string,
     listType: PropTypes.string,
@@ -124,11 +161,15 @@ ListResourceContainer.propTypes = {
     onSearchButtonClick: PropTypes.func,
     onSearchInputChange: PropTypes.func,
     onSearchInputClear: PropTypes.func,
+    onSimpleFilterDropdownItemClick: PropTypes.func,
     onSortDropdownItemClick: PropTypes.func,
     pageSize: PropTypes.number,
-    resources: PropTypes.object,
+    resources: PropTypes.oneOfType([
+        PropTypes.array,
+        PropTypes.object,
+    ]),
     resourceBaseRoute: PropTypes.string,
-    resourceListGroupItemClassName: PropTypes.string,
+    resourceItemClassName: PropTypes.string,
     resourcesDisplayName: PropTypes.string,
     searchEnabled: PropTypes.bool,
     searching: PropTypes.bool,
@@ -136,10 +177,10 @@ ListResourceContainer.propTypes = {
     searchTextInputPlaceholder: PropTypes.string,
     selectedSortingOption: PropTypes.object,
     sortButtonDisabled: PropTypes.bool,
-    sortingEnabled: PropTypes.bool,
     sortingOptions: PropTypes.array,
     total: PropTypes.number,
     urlBuilder: PropTypes.func,
+    urlParams: PropTypes.object,
 };
 
 export default ListResourceContainer;

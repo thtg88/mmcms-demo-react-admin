@@ -17,7 +17,7 @@ const LoaderRow = ({
         );
     }
 
-    if(type === 'spinner') {
+    if(type === "spinner") {
         return (
             <tr>
                 <td colSpan={colSpan}>

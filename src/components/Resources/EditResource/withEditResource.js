@@ -1,42 +1,34 @@
 import React, { Component } from 'react';
+import cloneDeep from 'lodash/cloneDeep';
+import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
 import { animateScroll as scroll } from 'react-scroll';
 import * as yup from 'yup';
-import { getApiErrorMessages } from '../../../helpers/apiErrorMessages';
+import { getApiErrorMessages, getApiWarningMessages } from '../../../helpers/apiMessages';
 import { getSelectOptions } from '../../../helpers/formResources';
 import {
     getFormResourceFromValues,
-    getValidationSchemaFromFormResource,
-    getValuesFromFormResource,
+    getValidationSchemaFromFormSchema,
+    getValuesFromFormSchema,
     updateFormResourceFromErrors,
 } from '../../../helpers/formResources';
-import { getResourceFromPaginatedResourcesAndId } from '../../../helpers/paginatedResources';
 import slugify from '../../../helpers/slugify';
+import { replaceUrlParameters } from '../../../helpers/url';
 import {
     apiResourceCreateSuccessNotification,
-    apiResourceDestroySuccessNotification,
     apiResourcePublishSuccessNotification,
     apiResourceRecoverSuccessNotification,
+    apiResourceRegenerateSuccessNotification,
     apiResourceUnpublishSuccessNotification,
     apiResourceUpdateSuccessNotification,
 } from '../../../helpers/toastNotification';
 import {
     createResource as createImage,
     destroyResource as destroyImage,
-    reducerName as imageReducerName,
+    updateResource as updateImage,
 } from '../../../redux/images/actions';
-import {
-    clearMetadataResourceEdit as clearMetadataSeoEntryEdit,
-    createResource as createSeoEntry,
-    updateResource as updateSeoEntry,
-    reducerName as seoEntryReducerName,
-} from '../../../redux/seoEntries/actions';
-import {
-    attributesSequenceToShow as seoAttributesToShow,
-    resourceDisplayName as seoEntryResourceDisplayName,
-    schema as seoEntrySchema,
-} from '../../../redux/seoEntries/schema';
+import { reducerName as imageReducerName } from '../../../redux/images/schema';
 
 const { REACT_APP_API_BASE_URL } = process.env;
 
@@ -44,29 +36,43 @@ const withEditResource = ({
     attributesSequenceToShow,
     clearMetadataResourceEdit,
     destroyResource,
-    publishResource,
-    unpublishResource,
     findResource,
-    getPaginatedResources,
     nameField,
-    pageSize,
+    publishResource,
     recoverResource,
+    reducerName,
+    regenerateResource,
     resourceBaseRoute,
     resourceDisplayName,
     resourceTableName,
     schema,
-    reducerName,
+    unpublishResource,
     updateResource,
+    urlParamsResourceIdCheckDisabled,
 }) => (ComponentToWrap) => {
+    // We deep copy schema so we are sure we are working with a fresh copy
+    // e.g. no wiriting on old references or for next time we use schema
+    const updatedSchema = cloneDeep(schema);
+
     // We loop all the schema entries,
     // in order to get valuesFetchers from them
     // These will allow us to dispatch Redux actions,
     // Which ultimately will allow us to update the schema with the transformed
     // resources returned
     // This is mainly used to populate select values with data coming from the API
-    const valuesFetchers = Object.entries(schema)
+    const valuesFetchers = Object.entries(updatedSchema)
         .filter(([name, params], idx) => typeof params.valuesFetcher !== 'undefined')
         .map(([name, params], idx) => ({...params.valuesFetcher, name: name}));
+
+    // We loop all the updatedSchema entries,
+    // in order to get valuesSearchers from them
+    // These will allow us to dispatch Redux actions,
+    // Which ultimately will allow us to update the updatedSchema with the transformed
+    // resources returned
+    // This is mainly used to populate select values with data coming from the API
+    const valuesSearchers = Object.entries(updatedSchema)
+        .filter(([name, params], idx) => typeof params.valuesSearcher !== 'undefined')
+        .map(([name, params], idx) => ({...params.valuesSearcher, name: name}));
 
     class EditHOC extends Component {
         constructor(props) {
@@ -74,51 +80,43 @@ const withEditResource = ({
 
             this.forceUpdateSchema = this.forceUpdateSchema.bind(this);
             this.handleCKEditorImageFileUpload = this.handleCKEditorImageFileUpload.bind(this);
-            this.handleCreateSeoEntry = this.handleCreateSeoEntry.bind(this);
             this.handleDestroyResource = this.handleDestroyResource.bind(this);
-            this.handleImageFileRemove = this.handleImageFileRemove.bind(this);
-            this.handleImageFileUpload = this.handleImageFileUpload.bind(this);
             this.handlePublishResource = this.handlePublishResource.bind(this);
             this.handleRecoverResource = this.handleRecoverResource.bind(this);
+            this.handleRegenerateResource = this.handleRegenerateResource.bind(this);
             this.handleUnpublishResource = this.handleUnpublishResource.bind(this);
             this.handleUpdateResource = this.handleUpdateResource.bind(this);
-            this.handleUpdateSeoEntry = this.handleUpdateSeoEntry.bind(this);
-            this.removeImage = this.removeImage.bind(this);
             this.toggleDestroyResourceModal = this.toggleDestroyResourceModal.bind(this);
             this.togglePublishResourceModal = this.togglePublishResourceModal.bind(this);
             this.toggleRecoverResourceModal = this.toggleRecoverResourceModal.bind(this);
+            this.toggleRegenerateResourceModal = this.toggleRegenerateResourceModal.bind(this);
             this.toggleUnpublishResourceModal = this.toggleUnpublishResourceModal.bind(this);
             this.updateInputValue = this.updateInputValue.bind(this);
-            this.updateResourceValueState = this.updateResourceValueState.bind(this);
-            this.updateSeoInputValue = this.updateSeoInputValue.bind(this);
 
             const uriObj = queryString.parse(props.location.search);
 
             this.state = {
-                creatingSeoEntry: false,
-                destroying_resource: false,
-                getting_resource: false,
-                hasImages: false,
+                destroyingResource: false,
+                formSchema: null,
+                gettingResource: false,
                 hasSeo: false,
-                images: [],
-                imageCategories: [],
+                hasVariants: false,
                 imageUploadRejectPromise: null,
                 imageUploadResolvePromise: null,
                 isDestroyResourceModalOpen: false,
                 isPublishResourceModalOpen: false,
                 isRecoverResourceModalOpen: false,
+                isRegenerateResourceModalOpen: false,
                 isRecovering: parseInt(uriObj.recovery, 10) === 1,
                 isUnpublishResourceModalOpen: false,
-                publishing_resource: false,
+                publishingResource: false,
                 recoveringResource: false,
-                resource: null,
+                regeneratingResource: false,
                 resourceUnchanged: true,
-                seoEntry: null,
-                seoEntryId: null,
-                seoEntryUnchanged: true,
-                unpublishing_resource: false,
-                updating_resource: false,
-                updatingSeoEntry: false,
+                unpublishingResource: false,
+                updatingResource: false,
+                valuesSearcherCallbacks: {},
+                variants: [],
             };
         }
 
@@ -126,28 +124,12 @@ const withEditResource = ({
             const { resource } = this.props;
 
             this.setState({
-                resource: getFormResourceFromValues(resource, schema, attributesSequenceToShow),
+                formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
             });
-        }
-
-        handleCreateSeoEntry(evt) {
-            evt.preventDefault();
-
-            this.setState({
-                creatingSeoEntry: true,
-            });
-
-            const { createSeoEntry, token, urlResourceId } = this.props;
-            const data = {
-                token,
-                target_id: urlResourceId,
-                target_table: resourceTableName,
-            };
-            createSeoEntry({ data })
         }
 
         handleCKEditorImageFileUpload(file, resolvePromise, rejectPromise) {
-            const { createImage, token, urlResourceId } = this.props;
+            const { createImage, token, urlParams } = this.props;
 
             this.setState({
                 imageUploadResolvePromise: resolvePromise,
@@ -158,7 +140,7 @@ const withEditResource = ({
             const data = {
                 token,
                 data: file,
-                target_id: urlResourceId,
+                target_id: urlParams.id,
                 target_table: resourceTableName,
             };
             createImage({ data });
@@ -167,77 +149,30 @@ const withEditResource = ({
         handleDestroyResource(evt) {
             evt.preventDefault();
 
-            const { destroyResource, token, urlResourceId } = this.props;
+            const { destroyResource, token, urlParams } = this.props;
             const data = {
-                id: urlResourceId,
+                id: urlParams.id,
                 token,
             };
 
             this.setState({
-                destroying_resource: true,
+                destroyingResource: true,
             });
 
             destroyResource({ data });
         }
 
-        handleImageFileRemove(evt, imageId) {
-            evt.preventDefault();
-
-            if(imageId) {
-                this.removeImage(parseInt(imageId, 10));
-            }
-        }
-
-        handleImageFileUpload(acceptedFiles, rejectedFiles, imageCategoryId, existingImageId) {
-            const { createImage, token, urlResourceId } = this.props;
-            const { imageCategories } = this.state;
-
-            if(acceptedFiles.length > 0) {
-                if(existingImageId) {
-                    this.removeImage(existingImageId);
-                }
-
-                // We set the given category id as uploading so that UI can react accordingly
-                this.setState({
-                    imageCategories: imageCategories.map(imageCategory => {
-                        if(imageCategory.id === imageCategoryId) {
-                            return {
-                                ...imageCategory,
-                                isUploading: true,
-                            };
-                        }
-
-                        return imageCategory;
-                    }),
-                });
-
-                // add/upload file for imageCategoryId
-                const createData = {
-                    token,
-                    data: acceptedFiles[0],
-                    image_category_id: imageCategoryId,
-                    target_id: urlResourceId,
-                    target_table: resourceTableName,
-                };
-                createImage({ data: createData });
-            }
-
-            if(rejectedFiles.length > 0) {
-                // TODO show error?
-            }
-        }
-
         handlePublishResource(evt) {
             evt.preventDefault();
 
-            const { publishResource, token, urlResourceId } = this.props;
+            const { publishResource, token, urlParams } = this.props;
             const data = {
-                id: urlResourceId,
+                id: urlParams.id,
                 token,
             };
 
             this.setState({
-                publishing_resource: true,
+                publishingResource: true,
             });
 
             publishResource({ data });
@@ -246,9 +181,9 @@ const withEditResource = ({
         handleRecoverResource(evt) {
             evt.preventDefault();
 
-            const { recoverResource, token, urlResourceId } = this.props;
+            const { recoverResource, token, urlParams } = this.props;
             const data = {
-                id: urlResourceId,
+                id: urlParams.id,
                 token,
             };
 
@@ -259,17 +194,33 @@ const withEditResource = ({
             recoverResource({ data });
         }
 
-        handleUnpublishResource(evt) {
+        handleRegenerateResource(evt) {
             evt.preventDefault();
 
-            const { unpublishResource, token, urlResourceId } = this.props;
+            const { regenerateResource, token, urlParams } = this.props;
             const data = {
-                id: urlResourceId,
+                id: urlParams.id,
                 token,
             };
 
             this.setState({
-                unpublishing_resource: true,
+                regeneratingResource: true,
+            });
+
+            regenerateResource({ data });
+        }
+
+        handleUnpublishResource(evt) {
+            evt.preventDefault();
+
+            const { unpublishResource, token, urlParams } = this.props;
+            const data = {
+                id: urlParams.id,
+                token,
+            };
+
+            this.setState({
+                unpublishingResource: true,
             });
 
             unpublishResource({ data });
@@ -278,19 +229,19 @@ const withEditResource = ({
         async handleUpdateResource(evt) {
             evt.preventDefault();
 
-            const { updateResource, token, urlResourceId } = this.props;
-            const { resource } = this.state;
-            const values = getValuesFromFormResource(resource);
-            const validationSchema = getValidationSchemaFromFormResource(resource);
+            const { updateResource, resource, token } = this.props;
+            const { formSchema } = this.state;
+            const values = getValuesFromFormSchema(formSchema);
+            const validationSchema = getValidationSchemaFromFormSchema(formSchema);
             const data = {
-                id: urlResourceId,
+                id: resource.id,
                 token,
                 ...values,
             };
 
             // Reset errors
             this.setState({
-                resource: updateFormResourceFromErrors(resource, {inner:[]})
+                formSchema: updateFormResourceFromErrors(formSchema, {inner:[]})
             });
 
             await yup.object(validationSchema)
@@ -304,7 +255,7 @@ const withEditResource = ({
                     scroll.scrollToTop();
 
                     this.setState({
-                        updating_resource: true,
+                        updatingResource: true,
                     });
 
                     updateResource({ data });
@@ -313,84 +264,22 @@ const withEditResource = ({
                     // If validation does not passes
                     // Set errors in the form
                     this.setState({
-                        resource: updateFormResourceFromErrors(resource, errors)
+                        formSchema: updateFormResourceFromErrors(formSchema, errors)
                     });
                 });
         }
 
-        async handleUpdateSeoEntry(evt) {
-            evt.preventDefault();
-
-            const { updateSeoEntry, token } = this.props;
-            const { seoEntry, seoEntryId } = this.state;
-            const values = getValuesFromFormResource(seoEntry);
-            const validationSchema = getValidationSchemaFromFormResource(seoEntry);
-            const data = {
-                id: seoEntryId,
-                token,
-                ...values
-            };
-
-            // Reset errors
-            this.setState({
-                seoEntry: updateFormResourceFromErrors(seoEntry, {inner:[]})
-            });
-
-            await yup.object(validationSchema)
-                .validate(
-                    values,
-                    { abortEarly: false }
-                )
-                .then(() => {
-                    // If validation passes
-                    // Update resource
-                    scroll.scrollToTop();
-
-                    this.setState({
-                        updatingSeoEntry: true,
-                    });
-
-                    updateSeoEntry({ data });
-                })
-                .catch((errors) => {
-                    // If validation does not passes
-                    // Set errors in the form
-                    this.setState({
-                        seoEntry: updateFormResourceFromErrors(seoEntry, errors)
-                    });
-                });
-        }
-
-        removeImage(imageId) {
-            const { destroyImage, token } = this.props;
-            const { images } = this.state;
-
-            // We remove the image from state
-            this.setState({
-                images: images.filter((image) => image.id !== imageId),
-            });
-
-            // remove imageId
-            const destroyData = {
-                token,
-                id: imageId,
-            };
-            destroyImage({ data: destroyData });
-        }
-
-        setInputValueState(name, value, resourceKey) {
-            const resource = this.state[resourceKey];
-            const resourceUnchangedKey = resourceKey+'Unchanged';
-            const resourceUnchanged = this.state[resourceUnchangedKey];
+        setInputValueState(name, value) {
+            const { formSchema, resourceUnchanged } = this.state;
             const newValue = {
-                [resourceKey]: Object.assign(resource, {
-                    [name]: Object.assign(resource[name], { value }),
+                formSchema: Object.assign(formSchema, {
+                    [name]: Object.assign(formSchema[name], { value }),
                 }),
             };
 
-            if(name !== 'slug' && name === nameField && resource.slug) {
-                newValue.resource.slug = {
-                    ...resource.slug,
+            if(name !== 'slug' && name === nameField && formSchema.slug) {
+                newValue.formSchema.slug = {
+                    ...formSchema.slug,
                     value: slugify(value),
                 };
             }
@@ -403,7 +292,7 @@ const withEditResource = ({
                 // We set the state to cater for that
                 this.setState({
                     ...newValue,
-                    [resourceUnchangedKey]: false,
+                    resourceUnchanged: false,
                 });
             } else {
                 // Otherwise we simply set the new value
@@ -437,6 +326,14 @@ const withEditResource = ({
             });
         }
 
+        toggleRegenerateResourceModal(evt) {
+            evt.preventDefault();
+
+            this.setState({
+                isRegenerateResourceModalOpen: !this.state.isRegenerateResourceModalOpen,
+            });
+        }
+
         toggleUnpublishResourceModal(evt) {
             evt.preventDefault();
 
@@ -446,136 +343,109 @@ const withEditResource = ({
         }
 
         updateInputValue(evt, extra) {
-            this.updateResourceValueState(evt, extra, 'resource');
-        }
-
-        updateSeoInputValue(evt, extra) {
-            this.updateResourceValueState(evt, extra, 'seoEntry');
-        }
-
-        updateResourceValueState(evt, extra, resourceKey) {
             // This means that a monkey-patched React-Select is updating data
             if(extra && extra.action && extra.name) {
 
                 // A single-value selected option
                 if(extra.action === 'select-option' && evt.label && evt.value) {
-                    this.setInputValueState(extra.name, evt.value, resourceKey);
+                    this.setInputValueState(extra.name, evt.value);
                 }
 
                 // A multiple-value selected option
                 else if(extra.action === 'select-option' && typeof evt.length !== 'undefined') {
-                    this.setInputValueState(extra.name, evt.map(option => option.value), resourceKey);
+                    this.setInputValueState(extra.name, evt.map(option => option.value));
                 }
 
                 // A multiple value has removed a value
                 else if(extra.action === 'remove-value' && typeof evt.length !== 'undefined') {
-                    this.setInputValueState(extra.name, evt.map(option => option.value), resourceKey);
+                    this.setInputValueState(extra.name, evt.map(option => option.value));
                 }
 
                 // The value has been cleared
                 else if(extra.action === 'clear') {
                     // For a multiple select, we set the value to an empty array
                     if(extra.multiple) {
-                        this.setInputValueState(extra.name, [], resourceKey);
+                        this.setInputValueState(extra.name, []);
                     }
 
                     // For a single select, we set it to null
                     else {
-                        this.setInputValueState(extra.name, null, resourceKey);
+                        this.setInputValueState(extra.name, null);
                     }
                 }
             } else {
-                this.setInputValueState(evt.target.name, evt.target.value, resourceKey);
+                this.setInputValueState(evt.target.name, evt.target.value);
             }
         }
 
         componentDidMount() {
             const {
-                created,
                 findResource,
-                getPaginatedResources,
-                resource,
                 token,
-                urlResourceId,
+                urlParams,
             } = this.props;
             const { isRecovering } = this.state;
 
-            // If resource is already in global state
-            // Avoid re-fetching
-            if(resource === null) {
+            if(typeof findResource === 'function') {
+                // Always fetch this mofo
                 const data = {
                     token,
-                    id: urlResourceId,
+                    id: urlParams.id,
                     recovery: isRecovering === true ? 1 : 0,
                 };
 
                 this.setState({
-                    getting_resource: true
+                    gettingResource: true,
                 });
 
                 findResource({ data });
-
-            } else {
-                this.forceUpdateSchema();
             }
 
-            // Get all the resources in the background
-            // so that when the user goes back to the list
-            // he can see the latest changes
-            if(created === true) {
-                apiResourceCreateSuccessNotification({ resourceDisplayName });
-
-                const data = {
-                    token,
-                    pageSize,
-                    page: 1,
-                };
-                getPaginatedResources({ data });
-            }
-
-            // We loop the valuesFetchers from the schema
+            // We loop the valuesFetchers from the updatedSchema
             // In order to check if we had resources in state,
             // If not we re-fetch them
             valuesFetchers.forEach((valuesFetcher, idx) => {
                 if(
-                    !this.props[valuesFetcher.reducerName]
-                    || this.props[valuesFetcher.reducerName].length === 0
+                    !this.props[valuesFetcher.reducerName].resources
+                    || this.props[valuesFetcher.reducerName].resources.length === 0
                 ) {
-                    // If there are no this.props[valuesFetcher.reducerName]
+                    // If there are no this.props[valuesFetcher.reducerName].resources
                     // We re-fetch them
                     const data = {
                         token,
                     };
 
-                    this.setState({
-                        [`fetching_${valuesFetcher.reducerName}`]: true,
-                    });
+                    if(this.props[valuesFetcher.fetcherName]) {
+                        this.props[valuesFetcher.fetcherName]({ data });
+                    } else {
+                        // TODO only warn in development?
+                        console.warn('couldn\'t load valuesFetcher', valuesFetcher);
+                    }
 
-                    this.props[valuesFetcher.fetcherName]({ data });
-
-                    // While we fetch them, we disable the input
-                    // to give a visual feedback to the user
-                    schema[valuesFetcher.name].disabled = true;
-
+                    if(!updatedSchema[valuesFetcher.name].dontEnable) {
+                        // While we fetch them, we disable the input
+                        // to give a visual feedback to the user
+                        updatedSchema[valuesFetcher.name].disabled = true;
+                    }
                 } else {
-                    // Otherwise we get them from state and update the schema,
+                    // Otherwise we get them from state and update the updatedSchema,
 
                     // If the fetcher reducer name is the same as the component reducerName
                     // i.e. I'm fetching the same kind of resource
-                    // We disable the urlResourceId from being selected
+                    // We disable the urlParams.id from being selected
                     // i.e. no circular relationship on itself
                     const disabledValues = reducerName === valuesFetcher.reducerName
-                        ? [urlResourceId]
+                        ? [urlParams.id]
                         : [];
-                    schema[valuesFetcher.name].values = getSelectOptions(
-                        this.props[valuesFetcher.reducerName],
-                        schema[valuesFetcher.name].selectOptionText,
-                        schema[valuesFetcher.name].selectOptionValue,
+                    updatedSchema[valuesFetcher.name].values = getSelectOptions(
+                        this.props[valuesFetcher.reducerName].resources,
+                        updatedSchema[valuesFetcher.name].selectOptionText,
+                        updatedSchema[valuesFetcher.name].selectOptionValue,
                         disabledValues
                     );
 
                     // This function triggers a setState,
-                    // Which will re-render the component with the updated schema
+                    // Which will re-render the component with the updated updatedSchema
                     this.forceUpdateSchema();
                 }
             });
@@ -588,45 +458,58 @@ const withEditResource = ({
                 history,
                 image,
                 imageCreated,
-                imageDestroyed,
                 imageErrors,
                 resource,
                 published,
                 recovered,
-                seoEntry,
-                seoEntryCreated,
-                seoEntryErrors,
-                seoEntryUpdated,
+                regenerated,
                 unpublished,
                 updated,
-                urlResourceId,
+                urlParams,
             } = this.props;
             const {
-                destroying_resource,
-                imageCategories,
-                images,
+                destroyingResource,
+                formSchema,
                 imageUploadRejectPromise,
                 imageUploadResolvePromise,
-                publishing_resource,
+                publishingResource,
                 recoveringResource,
-                unpublishing_resource,
-                updating_resource,
-                updatingSeoEntry,
+                regeneratingResource,
+                unpublishingResource,
+                updatingResource,
+                valuesSearcherCallbacks,
             } = this.state;
 
             // This means that I was destroying the resource,
             // And I received a destroyed from the store
-            // So restore the state  - this will trigger a re-render
+            // So restore the state - this will trigger a re-render
             // which will redirect us to the index
             if(
                 typeof errors !== 'undefined'
                 && typeof errors.length !== 'undefined'
                 && errors.length === 0
-                && destroying_resource === true
+                && destroyingResource === true
                 && destroyed === true
             ) {
                 this.setState({
-                    destroying_resource: false,
+                    destroyingResource: false,
+                    isDestroyResourceModalOpen: false,
+                });
+
+                history.push(`/${replaceUrlParameters(resourceBaseRoute, urlParams)}`);
+            }
+
+            // This means that if I was destroying the resource,
+            // And I have errors,
+            // close the modal and show them
+            else if(
+                typeof errors !== 'undefined'
+                && typeof errors.length !== 'undefined'
+                && errors.length > 0
+                && destroyingResource === true
+            ) {
+                this.setState({
+                    destroyingResource: false,
                     isDestroyResourceModalOpen: false,
                 });
             }
@@ -635,13 +518,13 @@ const withEditResource = ({
             // And I received errors from the store
             // So it's time to restore the Update button
             else if(
-                updating_resource === true
+                updatingResource === true
                 && typeof errors.length !== 'undefined'
                 && errors.length !== 0
             ) {
                 this.setState({
-                    getting_resource: false,
-                    updating_resource: false,
+                    gettingResource: false,
+                    updatingResource: false,
                 });
             }
 
@@ -649,7 +532,7 @@ const withEditResource = ({
             // And I received an updated from the store
             // So it's time to restore the Update button
             else if(
-                updating_resource === true
+                updatingResource === true
                 && updated === true
             ) {
                 apiResourceUpdateSuccessNotification({
@@ -657,8 +540,8 @@ const withEditResource = ({
                 });
 
                 this.setState({
-                    getting_resource: false,
-                    updating_resource: false,
+                    gettingResource: false,
+                    updatingResource: false,
                 });
             }
 
@@ -666,13 +549,13 @@ const withEditResource = ({
             // And I received errors from the store
             // So it's time to restore the Publish button
             else if(
-                publishing_resource === true
+                publishingResource === true
                 && typeof errors.length !== 'undefined'
                 && errors.length !== 0
             ) {
                 this.setState({
-                    getting_resource: false,
-                    publishing_resource: false,
+                    gettingResource: false,
+                    publishingResource: false,
                     isPublishResourceModalOpen: false,
                 });
             }
@@ -681,7 +564,7 @@ const withEditResource = ({
             // And I received an published from the store
             // So it's time to restore the Publish button
             else if(
-                publishing_resource === true
+                publishingResource === true
                 && published === true
             ) {
                 apiResourcePublishSuccessNotification({
@@ -689,10 +572,10 @@ const withEditResource = ({
                 });
 
                 this.setState({
-                    getting_resource: false,
+                    gettingResource: false,
                     isPublishResourceModalOpen: false,
-                    publishing_resource: false,
-                    resource: getFormResourceFromValues(resource, schema, attributesSequenceToShow),
+                    publishingResource: false,
+                    formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
                 });
             }
 
@@ -705,7 +588,7 @@ const withEditResource = ({
                 && errors.length !== 0
             ) {
                 this.setState({
-                    getting_resource: false,
+                    gettingResource: false,
                     recoveringResource: false,
                     isRecoverResourceModalOpen: false,
                 });
@@ -723,28 +606,62 @@ const withEditResource = ({
                 });
 
                 this.setState({
-                    getting_resource: false,
+                    gettingResource: false,
                     isRecovering: false,
                     isRecoverResourceModalOpen: false,
                     recoveringResource: false,
-                    resource: getFormResourceFromValues(resource, schema, attributesSequenceToShow),
+                    formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
                     resourceUnchanged: true,
                 });
 
-                history.push('/'+resourceBaseRoute+'/'+urlResourceId);
+                history.push('/'+replaceUrlParameters(resourceBaseRoute, urlParams)+'/'+urlParams.id);
+            }
+
+            // This means that I was regenerating the resource,
+            // And I received errors from the store
+            // So it's time to restore the Recover button
+            else if(
+                regeneratingResource === true
+                && typeof errors.length !== 'undefined'
+                && errors.length !== 0
+            ) {
+                this.setState({
+                    gettingResource: false,
+                    regeneratingResource: false,
+                    isRegenerateResourceModalOpen: false,
+                });
+            }
+
+            // This means that I was regenerating the resource,
+            // And I received an regenerated from the store
+            // So it's time to restore the Regenerate button
+            else if(
+                regeneratingResource === true
+                && regenerated === true
+            ) {
+                apiResourceRegenerateSuccessNotification({
+                    resourceDisplayName: resourceDisplayName ? resourceDisplayName : undefined
+                });
+
+                this.setState({
+                    gettingResource: false,
+                    formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
+                    isRegenerateResourceModalOpen: false,
+                    regeneratingResource: false,
+                });
             }
 
             // This means that I was unpublishing the resource,
             // And I received errors from the store
             // So it's time to restore the Unpublish button
             else if(
-                unpublishing_resource === true
+                unpublishingResource === true
                 && typeof errors.length !== 'undefined'
                 && errors.length !== 0
             ) {
                 this.setState({
-                    getting_resource: false,
-                    unpublishing_resource: false,
+                    gettingResource: false,
+                    unpublishingResource: false,
                     isUnpublishResourceModalOpen: false,
                 });
             }
@@ -753,7 +670,7 @@ const withEditResource = ({
             // And I received an unpublished from the store
             // So it's time to restore the Unpublish button
             else if(
-                unpublishing_resource === true
+                unpublishingResource === true
                 && unpublished === true
             ) {
                 apiResourceUnpublishSuccessNotification({
@@ -761,25 +678,10 @@ const withEditResource = ({
                 });
 
                 this.setState({
-                    getting_resource: false,
+                    gettingResource: false,
                     isUnpublishResourceModalOpen: false,
-                    resource: getFormResourceFromValues(resource, schema, attributesSequenceToShow),
-                    unpublishing_resource: false,
-                });
-            }
-
-            // This means that if I was destroying the resource,
-            // And I have errors,
-            // close the modal and show them
-            else if(
-                typeof errors !== 'undefined'
-                && typeof errors.length !== 'undefined'
-                && errors.length > 0
-                && destroying_resource === true
-            ) {
-                this.setState({
-                    destroying_resource: false,
-                    isDestroyResourceModalOpen: false,
+                    formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
+                    unpublishingResource: false,
                 });
             }
 
@@ -787,33 +689,59 @@ const withEditResource = ({
             // Set in the state so it can be updated properly
             // avoiding blank fields for ones that do not get updated
             else if(resource !== null && prevProps.resource === null) {
+                if(valuesSearchers.length > 0) {
+                    valuesSearchers.forEach(valuesSearcher => {
+                        // Here we loop all the valuesSearcher,
+                        // Look if there's a relationship loaded with the same name as the valuesSearcher name,
+                        // Without the _id at the end, and then we add it to the values array
+                        // An example of the above is a resource object with both a "parent_id" attribute,
+                        // and a "parent" one.
+                        // This way react-selects will have pre-loaded value(s) in them.
+                        // PLEASE NOTE: scenarios where value and text are not retrievable for a relationship,
+                        // as described above are not supported.
+                        if(valuesSearcher.name.indexOf('_id')) {
+                            // Get rid of "_id"
+                            const relationshipName = valuesSearcher.name.replace('_id', '');
+
+                            if(
+                                resource[relationshipName]
+                                && (
+                                    typeof resource[relationshipName] === 'object'
+                                    || resource[relationshipName].constructor === Array
+                                )
+                            ) {
+                                // If there's an attribute with that name,
+                                // And it's either an object or an array
+                                // We update the schema
+                                updatedSchema[valuesSearcher.name].values = getSelectOptions(
+                                    resource[relationshipName].constructor === Array ? resource[relationshipName] : [resource[relationshipName]],
+                                    updatedSchema[valuesSearcher.name].selectOptionText,
+                                    updatedSchema[valuesSearcher.name].selectOptionValue
+                                );
+                            }
+                        }
+                    });
+                }
+
                 this.setState({
-                    resource: getFormResourceFromValues(resource, schema, attributesSequenceToShow),
-                    getting_resource: false,
-                    updating_resource: false,
+                    formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
+                    gettingResource: false,
+                    updatingResource: false,
                 });
+            }
 
-                // If the resource has image categories
-                // it means we need to display a special part of the form
-                // So we set this in state
-                if(typeof resource.image_categories !== 'undefined' && resource.image_categories.length) {
-                    this.setState({
-                        hasImages: true,
-                        images: resource.images && resource.images.length ? [...resource.images] : [],
-                        imageCategories: resource.image_categories.map((imageCategory) => ({...imageCategory, isUploading: false})),
-                    });
-                }
-
-                // If the resource has an seo_entry
-                // it means we need to display a special part of the form
-                // So we set this in state
-                if(typeof resource.seo_entry !== 'undefined') {
-                    this.setState({
-                        hasSeo: true,
-                        seoEntry: getFormResourceFromValues(resource.seo_entry, seoEntrySchema, seoAttributesToShow),
-                        seoEntryId: resource.seo_entry ? resource.seo_entry.id : null,
-                    });
-                }
+            else if(
+                resource
+                && prevProps.resource
+                && resource.id !== prevProps.resource.id
+            ) {
+                // If the id changes, chances are we are remounting the component
+                // With a different resource, so reset schema
+                this.setState({
+                    formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
+                    gettingResource: false,
+                    updatingResource: false,
+                });
             }
 
             // This means that if I was creating/destroying the image,
@@ -827,24 +755,12 @@ const withEditResource = ({
                 && imageErrors
                 && imageErrors.length
                 && imageErrors.length > 0
+                && imageUploadRejectPromise
             ) {
-                if(imageUploadRejectPromise) {
-                    imageUploadRejectPromise(imageErrors.join('. '));
-                }
+                imageUploadRejectPromise(imageErrors.join('. '));
 
                 this.setState({
-                    imageCategories: imageCategories.map(imageCategory => ({...imageCategory, isUploading: false})),
                     imageUploadRejectPromise: null,
-                });
-            }
-
-            // This means we were destroying an image
-            // and it's been created correctly
-            // So we append it to the existing images array
-            // and we set all image categories uploading to false
-            else if(prevProps.imageDestroyed === false && imageDestroyed === true) {
-                apiResourceDestroySuccessNotification({
-                    resourceDisplayName: 'Image',
                 });
             }
 
@@ -852,172 +768,206 @@ const withEditResource = ({
             // and it's been created correctly
             // So we append it to the existing images array
             // and we set all image categories uploading to false
-            else if(prevProps.imageCreated === false && imageCreated === true) {
+            else if(
+                prevProps.imageCreated === false
+                && imageCreated === true
+                && imageUploadResolvePromise
+            ) {
                 apiResourceCreateSuccessNotification({
                     resourceDisplayName: 'Image',
                     iconClassName: 'fa-image',
                 });
 
-                if(imageUploadResolvePromise) {
-                    imageUploadResolvePromise({
-                        default: `${REACT_APP_API_BASE_URL}${image.url}`,
-                    });
-                }
+                imageUploadResolvePromise({
+                    default: `${REACT_APP_API_BASE_URL}${image.url}`,
+                });
 
                 this.setState({
-                    imageCategories: imageCategories.map(imageCategory => ({...imageCategory, isUploading: false})),
-                    images: [
-                        ...images,
-                        image,
-                    ],
                     imageUploadResolvePromise: null,
                 });
             }
 
-            // This means that if I was creating/updating an SEO entry,
-            // And I have errors,
-            // so we set the state accordingly
-            else if(
-                (
-                    !prevProps.seoEntryErrors
-                    || !prevProps.seoEntryErrors.length
-                )
-                && seoEntryErrors
-                && seoEntryErrors.length
-                && seoEntryErrors.length > 0
-            ) {
-                this.setState({
-                    creatingSeoEntry: false,
+            if(valuesFetchers.length > 0) {
+                let forceUpdateSchema = false;
+
+                // We loop the valuesFetchers from the updatedSchema
+                // In order to check if we had resources or errors coming back
+                // so we can update the updatedSchema
+                valuesFetchers.forEach(valuesFetcher => {
+                    // If I was fetching this.props[valuesFetcher.reducerName].fetching_resources,
+                    // and they have come back,
+                    // We reset the fetching state
+                    // And we update the updatedSchema
+                    if(
+                        prevProps[valuesFetcher.reducerName].fetching_resources === true
+                        && this.props[valuesFetcher.reducerName].fetching_resources === false
+                    ) {
+                        // If the fetcher reducer name is the same as the component reducerName
+                        // i.e. I'm fetching the same kind of resource
+                        // We disable the urlParams.id from being selected
+                        // i.e. no circular relationship on itself
+                        const disabledValues = reducerName === valuesFetcher.reducerName
+                            ? [urlParams.id]
+                            : [];
+                        updatedSchema[valuesFetcher.name].values = getSelectOptions(
+                            this.props[valuesFetcher.reducerName].resources,
+                            updatedSchema[valuesFetcher.name].selectOptionText,
+                            updatedSchema[valuesFetcher.name].selectOptionValue,
+                            disabledValues
+                        );
+                        if(!updatedSchema[valuesFetcher.name].dontEnable) {
+                            updatedSchema[valuesFetcher.name].disabled = false;
+                        }
+
+                        forceUpdateSchema = true;
+                    }
                 });
+
+                if(forceUpdateSchema === true) {
+                    // This function triggers a setState,
+                    // Which will re-render the component with the updated updatedSchema
+                    this.forceUpdateSchema();
+                }
             }
 
-            // This means we were creating an SEO entry
-            // and it's been created correctly
-            // So we set the SEO entry in state
-            else if(prevProps.seoEntryCreated === false && seoEntryCreated === true) {
-                apiResourceCreateSuccessNotification({
-                    resourceDisplayName: 'SEO',
-                    iconClassName: 'fa-search',
+            if(valuesSearchers.length > 0) {
+                const newValues = {};
+                const newCallbacks = {};
+
+                // We loop the valuesSearchers from the updatedSchema
+                // In order to check if we had resources or errors coming back
+                // so we can update the updatedSchema
+                valuesSearchers.forEach(valuesSearcher => {
+                    // If I was fetching this.props[`${valuesSearcher.reducerName}`].fetching_resources,
+                    // and they have come back,
+                    // We update the updatedSchema
+                    if(
+                        prevProps[`${valuesSearcher.reducerName}`].fetching_resources === true
+                        && this.props[`${valuesSearcher.reducerName}`].fetching_resources === false
+                    ) {
+                        if(typeof newValues[valuesSearcher.name] === 'undefined') {
+                            newValues[valuesSearcher.name] = {};
+                        }
+
+                        newValues[valuesSearcher.name].values = getSelectOptions(
+                            this.props[valuesSearcher.reducerName].resources,
+                            updatedSchema[valuesSearcher.name].selectOptionText,
+                            updatedSchema[valuesSearcher.name].selectOptionValue
+                        );
+                        if(!updatedSchema[valuesSearcher.name].dontEnable) {
+                            newValues[valuesSearcher.name].disabled = false;
+                        }
+
+                        if(this.state.valuesSearcherCallbacks[valuesSearcher.searcherName]) {
+                            this.state.valuesSearcherCallbacks[valuesSearcher.searcherName](
+                                // format as react-select wants the values
+                                newValues[valuesSearcher.name].values.map(option => ({
+                                    ...option,
+                                    label: option.text,
+                                }))
+                            );
+
+                            newCallbacks[valuesSearcher.searcherName] = null;
+                        }
+                    }
                 });
 
-                this.setState({
-                    creatingSeoEntry: false,
-                    seoEntry: getFormResourceFromValues(seoEntry, seoEntrySchema, seoAttributesToShow),
-                });
-            }
-
-            // This means that I was updating the SEO entry,
-            // And I received errors from the store
-            // So it's time to restore the Update button
-            else if(
-                updatingSeoEntry === true
-                && typeof seoEntryErrors.length !== 'undefined'
-                && seoEntryErrors.length !== 0
-            ) {
-                this.setState({
-                    updatingSeoEntry: false,
-                });
-            }
-
-            // This means that I was updating the resource,
-            // And I received an updated from the store
-            // So it's time to restore the Update button
-            else if(
-                updatingSeoEntry === true
-                && seoEntryUpdated === true
-            ) {
-                apiResourceUpdateSuccessNotification({
-                    resourceDisplayName: seoEntryResourceDisplayName ? seoEntryResourceDisplayName : undefined
-                });
-
-                this.setState({
-                    updatingSeoEntry: false,
-                });
-            }
-
-            // We loop the valuesFetchers from the schema
-            // In order to check if we had resources or errors coming back
-            // so we can update the schema
-            valuesFetchers.forEach(valuesFetcher => {
-                // If I was fetching this.state[`fetching_${valuesFetcher.reducerName}`],
-                // and they have come back,
-                // We reset the fetching state
-                // And we update the schema
-                if(
-                    this.state[`fetching_${valuesFetcher.reducerName}`] === true
-                    && prevProps[valuesFetcher.reducerName].length === 0
-                    && this.props[valuesFetcher.reducerName].length > 0
-                ) {
-                    // If the fetcher reducer name is the same as the component reducerName
-                    // i.e. I'm fetching the same kind of resource
-                    // We disable the urlResourceId from being selected
-                    // i.e. no circular relationship on itself
-                    const disabledValues = reducerName === valuesFetcher.reducerName
-                        ? [urlResourceId]
-                        : [];
-                    schema[valuesFetcher.name].values = getSelectOptions(
-                        this.props[valuesFetcher.reducerName],
-                        schema[valuesFetcher.name].selectOptionText,
-                        schema[valuesFetcher.name].selectOptionValue,
-                        disabledValues
-                    );
-                    schema[valuesFetcher.name].disabled = false;
-
+                if(Object.entries(newValues).length > 0) {
                     // This function triggers a setState,
                     // Which will re-render the component with the updated schema
-                    this.forceUpdateSchema();
-
                     this.setState({
-                        [`fetching_${valuesFetcher.reducerName}`]: false,
+                        formSchema: Object.entries(formSchema).reduce(
+                            (result, [name, fieldSchema]) => {
+                                if(!newValues[name]) {
+                                    return {
+                                        ...result,
+                                        [name]: fieldSchema,
+                                    };
+                                }
+
+                                return {
+                                    ...result,
+                                    [name]: {
+                                        ...formSchema[name],
+                                        ...newValues[name],
+                                    },
+                                };
+                            },
+                            {}
+                        ),
+                        valuesSearcherCallbacks: Object.entries(valuesSearcherCallbacks).reduce(
+                            (result, [name, callback]) => {
+                                if(!newCallbacks[name]) {
+                                    return {
+                                        ...result,
+                                        [name]: callback,
+                                    };
+                                }
+
+                                return {
+                                    ...result,
+                                    [name]: newCallbacks[name],
+                                };
+                            },
+                            {}
+                        ),
                     });
                 }
-
-                // If I was fetching this.state[`fetching_${valuesFetcher.reducerName}`],
-                // and errors have come back,
-                // We reset the fetching state
-                else if(
-                    this.state[`fetching_${valuesFetcher.reducerName}`] === true
-                    && this.props[`${valuesFetcher.reducerName}Errors`].length > 0
-                ) {
-                    this.setState({
-                        [`fetching_${valuesFetcher.reducerName}`]: false,
-                    });
-                }
-            });
+            }
         }
 
         componentWillUnmount() {
-            const { clearMetadataResourceEdit, clearMetadataSeoEntryEdit } = this.props;
+            const { clearMetadataResourceEdit } = this.props;
 
             if(typeof clearMetadataResourceEdit !== 'undefined') {
                 clearMetadataResourceEdit();
             }
-
-            if(typeof clearMetadataSeoEntryEdit !== 'undefined') {
-                clearMetadataSeoEntryEdit();
-            }
         }
 
         render() {
+            const { token } = this.props;
+            const { valuesSearcherCallbacks } = this.state;
+            const dispatchedValuesSearchers = valuesSearchers.reduce(
+                (result, valuesSearcher) => ({
+                    ...result,
+                    [valuesSearcher.searcherName]: debounce((inputValue, callback) => {
+                        this.setState({
+                            valuesSearcherCallbacks: {
+                                ...valuesSearcherCallbacks,
+                                [valuesSearcher.searcherName]: callback,
+                            }
+                        });
+
+                        const data = {
+                            token,
+                            q: inputValue,
+                        };
+                        this.props[valuesSearcher.searcherName]({ data });
+                    }, 500),
+                }),
+                {}
+            );
+
             return (
                 <ComponentToWrap
+                    dispatchedValuesSearchers={dispatchedValuesSearchers}
                     forceUpdateSchema={this.forceUpdateSchema}
                     handleCKEditorImageFileUpload={this.handleCKEditorImageFileUpload}
-                    handleCreateSeoEntry={this.handleCreateSeoEntry}
                     handleDestroyResource={this.handleDestroyResource}
-                    handleImageFileRemove={this.handleImageFileRemove}
-                    handleImageFileUpload={this.handleImageFileUpload}
+                    handleGenerateVariants={this.handleGenerateVariants}
                     handlePublishResource={this.handlePublishResource}
                     handleRecoverResource={this.handleRecoverResource}
+                    handleRegenerateResource={this.handleRegenerateResource}
+                    handleSetVariantSelectedAttributeTypeId={this.handleSetVariantSelectedAttributeTypeId}
+                    handleSetVariantSelectedAttributeValueId={this.handleSetVariantSelectedAttributeValueId}
                     handleUnpublishResource={this.handleUnpublishResource}
                     handleUpdateResource={this.handleUpdateResource}
-                    handleUpdateSeoEntry={this.handleUpdateSeoEntry}
                     toggleDestroyResourceModal={this.toggleDestroyResourceModal}
                     togglePublishResourceModal={this.togglePublishResourceModal}
                     toggleRecoverResourceModal={this.toggleRecoverResourceModal}
+                    toggleRegenerateResourceModal={this.toggleRegenerateResourceModal}
                     toggleUnpublishResourceModal={this.toggleUnpublishResourceModal}
                     updateInputValue={this.updateInputValue}
-                    updateSeoInputValue={this.updateSeoInputValue}
                     {...this.props}
                     {...this.state}
                 />
@@ -1031,23 +981,18 @@ const withEditResource = ({
             created,
             destroyed,
             error,
-            resources,
             published,
             recovered,
+            regenerated,
+            resource,
             unpublished,
             updated,
+            variantsGenerated,
+            warning,
         } = state[reducerName];
         const errors = getApiErrorMessages(error);
-        const urlResourceId = parseInt(ownProps.match.params.id, 10);
-        let { resource } = state[reducerName];
-
-        if(
-            resource === null
-            || typeof resource === 'undefined'
-            || resource.id !== urlResourceId
-        ) {
-            resource = getResourceFromPaginatedResourcesAndId(resources, urlResourceId);
-        }
+        const warnings = getApiWarningMessages(warning);
+        const urlParams = ownProps.match.params;
 
         // Get images data
         const imageCreated = state[imageReducerName].created;
@@ -1055,13 +1000,6 @@ const withEditResource = ({
         const image = state[imageReducerName].resource;
         const imageError = state[imageReducerName].error;
         const imageErrors = getApiErrorMessages(imageError);
-
-        // Get SEO entry data
-        const seoEntryCreated = state[seoEntryReducerName].created;
-        const seoEntryUpdated = state[seoEntryReducerName].updated;
-        const seoEntry = state[seoEntryReducerName].resource;
-        const seoEntryError = state[seoEntryReducerName].error;
-        const seoEntryErrors = getApiErrorMessages(seoEntryError);
 
         const newProps = {
             created,
@@ -1073,24 +1011,38 @@ const withEditResource = ({
             imageErrors,
             published,
             recovered,
-            seoEntry,
-            seoEntryCreated,
-            seoEntryErrors,
-            seoEntryUpdated,
+            regenerated,
             token,
             unpublished,
             updated,
-            urlResourceId,
+            urlParams,
+            variantsGenerated,
+            warnings,
             resource: typeof resource === 'undefined' ? null : resource,
         };
 
-        // We loop the valuesFetchers from the schema
+        // We loop the valuesFetchers from the updatedSchema
         // So we can add for each one of them additional resources and errors props
         valuesFetchers.forEach(valuesFetcher => {
-            newProps[valuesFetcher.reducerName] = state[valuesFetcher.reducerName].resources;
-            newProps[`${valuesFetcher.reducerName}Errors`] = getApiErrorMessages(
+            newProps[valuesFetcher.reducerName] = {};
+            newProps[valuesFetcher.reducerName].fetching_resources = state[valuesFetcher.reducerName].fetching_resources;
+            newProps[valuesFetcher.reducerName].resources = state[valuesFetcher.reducerName].resources;
+            newProps[valuesFetcher.reducerName].errors = getApiErrorMessages(
                 state[valuesFetcher.reducerName].error
             );
+        });
+
+        // We loop the valuesFetchers from the updatedSchema
+        // So we can add for each one of them additional resources and errors props
+        valuesSearchers.forEach(valuesSearcher => {
+            if(!newProps[valuesSearcher.reducerName]) {
+                newProps[valuesSearcher.reducerName] = {};
+                newProps[valuesSearcher.reducerName].fetching_resources = state[valuesSearcher.reducerName].fetching_resources;
+                newProps[valuesSearcher.reducerName].resources = state[valuesSearcher.reducerName].resources;
+                newProps[valuesSearcher.reducerName].errors = getApiErrorMessages(
+                    state[valuesSearcher.reducerName].error
+                );
+            }
         });
 
         return newProps;
@@ -1098,23 +1050,26 @@ const withEditResource = ({
 
     const mapDispatchToProps = {
         clearMetadataResourceEdit,
-        clearMetadataSeoEntryEdit,
         createImage,
-        createSeoEntry,
         destroyImage,
         destroyResource,
         findResource,
-        getPaginatedResources,
         publishResource,
         recoverResource,
+        regenerateResource,
         unpublishResource,
+        updateImage,
         updateResource,
-        updateSeoEntry,
     };
 
-    // We add additional dispatch actions for each valuesFetcher from the schema
+    // We add additional dispatch actions for each valuesFetcher from the updatedSchema
     valuesFetchers.forEach(valuesFetcher => {
         mapDispatchToProps[valuesFetcher.fetcherName] = valuesFetcher.fetcher;
+    });
+
+    // We add additional dispatch actions for each valuesSearcher from the updatedSchema
+    valuesSearchers.forEach(valuesSearcher => {
+        mapDispatchToProps[valuesSearcher.searcherName] = valuesSearcher.searcher;
     });
 
     return connect(

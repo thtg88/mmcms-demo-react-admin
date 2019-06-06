@@ -19,8 +19,17 @@ const SortDropdown = ({
         : 'fa fa-fw fa-arrow-up';
 
     return (
-        <Dropdown isOpen={isDropdownOpen} toggle={() => setIsDropdownOpen(!isDropdownOpen)}>
-            <DropdownToggle block disabled={sortButtonDisabled}>
+        <Dropdown
+            className="sort-dropdown"
+            isOpen={isDropdownOpen}
+            toggle={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
+            <DropdownToggle
+                className="sort-dropdown-toggle"
+                disabled={sortButtonDisabled}
+                block
+                outline
+            >
                 Sorted By:
                 {' '}
                 <i className={selectedSortingOptionIconClassName}></i>

@@ -12,10 +12,11 @@ import ResourceForm from '../ResourceForm';
 
 const CreateResource = ({
     creatingResource,
+    dispatchedValuesSearchers,
+    formSchema,
     handleCKEditorImageFileUpload,
     handleCreateResource,
     errors,
-    resource,
     resourceDisplayName,
     resourceUnchanged,
     updateInputValue,
@@ -37,10 +38,11 @@ const CreateResource = ({
                     <Card className="card-accent-success">
                         <CardBody>
                             <ResourceForm
+                                dispatchedValuesSearchers={dispatchedValuesSearchers}
+                                formSchema={formSchema}
                                 onCKEditorImageUpload={handleCKEditorImageFileUpload}
                                 onInputChange={updateInputValue}
                                 onSubmit={handleCreateResource}
-                                resource={resource}
                                 submitButtonClassName="success"
                                 submitButtonDisabled={resourceUnchanged || creatingResource}
                                 submitButtonIconClassName={createButtonIconClassName}
@@ -56,10 +58,10 @@ const CreateResource = ({
 
 CreateResource.proptTypes = {
     creatingResource: PropTypes.bool,
+    formSchema: PropTypes.object,
     handleCKEditorImageFileUpload: PropTypes.func,
     handleCreateResource: PropTypes.func,
     errors: PropTypes.array,
-    resource: PropTypes.object,
     resourceDisplayName: PropTypes.string,
     resourceUnchanged: PropTypes.bool,
     updateInputValue: PropTypes.func,

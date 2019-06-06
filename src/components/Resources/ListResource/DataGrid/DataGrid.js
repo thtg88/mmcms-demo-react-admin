@@ -1,19 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-    Col,
-    ListGroup,
-    Row
-} from 'reactstrap';
-import SimpleFilterDropdown from '../SimpleFilterDropdown';
-import LoaderListGroupItem from '../LoaderListGroupItem';
-import EmptyListGroupItem from '../EmptyListGroupItem';
-import ResourceListGroupItem from './ResourceListGroupItem';
+import { Col, Row } from 'reactstrap';
+import LoaderGridItem from './LoaderGridItem';
+import EmptyGridItem from './EmptyGridItem';
 import Pagination from '../Pagination';
+import SimpleFilterDropdown from '../SimpleFilterDropdown';
 import SortDropdown from '../SortDropdown';
 import SearchBar from '../SearchBar';
+import {
+    ResourceGridItemHeader,
+    ResourceGridItemBody,
+} from './ResourceGridItem';
 
-const DataListGroup = ({
+const DataGrid = ({
     columns,
     data,
     filters,
@@ -39,7 +38,9 @@ const DataListGroup = ({
     searchButtonIconClassName,
     searchEnabled,
     searchTextInputPlaceholder,
+    selectedItem,
     selectedSortingOption,
+    setSelectedItem,
     sortButtonDisabled,
     sortingOptions,
     total,
@@ -127,44 +128,59 @@ const DataListGroup = ({
                     )
                     : null
             }
-            <ListGroup flush className="mb-3">
-                {
-                    loading
-                        ? (
-                            <LoaderListGroupItem
-                                columns={columns}
-                                pageSize={pageSize}
-                                type="placeholderShimmer"
-                            />
-                        )
-                        : (
-                            data.length > 0
-                                ? (
-                                    data.map((entity, index) => {
-                                        const listGroupItemClassName = typeof resourceItemClassName === 'function'
-                                            ? resourceItemClassName(entity)
-                                            : resourceItemClassName;
+            {
+                loading
+                    ? (
+                        <LoaderGridItem
+                            columns={columns}
+                            pageSize={pageSize}
+                            type="placeholderShimmer"
+                        />
+                    )
+                    : (
+                        data.length > 0
+                            ? (
+                                <Row>
+                                    {
+                                        data.map((entity, idx) => {
+                                            const borderClassName = !!selectedItem && entity.id === selectedItem.id
+                                                ? ' border border-primary rounded border-3'
+                                                : '';
 
-                                        return (
-                                            <ResourceListGroupItem
-                                                key={entity[keyField]+'_'+index}
-                                                columns={columns}
-                                                history={history}
-                                                keyField={keyField}
-                                                listGroupItemClassName={listGroupItemClassName}
-                                                nameField={nameField}
-                                                entity={entity}
-                                                tag={listgroupItemTag}
-                                                urlBuilder={urlBuilder}
-                                                preItem={preItem}
-                                            />
-                                        );
-                                    })
-                                )
-                                : <EmptyListGroupItem />
-                        )
-                }
-            </ListGroup>
+                                            return (
+                                                <Col className="col-md-4 col-12 mb-3" key={entity[keyField]+'_'+idx}>
+                                                    <div
+                                                        className={`p-2${borderClassName}`}
+                                                        onClick={() => {
+                                                            if(setSelectedItem && typeof setSelectedItem === 'function') {
+                                                                return !!selectedItem && entity.id === selectedItem.id
+                                                                    ? setSelectedItem(null)
+                                                                    : setSelectedItem({...entity});
+                                                            } else if(urlBuilder && typeof urlBuilder === 'function') {
+                                                                return urlBuilder(entity);
+                                                            }
+                                                        }}>
+                                                        <ResourceGridItemHeader
+                                                            columns={columns}
+                                                            entity={entity}
+                                                            nameField={nameField}
+                                                        />
+                                                        <ResourceGridItemBody
+                                                            columns={columns}
+                                                            entity={entity}
+                                                            keyField={keyField}
+                                                            nameField={nameField}
+                                                        />
+                                                    </div>
+                                                </Col>
+                                            );
+                                        })
+                                    }
+                                </Row>
+                            )
+                            : <EmptyGridItem />
+                    )
+            }
             {
                 loading
                     ? null
@@ -184,7 +200,7 @@ const DataListGroup = ({
     );
 };
 
-DataListGroup.propTypes = {
+DataGrid.propTypes = {
     columns: PropTypes.array,
     data: PropTypes.array.isRequired,
     filters: PropTypes.arrayOf(
@@ -245,7 +261,9 @@ DataListGroup.propTypes = {
     searchButtonIconClassName: PropTypes.string,
     searchEnabled: PropTypes.bool,
     searchTextInputPlaceholder: PropTypes.string,
+    selectedItem: PropTypes.object,
     selectedSortingOption: PropTypes.object,
+    setSelectedItem: PropTypes.func,
     sortButtonDisabled: PropTypes.bool,
     sortingOptions: PropTypes.array,
     total: PropTypes.number,
@@ -253,4 +271,4 @@ DataListGroup.propTypes = {
     urlParams: PropTypes.object,
 };
 
-export default DataListGroup;
+export default DataGrid;

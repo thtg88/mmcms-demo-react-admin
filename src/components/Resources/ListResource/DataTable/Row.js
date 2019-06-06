@@ -12,20 +12,20 @@ const Row = ({
     <tr>
         {
             columns.map((column, idx) => {
-                const { dataField } = column;
-                const content = get(entity, dataField);
-                const key = `entity_${entity[keyField]}_${dataField}`;
+                const content = get(entity, column.dataField);
 
-                if(dataField === keyField) {
+                if(column.dataField === keyField) {
                     return (
-                        <th key={key} scope="row">
+                        <th key={'entity_'+entity[keyField]+'_'+column.dataField} scope="row">
                             <Link to={urlBuilder(entity)}>{content}</Link>
                         </th>
                     );
                 }
 
                 return (
-                    <td key={key}>{content}</td>
+                    <td key={'entity_'+entity[keyField]+'_'+column.dataField}>
+                        {content}
+                    </td>
                 );
             })
         }
@@ -36,7 +36,7 @@ Row.propTypes = {
     columns: PropTypes.array,
     entity: PropTypes.object,
     keyField: PropTypes.string,
-    urlBuilder: PropTypes.func,
+    urlBuilder: PropTypes.func
 };
 
 export default Row;
