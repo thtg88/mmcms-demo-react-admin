@@ -28,6 +28,7 @@ const FormGroups = ({ groups }) => {
             dataAttributes,
             dateFormat,
             disabled,
+            onReactSelectAsyncLoadOptions,
             emptyOption,
             formFeedbackText,
             formText,
@@ -134,6 +135,7 @@ const FormGroups = ({ groups }) => {
                     dataAttributes={dataAttributes}
                     dateFormat={dateFormat}
                     disabled={disabled}
+                    onReactSelectAsyncLoadOptions={onReactSelectAsyncLoadOptions}
                     emptyOption={emptyOption}
                     invalid={invalid}
                     isValidDate={isValidDate}
@@ -200,6 +202,7 @@ FormGroups.propTypes = {
         name: PropTypes.string,
         onCKEditorImageUpload: PropTypes.func,
         onChange: PropTypes.func,
+        onReactSelectAsyncLoadOptions: PropTypes.func,
         placeholder: PropTypes.string,
         rows: PropTypes.number,
         type: PropTypes.string,
