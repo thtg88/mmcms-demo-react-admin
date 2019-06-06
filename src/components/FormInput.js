@@ -3,11 +3,8 @@ import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import DateTime from 'react-datetime';
 import Select from 'react-select';
-import CKEditor from '@ckeditor/ckeditor5-react';
-// import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { CallbackImageUploadAdapterPlugin } from '../helpers/CKEditor';
 import AsyncSelect from 'react-select/lib/Async';
+import { CKEditorFormInput } from './CKEditor';
 import moment from 'moment';
 import { momentSqlFormat } from '../helpers/dates';
 import 'moment/locale/en-gb';
@@ -226,30 +223,15 @@ const FormInput = ({
     }
 
     if(type === 'ckeditor') {
-        // CKEditor seems to throw issues with disabled={true} on quick in succession re-renders
-        // on versions >= v1.1.2, So for now we declare it as not supported
-        // See https://github.com/ckeditor/ckeditor5-react/issues/83
-        // TOOD test in future disabled={disabled}
         return (
-            <CKEditor
-                config={{
-                    extraPlugins: [CallbackImageUploadAdapterPlugin],
-                    removePlugins: ['CKFinder'],
-                    callbackImageUploadAdapterPlugin: {
-                        onUploadRequest: onCKEditorImageUpload,
-                    },
-                }}
-                data={value}
-                editor={ClassicEditor}
-                onChange={(event, editor) => {
-                    const target = {
-                        name,
-                        value: editor.getData(),
-                    };
-                    onChange({ target });
-                }}
+            <CKEditorFormInput
+                disabled={disabled}
+                name={name}
+                onChange={onChange}
+                onImageUpload={onCKEditorImageUpload}
+                value={value}
             />
-        );
+        )
     }
 
     return (
