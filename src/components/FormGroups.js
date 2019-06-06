@@ -147,6 +147,7 @@ const FormGroups = ({ groups }) => {
                     onChange={onChange}
                     placeholder={placeholder}
                     rows={rows}
+                    step={step}
                     timeFormat={timeFormat}
                     type={type}
                     value={value}
@@ -205,6 +206,7 @@ FormGroups.propTypes = {
         onReactSelectAsyncLoadOptions: PropTypes.func,
         placeholder: PropTypes.string,
         rows: PropTypes.number,
+        step: PropTypes.number,
         type: PropTypes.string,
         value: PropTypes.oneOfType([
             PropTypes.array,

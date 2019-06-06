@@ -7,6 +7,7 @@ import CKEditor from '@ckeditor/ckeditor5-react';
 // import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CallbackImageUploadAdapterPlugin } from '../helpers/CKEditor';
+import AsyncSelect from 'react-select/lib/Async';
 import moment from 'moment';
 import { momentSqlFormat } from '../helpers/dates';
 import 'moment/locale/en-gb';
@@ -27,6 +28,7 @@ const FormInput = ({
     name,
     onChange,
     onCKEditorImageUpload,
+    onReactSelectAsyncLoadOptions,
     placeholder,
     rows,
     timeFormat,
@@ -36,6 +38,49 @@ const FormInput = ({
     viewMode,
 }) => {
     if(type === 'react-select') {
+        if(typeof onReactSelectAsyncLoadOptions === 'function') {
+            return (
+                <AsyncSelect
+                    id={name}
+                    name={name}
+                    value={value}
+                    loadOptions={onReactSelectAsyncLoadOptions}
+                    isDisabled={disabled}
+                    isMulti={multiple}
+                    isSearchable={true}
+                    onChange={(selectedOption, extra) => {
+                        // We proceed updating if:
+                        // 1. It's a multiple select and multipleSelectLimit > 0,
+                        // and I do not have already multipleSelectLimit options selected
+                        // 2. It's a multiple select and multipleSelectLimit is false-y
+                        // 3. It's not a multiple select
+                        // 4. I'm removing an option (only possible for multiple selects)
+                        // 5. I'm clearing the selected options (only possible for multiple selects)
+                        if(
+
+                            (
+                                multiple
+                                && multipleSelectLimit > 0
+                                && value.length < multipleSelectLimit
+                            )
+                            || (
+                                multiple
+                                && !multipleSelectLimit
+                            )
+                            || !multiple
+                            || extra.action === 'remove-value'
+                            || extra.action === 'clear'
+                        ) {
+                            onChange(selectedOption, {...extra, name, multiple})
+                        }
+                    }}
+                    options={values}
+                    placeholder={placeholder}
+                    isOptionDisabled={option => !!(option.disabled)}
+                />
+            );
+        }
+
         return (
             <Select
                 id={name}
@@ -216,6 +261,7 @@ const FormInput = ({
             name={name}
             onChange={onChange}
             placeholder={placeholder}
+            step={step}
             type={type}
             value={value}
             {...dataAttributes}
@@ -238,8 +284,10 @@ FormInput.propTypes = {
     name: PropTypes.string,
     onChange: PropTypes.func,
     onCKEditorImageUpload: PropTypes.func,
+    onReactSelectAsyncLoadOptions: PropTypes.func,
     placeholder: PropTypes.string,
     rows: PropTypes.number,
+    step: PropTypes.number,
     timeFormat: PropTypes.oneOfType([
         PropTypes.bool,
         PropTypes.string,
