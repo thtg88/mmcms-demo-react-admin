@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import SpinnerLoader from './SpinnerLoader';
+import SpinnerLoader from '../components/SpinnerLoader';
 
 const WaitingComponent = ({
     Component,
@@ -7,7 +7,7 @@ const WaitingComponent = ({
     ...props
 }) => (
     <Suspense fallback={<SpinnerLoader />}>
-        <Component query={query} {...props} />
+        <Component {...props} query={query} />
     </Suspense>
 );
 
