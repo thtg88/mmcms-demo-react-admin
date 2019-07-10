@@ -11,7 +11,7 @@
         "url": "git@github.com:thtg88/mmcms-demo-react-admin.git"
     },
     "dependencies": {
-        "@ckeditor/ckeditor5-build-classic": "^12.2.0",
+        "@ckeditor/ckeditor5-build-classic": "^12.3.1",
         "@ckeditor/ckeditor5-react": "^1.1.3",
         "@coreui/coreui": "^2.1.12",
         "@coreui/coreui-plugin-chartjs-custom-tooltips": "^1.3.1",
@@ -24,7 +24,7 @@
         "flag-icon-css": "^3.3.0",
         "font-awesome": "^4.7.0",
         "jquery": "^3.4.1",
-        "lodash": "^4.17.11",
+        "lodash": "^4.17.14",
         "moment": "^2.24.0",
         "node-sass": "^4.12.0",
         "nprogress": "^0.2.0",
@@ -45,10 +45,10 @@
         "react-test-renderer": "^16.8.6",
         "react-toastify": "^4.5.2",
         "reactstrap": "^6.5.0",
-        "redux": "^4.0.1",
+        "redux": "^4.0.4",
         "redux-saga": "^0.16.2",
         "slugify": "^1.3.4",
-        "typescript": "^3.5.2",
+        "typescript": "^3.5.3",
         "yup": "^0.26.10"
     },
     "devDependencies": {
