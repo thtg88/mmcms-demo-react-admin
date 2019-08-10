@@ -113,6 +113,7 @@ const DataListGroup = ({
                                     <Col key={idx} className={`mb-3 col-12 col-md-4`}>
                                         <SimpleFilterDropdown
                                             disabled={filter.disabled}
+                                            itemStyle={filter.itemStyle}
                                             label={filter.label}
                                             name={filter.name}
                                             onDropdownItemClick={onSimpleFilterDropdownItemClick}

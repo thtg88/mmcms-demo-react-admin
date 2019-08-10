@@ -11,6 +11,7 @@ import {
 
 const SimpleFilterDropdown = ({
     disabled,
+    itemStyle,
     label,
     name,
     operator,
@@ -100,7 +101,11 @@ const SimpleFilterDropdown = ({
                             : name;
                         const valueOperator = filterValue.data && filterValue.data.operator
                             ? filterValue.data.operator
-                            : '=';
+                            : (
+                                operator === 'in'
+                                ? operator
+                                : '='
+                            );
                         let active = filterValue.value === value;
                         if(filterValue.data) {
                             if(filterValue.data.name && filterValue.data.operator) {
@@ -127,6 +132,7 @@ const SimpleFilterDropdown = ({
                                 key={`filterValue_${filterValueIdx}`}
                                 active={active}
                                 onClick={() => onDropdownItemClick(name, fieldName, filterValue.value, valueOperator)}
+                                style={itemStyle ? itemStyle : null}
                             >
                                 {filterValue.text}
                             </DropdownItem>
@@ -140,6 +146,7 @@ const SimpleFilterDropdown = ({
 
 SimpleFilterDropdown.propTypes = {
     disabled: PropTypes.bool,
+    itemStyle: PropTypes.object,
     label: PropTypes.string,
     name: PropTypes.string,
     operator: PropTypes.string,

@@ -114,6 +114,7 @@ const DataGrid = ({
                                     <Col key={idx} className={`mb-3 col-12 col-md-4`}>
                                         <SimpleFilterDropdown
                                             disabled={filter.disabled}
+                                            itemStyle={filter.itemStyle}
                                             label={filter.label}
                                             name={filter.name}
                                             onDropdownItemClick={onSimpleFilterDropdownItemClick}
@@ -138,7 +139,7 @@ const DataGrid = ({
                         />
                     )
                     : (
-                        data.length > 0
+                        data && data.length > 0
                             ? (
                                 <Row>
                                     {
@@ -202,7 +203,7 @@ const DataGrid = ({
 
 DataGrid.propTypes = {
     columns: PropTypes.array,
-    data: PropTypes.array.isRequired,
+    data: PropTypes.array,
     filters: PropTypes.arrayOf(
         PropTypes.shape({
             disabled: PropTypes.bool,

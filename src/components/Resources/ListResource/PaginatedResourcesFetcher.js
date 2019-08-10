@@ -32,8 +32,8 @@ class PaginatedResourcesFetcher extends Component {
                 .map(({name, fieldName, value, operator}) => ({name, fieldName, value, operator})),
             q: query,
             recovery: isRecovering === true ? 1 : 0,
-            sort_name: selectedSortingOption.name,
-            sort_direction: selectedSortingOption.direction,
+            sort_name: selectedSortingOption ? selectedSortingOption.name : null,
+            sort_direction: selectedSortingOption ? selectedSortingOption.direction : null,
         };
 
         getPaginatedResources({ data });

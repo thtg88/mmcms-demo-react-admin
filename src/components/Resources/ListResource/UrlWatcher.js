@@ -25,10 +25,10 @@ class UrlWatcher extends Component {
             searchArr.push('q='+query);
         }
 
-        if(selectedSortingOption.name) {
+        if(selectedSortingOption && selectedSortingOption.name) {
             searchArr.push('sort_name='+selectedSortingOption.name);
         }
-        if(selectedSortingOption.direction) {
+        if(selectedSortingOption && selectedSortingOption.direction) {
             searchArr.push('sort_direction='+selectedSortingOption.direction);
         }
 
