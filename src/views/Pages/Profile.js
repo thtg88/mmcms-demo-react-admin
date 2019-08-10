@@ -11,7 +11,7 @@ import ApiErrorCard from '../../components/Cards/ApiErrorCard';
 import PageTitle from '../../components/PageTitle';
 import ResourceForm from '../../components/Resources/ResourceForm';
 import SpinnerLoader from '../../components/SpinnerLoader';
-import { getApiErrorMessages } from '../../helpers/apiErrorMessages';
+import { getApiErrorMessages } from '../../helpers/apiMessages';
 import {
     getFormResourceFromValues,
     getValidationSchemaFromFormResource,
