@@ -1,113 +1,110 @@
 import * as yup from 'yup';
+import { getFullDateText, getTimeText } from '../../helpers/dates';
+// Having reducerName in a different files allow the whole schema not to be compiled,
+// before redux initializes, causing valuesFetcher to have an undefined fetcher callback.
+// Please do not move
+import { reducerName } from './variables';
+
+export { reducerName };
 
 export const resourceDisplayName = 'Role';
 
 export const resourcesDisplayName = 'Roles';
 
+export const resourceBaseRoute = 'roles';
+
 export const keyField = 'id';
 
-export const nameField = 'name';
+export const nameField = 'display_name';
+
+export const selectOptionValue = 'id';
+
+export const selectOptionText = 'display_name';
 
 export const columns = [
     {
-        dataField: 'name',
-        text: 'Name',
-        className: 'col-md-12 col-12',
-    },
-    {
         dataField: 'display_name',
         text: 'Display Name',
-        className: 'col-md-6 col-12',
+        className: 'col-md-4 col-12',
     },
     {
-        dataField: 'priority',
+        dataField: 'triviality',
         text: 'Priority',
-        className: 'col-md-6 col-12',
+        className: 'col-md-12',
     },
     {
         dataField: 'created_at',
         text: 'Created',
         className: 'col-md-12 col-12',
-    }
+        formatter: (created_at) => `${getFullDateText(created_at)} ${getTimeText(created_at)}`,
+    },
 ];
 
 export const sortingOptions = [
     {
-        display_name: 'Display Name',
+        display_name: 'Priority',
+        name: 'triviality',
+        direction: 'asc',
+    },
+    {
+        display_name: 'Priority',
+        name: 'triviality',
+        direction: 'desc',
+    },
+    {
+        display_name: 'Display name',
         name: 'display_name',
         direction: 'asc',
     },
     {
-        display_name: 'Display Name',
+        display_name: 'Display name',
         name: 'display_name',
-        direction: 'desc',
-    },
-    {
-        display_name: 'Name',
-        name: 'name',
-        direction: 'asc',
-    },
-    {
-        display_name: 'Name',
-        name: 'name',
-        direction: 'desc',
-    },
-    {
-        display_name: 'ID',
-        name: 'id',
-        direction: 'asc',
-    },
-    {
-        display_name: 'ID',
-        name: 'id',
         direction: 'desc',
     },
 ];
 
 export const defaultSortingOption = {...sortingOptions[0]};
 
-export const searchColumns = [
+const searchColumns = [
     'Display Name',
-    'ID',
-    'Name',
 ];
 
-export const pageSize = 10;
+export const searchTextInputPlaceholder = `Search by ${searchColumns.join(', or ')}`;
 
 export const canDestroy = true;
 
+export const pageSize = 10;
+
 export const schema = {
     display_name: {
-        errors: [],
+        type: 'text',
+        value: '',
         rules: yup.string()
             .required()
             .max(255),
-        type: 'text',
-        value: '',
+        errors: [],
     },
     name: {
-        errors: [],
+        type: 'text',
+        value: '',
         rules: yup.string()
             .required()
             .max(255),
-        type: 'text',
-        value: '',
-    },
-    priority: {
         errors: [],
+    },
+    triviality: {
+        type: 'number',
+        value: '',
         rules: yup.number()
             .required()
             .integer()
-            .min(0),
-        type: 'number',
-        value: '',
+            .min(1),
+        errors:[]
     },
 };
 
 export const attributesSequenceToShow = [
     'display_name',
     'name',
-    'priority',
+    'triviality',
 ];
-
-export default schema;

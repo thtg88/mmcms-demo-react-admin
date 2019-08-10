@@ -143,6 +143,33 @@ export const getAllResourcesRequestBase = (actions, getAllResources) => function
     });
 };
 
+export const getOrderResourcesRequestBase = (actions, getOrderResources) => function* () {
+    yield takeEvery(actions.GET_ORDER_RESOURCES_REQUEST, function*({ payload }) {
+        const { data } = payload;
+
+        try {
+            const result = yield call(getOrderResources, data);
+
+            if (result.resources) {
+                yield put({
+                    type: actions.GET_ORDER_RESOURCES_SUCCESS,
+                    payload: result
+                });
+            } else {
+                yield put({
+                    type: actions.GET_ORDER_RESOURCES_ERROR,
+                    error: result.error || result.errors || result
+                });
+            }
+        } catch(err) {
+            yield put({
+                type: actions.GET_ORDER_RESOURCES_ERROR,
+                error: 'Internal server error'
+            });
+        }
+    });
+};
+
 export const getPaginatedResourcesRequestBase = (actions, getPaginatedResources) => function* () {
     yield takeEvery(actions.GET_PAGINATED_RESOURCES_REQUEST, function* ({ payload }) {
         const { data } = payload;
@@ -278,6 +305,34 @@ export const regenerateThumbnailsRequestBase = (actions, regenerateThumbnails) =
    });
 };
 
+export const runReportRequestBase = (actions, runReport) => function* () {
+    yield takeEvery(actions.RUN_REPORT_REQUEST, function*({ payload }) {
+        const { data } = payload;
+
+        try {
+            const result = yield call(runReport, data);
+
+            if (result.resources) {
+                yield put({
+                    type: actions.RUN_REPORT_SUCCESS,
+                    payload: result
+                });
+            } else {
+                yield put({
+                    type: actions.RUN_REPORT_ERROR,
+                    error: result.error || result.errors || result
+                });
+            }
+        } catch(err) {
+            console.log(err);
+            yield put({
+                type: actions.RUN_REPORT_ERROR,
+                error: 'Internal server error'
+            });
+        }
+    });
+};
+
 export const searchResourcesRequestBase = (actions, searchResources) => function* () {
     yield takeEvery(actions.SEARCH_RESOURCES_REQUEST, function*({ payload }) {
         const { data } = payload;
@@ -299,6 +354,33 @@ export const searchResourcesRequestBase = (actions, searchResources) => function
         } catch(err) {
             yield put({
                 type: actions.SEARCH_RESOURCES_ERROR,
+                error: 'Internal server error'
+            });
+        }
+    });
+};
+
+export const sendCodeResourceRequestBase = (actions, sendCodeResource) => function* () {
+    yield takeEvery(actions.SEND_CODE_RESOURCE_REQUEST, function*({ payload }) {
+        const { data } = payload;
+
+        try {
+            const result = yield call(sendCodeResource, data);
+
+            if (result.success === true) {
+                yield put({
+                    type: actions.SEND_CODE_RESOURCE_SUCCESS,
+                    payload: result
+                });
+            } else {
+                yield put({
+                    type: actions.SEND_CODE_RESOURCE_ERROR,
+                    error: result.error || result.errors || result
+                });
+            }
+        } catch(err) {
+            yield put({
+                type: actions.SEND_CODE_RESOURCE_ERROR,
                 error: 'Internal server error'
             });
         }

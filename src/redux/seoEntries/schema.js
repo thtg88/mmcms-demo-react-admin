@@ -1,5 +1,11 @@
 // import * as yup from 'yup';
 import { getFullDateText, getTimeText } from '../../helpers/dates';
+// Having reducerName in a different files allow the whole schema not to be compiled,
+// before redux initializes, causing valuesFetcher to have an undefined fetcher callback.
+// Please do not move
+import { reducerName } from './variables';
+
+export { reducerName };
 
 export const resourceDisplayName = 'SEO Entry';
 
@@ -40,9 +46,11 @@ export const sortingOptions = [
 
 export const defaultSortingOption = {...sortingOptions[0]};
 
-export const searchColumns = [
-    'page_title',
+const searchColumns = [
+    'Page Title',
 ];
+
+export const searchTextInputPlaceholder = `Search by ${searchColumns.join(', or ')}`;
 
 export const pageSize = 10;
 
@@ -162,4 +170,4 @@ export const attributesSequenceToShow = [
 	'twitter_title',
 ];
 
-export default schema;
+

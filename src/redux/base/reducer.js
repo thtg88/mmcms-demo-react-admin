@@ -4,20 +4,24 @@ import {
 } from '../../helpers/paginatedResources';
 
 const initial_state = {
+    club_order_lines: null,
     created: false,
     destroyed: false,
     current_page: 1,
     error: null,
     fetching_resources: false,
+    orders: null,
     paginated_resources: {
         1: [],
     },
     published: false,
     recovered: false,
     regenerated: false,
+    report_run: false,
     resequenced: false,
     resource: null,
     resources: [],
+    sendCoded: false,
     total: 0,
     unpublished: false,
     updated: false,
@@ -32,6 +36,15 @@ const reducer = (actions) => (state = initial_state, action) => {
                 ...state,
                 current_page: action.payload.data.page,
             };
+        case actions.CLEAR_METADATA_REPORT: {
+            return {
+                ...state,
+                fetching_resources: false,
+                paginated_resources: {1: []},
+                report_run: false,
+                resources: [],
+            };
+        }
         case actions.CLEAR_METADATA_RESOURCES: {
             return {
                 ...state,
@@ -191,6 +204,29 @@ const reducer = (actions) => (state = initial_state, action) => {
                 error: action.error,
                 fetching_resources: false,
             };
+        case actions.GET_ORDER_RESOURCES_REQUEST: {
+            return {
+                ...state,
+                error: null,
+                orders: null,
+                warning: null,
+            };
+        }
+        case actions.GET_ORDER_RESOURCES_SUCCESS: {
+            const { resources } = action.payload;
+            return {
+                ...state,
+                orders: resources,
+                error: null,
+                warning: null,
+            };
+        }
+        case actions.GET_ORDER_RESOURCES_ERROR:
+            return {
+                ...state,
+                error: action.error,
+                fetching_resources: false,
+            };
         case actions.GET_PAGINATED_RESOURCES_REQUEST: {
             const { data } = action.payload;
             return {
@@ -227,6 +263,31 @@ const reducer = (actions) => (state = initial_state, action) => {
                 error: action.error,
                 fetching_resources: false,
                 total: 0,
+            };
+        case actions.GET_CLUB_ORDER_LINES_REQUEST: {
+            return {
+                ...state,
+                error: null,
+                fetching_resources: true,
+                club_order_lines: null,
+                warning: null,
+            };
+        }
+        case actions.GET_CLUB_ORDER_LINES_SUCCESS: {
+            const { resources } = action.payload;
+            return {
+                ...state,
+                club_order_lines: resources,
+                error: null,
+                fetching_resources: false,
+                warning: null,
+            };
+        }
+        case actions.GET_CLUB_ORDER_LINES_ERROR:
+            return {
+                ...state,
+                error: action.error,
+                fetching_resources: false,
             };
         case actions.PUBLISH_RESOURCE_REQUEST:
             return {
@@ -331,6 +392,33 @@ const reducer = (actions) => (state = initial_state, action) => {
                 error: action.error,
                 regenerated: false,
             };
+        case actions.RUN_REPORT_REQUEST:
+            return {
+                ...state,
+                error: null,
+                fetching_resources: true,
+                report_run: false,
+                resources: [],
+                warning: null,
+            };
+        case actions.RUN_REPORT_SUCCESS: {
+            const { resources } = action.payload;
+
+            return {
+                ...state,
+                resources,
+                error: null,
+                fetching_resources: false,
+                report_run: true,
+                warning: null,
+            };
+        }
+        case actions.RUN_REPORT_ERROR:
+            return {
+                ...state,
+                error: action.error,
+                report_run: false,
+            };
         case actions.SEARCH_RESOURCES_REQUEST: {
             return {
                 ...state,
@@ -355,6 +443,27 @@ const reducer = (actions) => (state = initial_state, action) => {
                 ...state,
                 error: action.error,
                 fetching_resources: false,
+            };
+        case actions.SEND_CODE_RESOURCE_REQUEST:
+            return {
+                ...state,
+                error: null,
+                sendCoded: false,
+                warning: null,
+            };
+        case actions.SEND_CODE_RESOURCE_SUCCESS: {
+            return {
+                ...state,
+                error: null,
+                sendCoded: true,
+                warning: null,
+            };
+        }
+        case actions.SEND_CODE_RESOURCE_ERROR:
+            return {
+                ...state,
+                error: action.error,
+                sendCoded: false,
             };
         case actions.SET_PAGINATED_RESOURCES: {
             return {

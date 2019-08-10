@@ -1,4 +1,17 @@
 import * as yup from 'yup';
+import { getFullDateText, getTimeText } from '../../helpers/dates';
+import {
+    reducerName as rolesReducerName,
+    selectOptionText as roleSelectOptionText,
+    selectOptionValue as roleSelectOptionValue,
+} from '../roles/schema';
+import { getAllResources as getAllRoles } from '../roles/actions';
+// Having reducerName in a different files allow the whole schema not to be compiled,
+// before redux initializes, causing valuesFetcher to have an undefined fetcher callback.
+// Please do not move
+import { reducerName } from './variables';
+
+export { reducerName };
 
 export const resourceDisplayName = 'User';
 
@@ -8,40 +21,83 @@ export const resourceBaseRoute = 'users';
 
 export const keyField = 'id';
 
-export const nameField = 'name';
+export const nameField = 'email';
+
+export const roleValuesFetcher = {
+    reducerName: rolesReducerName,
+    fetcher: getAllRoles,
+    fetcherName: 'getAllRoles',
+};
 
 export const columns = [
     {
-        dataField: 'name',
+        dataField: 'id',
+        text: 'ID',
+        className: 'col-md-12',
+    },
+    {
+        dataField: 'first_name',
         text: 'Name',
-        className: 'col-md-12 col-12',
+        className: 'col-md-5 col-12',
+    },
+    {
+        dataField: 'last_name',
+        text: 'Name',
+        className: 'col-md-5 col-12',
     },
     {
         dataField: 'email',
         text: 'Email',
-        className: 'col-md-6 col-12',
+        className: 'col-md-5 col-12',
     },
     {
         dataField: 'role.display_name',
         text: 'Role',
-        className: 'col-md-6 col-12',
+        className: 'col-md-2 col-12',
     },
     {
         dataField: 'created_at',
         text: 'Registered',
         className: 'col-md-12',
+        formatter: (created_at) => `${getFullDateText(created_at)} ${getTimeText(created_at)}`,
+    }
+];
+
+export const filters = [
+    {
+        disabled: false,
+        emptyOption: 'Filter by Role',
+        label: 'Role',
+        name: 'role_id',
+        operator: '=',
+        selectOptionText: roleSelectOptionText,
+        selectOptionValue: roleSelectOptionValue,
+        type: 'select',
+        value: '',
+        values: [],
+        valuesFetcher: {...roleValuesFetcher},
     },
 ];
 
 export const sortingOptions = [
     {
-        display_name: 'Name',
-        name: 'name',
+        display_name: 'First name',
+        name: 'first_name',
         direction: 'asc',
     },
     {
-        display_name: 'Name',
-        name: 'name',
+        display_name: 'First name',
+        name: 'first_name',
+        direction: 'desc',
+    },
+    {
+        display_name: 'Last name',
+        name: 'last_name',
+        direction: 'asc',
+    },
+    {
+        display_name: 'Last name',
+        name: 'last_name',
         direction: 'desc',
     },
     {
@@ -52,85 +108,83 @@ export const sortingOptions = [
     {
         display_name: 'Email',
         name: 'email',
-        direction: 'desc',
-    },
-    {
-        display_name: 'ID',
-        name: 'id',
-        direction: 'asc',
-    },
-    {
-        display_name: 'ID',
-        name: 'id',
         direction: 'desc',
     },
 ];
 
 export const defaultSortingOption = {...sortingOptions[0]};
 
-export const searchColumns = [
-    'ID',
-    'Email',
-    'Name',
+const searchColumns = [
+    'First Name',
+    'Last Name',
+    'Email Address',
 ];
 
-export const pageSize = 10;
+export const searchTextInputPlaceholder = `Search by ${searchColumns.join(', or ')}`;
 
 export const canDestroy = true;
 
+export const pageSize = 10;
+
 export const schema = {
-    name: {
-        errors: [],
-        rules: yup.string()
-            .required()
-            .max(255),
-        type: 'text',
-        value: '',
-    },
     email: {
-        errors: [],
-        rules: yup.string()
-            .required()
-            .email()
-            .max(255),
         type: 'email',
         value: '',
+        rules: yup.string()
+            .email()
+            .max(255),
+        errors: [],
+    },
+    first_name: {
+        type: 'text',
+        value: '',
+        rules: yup.string()
+            .max(255),
+        errors: [],
+    },
+    last_name: {
+        type: 'text',
+        value: '',
+        rules: yup.string()
+            .max(255),
+        errors: [],
     },
     password: {
-        errors: [],
-        rules: yup.string()
-            .required()
-            .min(6)
-            .max(255),
         type: 'password',
         value: '',
+        rules: yup.string()
+            .max(255)
+            .min(6),
+        errors: [],
+        dontGetResourceValue: true,
     },
     password_confirmation: {
-        errors: [],
-        label: 'Confirm Password',
-        placeholder: 'Confirm your password',
-        rules: yup.string()
-            .required()
-            .min(6)
-            .max(255),
         type: 'password',
         value: '',
+        rules: yup.string()
+            .max(255)
+            .min(6),
+        errors: [],
+        dontGetResourceValue: true,
     },
     role_id: {
-        empty_option: 'Please select a role for this user...',
-        errors: [],
-        rules: yup.number()
-            .required(),
         type: 'select',
         value: '',
+        rules: yup.number()
+            .min(1),
+        errors: [],
+        label: 'Role',
+        emptyOption: 'Please select a role...',
         values: [],
+        selectOptionText: roleSelectOptionText,
+        selectOptionValue: roleSelectOptionValue,
+        valuesFetcher: {...roleValuesFetcher},
     },
 };
 
 export const attributesSequenceToShow = [
-    'name',
     'email',
-    // 'role_id',
+    'first_name',
+    'last_name',
+    'role_id',
 ];
-
-export default schema;

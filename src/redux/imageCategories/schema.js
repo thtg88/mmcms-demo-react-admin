@@ -1,5 +1,11 @@
 import * as yup from 'yup';
 import { getFullDateText, getTimeText } from '../../helpers/dates';
+// Having reducerName in a different files allow the whole schema not to be compiled,
+// before redux initializes, causing valuesFetcher to have an undefined fetcher callback.
+// Please do not move
+import { reducerName } from './variables';
+
+export { reducerName };
 
 export const resourceDisplayName = 'Image Category';
 
@@ -10,6 +16,10 @@ export const resourceBaseRoute = 'image-categories';
 export const keyField = 'id';
 
 export const nameField = 'name';
+
+export const selectOptionValue = 'id';
+
+export const selectOptionText = (image_category) => `${image_category.name} (${image_category.target_table})`;
 
 export const columns = [
     {
@@ -70,16 +80,26 @@ export const sortingOptions = [
 
 export const defaultSortingOption = {...sortingOptions[0]};
 
-export const searchColumns = [
+const searchColumns = [
     'Name',
     'Target Table',
 ];
+
+export const searchTextInputPlaceholder = `Search by ${searchColumns.join(', or ')}`;
 
 export const canDestroy = true;
 
 export const pageSize = 10;
 
 export const schema = {
+    name: {
+        type: 'text',
+        value: '',
+        rules: yup.string()
+            .required()
+            .max(255),
+        errors: [],
+    },
     sequence: {
         type: 'number',
         value: '',
@@ -97,20 +117,12 @@ export const schema = {
             .max(255),
         errors: [],
     },
-    name: {
-        type: 'text',
-        value: '',
-        rules: yup.string()
-            .required()
-            .max(255),
-        errors: [],
-    },
 };
 
 export const attributesSequenceToShow = [
-    'sequence',
     'name',
     'target_table',
+    'sequence',
 ];
 
-export default schema;
+

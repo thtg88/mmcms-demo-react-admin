@@ -1,4 +1,4 @@
-import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
+import { all, fork } from 'redux-saga/effects';
 import actions from './actions';
 import {
     createResource,
@@ -6,114 +6,20 @@ import {
     findResource,
     updateResource,
 } from './helper';
+import {
+    createResourceRequestBase,
+    destroyResourceRequestBase,
+    findResourceRequestBase,
+    updateResourceRequestBase,
+} from '../base/sagas';
 
-export function* createResourceRequest() {
-    yield takeEvery(actions.CREATE_RESOURCE_REQUEST, function*({ payload }) {
-        const { data } = payload;
+export const createResourceRequest = createResourceRequestBase(actions, createResource);
 
-        try {
-            const result = yield call(createResource, data);
+export const destroyResourceRequest = destroyResourceRequestBase(actions, destroyResource);
 
-            if (result.resource) {
-                yield put({
-                    type: actions.CREATE_RESOURCE_SUCCESS,
-                    payload: result
-                });
-            } else {
-                yield put({
-                    type: actions.CREATE_RESOURCE_ERROR,
-                    error: result.error || result.errors || result
-                });
-            }
-        } catch(err) {
-            yield put({
-                type: actions.CREATE_RESOURCE_ERROR,
-                error: 'Internal server error'
-            });
-        }
-    });
-}
+export const findResourceRequest = findResourceRequestBase(actions, findResource);
 
-export function* destroyResourceRequest() {
-    yield takeEvery(actions.DESTROY_RESOURCE_REQUEST, function*({ payload }) {
-        const { data } = payload;
-
-        try {
-            const result = yield call(destroyResource, data);
-
-            if (result.resource) {
-                yield put({
-                    type: actions.DESTROY_RESOURCE_SUCCESS,
-                    payload: result
-                });
-            } else {
-                yield put({
-                    type: actions.DESTROY_RESOURCE_ERROR,
-                    error: result.error || result.errors || result
-                });
-            }
-        } catch(err) {
-            yield put({
-                type: actions.DESTROY_RESOURCE_ERROR,
-                error: 'Internal server error'
-            });
-        }
-    });
-}
-
-export function* findResourceRequest() {
-    yield takeEvery(actions.FIND_RESOURCE_REQUEST, function*({ payload }) {
-        const { data } = payload;
-
-        try {
-            const result = yield call(findResource, data);
-
-            if (result.resource) {
-                yield put({
-                    type: actions.FIND_RESOURCE_SUCCESS,
-                    payload: result
-                });
-            } else {
-                yield put({
-                    type: actions.FIND_RESOURCE_ERROR,
-                    error: result.error || result.errors || result
-                });
-            }
-        } catch(err) {
-            yield put({
-                type: actions.FIND_RESOURCE_ERROR,
-                error: 'Internal server error'
-            });
-        }
-    });
-}
-
-export function* updateResourceRequest() {
-    yield takeEvery(actions.UPDATE_RESOURCE_REQUEST, function*({ payload }) {
-        const { data } = payload;
-
-        try {
-            const result = yield call(updateResource, data);
-
-            if (result.resource) {
-                yield put({
-                    type: actions.UPDATE_RESOURCE_SUCCESS,
-                    payload: result
-                });
-            } else {
-                yield put({
-                    type: actions.UPDATE_RESOURCE_ERROR,
-                    error: result.error || result.errors || result
-                });
-            }
-        } catch(err) {
-            yield put({
-                type: actions.UPDATE_RESOURCE_ERROR,
-                error: 'Internal server error'
-            });
-        }
-    });
-}
+export const updateResourceRequest = updateResourceRequestBase(actions, updateResource);
 
 export default function* rootSaga() {
     yield all([
