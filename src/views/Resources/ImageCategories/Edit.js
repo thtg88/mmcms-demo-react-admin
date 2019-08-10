@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import EditResource, { withEditResource } from '../../../components/Resources/EditResource';
 import {
     clearMetadataResourceEdit,
@@ -7,7 +6,6 @@ import {
     findResource,
     getPaginatedResources,
     recoverResource,
-    reducerName,
     updateResource,
 } from '../../../redux/imageCategories/actions';
 import {
@@ -15,35 +13,24 @@ import {
     canDestroy,
     nameField,
     pageSize,
+    reducerName,
     resourceBaseRoute,
     resourceDisplayName,
     schema,
 } from '../../../redux/imageCategories/schema';
 
 export const Edit = ({
-    destroyed,
-    destroying_resource,
-    errors,
-    getting_resource,
-    handleDestroyResource,
-    handleRecoverResource,
-    handleUpdateResource,
-    isDestroyResourceModalOpen,
+    gettingResource,
     isRecovering,
-    isRecoverResourceModalOpen,
-    recoveringResource,
-    resource,
-    resourceUnchanged,
     toggleDestroyResourceModal,
     toggleRecoverResourceModal,
-    updateInputValue,
-    updating_resource,
+    ...props,
 }) => {
     let actions = [];
     if(isRecovering === true) {
         actions.push({
             className: 'btn-success',
-            disabled: getting_resource,
+            disabled: gettingResource,
             iconClassName: 'fa fa-fw fa-check',
             onClick: toggleRecoverResourceModal,
             title: 'Recover '+resourceDisplayName,
@@ -52,7 +39,7 @@ export const Edit = ({
     } else if(canDestroy === true) {
         actions.push({
             className: 'btn-danger',
-            disabled: getting_resource,
+            disabled: gettingResource,
             iconClassName: 'fa fa-fw fa-trash',
             onClick: toggleDestroyResourceModal,
             title: 'Remove '+resourceDisplayName,
@@ -60,32 +47,17 @@ export const Edit = ({
         });
     }
 
-    if(destroyed === true) {
-        return <Redirect to={`/${resourceBaseRoute}`} />;
-    }
-
     return (
         <EditResource
+            {...props}
             actions={actions}
             canDestroy={canDestroy}
-            destroyingResource={destroying_resource}
-            errors={errors}
-            gettingResource={getting_resource}
-            handleDestroyResource={handleDestroyResource}
-            handleRecoverResource={handleRecoverResource}
-            handleUpdateResource={handleUpdateResource}
-            isDestroyResourceModalOpen={isDestroyResourceModalOpen}
-            isRecoverResourceModalOpen={isRecoverResourceModalOpen}
+            gettingResource={gettingResource}
             isRecovering={isRecovering}
-            recoveringResource={recoveringResource}
-            resource={resource}
             resourceDisplayName={resourceDisplayName}
             resourceNameField={nameField}
-            resourceUnchanged={resourceUnchanged}
             toggleDestroyResourceModal={toggleDestroyResourceModal}
             toggleRecoverResourceModal={toggleRecoverResourceModal}
-            updateInputValue={updateInputValue}
-            updatingResource={updating_resource}
         />
     );
 };

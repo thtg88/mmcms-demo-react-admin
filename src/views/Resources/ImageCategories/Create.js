@@ -3,35 +3,16 @@ import CreateResource, { withCreateResource } from '../../../components/Resource
 import {
     clearMetadataResourceCreate,
     createResource,
-    reducerName,
 } from '../../../redux/imageCategories/actions';
 import {
     attributesSequenceToShow,
+    reducerName,
     resourceBaseRoute,
     resourceDisplayName,
     schema,
 } from '../../../redux/imageCategories/schema';
 
-export const Create = ({
-    creating_resource,
-    errors,
-    handleCreateResource,
-    resource,
-    resourceUnchanged,
-    updateInputValue,
-}) => {
-    return (
-        <CreateResource
-            creatingResource={creating_resource}
-            errors={errors}
-            handleCreateResource={handleCreateResource}
-            resource={resource}
-            resourceDisplayName={resourceDisplayName}
-            resourceUnchanged={resourceUnchanged}
-            updateInputValue={updateInputValue}
-        />
-    );
-};
+export const Create = props => <CreateResource {...props} resourceDisplayName={resourceDisplayName} />;
 
 export default withCreateResource({
     attributesSequenceToShow,

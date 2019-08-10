@@ -4,39 +4,31 @@ import {
     changePageResources,
     clearMetadataResources,
     getPaginatedResources,
-    reducerName,
 } from '../../../redux/imageCategories/actions';
 import {
     columns,
-    pageSize,
+    defaultSortingOption,
     keyField,
     nameField,
-    sortingOptions,
-    defaultSortingOption,
+    pageSize,
+    reducerName,
     resourceBaseRoute,
     resourceDisplayName,
     resourcesDisplayName,
-    searchColumns,
+    searchTextInputPlaceholder,
+    sortingOptions,
 } from '../../../redux/imageCategories/schema';
 
 export const List = ({
-    current_page,
-    errors,
     fetching_resources,
     history,
     isRecovering,
-    onPageClick,
     onRecoverClick,
     onRecoverDoneClick,
-    onSearchButtonClick,
-    onSearchInputChange,
-    onSearchInputClear,
-    onSortDropdownItemClick,
+    page,
     paginated_resources,
     query,
-    searching,
-    selectedSortingOption,
-    total,
+    ...props,
 }) => {
     const actions = [
         {
@@ -69,31 +61,21 @@ export const List = ({
         <ListResource
             actions={actions}
             columns={columns}
-            currentPage={current_page}
-            errors={errors}
+            currentPage={page}
             fetchingResources={fetching_resources}
             history={history}
             keyField={keyField}
             listgroupItemTag="button"
             listType="list"
             nameField={nameField}
-            onPageClick={onPageClick}
-            onSearchButtonClick={onSearchButtonClick}
-            onSearchInputChange={onSearchInputChange}
-            onSearchInputClear={onSearchInputClear}
-            onSortDropdownItemClick={onSortDropdownItemClick}
             pageSize={pageSize}
             resourceBaseRoute={reducerName}
             resources={paginated_resources}
             resourcesDisplayName={resourcesDisplayName}
             searchEnabled={true}
-            searching={searching}
             searchQuery={query}
-            searchTextInputPlaceholder={`Search by ${searchColumns.join(', or ')}`}
-            selectedSortingOption={selectedSortingOption}
-            sortingEnabled={true}
+            searchTextInputPlaceholder={searchTextInputPlaceholder}
             sortingOptions={sortingOptions}
-            total={total}
             urlBuilder={(entity) => history.push(`/${resourceBaseRoute}/${entity.id}${isRecovering === true ? '?recovery=1' : ''}`)}
         />
     );

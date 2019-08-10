@@ -1,12 +1,11 @@
 import React from 'react';
-import ListResource, { withListResource } from '../../../components/Resources/ListResource';
+import ListResourceContainer, { withListResource } from '../../../components/Resources/ListResource';
 import reducerRegistry from '../../../redux/reducerRegistry';
 import sagaRegistry from '../../../redux/sagaRegistry';
 import {
     changePageResources,
     clearMetadataResources,
     getPaginatedResources,
-    reducerName,
 } from '../../../redux/roles/actions';
 import reducer from '../../../redux/roles/reducers';
 import sagas from '../../../redux/roles/sagas';
@@ -16,9 +15,10 @@ import {
     keyField,
     nameField,
     pageSize,
+    reducerName,
     resourceDisplayName,
     resourcesDisplayName,
-    searchColumns,
+    searchTextInputPlaceholder,
     sortingOptions,
 } from '../../../redux/roles/schema';
 
@@ -26,23 +26,14 @@ reducerRegistry.register(reducerName, reducer);
 sagaRegistry.register(reducerName, sagas);
 
 export const List = ({
-    current_page,
-    errors,
     fetching_resources,
-    history,
     isRecovering,
-    onPageClick,
     onRecoverClick,
     onRecoverDoneClick,
-    onSearchButtonClick,
-    onSearchInputChange,
-    onSearchInputClear,
-    onSortDropdownItemClick,
+    page,
     paginated_resources,
     query,
-    searching,
-    selectedSortingOption,
-    total,
+    ...props,
 }) => {
     const actions = [
         {
@@ -72,35 +63,25 @@ export const List = ({
     }
 
     return (
-        <ListResource
-        actions={actions}
-        columns={columns}
-        currentPage={current_page}
-        errors={errors}
-        fetchingResources={fetching_resources}
-        history={history}
-        keyField={keyField}
-        listgroupItemTag="button"
-        listType="list"
-        nameField={nameField}
-        onPageClick={onPageClick}
-        onSearchButtonClick={onSearchButtonClick}
-        onSearchInputChange={onSearchInputChange}
-        onSearchInputClear={onSearchInputClear}
-        onSortDropdownItemClick={onSortDropdownItemClick}
-        pageSize={pageSize}
-        resourceBaseRoute={reducerName}
-        resources={paginated_resources}
-        resourcesDisplayName={resourcesDisplayName}
-        searchEnabled={true}
-        searching={searching}
-        searchQuery={query}
-        searchTextInputPlaceholder={`Search by ${searchColumns.join(', or ')}`}
-        selectedSortingOption={selectedSortingOption}
-        sortingEnabled={true}
-        sortingOptions={sortingOptions}
-        total={total}
-        urlBuilder={(entity) => history.push(`/${reducerName}/${entity.id}${isRecovering === true ? '?recovery=1' : ''}`)}
+        <ListResourceContainer
+            {...props}
+            actions={actions}
+            columns={columns}
+            currentPage={page}
+            fetchingResources={fetching_resources}
+            keyField={keyField}
+            listgroupItemTag="button"
+            listType="list"
+            nameField={nameField}
+            pageSize={pageSize}
+            resourceBaseRoute={reducerName}
+            resources={paginated_resources}
+            resourcesDisplayName={resourcesDisplayName}
+            searchEnabled={true}
+            searchQuery={query}
+            searchTextInputPlaceholder={searchTextInputPlaceholder}
+            sortingOptions={sortingOptions}
+            urlBuilder={(entity) => props.history.push(`/${reducerName}/${entity.id}${isRecovering === true ? '?recovery=1' : ''}`)}
         />
     );
 };

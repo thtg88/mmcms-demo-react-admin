@@ -14,8 +14,8 @@ import SpinnerLoader from '../../components/SpinnerLoader';
 import { getApiErrorMessages } from '../../helpers/apiMessages';
 import {
     getFormResourceFromValues,
-    getValidationSchemaFromFormResource,
-    getValuesFromFormResource,
+    getValidationSchemaFromFormSchema,
+    getValuesFromFormSchema,
     updateFormResourceFromErrors,
 } from '../../helpers/formResources';
 import { apiResourceUpdateSuccessNotification } from '../../helpers/toastNotification';
@@ -24,7 +24,7 @@ import {
     getProfile,
     updateProfile,
 } from '../../redux/auth/actions';
-import schema from '../../redux/users/schema';
+import { schema } from '../../redux/users/schema';
 
 const attributesToShow = [
     'name',
@@ -75,8 +75,8 @@ export class Profile extends Component {
 
         const { updateProfile, token } = this.props;
         const { profile } = this.state;
-        const values = getValuesFromFormResource(profile);
-        const validationSchema = getValidationSchemaFromFormResource(profile);
+        const values = getValuesFromFormSchema(profile);
+        const validationSchema = getValidationSchemaFromFormSchema(profile);
         const data = {
             token,
             ...values,

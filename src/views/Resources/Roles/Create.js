@@ -5,11 +5,13 @@ import sagaRegistry from '../../../redux/sagaRegistry';
 import {
     clearMetadataResourceCreate,
     createResource,
-    reducerName,
 } from '../../../redux/roles/actions';
 import reducer from '../../../redux/roles/reducers';
 import sagas from '../../../redux/roles/sagas';
-import schema from '../../../redux/roles/schema';
+import {
+    reducerName,
+    schema,
+} from '../../../redux/roles/schema';
 
 reducerRegistry.register(reducerName, reducer);
 sagaRegistry.register(reducerName, sagas);

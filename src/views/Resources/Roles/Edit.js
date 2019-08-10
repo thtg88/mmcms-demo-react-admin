@@ -8,7 +8,6 @@ import {
     destroyResource,
     findResource,
     getPaginatedResources,
-    reducerName,
     updateResource,
 } from '../../../redux/roles/actions';
 import reducer from '../../../redux/roles/reducers';
@@ -18,6 +17,7 @@ import {
     canDestroy,
     nameField,
     pageSize,
+    reducerName,
     schema,
 } from '../../../redux/roles/schema';
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import EditResource, { withEditResource } from '../../../components/Resources/EditResource';
 import reducerRegistry from '../../../redux/reducerRegistry';
 import sagaRegistry from '../../../redux/sagaRegistry';
@@ -9,7 +8,6 @@ import {
     findResource,
     getPaginatedResources,
     recoverResource,
-    reducerName,
     updateResource,
 } from '../../../redux/users/actions';
 import reducer from '../../../redux/users/reducers';
@@ -19,6 +17,7 @@ import {
     canDestroy,
     nameField,
     pageSize,
+    reducerName,
     resourceBaseRoute,
     resourceDisplayName,
     schema,
@@ -28,24 +27,15 @@ reducerRegistry.register(reducerName, reducer);
 sagaRegistry.register(reducerName, sagas);
 
 export const Edit = ({
-    destroyed,
-    destroying_resource,
-    errors,
-    getting_resource,
-    handleDestroyResource,
-    handleUpdateResource,
-    is_modal_open,
-    resource,
-    resource_unchanged,
+    gettingResource,
     toggleDestroyResourceModal,
-    updateInputValue,
-    updating_resource,
+    ...props,
 }) => {
     let actions = [];
     if(canDestroy === true) {
         actions.push({
             className: 'btn-danger',
-            disabled: getting_resource,
+            disabled: gettingResource,
             iconClassName: 'fa fa-trash',
             onClick: toggleDestroyResourceModal,
             title: 'Remove Resource',
@@ -53,26 +43,14 @@ export const Edit = ({
         });
     }
 
-    if(destroyed === true) {
-        return <Redirect to={`/${reducerName}`} />;
-    }
-
     return (
         <EditResource
+            {...props}
             actions={actions}
             canDestroy={canDestroy}
-            destroyingResource={destroying_resource}
-            errors={errors}
-            gettingResource={getting_resource}
-            handleDestroyResource={handleDestroyResource}
-            handleUpdateResource={handleUpdateResource}
-            isDestroyResourceModalOpen={is_modal_open}
-            resource={resource}
+            gettingResource={gettingResource}
             resourceNameField={nameField}
-            resourceUnchanged={resource_unchanged}
             toggleDestroyResourceModal={toggleDestroyResourceModal}
-            updateInputValue={updateInputValue}
-            updatingResource={updating_resource}
         />
     );
 };

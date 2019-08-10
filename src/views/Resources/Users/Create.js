@@ -5,39 +5,30 @@ import sagaRegistry from '../../../redux/sagaRegistry';
 import {
     clearMetadataResourceCreate,
     createResource,
-    reducerName,
 } from '../../../redux/users/actions';
 import reducer from '../../../redux/users/reducers';
 import sagas from '../../../redux/users/sagas';
-import schema from '../../../redux/users/schema';
+import {
+    attributesSequenceToShow,
+    nameField,
+    reducerName,
+    resourceBaseRoute,
+    resourceDisplayName,
+    schema,
+} from '../../../redux/users/schema';
 
 reducerRegistry.register(reducerName, reducer);
 sagaRegistry.register(reducerName, sagas);
 
-export const Create = ({
-    creating_resource,
-    errors,
-    handleCreateResource,
-    resource,
-    resource_unchanged,
-    updateInputValue,
-}) => {
-    return (
-        <CreateResource
-            creatingResource={creating_resource}
-            errors={errors}
-            handleCreateResource={handleCreateResource}
-            resource={resource}
-            resourceUnchanged={resource_unchanged}
-            updateInputValue={updateInputValue}
-        />
-    );
-};
+export const Create = props => <CreateResource {...props} resourceDisplayName={resourceDisplayName} />;
 
 export default withCreateResource({
+    attributesSequenceToShow,
     clearMetadataResourceCreate,
     createResource,
-    schema,
-    resourceBaseRoute: reducerName,
+    nameField,
     reducerName,
+    resourceBaseRoute,
+    resourceDisplayName,
+    schema,
 })(Create);
