@@ -1,12 +1,10 @@
-const getValidationSchemaFromFormResource = (resource) => {
-    if(!resource) {
+const getValidationSchemaFromFormSchema = schema => {
+    if(!schema) {
         return {};
     }
 
-    const schema = Object.entries(resource).reduce(
+    const validationSchema = Object.entries(schema).reduce(
         (result, [name, parameters]) => {
-            // console.log(result);
-
             if(parameters.rules) {
                 return {
                     ...result,
@@ -23,9 +21,7 @@ const getValidationSchemaFromFormResource = (resource) => {
         {}
     );
 
-    // console.log(schema);
-
-    return schema;
+    return validationSchema;
 };
 
-export default getValidationSchemaFromFormResource;
+export default getValidationSchemaFromFormSchema;

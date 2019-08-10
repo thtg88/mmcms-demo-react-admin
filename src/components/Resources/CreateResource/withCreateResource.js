@@ -4,16 +4,13 @@ import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
 import { animateScroll as scroll } from 'react-scroll';
+import withUpdateFormSchema from '../withUpdateFormSchema';
 import { getApiErrorMessages } from '../../../helpers/apiMessages';
 import {
-    filterSchemaFromAttributes,
     getSelectOptions,
     getValidationSchemaFromFormSchema,
     getValuesFromFormSchema,
-    updateFormResourceFromErrors,
-    updateFormSchemaValuesWithUrlParameters,
 } from '../../../helpers/formResources';
-import slugify from '../../../helpers/slugify';
 import { apiResourceCreateSuccessNotification } from '../../../helpers/toastNotification';
 import { replaceUrlParameters } from '../../../helpers/url';
 import {
@@ -66,32 +63,16 @@ const withCreateResource = ({
         constructor(props) {
             super(props);
 
-            this.forceUpdateSchema = this.forceUpdateSchema.bind(this);
             this.handleCKEditorImageFileUpload = this.handleCKEditorImageFileUpload.bind(this);
             this.handleCreateResource = this.handleCreateResource.bind(this);
-            this.setInputValueState = this.setInputValueState.bind(this);
-            this.updateInputValue = this.updateInputValue.bind(this);
 
             this.state = {
                 creatingResource: false,
                 imageUploadRejectPromise: null,
                 imageUploadResolvePromise: null,
-                formSchema: updateFormSchemaValuesWithUrlParameters(
-                    filterSchemaFromAttributes(updatedSchema, attributesSequenceToShow),
-                    props.urlParams
-                ),
-                resourceUnchanged: true,
                 toUpdateImages: [],
                 valuesSearcherCallbacks: {},
             };
-        }
-
-        forceUpdateSchema() {
-            const { formSchema } = this.state;
-
-            this.setState({
-                formSchema: filterSchemaFromAttributes(formSchema, attributesSequenceToShow),
-            });
         }
 
         handleCKEditorImageFileUpload(file, resolvePromise, rejectPromise) {
@@ -119,16 +100,19 @@ const withCreateResource = ({
         async handleCreateResource(evt) {
             evt.preventDefault();
 
-            const { createResource, token } = this.props;
-            const { formSchema } = this.state;
+            const {
+                createResource,
+                formSchema,
+                resetFormSchemaErrors,
+                setFormSchemaErrors,
+                token,
+            } = this.props;
             const values = getValuesFromFormSchema(formSchema);
             const validationSchema = getValidationSchemaFromFormSchema(formSchema);
             const data = { token, ...values };
 
             // Reset errors
-            this.setState({
-                formSchema: updateFormResourceFromErrors(formSchema, {inner:[]})
-            });
+            resetFormSchemaErrors();
 
             await yup.object(validationSchema)
                 .validate(
@@ -149,94 +133,16 @@ const withCreateResource = ({
                 .catch((errors) => {
                     // If validation does not passes
                     // Set errors in the form
-                    this.setState({
-                        formSchema: updateFormResourceFromErrors(formSchema, errors),
-                    });
+                    setFormSchemaErrors(errors);
                 });
-        }
-
-        setInputValueState(name, value) {
-            const { formSchema, resourceUnchanged } = this.state;
-            const newValue = {
-                formSchema: {
-                    ...formSchema,
-                    [name]: {
-                        ...formSchema[name],
-                        value,
-                    },
-                },
-            };
-
-            // We update the slug if it's the nameField
-            // and there is a slug available in the formSchema
-            if(name !== 'slug' && name === nameField && formSchema.slug) {
-                newValue.formSchema.slug = {
-                    ...formSchema.slug,
-                    value: slugify(value),
-                };
-            }
-
-            // Please don't split this set state into 2 separate ones,
-            // As doing so may introduce slightly odd bugs on CKEditor implementation
-            // Where 2 state updates in succession may fire the update with the old value
-            if(resourceUnchanged === true) {
-                // If the resource has not been changed
-                // We set the state to cater for that
-                this.setState({
-                    ...newValue,
-                    resourceUnchanged: false,
-                });
-            } else {
-                // Otherwise we simply set the new value
-                this.setState({
-                    ...newValue,
-                });
-            }
-        }
-
-        updateInputValue(evt, extra) {
-            // This means that a monkey-patched React-Select is updating data
-            if(extra && extra.action && extra.name) {
-
-                // A single-value selected option
-                if(extra.action === 'select-option' && evt.label && evt.value) {
-                    this.setInputValueState(extra.name, evt.value);
-                }
-
-                // A multiple-value selected option
-                else if(extra.action === 'select-option' && typeof evt.length !== 'undefined') {
-                    this.setInputValueState(extra.name, evt.map(option => {
-                        return option.value;
-                    }));
-                }
-
-                // A multiple value has removed a value
-                else if(extra.action === 'remove-value' && typeof evt.length !== 'undefined') {
-                    this.setInputValueState(extra.name, evt.map(option => {
-                        return option.value;
-                    }));
-                }
-
-                // The value has been cleared
-                else if(extra.action === 'clear') {
-                    // For a multiple select, we set the value to an empty array
-                    if(extra.multiple) {
-                        this.setInputValueState(extra.name, []);
-                    }
-
-                    // For a single select, we set it to null
-                    else {
-                        this.setInputValueState(extra.name, null);
-                    }
-                }
-            } else {
-                this.setInputValueState(evt.target.name, evt.target.value);
-            }
         }
 
         componentDidMount() {
-            const { token } = this.props;
-            const { formSchema } = this.state;
+            const {
+                formSchema,
+                setAllFormSchema,
+                token,
+            } = this.props;
 
             if(valuesFetchers.length > 0) {
                 // We loop the valuesFetchers from the formSchema
@@ -272,7 +178,7 @@ const withCreateResource = ({
 
                 // This function triggers a setState,
                 // Which will re-render the component with the updated formSchema
-                this.forceUpdateSchema();
+                setAllFormSchema(formSchema);
             }
         }
 
@@ -281,17 +187,18 @@ const withCreateResource = ({
                 created,
                 errors,
                 history,
+                formSchema,
                 image,
                 imageCreated,
                 imageErrors,
                 resource,
+                setAllFormSchema,
                 token,
                 updateImage,
                 urlParams,
             } = this.props;
             const {
                 creatingResource,
-                formSchema,
                 imageUploadRejectPromise,
                 imageUploadResolvePromise,
                 toUpdateImages,
@@ -422,7 +329,7 @@ const withCreateResource = ({
                 if(forceUpdateSchema === true) {
                     // This function triggers a setState,
                     // Which will re-render the component with the updated formSchema
-                    this.forceUpdateSchema();
+                    setAllFormSchema(formSchema);
                 }
             }
 
@@ -469,28 +376,31 @@ const withCreateResource = ({
                 });
 
                 if(Object.entries(newValues).length > 0) {
-                    // This function triggers a setState,
-                    // Which will re-render the component with the updated schema
-                    this.setState({
-                        formSchema: Object.entries(formSchema).reduce(
-                            (result, [name, fieldSchema]) => {
-                                if(!newValues[name]) {
-                                    return {
-                                        ...result,
-                                        [name]: fieldSchema,
-                                    };
-                                }
-
+                    const newSchema = Object.entries(formSchema).reduce(
+                        (result, [name, fieldSchema]) => {
+                            if(!newValues[name]) {
                                 return {
                                     ...result,
-                                    [name]: {
-                                        ...formSchema[name],
-                                        ...newValues[name],
-                                    },
+                                    [name]: fieldSchema,
                                 };
-                            },
-                            {}
-                        ),
+                            }
+
+                            return {
+                                ...result,
+                                [name]: {
+                                    ...formSchema[name],
+                                    ...newValues[name],
+                                },
+                            };
+                        },
+                        {}
+                    );
+
+                    // This function triggers a setState,
+                    // Which will re-render the component with the updated schema
+                    setAllFormSchema(newSchema);
+
+                    this.setState({
                         valuesSearcherCallbacks: Object.entries(valuesSearcherCallbacks).reduce(
                             (result, [name, callback]) => {
                                 if(!newCallbacks[name]) {
@@ -546,14 +456,11 @@ const withCreateResource = ({
 
             return (
                 <ComponentToWrap
-                    dispatchedValuesSearchers={dispatchedValuesSearchers}
-                    forceUpdateSchema={this.forceUpdateSchema}
-                    handleCKEditorImageFileUpload={this.handleCKEditorImageFileUpload}
-                    handleCreateResource={this.handleCreateResource}
-                    updateInputValue={this.updateInputValue}
-                    updateFormSchemaValuesWithUrlParameters={this.updateFormSchemaValuesWithUrlParameters}
                     {...this.props}
                     {...this.state}
+                    dispatchedValuesSearchers={dispatchedValuesSearchers}
+                    handleCKEditorImageFileUpload={this.handleCKEditorImageFileUpload}
+                    handleCreateResource={this.handleCreateResource}
                 />
             );
         }
@@ -635,7 +542,13 @@ const withCreateResource = ({
     return connect(
         mapStateToProps,
         mapDispatchToProps
-    )(CreateHOC);
+    )(
+        withUpdateFormSchema({
+            attributesSequenceToShow,
+            nameField,
+            schema,
+        })(CreateHOC)
+    );
 };
 
 export default withCreateResource;

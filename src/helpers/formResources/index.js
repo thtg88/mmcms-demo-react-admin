@@ -1,23 +1,27 @@
 import filterSchemaFromAttributes from './filterSchemaFromAttributes';
 import get from './get';
-import getFormGroupsFromResource from './getFormGroupsFromResource';
+import getFormGroupsFromSchema from './getFormGroupsFromSchema';
 import getFormResourceFromValues from './getFormResourceFromValues';
 import getSchemaValueFromKeyAndParameter from './getSchemaValueFromKeyAndParameter';
 import getSelectOptions from './getSelectOptions';
 import getTypeFromKey from './getTypeFromKey';
-import getValidationSchemaFromFormResource from './getValidationSchemaFromFormResource';
-import getValuesFromFormResource from './getValuesFromFormResource';
+import getValidationSchemaFromFormSchema from './getValidationSchemaFromFormSchema';
+import getValuesFromFormSchema from './getValuesFromFormSchema';
+import getValuesSearchersFromSchema from './getValuesSearchersFromSchema';
 import updateFormResourceFromErrors from './updateFormResourceFromErrors';
+import updateFormSchemaValuesWithUrlParameters from './updateFormSchemaValuesWithUrlParameters';
 
 export {
     filterSchemaFromAttributes,
     get,
-    getFormGroupsFromResource,
+    getFormGroupsFromSchema,
     getFormResourceFromValues,
     getSchemaValueFromKeyAndParameter,
     getSelectOptions,
     getTypeFromKey,
-    getValidationSchemaFromFormResource,
-    getValuesFromFormResource,
+    getValidationSchemaFromFormSchema,
+    getValuesFromFormSchema,
+    getValuesSearchersFromSchema,
     updateFormResourceFromErrors,
+    updateFormSchemaValuesWithUrlParameters,
 };

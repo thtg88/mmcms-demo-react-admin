@@ -5,21 +5,22 @@ import { connect } from 'react-redux';
 import queryString from 'query-string';
 import { animateScroll as scroll } from 'react-scroll';
 import * as yup from 'yup';
+import withUpdateFormSchema from '../withUpdateFormSchema';
 import { getApiErrorMessages, getApiWarningMessages } from '../../../helpers/apiMessages';
 import { getSelectOptions } from '../../../helpers/formResources';
 import {
     getFormResourceFromValues,
     getValidationSchemaFromFormSchema,
     getValuesFromFormSchema,
-    updateFormResourceFromErrors,
+    getValuesSearchersFromSchema,
 } from '../../../helpers/formResources';
-import slugify from '../../../helpers/slugify';
 import { replaceUrlParameters } from '../../../helpers/url';
 import {
     apiResourceCreateSuccessNotification,
     apiResourcePublishSuccessNotification,
     apiResourceRecoverSuccessNotification,
     apiResourceRegenerateSuccessNotification,
+    apiResourceSendCodeSuccessNotification,
     apiResourceUnpublishSuccessNotification,
     apiResourceUpdateSuccessNotification,
 } from '../../../helpers/toastNotification';
@@ -46,6 +47,7 @@ const withEditResource = ({
     resourceDisplayName,
     resourceTableName,
     schema,
+    sendCodeResource,
     unpublishResource,
     updateResource,
     urlParamsResourceIdCheckDisabled,
@@ -70,34 +72,31 @@ const withEditResource = ({
     // Which ultimately will allow us to update the updatedSchema with the transformed
     // resources returned
     // This is mainly used to populate select values with data coming from the API
-    const valuesSearchers = Object.entries(updatedSchema)
-        .filter(([name, params], idx) => typeof params.valuesSearcher !== 'undefined')
-        .map(([name, params], idx) => ({...params.valuesSearcher, name: name}));
+    const valuesSearchers = getValuesSearchersFromSchema(updatedSchema);
 
     class EditHOC extends Component {
         constructor(props) {
             super(props);
 
-            this.forceUpdateSchema = this.forceUpdateSchema.bind(this);
             this.handleCKEditorImageFileUpload = this.handleCKEditorImageFileUpload.bind(this);
             this.handleDestroyResource = this.handleDestroyResource.bind(this);
             this.handlePublishResource = this.handlePublishResource.bind(this);
             this.handleRecoverResource = this.handleRecoverResource.bind(this);
             this.handleRegenerateResource = this.handleRegenerateResource.bind(this);
+            this.handleSendCodeResource = this.handleSendCodeResource.bind(this);
             this.handleUnpublishResource = this.handleUnpublishResource.bind(this);
             this.handleUpdateResource = this.handleUpdateResource.bind(this);
             this.toggleDestroyResourceModal = this.toggleDestroyResourceModal.bind(this);
             this.togglePublishResourceModal = this.togglePublishResourceModal.bind(this);
             this.toggleRecoverResourceModal = this.toggleRecoverResourceModal.bind(this);
             this.toggleRegenerateResourceModal = this.toggleRegenerateResourceModal.bind(this);
+            this.toggleSendCodeResourceModal = this.toggleSendCodeResourceModal.bind(this);
             this.toggleUnpublishResourceModal = this.toggleUnpublishResourceModal.bind(this);
-            this.updateInputValue = this.updateInputValue.bind(this);
 
             const uriObj = queryString.parse(props.location.search);
 
             this.state = {
                 destroyingResource: false,
-                formSchema: null,
                 gettingResource: false,
                 hasSeo: false,
                 hasVariants: false,
@@ -107,25 +106,18 @@ const withEditResource = ({
                 isPublishResourceModalOpen: false,
                 isRecoverResourceModalOpen: false,
                 isRegenerateResourceModalOpen: false,
+                isSendCodeResourceModalOpen: false,
                 isRecovering: parseInt(uriObj.recovery, 10) === 1,
                 isUnpublishResourceModalOpen: false,
                 publishingResource: false,
                 recoveringResource: false,
                 regeneratingResource: false,
-                resourceUnchanged: true,
+                sendCodingResource: false,
                 unpublishingResource: false,
                 updatingResource: false,
                 valuesSearcherCallbacks: {},
                 variants: [],
             };
-        }
-
-        forceUpdateSchema() {
-            const { resource } = this.props;
-
-            this.setState({
-                formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
-            });
         }
 
         handleCKEditorImageFileUpload(file, resolvePromise, rejectPromise) {
@@ -210,6 +202,22 @@ const withEditResource = ({
             regenerateResource({ data });
         }
 
+        handleSendCodeResource(evt) {
+            evt.preventDefault();
+
+            const { sendCodeResource, token, urlParams } = this.props;
+            const data = {
+                id: urlParams.id,
+                token,
+            };
+
+            this.setState({
+                sendCodingResource: true,
+            });
+
+            sendCodeResource({ data });
+        }
+
         handleUnpublishResource(evt) {
             evt.preventDefault();
 
@@ -229,8 +237,14 @@ const withEditResource = ({
         async handleUpdateResource(evt) {
             evt.preventDefault();
 
-            const { updateResource, resource, token } = this.props;
-            const { formSchema } = this.state;
+            const {
+                formSchema,
+                resource,
+                resetFormSchemaErrors,
+                setFormSchemaErrors,
+                token,
+                updateResource,
+            } = this.props;
             const values = getValuesFromFormSchema(formSchema);
             const validationSchema = getValidationSchemaFromFormSchema(formSchema);
             const data = {
@@ -240,9 +254,7 @@ const withEditResource = ({
             };
 
             // Reset errors
-            this.setState({
-                formSchema: updateFormResourceFromErrors(formSchema, {inner:[]})
-            });
+            resetFormSchemaErrors();
 
             await yup.object(validationSchema)
                 .validate(
@@ -263,43 +275,8 @@ const withEditResource = ({
                 .catch((errors) => {
                     // If validation does not passes
                     // Set errors in the form
-                    this.setState({
-                        formSchema: updateFormResourceFromErrors(formSchema, errors)
-                    });
+                    setFormSchemaErrors(errors);
                 });
-        }
-
-        setInputValueState(name, value) {
-            const { formSchema, resourceUnchanged } = this.state;
-            const newValue = {
-                formSchema: Object.assign(formSchema, {
-                    [name]: Object.assign(formSchema[name], { value }),
-                }),
-            };
-
-            if(name !== 'slug' && name === nameField && formSchema.slug) {
-                newValue.formSchema.slug = {
-                    ...formSchema.slug,
-                    value: slugify(value),
-                };
-            }
-
-            // Please don't split this set state into 2 separate ones,
-            // As doing so may introduce slightly odd bugs on CKEditor implementation
-            // Where 2 state updates in succession may fire the update with the old value
-            if(resourceUnchanged === true) {
-                // If the resource has not been changed
-                // We set the state to cater for that
-                this.setState({
-                    ...newValue,
-                    resourceUnchanged: false,
-                });
-            } else {
-                // Otherwise we simply set the new value
-                this.setState({
-                    ...newValue,
-                });
-            }
         }
 
         toggleDestroyResourceModal(evt) {
@@ -334,6 +311,14 @@ const withEditResource = ({
             });
         }
 
+        toggleSendCodeResourceModal(evt) {
+            evt.preventDefault();
+
+            this.setState({
+                isSendCodeResourceModalOpen: !this.state.isSendCodeResourceModalOpen,
+            });
+        }
+
         toggleUnpublishResourceModal(evt) {
             evt.preventDefault();
 
@@ -342,45 +327,11 @@ const withEditResource = ({
             });
         }
 
-        updateInputValue(evt, extra) {
-            // This means that a monkey-patched React-Select is updating data
-            if(extra && extra.action && extra.name) {
-
-                // A single-value selected option
-                if(extra.action === 'select-option' && evt.label && evt.value) {
-                    this.setInputValueState(extra.name, evt.value);
-                }
-
-                // A multiple-value selected option
-                else if(extra.action === 'select-option' && typeof evt.length !== 'undefined') {
-                    this.setInputValueState(extra.name, evt.map(option => option.value));
-                }
-
-                // A multiple value has removed a value
-                else if(extra.action === 'remove-value' && typeof evt.length !== 'undefined') {
-                    this.setInputValueState(extra.name, evt.map(option => option.value));
-                }
-
-                // The value has been cleared
-                else if(extra.action === 'clear') {
-                    // For a multiple select, we set the value to an empty array
-                    if(extra.multiple) {
-                        this.setInputValueState(extra.name, []);
-                    }
-
-                    // For a single select, we set it to null
-                    else {
-                        this.setInputValueState(extra.name, null);
-                    }
-                }
-            } else {
-                this.setInputValueState(evt.target.name, evt.target.value);
-            }
-        }
-
         componentDidMount() {
             const {
                 findResource,
+                formSchema,
+                setAllFormSchema,
                 token,
                 urlParams,
             } = this.props;
@@ -401,7 +352,7 @@ const withEditResource = ({
                 findResource({ data });
             }
 
-            // We loop the valuesFetchers from the updatedSchema
+            // We loop the valuesFetchers from the formSchema
             // In order to check if we had resources in state,
             // If not we re-fetch them
             valuesFetchers.forEach((valuesFetcher, idx) => {
@@ -422,13 +373,13 @@ const withEditResource = ({
                         console.warn('couldn\'t load valuesFetcher', valuesFetcher);
                     }
 
-                    if(!updatedSchema[valuesFetcher.name].dontEnable) {
+                    if(!formSchema[valuesFetcher.name].dontEnable) {
                         // While we fetch them, we disable the input
                         // to give a visual feedback to the user
-                        updatedSchema[valuesFetcher.name].disabled = true;
+                        formSchema[valuesFetcher.name].disabled = true;
                     }
-                } else {
-                    // Otherwise we get them from state and update the updatedSchema,
+                } else if(formSchema[valuesFetcher.name]) {
+                    // Otherwise we get them from state and update the formSchema,
 
                     // If the fetcher reducer name is the same as the component reducerName
                     // i.e. I'm fetching the same kind of resource
@@ -437,16 +388,16 @@ const withEditResource = ({
                     const disabledValues = reducerName === valuesFetcher.reducerName
                         ? [urlParams.id]
                         : [];
-                    updatedSchema[valuesFetcher.name].values = getSelectOptions(
+                    formSchema[valuesFetcher.name].values = getSelectOptions(
                         this.props[valuesFetcher.reducerName].resources,
-                        updatedSchema[valuesFetcher.name].selectOptionText,
-                        updatedSchema[valuesFetcher.name].selectOptionValue,
+                        formSchema[valuesFetcher.name].selectOptionText,
+                        formSchema[valuesFetcher.name].selectOptionValue,
                         disabledValues
                     );
 
                     // This function triggers a setState,
-                    // Which will re-render the component with the updated updatedSchema
-                    this.forceUpdateSchema();
+                    // Which will re-render the component with the updated formSchema
+                    setAllFormSchema(formSchema);
                 }
             });
         }
@@ -455,6 +406,7 @@ const withEditResource = ({
             const {
                 destroyed,
                 errors,
+                formSchema,
                 history,
                 image,
                 imageCreated,
@@ -463,18 +415,20 @@ const withEditResource = ({
                 published,
                 recovered,
                 regenerated,
+                sendCoded,
+                setAllFormSchema,
                 unpublished,
                 updated,
                 urlParams,
             } = this.props;
             const {
                 destroyingResource,
-                formSchema,
                 imageUploadRejectPromise,
                 imageUploadResolvePromise,
                 publishingResource,
                 recoveringResource,
                 regeneratingResource,
+                sendCodingResource,
                 unpublishingResource,
                 updatingResource,
                 valuesSearcherCallbacks,
@@ -575,8 +529,11 @@ const withEditResource = ({
                     gettingResource: false,
                     isPublishResourceModalOpen: false,
                     publishingResource: false,
-                    formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
                 });
+
+                setAllFormSchema(
+                    getFormResourceFromValues(resource, formSchema, attributesSequenceToShow)
+                );
             }
 
             // This means that I was recovering the resource,
@@ -601,6 +558,10 @@ const withEditResource = ({
                 recoveringResource === true
                 && recovered === true
             ) {
+                setAllFormSchema(
+                    getFormResourceFromValues(resource, formSchema, attributesSequenceToShow)
+                );
+
                 apiResourceRecoverSuccessNotification({
                     resourceDisplayName: resourceDisplayName ? resourceDisplayName : undefined
                 });
@@ -610,7 +571,6 @@ const withEditResource = ({
                     isRecovering: false,
                     isRecoverResourceModalOpen: false,
                     recoveringResource: false,
-                    formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
                     resourceUnchanged: true,
                 });
 
@@ -645,10 +605,49 @@ const withEditResource = ({
 
                 this.setState({
                     gettingResource: false,
-                    formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
                     isRegenerateResourceModalOpen: false,
                     regeneratingResource: false,
                 });
+
+                setAllFormSchema(
+                    getFormResourceFromValues(resource, formSchema, attributesSequenceToShow)
+                );
+            }
+
+            // This means that I was regenerating the resource,
+            // And I received errors from the store
+            // So it's time to restore the Recover button
+            else if(
+                sendCodingResource === true
+                && typeof errors.length !== 'undefined'
+                && errors.length !== 0
+            ) {
+                this.setState({
+                    sendCodingResource: false,
+                    isSendCodeResourceModalOpen: false,
+                });
+            }
+
+            // This means that I was sendCoding the resource,
+            // And I received an sendCoded from the store
+            // So it's time to restore the SendCode button
+            else if(
+                sendCodingResource === true
+                && sendCoded === true
+            ) {
+                apiResourceSendCodeSuccessNotification({
+                    resourceDisplayName: resourceDisplayName ? resourceDisplayName : undefined
+                });
+
+                this.setState({
+                    gettingResource: false,
+                    isSendCodeResourceModalOpen: false,
+                    sendCodingResource: false,
+                });
+
+                setAllFormSchema(
+                    getFormResourceFromValues(resource, formSchema, attributesSequenceToShow)
+                );
             }
 
             // This means that I was unpublishing the resource,
@@ -680,9 +679,12 @@ const withEditResource = ({
                 this.setState({
                     gettingResource: false,
                     isUnpublishResourceModalOpen: false,
-                    formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
                     unpublishingResource: false,
                 });
+
+                setAllFormSchema(
+                    getFormResourceFromValues(resource, formSchema, attributesSequenceToShow)
+                );
             }
 
             // If component is receiving props
@@ -713,10 +715,10 @@ const withEditResource = ({
                                 // If there's an attribute with that name,
                                 // And it's either an object or an array
                                 // We update the schema
-                                updatedSchema[valuesSearcher.name].values = getSelectOptions(
+                                formSchema[valuesSearcher.name].values = getSelectOptions(
                                     resource[relationshipName].constructor === Array ? resource[relationshipName] : [resource[relationshipName]],
-                                    updatedSchema[valuesSearcher.name].selectOptionText,
-                                    updatedSchema[valuesSearcher.name].selectOptionValue
+                                    formSchema[valuesSearcher.name].selectOptionText,
+                                    formSchema[valuesSearcher.name].selectOptionValue
                                 );
                             }
                         }
@@ -724,10 +726,13 @@ const withEditResource = ({
                 }
 
                 this.setState({
-                    formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
                     gettingResource: false,
                     updatingResource: false,
                 });
+
+                setAllFormSchema(
+                    getFormResourceFromValues(resource, formSchema, attributesSequenceToShow)
+                );
             }
 
             else if(
@@ -738,10 +743,13 @@ const withEditResource = ({
                 // If the id changes, chances are we are remounting the component
                 // With a different resource, so reset schema
                 this.setState({
-                    formSchema: getFormResourceFromValues(resource, updatedSchema, attributesSequenceToShow),
                     gettingResource: false,
                     updatingResource: false,
                 });
+
+                setAllFormSchema(
+                    getFormResourceFromValues(resource, formSchema, attributesSequenceToShow)
+                );
             }
 
             // This means that if I was creating/destroying the image,
@@ -809,14 +817,14 @@ const withEditResource = ({
                         const disabledValues = reducerName === valuesFetcher.reducerName
                             ? [urlParams.id]
                             : [];
-                        updatedSchema[valuesFetcher.name].values = getSelectOptions(
+                        formSchema[valuesFetcher.name].values = getSelectOptions(
                             this.props[valuesFetcher.reducerName].resources,
-                            updatedSchema[valuesFetcher.name].selectOptionText,
-                            updatedSchema[valuesFetcher.name].selectOptionValue,
+                            formSchema[valuesFetcher.name].selectOptionText,
+                            formSchema[valuesFetcher.name].selectOptionValue,
                             disabledValues
                         );
-                        if(!updatedSchema[valuesFetcher.name].dontEnable) {
-                            updatedSchema[valuesFetcher.name].disabled = false;
+                        if(!formSchema[valuesFetcher.name].dontEnable) {
+                            formSchema[valuesFetcher.name].disabled = false;
                         }
 
                         forceUpdateSchema = true;
@@ -826,7 +834,9 @@ const withEditResource = ({
                 if(forceUpdateSchema === true) {
                     // This function triggers a setState,
                     // Which will re-render the component with the updated updatedSchema
-                    this.forceUpdateSchema();
+                    setAllFormSchema(
+                        getFormResourceFromValues(resource, formSchema, attributesSequenceToShow)
+                    );
                 }
             }
 
@@ -851,8 +861,8 @@ const withEditResource = ({
 
                         newValues[valuesSearcher.name].values = getSelectOptions(
                             this.props[valuesSearcher.reducerName].resources,
-                            updatedSchema[valuesSearcher.name].selectOptionText,
-                            updatedSchema[valuesSearcher.name].selectOptionValue
+                            formSchema[valuesSearcher.name].selectOptionText,
+                            formSchema[valuesSearcher.name].selectOptionValue
                         );
                         if(!updatedSchema[valuesSearcher.name].dontEnable) {
                             newValues[valuesSearcher.name].disabled = false;
@@ -873,28 +883,31 @@ const withEditResource = ({
                 });
 
                 if(Object.entries(newValues).length > 0) {
-                    // This function triggers a setState,
-                    // Which will re-render the component with the updated schema
-                    this.setState({
-                        formSchema: Object.entries(formSchema).reduce(
-                            (result, [name, fieldSchema]) => {
-                                if(!newValues[name]) {
-                                    return {
-                                        ...result,
-                                        [name]: fieldSchema,
-                                    };
-                                }
-
+                    const newSchema = Object.entries(formSchema).reduce(
+                        (result, [name, fieldSchema]) => {
+                            if(!newValues[name]) {
                                 return {
                                     ...result,
-                                    [name]: {
-                                        ...formSchema[name],
-                                        ...newValues[name],
-                                    },
+                                    [name]: fieldSchema,
                                 };
-                            },
-                            {}
-                        ),
+                            }
+
+                            return {
+                                ...result,
+                                [name]: {
+                                    ...formSchema[name],
+                                    ...newValues[name],
+                                },
+                            };
+                        },
+                        {}
+                    );
+
+                    // This function triggers a setState,
+                    // Which will re-render the component with the updated schema
+                    setAllFormSchema(newSchema);
+
+                    this.setState({
                         valuesSearcherCallbacks: Object.entries(valuesSearcherCallbacks).reduce(
                             (result, [name, callback]) => {
                                 if(!newCallbacks[name]) {
@@ -950,14 +963,16 @@ const withEditResource = ({
 
             return (
                 <ComponentToWrap
+                    {...this.props}
+                    {...this.state}
                     dispatchedValuesSearchers={dispatchedValuesSearchers}
-                    forceUpdateSchema={this.forceUpdateSchema}
                     handleCKEditorImageFileUpload={this.handleCKEditorImageFileUpload}
                     handleDestroyResource={this.handleDestroyResource}
                     handleGenerateVariants={this.handleGenerateVariants}
                     handlePublishResource={this.handlePublishResource}
                     handleRecoverResource={this.handleRecoverResource}
                     handleRegenerateResource={this.handleRegenerateResource}
+                    handleSendCodeResource={this.handleSendCodeResource}
                     handleSetVariantSelectedAttributeTypeId={this.handleSetVariantSelectedAttributeTypeId}
                     handleSetVariantSelectedAttributeValueId={this.handleSetVariantSelectedAttributeValueId}
                     handleUnpublishResource={this.handleUnpublishResource}
@@ -966,10 +981,8 @@ const withEditResource = ({
                     togglePublishResourceModal={this.togglePublishResourceModal}
                     toggleRecoverResourceModal={this.toggleRecoverResourceModal}
                     toggleRegenerateResourceModal={this.toggleRegenerateResourceModal}
+                    toggleSendCodeResourceModal={this.toggleSendCodeResourceModal}
                     toggleUnpublishResourceModal={this.toggleUnpublishResourceModal}
-                    updateInputValue={this.updateInputValue}
-                    {...this.props}
-                    {...this.state}
                 />
             );
         }
@@ -985,6 +998,7 @@ const withEditResource = ({
             recovered,
             regenerated,
             resource,
+            sendCoded,
             unpublished,
             updated,
             variantsGenerated,
@@ -1012,6 +1026,7 @@ const withEditResource = ({
             published,
             recovered,
             regenerated,
+            sendCoded,
             token,
             unpublished,
             updated,
@@ -1057,6 +1072,7 @@ const withEditResource = ({
         publishResource,
         recoverResource,
         regenerateResource,
+        sendCodeResource,
         unpublishResource,
         updateImage,
         updateResource,
@@ -1075,7 +1091,13 @@ const withEditResource = ({
     return connect(
         mapStateToProps,
         mapDispatchToProps
-    )(EditHOC);
+    )(
+        withUpdateFormSchema({
+            attributesSequenceToShow,
+            nameField,
+            schema,
+        })(EditHOC)
+    );
 };
 
 export default withEditResource;

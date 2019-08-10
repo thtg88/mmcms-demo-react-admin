@@ -1,17 +1,18 @@
-const getFormGroupsFromResource = (
-    resource,
+const getFormGroupsFromSchema = (
+    formSchema,
     onInputChange,
     isRecovering,
-    onCKEditorImageUpload
+    onCKEditorImageUpload,
+    dispatchedValuesSearchers
 ) => {
-    if(!resource) {
+    if(!formSchema) {
         return [];
     }
 
-    return Object.entries(resource).filter(([name, params], idx) => {
+    return Object.entries(formSchema).filter(([name, params], idx) => {
         if(
             // We skip everything that's not undefined
-            typeof resource[name] === 'undefined'
+            typeof formSchema[name] === 'undefined'
             // we skip id
             || name === 'id'
         ) {
@@ -28,6 +29,12 @@ const getFormGroupsFromResource = (
         return true;
 
     }).map(([name, params], idx) => {
+        const closeOnSelect = params.closeOnSelect
+            ? params.closeOnSelect
+            : undefined;
+        const dateFormat = params.dateFormat
+            ? params.dateFormat
+            : undefined;
         const disabled = isRecovering === true
             ? true
             : (
@@ -35,50 +42,75 @@ const getFormGroupsFromResource = (
                     ? params.disabled
                     : false
             );
-        const label = params.label
-            ? params.label
-            : name.charAt(0).toUpperCase()+name.substr(1).replace('_', ' ');
-        const placeholder = params.placeholder
-            ? params.placeholder
-            : `Enter the ${label}`;
-        const type = params.type
-            ? params.type
-            : "text";
-        const value = params.value === null
-            ? ''
-            : params.value;
-        const errors = params.errors
-            ? params.errors
-            : [];
         const emptyOption = params.emptyOption
             ? params.emptyOption
             : '';
-        const values = params.values
-            ? params.values
+        const errors = params.errors
+            ? params.errors
             : [];
         const formText = params.formText
             ? params.formText
             : null;
+        const isValidDate = params.isValidDate
+            ? params.isValidDate
+            : undefined;
+        const label = params.label
+            ? params.label
+            : name.charAt(0).toUpperCase()+name.substr(1).replace('_', ' ');
         const multiple = params.multiple
             ? params.multiple
             : false;
-        const dateFormat = params.dateFormat
-            ? params.dateFormat
+        const multipleSelectLimit = params.multipleSelectLimit
+            ? params.multipleSelectLimit
+            : undefined;
+        const placeholder = params.placeholder
+            ? params.placeholder
+            : `Enter the ${label}`;
+        const rows = params.rows
+            ? params.rows
+            : undefined;
+        const step = params.step
+            ? params.step
             : undefined;
         const timeFormat = params.timeFormat
             ? params.timeFormat
             : false;
-        const isValidDate = params.isValidDate
-            ? params.isValidDate
+        const type = params.type
+            ? params.type
+            : 'text';
+        const value = params.value === null
+            ? ''
+            : params.value;
+        const values = params.values
+            ? params.values
+            : [];
+        const style = params.style
+            ? params.style
             : undefined;
-        const closeOnSelect = params.closeOnSelect
-            ? params.closeOnSelect
+        const timeConstraints = params.timeConstraints
+            ? params.timeConstraints
             : undefined;
-        const rows = params.rows
-            ? params.rows
+        const content = params.content
+            ? params.content
             : undefined;
-        const multipleSelectLimit = params.multipleSelectLimit
-            ? params.multipleSelectLimit
+        const min = params.min
+            ? params.min
+            : undefined;
+
+        // This allows for a function to be dispatched on search
+        // For now it only applies to react-select as a type
+        if(params.valuesSearcher && params.valuesSearcher.searcherName) {
+            // Check if there is a dispatchedValuesSearcher
+            const dispatchedValuesSearchersFunctions = Object.entries(dispatchedValuesSearchers)
+                .filter(([searcherName, dispatchedValuesSearcher], idx) => params.valuesSearcher.searcherName === searcherName)
+                .map(tempDispatchedValuesSearcher => tempDispatchedValuesSearcher[1]);
+
+            if(dispatchedValuesSearchersFunctions.length > 0) {
+                params.onReactSelectAsyncLoadOptions = dispatchedValuesSearchersFunctions[0];
+            }
+        }
+        const onReactSelectAsyncLoadOptions = params.onReactSelectAsyncLoadOptions
+            ? params.onReactSelectAsyncLoadOptions
             : undefined;
 
         if(type === 'react-select') {
@@ -107,17 +139,19 @@ const getFormGroupsFromResource = (
                 );
 
             return {
-                disabled: disabled,
+                disabled,
+                label,
+                name,
+                multiple,
+                multipleSelectLimit,
+                onReactSelectAsyncLoadOptions,
+                placeholder,
+                style,
+                type,
                 formFeedbackText: errors.length ? errors.join('. ') : null,
                 key: name,
                 invalid: errors.length > 0,
-                label: label,
-                multiple: multiple,
-                multipleSelectLimit: multipleSelectLimit,
-                name: name,
                 onChange: (selectedOption, extra) => onInputChange(selectedOption, {...extra, name, multiple}),
-                placeholder: placeholder,
-                type: type,
                 value: reactSelectValue,
                 values: values.map(option => ({ ...option, label: option.text })),
             };
@@ -125,74 +159,81 @@ const getFormGroupsFromResource = (
 
         if(type === 'checkbox') {
             return {
+                disabled,
+                formText,
+                name,
+                style,
+                type,
+                value,
                 checked: value === 1,
                 className: 'pb-3',
-                disabled: disabled,
                 formFeedbackText: errors.length ? errors.join('. ') : null,
-                formText: formText,
                 invalid: errors.length > 0,
                 key: name,
                 label: ` ${label}`,
-                name: name,
                 onChange: onInputChange,
-                type: type,
-                value: value,
             };
         }
 
         if(type === 'hidden') {
             return {
-                disabled: disabled,
-                formText: formText,
+                disabled,
+                formText,
+                name,
+                type,
+                value,
                 key: name,
-                name: name,
                 onChange: onInputChange,
-                type: type,
-                value: value,
             };
         }
 
-        if(type === 'datetime') {
+        if(type === 'react-datetime') {
             return {
-                closeOnSelect: closeOnSelect,
-                dateFormat: dateFormat,
-                disabled: disabled,
+                closeOnSelect,
+                dateFormat,
+                disabled,
+                formText,
+                isValidDate,
+                label,
+                name,
+                placeholder,
+                style,
+                timeConstraints,
+                timeFormat,
+                type,
+                value,
                 formFeedbackText: errors.length ? errors.join('. ') : null,
-                formText: formText,
                 invalid: errors.length > 0,
-                isValidDate: isValidDate,
                 key: name,
-                label: label,
                 locale: 'en-gb',
-                name: name,
                 onChange: onInputChange,
-                placeholder: placeholder,
-                timeFormat: timeFormat,
-                type: type,
-                value: value,
                 viewMode: 'days',
             };
         }
 
         return {
-            disabled: disabled,
-            emptyOption: emptyOption,
+            content,
+            disabled,
+            emptyOption,
+            formText,
+            label,
+            min,
+            multiple,
+            name,
+            onCKEditorImageUpload,
+            placeholder,
+            rows,
+            step,
+            style,
+            type,
+            value,
+            values,
             formFeedbackText: errors.length ? errors.join('. ') : null,
-            formText: formText,
             invalid: errors.length > 0,
             key: name,
-            label: label,
-            multiple: multiple,
-            name: name,
-            onCKEditorImageUpload: onCKEditorImageUpload,
             onChange: onInputChange,
-            placeholder: placeholder,
-            rows: rows,
-            type: type,
-            value: value,
-            values: values,
         };
     });
 };
 
-export default getFormGroupsFromResource;
+export default getFormGroupsFromSchema;
