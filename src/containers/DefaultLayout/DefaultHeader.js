@@ -6,10 +6,10 @@ import {
     DropdownMenu,
     DropdownToggle,
     Nav,
-    NavItem
+    NavItem,
+    UncontrolledDropdown,
 } from 'reactstrap';
 import {
-    AppHeaderDropdown,
     AppNavbarBrand,
     AppSidebarToggler
 } from '@coreui/react';
@@ -55,7 +55,7 @@ export class DefaultHeader extends Component {
                     </NavItem>
                 </Nav>
                 <Nav className="ml-auto" navbar>
-                    <AppHeaderDropdown direction="down">
+                    <UncontrolledDropdown direction="down">
                         <DropdownToggle nav>
                             <img
                                 src={process.env.PUBLIC_URL+"/assets/img/avatars/6.jpg"}
@@ -73,7 +73,7 @@ export class DefaultHeader extends Component {
                                 <i className="fa fa-sign-out"></i> Logout
                             </DropdownItem>
                         </DropdownMenu>
-                    </AppHeaderDropdown>
+                    </UncontrolledDropdown>
                 </Nav>
             </>
         );
