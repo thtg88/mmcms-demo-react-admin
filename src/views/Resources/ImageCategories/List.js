@@ -21,7 +21,6 @@ import {
 
 export const List = ({
     fetching_resources,
-    history,
     isRecovering,
     onRecoverClick,
     onRecoverDoneClick,
@@ -59,24 +58,24 @@ export const List = ({
 
     return (
         <ListResource
+            {...props}
             actions={actions}
             columns={columns}
             currentPage={page}
             fetchingResources={fetching_resources}
-            history={history}
             keyField={keyField}
             listgroupItemTag="button"
             listType="list"
             nameField={nameField}
             pageSize={pageSize}
-            resourceBaseRoute={reducerName}
+            resourceBaseRoute={resourceBaseRoute}
             resources={paginated_resources}
             resourcesDisplayName={resourcesDisplayName}
             searchEnabled={true}
             searchQuery={query}
             searchTextInputPlaceholder={searchTextInputPlaceholder}
             sortingOptions={sortingOptions}
-            urlBuilder={(entity) => history.push(`/${resourceBaseRoute}/${entity.id}${isRecovering === true ? '?recovery=1' : ''}`)}
+            urlBuilder={(entity) => props.history.push(`/${resourceBaseRoute}/${entity.id}${isRecovering === true ? '?recovery=1' : ''}`)}
         />
     );
 };
