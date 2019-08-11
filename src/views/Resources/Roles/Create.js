@@ -9,37 +9,23 @@ import {
 import reducer from '../../../redux/roles/reducers';
 import sagas from '../../../redux/roles/sagas';
 import {
+    attributesSequenceToShow,
     reducerName,
+    resourceBaseRoute,
+    resourceDisplayName,
     schema,
 } from '../../../redux/roles/schema';
 
 reducerRegistry.register(reducerName, reducer);
 sagaRegistry.register(reducerName, sagas);
 
-export const Create = ({
-    creating_resource,
-    errors,
-    handleCreateResource,
-    resource,
-    resource_unchanged,
-    updateInputValue,
-}) => {
-    return (
-        <CreateResource
-            creatingResource={creating_resource}
-            errors={errors}
-            handleCreateResource={handleCreateResource}
-            resource={resource}
-            resourceUnchanged={resource_unchanged}
-            updateInputValue={updateInputValue}
-        />
-    );
-};
+export const Create = props => <CreateResource {...props} resourceDisplayName={resourceDisplayName} />;
 
 export default withCreateResource({
+    attributesSequenceToShow,
     clearMetadataResourceCreate,
     createResource,
     schema,
-    resourceBaseRoute: reducerName,
+    resourceBaseRoute,
     reducerName,
 })(Create);
