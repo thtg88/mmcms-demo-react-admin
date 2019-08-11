@@ -37,21 +37,35 @@ class App extends Component {
             <>
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path="/login" name="Login Page" render={(props) => (
-                            <ErrorBoundary>
-                                <GuestComponent>
-                                    <Login {...props} />
-                                </GuestComponent>
-                            </ErrorBoundary>
-                        )} />
-                        <Route exact path="/register" name="Register Page" render={(props) => (
-                            <ErrorBoundary>
-                                <GuestComponent>
-                                    <Register {...props} />
-                                </GuestComponent>
-                            </ErrorBoundary>
-                        )} />
-                        <Route path="/" name="Home" component={DefaultLayout} />
+                        <Route
+                            exact
+                            path="/login"
+                            name="Login Page"
+                            render={(props) => (
+                                <ErrorBoundary>
+                                    <GuestComponent>
+                                        <Login {...props} />
+                                    </GuestComponent>
+                                </ErrorBoundary>
+                            )}
+                        />
+                        <Route
+                            exact
+                            path="/register"
+                            name="Register Page"
+                            render={(props) => (
+                                <ErrorBoundary>
+                                    <GuestComponent>
+                                        <Register {...props} />
+                                    </GuestComponent>
+                                </ErrorBoundary>
+                            )}
+                        />
+                        <Route
+                            path="/"
+                            name="Home"
+                            component={DefaultLayout}
+                        />
                     </Switch>
                 </BrowserRouter>
                 <ToastContainer
