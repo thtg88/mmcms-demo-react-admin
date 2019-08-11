@@ -55,7 +55,7 @@ export class DefaultHeader extends Component {
                     </NavItem>
                 </Nav>
                 <Nav className="ml-auto" navbar>
-                    <UncontrolledDropdown direction="down">
+                    <UncontrolledDropdown className="nav-item" direction="down">
                         <DropdownToggle nav>
                             <img
                                 src={process.env.PUBLIC_URL+"/assets/img/avatars/6.jpg"}
