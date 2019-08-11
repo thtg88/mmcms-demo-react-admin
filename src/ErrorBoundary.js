@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { configureScope, captureException } from '@sentry/browser';
+import { captureException } from '@sentry/browser';
 import { Link } from 'react-router-dom';
 import {
     Button,
@@ -32,12 +32,6 @@ class ErrorBoundary extends Component {
             && REACT_APP_SENTRY_PROJECT_ID !== ''
         ) {
             // If app in production, send error to Sentry
-            configureScope(scope => {
-                Object.keys(errorInfo).forEach(key => {
-                    scope.setExtra(key, errorInfo[key]);
-                });
-            });
-
             captureException(error);
         }
     }
