@@ -10,6 +10,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Fixed
 - Selection of role for user
 
+## [0.19.0] - 2019-08-11
+### Added
+- CKEditor ImageBrowser support
+- New Toast notifications support
+- URL helpers
+- withUpdateFormSchema HOC unifies common functionality of withCreateResource and withEditResource HOCs
+### Changed
+- Decreased number of props passed directly to Resources components
+- Dependencies major versions upgrade
+- General improvements
+- Improved Helmet support
+- Moved API messages helpers to dedicated module
+- Moved mostly Redux handling to base handlers
+- Re-structured Redux handlers
+### Fixed
+- General bug fixes
+- Header dropdown styling
+### Removed
+- HMR from index
+
 ## [0.18.1] - 2019-03-16
 ### Fixed
 - pageSize import in Edit components
