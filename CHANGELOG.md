@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Fixed
 - Selection of role for user
 
+## [0.19.1] - 2019-08-14
+### Added
+- Usage of React Redux's useSelector hook in certain components
+### Changed
+- Dependencies Major version upgrades
+
 ## [0.19.0] - 2019-08-11
 ### Added
 - CKEditor ImageBrowser support
