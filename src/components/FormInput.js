@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import DateTime from 'react-datetime';
 import Select from 'react-select';
-import AsyncSelect from 'react-select/lib/Async';
+import AsyncSelect from 'react-select/async';
 import { CKEditorFormInput } from './CKEditor';
 import moment from 'moment';
 import { momentSqlFormat } from '../helpers/dates';
