@@ -31,29 +31,24 @@ export const roleValuesFetcher = {
 
 export const columns = [
     {
-        dataField: 'id',
-        text: 'ID',
-        className: 'col-md-12',
-    },
-    {
-        dataField: 'first_name',
-        text: 'Name',
-        className: 'col-md-5 col-12',
-    },
-    {
-        dataField: 'last_name',
-        text: 'Name',
-        className: 'col-md-5 col-12',
-    },
-    {
         dataField: 'email',
         text: 'Email',
+        className: 'col-md-12 col-12',
+    },
+    {
+        dataField: 'id',
+        text: 'ID',
+        className: 'col-md-3 col-12',
+    },
+    {
+        dataField: 'name',
+        text: 'Name',
         className: 'col-md-5 col-12',
     },
     {
         dataField: 'role.display_name',
         text: 'Role',
-        className: 'col-md-2 col-12',
+        className: 'col-md-4 col-12',
     },
     {
         dataField: 'created_at',
