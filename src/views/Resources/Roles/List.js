@@ -14,6 +14,7 @@ import {
     nameField,
     pageSize,
     reducerName,
+    resourceBaseRoute,
     resourceDisplayName,
     resourcesDisplayName,
     searchTextInputPlaceholder,
@@ -33,7 +34,7 @@ export const List = ({
     const actions = [
         {
             className: 'btn-success',
-            href: '/'+reducerName+'/create',
+            href: '/'+resourceBaseRoute+'/create',
             title: 'New '+resourceDisplayName,
             type: 'link',
             iconClassName: 'fa fa-plus',
@@ -69,7 +70,7 @@ export const List = ({
             listType="list"
             nameField={nameField}
             pageSize={pageSize}
-            resourceBaseRoute={reducerName}
+            resourceBaseRoute={resourceBaseRoute}
             resources={paginated_resources}
             resourcesDisplayName={resourcesDisplayName}
             searchEnabled={true}
@@ -91,6 +92,6 @@ export default withListResource({
     resourceDisplayName,
     sagas,
     sortingOptions,
-    resourceBaseRoute: reducerName,
     reducerName,
+    resourceBaseRoute,
 })(List);

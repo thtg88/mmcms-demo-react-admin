@@ -14,6 +14,7 @@ import {
     nameField,
     pageSize,
     reducerName,
+    resourceBaseRoute,
     resourceDisplayName,
     resourcesDisplayName,
     searchTextInputPlaceholder,
@@ -69,7 +70,7 @@ export const List = ({
             listType="list"
             nameField={nameField}
             pageSize={pageSize}
-            resourceBaseRoute={reducerName}
+            resourceBaseRoute={resourceBaseRoute}
             resources={paginated_resources}
             resourcesDisplayName={resourcesDisplayName}
             searchEnabled={true}
@@ -90,7 +91,7 @@ export default withListResource({
     reducerName,
     reducers,
     resourceDisplayName,
+    resourceBaseRoute,
     sagas,
     sortingOptions,
-    resourceBaseRoute: reducerName,
 })(List);
