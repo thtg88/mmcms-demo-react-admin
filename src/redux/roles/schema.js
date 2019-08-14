@@ -28,7 +28,7 @@ export const columns = [
         className: 'col-md-4 col-12',
     },
     {
-        dataField: 'triviality',
+        dataField: 'priority',
         text: 'Priority',
         className: 'col-md-12',
     },
@@ -43,12 +43,12 @@ export const columns = [
 export const sortingOptions = [
     {
         display_name: 'Priority',
-        name: 'triviality',
+        name: 'priority',
         direction: 'asc',
     },
     {
         display_name: 'Priority',
-        name: 'triviality',
+        name: 'priority',
         direction: 'desc',
     },
     {
@@ -92,7 +92,7 @@ export const schema = {
             .max(255),
         errors: [],
     },
-    triviality: {
+    priority: {
         type: 'number',
         value: '',
         rules: yup.number()
@@ -106,5 +106,5 @@ export const schema = {
 export const attributesSequenceToShow = [
     'display_name',
     'name',
-    'triviality',
+    'priority',
 ];
