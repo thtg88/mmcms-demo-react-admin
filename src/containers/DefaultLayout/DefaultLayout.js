@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import queryString from 'query-string';
 import { Container } from 'reactstrap';
 import {
@@ -25,7 +25,8 @@ import navigation from '../../_nav';
 import routes from '../../routes';
 
 const DefaultLayout = props => {
-    const { location, logging_out } = props;
+    const { location } = props;
+    const logging_out = useSelector(state => state.auth.logging_out === true);
 
     return (
         <div className="app">
@@ -37,8 +38,8 @@ const DefaultLayout = props => {
                     <AppSidebarHeader />
                     <AppSidebarForm />
                     <AppSidebarNav
-                        navConfig={navigation}
                         {...props}
+                        navConfig={navigation}
                     />
                     <AppSidebarFooter />
                     <AppSidebarMinimizer />
@@ -85,14 +86,4 @@ const DefaultLayout = props => {
     );
 };
 
-const mapStateToProps = state => {
-    const { logging_out } = state.auth;
-
-    return {
-        logging_out: logging_out === true,
-    };
-};
-
-export default connect(
-    mapStateToProps
-)(DefaultLayout);
+export default DefaultLayout;

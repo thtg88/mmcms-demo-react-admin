@@ -1,24 +1,18 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const GuestComponent = ({
-    children,
-    logged_in,
-}) => (
-    logged_in
-        ? <Redirect to="/" />
-        : children
-);
+const GuestComponent = ({ children }) => {
+    const logged_in = useSelector(state => (
+        typeof state.auth.token !== 'undefined'
+        && state.auth.token !== null
+    ));
 
-const mapStateToProps = state => {
-    const { token } = state.auth;
+    if(logged_in) {
+        return <Redirect to="/" />;
+    }
 
-    return {
-        logged_in: typeof token !== 'undefined' && token !== null,
-    };
+    return children;
 };
 
-export default connect(
-    mapStateToProps
-)(GuestComponent);
+export default GuestComponent;
