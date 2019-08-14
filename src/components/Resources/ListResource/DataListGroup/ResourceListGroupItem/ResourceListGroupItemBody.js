@@ -12,10 +12,7 @@ const ResourceListGroupItemBody = ({
     <Row>
         {
             columns.map((column, idx) => {
-                if(
-                    column.dataField === keyField
-                    || column.dataField === nameField
-                ) {
+                if(column.dataField === nameField) {
                     return null;
                 }
 
