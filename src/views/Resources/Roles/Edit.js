@@ -1,7 +1,5 @@
 import React from 'react';
 import EditResourceContainer, { withEditResource } from '../../../components/Resources/EditResource';
-import reducerRegistry from '../../../redux/reducerRegistry';
-import sagaRegistry from '../../../redux/sagaRegistry';
 import {
     clearMetadataResourceEdit,
     destroyResource,
@@ -9,7 +7,7 @@ import {
     getPaginatedResources,
     updateResource,
 } from '../../../redux/roles/actions';
-import reducer from '../../../redux/roles/reducers';
+import reducers from '../../../redux/roles/reducers';
 import sagas from '../../../redux/roles/sagas';
 import {
     attributesSequenceToShow,
@@ -21,9 +19,6 @@ import {
     resourceDisplayName,
     schema,
 } from '../../../redux/roles/schema';
-
-reducerRegistry.register(reducerName, reducer);
-sagaRegistry.register(reducerName, sagas);
 
 export const Edit = ({
     gettingResource,
@@ -65,8 +60,10 @@ export default withEditResource({
     nameField,
     pageSize,
     reducerName,
+    reducers,
     resourceBaseRoute,
     resourceDisplayName,
+    sagas,
     schema,
     updateResource,
 })(Edit);

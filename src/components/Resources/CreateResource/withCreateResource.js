@@ -13,6 +13,8 @@ import {
 } from '../../../helpers/formResources';
 import { apiResourceCreateSuccessNotification } from '../../../helpers/toastNotification';
 import { replaceUrlParameters } from '../../../helpers/url';
+import reducerRegistry from '../../../redux/reducerRegistry';
+import sagaRegistry from '../../../redux/sagaRegistry';
 import {
     createResource as createImage,
     // destroyResource as destroyImage,
@@ -30,11 +32,21 @@ const withCreateResource = ({
     nameField,
     redirectUrlAfterCreate,
     reducerName,
+    reducers,
     resourceBaseRoute,
     resourceDisplayName,
     resourceTableName,
+    sagas,
     schema,
 }) => (ComponentToWrap) => {
+    if(typeof reducers === 'function') {
+        reducerRegistry.register(reducerName, reducers);
+    }
+
+    if(sagas) {
+        sagaRegistry.register(reducerName, sagas);
+    }
+
     // We deep copy schema so we are sure we are working with a fresh copy
     // e.g. no wiriting on old references or for next time we use schema
     const updatedSchema = cloneDeep(schema);

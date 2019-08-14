@@ -1,13 +1,11 @@
 import React from 'react';
 import ListResourceContainer, { withListResource } from '../../../components/Resources/ListResource';
-import reducerRegistry from '../../../redux/reducerRegistry';
-import sagaRegistry from '../../../redux/sagaRegistry';
 import {
     changePageResources,
     clearMetadataResources,
     getPaginatedResources,
 } from '../../../redux/users/actions';
-import reducer from '../../../redux/users/reducers';
+import reducers from '../../../redux/users/reducers';
 import sagas from '../../../redux/users/sagas';
 import {
     columns,
@@ -21,9 +19,6 @@ import {
     searchTextInputPlaceholder,
     sortingOptions,
 } from '../../../redux/users/schema';
-
-reducerRegistry.register(reducerName, reducer);
-sagaRegistry.register(reducerName, sagas);
 
 export const List = ({
     fetching_resources,
@@ -92,8 +87,10 @@ export default withListResource({
     defaultSortingOption,
     getPaginatedResources,
     pageSize,
+    reducerName,
+    reducers,
     resourceDisplayName,
+    sagas,
     sortingOptions,
     resourceBaseRoute: reducerName,
-    reducerName,
 })(List);

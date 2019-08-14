@@ -9,6 +9,8 @@ import { getSelectOptions } from '../../../helpers/formResources';
 import { getSortingOptionFromSortNameAndDirection } from '../../../helpers/paginatedResources';
 import { apiResourceDestroySuccessNotification } from '../../../helpers/toastNotification';
 import { getFiltersFromQueryObject } from '../../../helpers/url';
+import reducerRegistry from '../../../redux/reducerRegistry';
+import sagaRegistry from '../../../redux/sagaRegistry';
 import { setResources as setImageThumbnails } from '../../../redux/imageThumbnails/actions';
 import { pageSize as imageThumbnailsPageSize } from '../../../redux/imageThumbnails/schema';
 
@@ -24,6 +26,8 @@ const withListResource = ({
     resourceBaseRoute,
     resourceDisplayName,
     reducerName,
+    reducers,
+    sagas,
     sequenceField,
     setResources,
     setSequenceResources,
@@ -32,6 +36,14 @@ const withListResource = ({
     isPaginatedResourcesFetcherDisabled,
     isUrlWatcherDisabled,
 }) => (ComponentToWrap) => {
+    if(typeof reducers === 'function') {
+        reducerRegistry.register(reducerName, reducers);
+    }
+
+    if(sagas) {
+        sagaRegistry.register(reducerName, sagas);
+    }
+
     // We deep copy emptyFilters so we are sure we are working with a fresh copy in state
     // e.g. no wiriting on old references or for next time we use emptyFilters
     const emptyFilters = filters ? cloneDeep(filters) : [];
