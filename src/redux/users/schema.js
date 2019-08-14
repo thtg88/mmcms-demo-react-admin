@@ -81,23 +81,13 @@ export const filters = [
 
 export const sortingOptions = [
     {
-        display_name: 'First name',
-        name: 'first_name',
+        display_name: 'Name',
+        name: 'name',
         direction: 'asc',
     },
     {
-        display_name: 'First name',
-        name: 'first_name',
-        direction: 'desc',
-    },
-    {
-        display_name: 'Last name',
-        name: 'last_name',
-        direction: 'asc',
-    },
-    {
-        display_name: 'Last name',
-        name: 'last_name',
+        display_name: 'Name',
+        name: 'name',
         direction: 'desc',
     },
     {
@@ -115,8 +105,7 @@ export const sortingOptions = [
 export const defaultSortingOption = {...sortingOptions[0]};
 
 const searchColumns = [
-    'First Name',
-    'Last Name',
+    'Name',
     'Email Address',
 ];
 
@@ -135,14 +124,7 @@ export const schema = {
             .max(255),
         errors: [],
     },
-    first_name: {
-        type: 'text',
-        value: '',
-        rules: yup.string()
-            .max(255),
-        errors: [],
-    },
-    last_name: {
+    name: {
         type: 'text',
         value: '',
         rules: yup.string()
@@ -184,7 +166,6 @@ export const schema = {
 
 export const attributesSequenceToShow = [
     'email',
-    'first_name',
-    'last_name',
+    'name',
     'role_id',
 ];
