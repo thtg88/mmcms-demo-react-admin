@@ -63,7 +63,7 @@ export class DefaultHeader extends Component {
                                 alt="admin@bootstrapmaster.com"
                             />
                         </DropdownToggle>
-                        <DropdownMenu right style={{ right: 'auto' }}>
+                        <DropdownMenu right>
                             <DropdownItem tag={Link} to="/me">
                                 <i className="fa fa-user"></i>
                                 {' '}
