@@ -124,5 +124,3 @@ export const attributesSequenceToShow = [
     'target_table',
     'sequence',
 ];
-
-

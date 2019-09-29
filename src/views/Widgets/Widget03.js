@@ -8,8 +8,6 @@ const Widget03 = ({
     className,
     cssModule,
     dataBox,
-    // eslint-disable-next-line
-    ...attributes,
 }) => {
     // demo purposes only
     const data = dataBox();
