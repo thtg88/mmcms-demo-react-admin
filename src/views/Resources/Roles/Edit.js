@@ -23,7 +23,7 @@ import {
 export const Edit = ({
     gettingResource,
     toggleDestroyResourceModal,
-    ...props,
+    ...props
 }) => {
     const actions = [];
     if(canDestroy === true) {
