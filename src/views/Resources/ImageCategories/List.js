@@ -27,7 +27,7 @@ export const List = ({
     page,
     paginated_resources,
     query,
-    ...props,
+    ...props
 }) => {
     const actions = [
         {

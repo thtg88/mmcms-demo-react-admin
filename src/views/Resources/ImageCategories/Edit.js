@@ -24,7 +24,7 @@ export const Edit = ({
     isRecovering,
     toggleDestroyResourceModal,
     toggleRecoverResourceModal,
-    ...props,
+    ...props
 }) => {
     let actions = [];
     if(isRecovering === true) {

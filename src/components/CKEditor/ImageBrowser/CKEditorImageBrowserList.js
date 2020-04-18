@@ -31,7 +31,7 @@ const CKEditorImageBrowserList = ({
     page,
     paginated_resources,
     searching,
-    ...props,
+    ...props
 }) => {
     const searchButtonIconClassName = (searching === true && fetching_resources === true)
         ? 'fa fa-spinner fa-spin'

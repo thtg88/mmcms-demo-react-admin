@@ -23,7 +23,7 @@ const PasswordResetTabPaneContent = ({
     resourceUnchanged,
     updateInputValue,
     updatingResource,
-    ...props,
+    ...props
 }) => {
     const updateButtonIconClassName = updatingResource === true
         ? 'fa fa-fw fa-spinner fa-spin'
