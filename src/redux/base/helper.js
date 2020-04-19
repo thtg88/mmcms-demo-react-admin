@@ -230,35 +230,6 @@ export const regenerateThumbnailsBase = apiBaseEndpoint => async data => {
     .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
 
-export const runReportBase = apiBaseEndpoint => async data => {
-    const { token, type, ...rest } = data;
-    let url = REACT_APP_API_BASE_URL
-        +replaceUrlParameters(apiBaseEndpoint, data)
-        +'/'
-        +type;
-    if(Object.entries(rest).length > 0) {
-        const url_arr = [];
-
-        Object.entries(rest).forEach(([name, value], idx) => {
-            url_arr.push(name+'='+value);
-        });
-
-        if(url_arr.length > 0) {
-            url = url + '?' + url_arr.join('&');
-        }
-    }
-
-    return await fetch(url, {
-        method: 'GET',
-        headers: new Headers({
-            'Authorization': token.token_type+' '+token.access_token,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        }),
-    })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
-};
-
 export const searchResourcesBase = apiBaseEndpoint => async data => {
     const { token, q } = data;
     let url = REACT_APP_API_BASE_URL
@@ -273,26 +244,6 @@ export const searchResourcesBase = apiBaseEndpoint => async data => {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }),
-    })
-    .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
-};
-
-export const sendCodeResourceBase = apiBaseEndpoint => async data => {
-    const { token, id, ...rest } = data;
-    const url = REACT_APP_API_BASE_URL
-        +replaceUrlParameters(apiBaseEndpoint, data)
-        +'/'
-        +id
-        +'/send-code';
-
-    return await fetch(url, {
-        method: 'POST',
-        headers: new Headers({
-            'Authorization': token.token_type+' '+token.access_token,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        }),
-        body: JSON.stringify(rest),
     })
     .then((response) => typeof response === 'object' && response instanceof Response ? response.json() : response);
 };
