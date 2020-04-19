@@ -25,6 +25,8 @@ import { reducerName as imageReducerName } from '../../../redux/images/schema';
 const { REACT_APP_API_BASE_URL } = process.env;
 
 const withCreateResource = ({
+    additionalReducers,
+    additionalSagas,
     attributesSequenceToShow,
     clearMetadataResourceCreate,
     createResource,
@@ -42,9 +44,27 @@ const withCreateResource = ({
     if(typeof reducers === 'function') {
         reducerRegistry.register(reducerName, reducers);
     }
+    if(additionalReducers) {
+        Object.entries(additionalReducers).forEach(
+            ([additionalReducerName, additionalReducer]) => {
+                console.log(additionalReducers, additionalSagas);
+                reducerRegistry.register(
+                    additionalReducerName,
+                    additionalReducer
+                );
+            }
+        );
+    }
 
     if(sagas) {
         sagaRegistry.register(reducerName, sagas);
+    }
+    if(additionalSagas) {
+        Object.entries(additionalSagas).forEach(
+            ([additionalSagaName, additionalSaga]) => {
+                sagaRegistry.register(additionalSagaName, additionalSaga);
+            }
+        );
     }
 
     // We deep copy schema so we are sure we are working with a fresh copy
