@@ -1,5 +1,8 @@
 import React from 'react';
 import CreateResource, { withCreateResource } from '../../../components/Resources/CreateResource';
+import rolesReducers from '../../../redux/roles/reducers';
+import rolesSagas from '../../../redux/roles/sagas';
+import { reducerName as rolesReducerName } from '../../../redux/roles/schema';
 import {
     clearMetadataResourceCreate,
     createResource,
@@ -15,9 +18,19 @@ import {
     schema,
 } from '../../../redux/users/schema';
 
+const additionalSagas = {
+    [rolesReducerName]: rolesSagas,
+};
+
+const additionalReducers = {
+    [rolesReducerName]: rolesReducers,
+};
+
 export const Create = props => <CreateResource {...props} resourceDisplayName={resourceDisplayName} />;
 
 export default withCreateResource({
+    additionalReducers,
+    additionalSagas,
     attributesSequenceToShow,
     clearMetadataResourceCreate,
     createResource,

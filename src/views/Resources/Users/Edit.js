@@ -1,5 +1,8 @@
 import React from 'react';
 import EditResource, { withEditResource } from '../../../components/Resources/EditResource';
+import rolesReducers from '../../../redux/roles/reducers';
+import rolesSagas from '../../../redux/roles/sagas';
+import { reducerName as rolesReducerName } from '../../../redux/roles/schema';
 import {
     clearMetadataResourceEdit,
     destroyResource,
@@ -20,6 +23,14 @@ import {
     resourceDisplayName,
     schema,
 } from '../../../redux/users/schema';
+
+const additionalSagas = {
+    [rolesReducerName]: rolesSagas,
+};
+
+const additionalReducers = {
+    [rolesReducerName]: rolesReducers,
+};
 
 export const Edit = ({
     gettingResource,
@@ -51,6 +62,8 @@ export const Edit = ({
 };
 
 export default withEditResource({
+    additionalReducers,
+    additionalSagas,
     attributesSequenceToShow,
     clearMetadataResourceEdit,
     destroyResource,
