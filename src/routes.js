@@ -4,6 +4,11 @@ import { noInternetConnectionNotification } from './helpers/toastNotification';
 const Profile = lazy(() => retry(() => import('./views/Pages/Profile')));
 const Dashboard = lazy(() => retry(() => import('./views/Dashboard')));
 
+// Content Migration Method lazies...
+const ContentMigrationMethodCreate = lazy(() => retry(() => import('./views/Resources/ContentMigrationMethods/Create')));
+const ContentMigrationMethodEdit = lazy(() => retry(() => import('./views/Resources/ContentMigrationMethods/Edit')));
+const ContentMigrationMethodList = lazy(() => retry(() => import('./views/Resources/ContentMigrationMethods/List')));
+
 // Image Category lazies...
 const ImageCategoryCreate = lazy(() => retry(() => import('./views/Resources/ImageCategories/Create')));
 const ImageCategoryEdit = lazy(() => retry(() => import('./views/Resources/ImageCategories/Edit')));
@@ -23,6 +28,9 @@ const routes = [
     { path: '/', exact: true, name: 'Home', component: Dashboard },
     { path: '/dashboard', exact: true, name: 'Dashboard', component: Dashboard },
     { path: '/me', exact: true, name: 'Profile', component: Profile },
+    { path: '/content-migration-methods', exact: true,  name: 'Content Migration Methods', component: ContentMigrationMethodList },
+    { path: '/content-migration-methods/create', exact: true,  name: 'Create', component: ContentMigrationMethodCreate },
+    { path: '/content-migration-methods/:id', exact: true, name: 'Edit Migration Method', component: ContentMigrationMethodEdit },
     { path: '/image-categories', exact: true,  name: 'Image Categories', component: ImageCategoriesList },
     { path: '/image-categories/create', exact: true,  name: 'Create', component: ImageCategoryCreate },
     { path: '/image-categories/:id', exact: true, name: 'Edit Role', component: ImageCategoryEdit },

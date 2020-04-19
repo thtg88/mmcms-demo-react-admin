@@ -47,7 +47,6 @@ const withCreateResource = ({
     if(additionalReducers) {
         Object.entries(additionalReducers).forEach(
             ([additionalReducerName, additionalReducer]) => {
-                console.log(additionalReducers, additionalSagas);
                 reducerRegistry.register(
                     additionalReducerName,
                     additionalReducer
