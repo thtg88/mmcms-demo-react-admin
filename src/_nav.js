@@ -12,6 +12,11 @@ export default {
             name: 'Content',
             children: [
                 {
+                    name: 'Types',
+                    url: '/content-types',
+                    icon: 'fa fa-cubes',
+                },
+                {
                     name: 'Migration Methods',
                     url: '/content-migration-methods',
                     icon: 'fa fa-database',
