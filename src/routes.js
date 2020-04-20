@@ -9,6 +9,11 @@ const ContentMigrationMethodCreate = lazy(() => retry(() => import('./views/Reso
 const ContentMigrationMethodEdit = lazy(() => retry(() => import('./views/Resources/ContentMigrationMethods/Edit')));
 const ContentMigrationMethodList = lazy(() => retry(() => import('./views/Resources/ContentMigrationMethods/List')));
 
+// Content Type lazies...
+const ContentTypeCreate = lazy(() => retry(() => import('./views/Resources/ContentTypes/Create')));
+const ContentTypeEdit = lazy(() => retry(() => import('./views/Resources/ContentTypes/Edit')));
+const ContentTypeList = lazy(() => retry(() => import('./views/Resources/ContentTypes/List')));
+
 // Image Category lazies...
 const ImageCategoryCreate = lazy(() => retry(() => import('./views/Resources/ImageCategories/Create')));
 const ImageCategoryEdit = lazy(() => retry(() => import('./views/Resources/ImageCategories/Edit')));
@@ -31,6 +36,9 @@ const routes = [
     { path: '/content-migration-methods', exact: true,  name: 'Content Migration Methods', component: ContentMigrationMethodList },
     { path: '/content-migration-methods/create', exact: true,  name: 'Create', component: ContentMigrationMethodCreate },
     { path: '/content-migration-methods/:id', exact: true, name: 'Edit Migration Method', component: ContentMigrationMethodEdit },
+    { path: '/content-types', exact: true,  name: 'Content Types', component: ContentTypeList },
+    { path: '/content-types/create', exact: true,  name: 'Create', component: ContentTypeCreate },
+    { path: '/content-types/:id', exact: true, name: 'Edit Type', component: ContentTypeEdit },
     { path: '/image-categories', exact: true,  name: 'Image Categories', component: ImageCategoriesList },
     { path: '/image-categories/create', exact: true,  name: 'Create', component: ImageCategoryCreate },
     { path: '/image-categories/:id', exact: true, name: 'Edit Role', component: ImageCategoryEdit },
