@@ -4,6 +4,11 @@ import { noInternetConnectionNotification } from './helpers/toastNotification';
 const Profile = lazy(() => retry(() => import('./views/Pages/Profile')));
 const Dashboard = lazy(() => retry(() => import('./views/Dashboard')));
 
+// Content Model lazies...
+const ContentModelCreate = lazy(() => retry(() => import('./views/Resources/ContentModels/Create')));
+const ContentModelEdit = lazy(() => retry(() => import('./views/Resources/ContentModels/Edit')));
+const ContentModelList = lazy(() => retry(() => import('./views/Resources/ContentModels/List')));
+
 // Content Migration Method lazies...
 const ContentMigrationMethodCreate = lazy(() => retry(() => import('./views/Resources/ContentMigrationMethods/Create')));
 const ContentMigrationMethodEdit = lazy(() => retry(() => import('./views/Resources/ContentMigrationMethods/Edit')));
@@ -36,6 +41,9 @@ const routes = [
     { path: '/content-migration-methods', exact: true,  name: 'Content Migration Methods', component: ContentMigrationMethodList },
     { path: '/content-migration-methods/create', exact: true,  name: 'Create', component: ContentMigrationMethodCreate },
     { path: '/content-migration-methods/:id', exact: true, name: 'Edit Migration Method', component: ContentMigrationMethodEdit },
+    { path: '/content-models', exact: true,  name: 'Content Models', component: ContentModelList },
+    { path: '/content-models/create', exact: true,  name: 'Create', component: ContentModelCreate },
+    { path: '/content-models/:id', exact: true, name: 'Edit Model', component: ContentModelEdit },
     { path: '/content-types', exact: true,  name: 'Content Types', component: ContentTypeList },
     { path: '/content-types/create', exact: true,  name: 'Create', component: ContentTypeCreate },
     { path: '/content-types/:id', exact: true, name: 'Edit Type', component: ContentTypeEdit },
