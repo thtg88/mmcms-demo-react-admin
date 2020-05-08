@@ -1,6 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { NavLink } from 'reactstrap';
 import EditResourceContainer, { withEditResource } from '../../../components/Resources/EditResource';
 import {
     clearMetadataResourceEdit,
@@ -8,9 +6,9 @@ import {
     findResource,
     getPaginatedResources,
     updateResource,
-} from '../../../redux/contentModels/actions';
-import reducers from '../../../redux/contentModels/reducers';
-import sagas from '../../../redux/contentModels/sagas';
+} from '../../../redux/contentFields/actions';
+import reducers from '../../../redux/contentFields/reducers';
+import sagas from '../../../redux/contentFields/sagas';
 import {
     attributesSequenceToShow,
     canDestroy,
@@ -20,14 +18,35 @@ import {
     resourceBaseRoute,
     resourceDisplayName,
     schema,
+} from '../../../redux/contentFields/schema';
+import contentModelsReducers from '../../../redux/contentModels/reducers';
+import contentModelsSagas from '../../../redux/contentModels/sagas';
+import {
+    reducerName as contentModelsReducerName,
+    resourceBaseRoute as contentModelsResourceBaseRoute,
 } from '../../../redux/contentModels/schema';
+import contentTypesReducers from '../../../redux/contentTypes/reducers';
+import contentTypesSagas from '../../../redux/contentTypes/sagas';
+import {
+    reducerName as contentTypesReducerName,
+} from '../../../redux/contentTypes/schema';
+
+const additionalSagas = {
+    [contentTypesReducerName]: contentTypesSagas,
+    [contentModelsReducerName]: contentModelsSagas,
+};
+
+const additionalReducers = {
+    [contentTypesReducerName]: contentTypesReducers,
+    [contentModelsReducerName]: contentModelsReducers,
+};
 
 export const Edit = ({
     gettingResource,
-    resource,
     toggleDestroyResourceModal,
     ...props
 }) => {
+    console.log(props.formSchema.content_type_id);
     const actions = [];
     if(canDestroy === true) {
         actions.push({
@@ -40,40 +59,23 @@ export const Edit = ({
         });
     }
 
-    const tabs = [];
-    if (resource) {
-        tabs.push({
-            name: 'content-fields',
-            navContent: (
-                <NavLink
-                    tag={Link}
-                    to={`/content-models/${resource.id}/content-fields`}
-                >
-                    <i className="fa fa-fw fa-th-list"></i>
-                    {' '}
-                    Fields
-                </NavLink>
-            ),
-        });
-    }
-
     return (
         <EditResourceContainer
             {...props}
             actions={actions}
             canDestroy={canDestroy}
             gettingResource={gettingResource}
-            resource={resource}
             resourceBaseRoute={resourceBaseRoute}
             resourceDisplayName={resourceDisplayName}
             resourceNameField={nameField}
-            tabs={tabs}
             toggleDestroyResourceModal={toggleDestroyResourceModal}
         />
     );
 };
 
 export default withEditResource({
+    additionalReducers,
+    additionalSagas,
     attributesSequenceToShow,
     clearMetadataResourceEdit,
     destroyResource,
@@ -83,9 +85,9 @@ export default withEditResource({
     pageSize,
     reducerName,
     reducers,
-    resourceBaseRoute,
     resourceDisplayName,
     sagas,
     schema,
     updateResource,
+    resourceBaseRoute: `${contentModelsResourceBaseRoute}/:content_model_id/${resourceBaseRoute}`,
 })(Edit);
