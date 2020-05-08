@@ -81,6 +81,7 @@ export const schema = {
         value: '',
         rules: undefined,
         errors: [],
+        label: 'Base route',
     },
     description: {
         type: 'textarea',
