@@ -230,6 +230,7 @@ FormGroups.propTypes = {
                 PropTypes.string,
             ]),
             value: PropTypes.oneOfType([
+                PropTypes.bool,
                 PropTypes.number,
                 PropTypes.string,
             ]),
