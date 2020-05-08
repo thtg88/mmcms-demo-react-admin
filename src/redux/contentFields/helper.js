@@ -2,7 +2,6 @@ import {
     createResourceBase,
     destroyResourceBase,
     findResourceBase,
-    getAllResourcesBase,
     getPaginatedResourcesBase,
     recoverResourceBase,
     updateResourceBase,
@@ -14,8 +13,6 @@ export const createResource = createResourceBase(apiBaseEndpoint);
 export const destroyResource = destroyResourceBase(apiBaseEndpoint);
 
 export const findResource = findResourceBase(apiBaseEndpoint);
-
-export const getAllResources = getAllResourcesBase(apiBaseEndpoint);
 
 export const getPaginatedResources = getPaginatedResourcesBase(apiBaseEndpoint);
 

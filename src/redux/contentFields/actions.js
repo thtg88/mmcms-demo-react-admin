@@ -42,11 +42,6 @@ export const getPaginatedResources = payload => ({
     payload,
 });
 
-export const getAllResources = payload => ({
-    type: actions.GET_ALL_RESOURCES_REQUEST,
-    payload,
-});
-
 export const recoverResource = payload => ({
     type: actions.RECOVER_RESOURCE_REQUEST,
     payload,

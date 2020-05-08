@@ -25,6 +25,10 @@ export const keyField = 'id';
 
 export const nameField = 'name';
 
+export const selectOptionText = 'name';
+
+export const selectOptionValue = 'id';
+
 export const contentMigrationMethodValuesFetcher = {
     reducerName: contentMigrationMethodsReducerName,
     fetcher: getAllContentMigrationMethods,

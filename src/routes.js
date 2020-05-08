@@ -4,6 +4,11 @@ import { noInternetConnectionNotification } from './helpers/toastNotification';
 const Profile = lazy(() => retry(() => import('./views/Pages/Profile')));
 const Dashboard = lazy(() => retry(() => import('./views/Dashboard')));
 
+// Content Field lazies...
+const ContentFieldCreate = lazy(() => retry(() => import('./views/Resources/ContentFields/Create')));
+const ContentFieldEdit = lazy(() => retry(() => import('./views/Resources/ContentFields/Edit')));
+const ContentFieldList = lazy(() => retry(() => import('./views/Resources/ContentFields/List')));
+
 // Content Model lazies...
 const ContentModelCreate = lazy(() => retry(() => import('./views/Resources/ContentModels/Create')));
 const ContentModelEdit = lazy(() => retry(() => import('./views/Resources/ContentModels/Edit')));
@@ -38,12 +43,15 @@ const routes = [
     { path: '/', exact: true, name: 'Home', component: Dashboard },
     { path: '/dashboard', exact: true, name: 'Dashboard', component: Dashboard },
     { path: '/me', exact: true, name: 'Profile', component: Profile },
-    { path: '/content-migration-methods', exact: true,  name: 'Content Migration Methods', component: ContentMigrationMethodList },
     { path: '/content-migration-methods/create', exact: true,  name: 'Create', component: ContentMigrationMethodCreate },
     { path: '/content-migration-methods/:id', exact: true, name: 'Edit Migration Method', component: ContentMigrationMethodEdit },
-    { path: '/content-models', exact: true,  name: 'Content Models', component: ContentModelList },
+    { path: '/content-migration-methods', exact: true,  name: 'Content Migration Methods', component: ContentMigrationMethodList },
+    { path: '/content-models/:content_model_id/content-fields/create', exact: true,  name: 'Create', component: ContentFieldCreate },
+    { path: '/content-models/:content_model_id/content-fields/:id', exact: true, name: 'Edit Field', component: ContentFieldEdit },
+    { path: '/content-models/:content_model_id/content-fields', exact: true,  name: 'Content Fields', component: ContentFieldList },
     { path: '/content-models/create', exact: true,  name: 'Create', component: ContentModelCreate },
     { path: '/content-models/:id', exact: true, name: 'Edit Model', component: ContentModelEdit },
+    { path: '/content-models', exact: true,  name: 'Content Models', component: ContentModelList },
     { path: '/content-types', exact: true,  name: 'Content Types', component: ContentTypeList },
     { path: '/content-types/create', exact: true,  name: 'Create', component: ContentTypeCreate },
     { path: '/content-types/:id', exact: true, name: 'Edit Type', component: ContentTypeEdit },
