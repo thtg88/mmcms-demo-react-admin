@@ -4,6 +4,7 @@ import {
     createResource,
     destroyResource,
     findResource,
+    getAllResources,
     getPaginatedResources,
     recoverResource,
     updateResource
@@ -12,6 +13,7 @@ import {
     createResourceRequestBase,
     destroyResourceRequestBase,
     findResourceRequestBase,
+    getAllResourcesRequestBase,
     getPaginatedResourcesRequestBase,
     recoverResourceRequestBase,
     updateResourceRequestBase,
@@ -22,6 +24,8 @@ export const createResourceRequest = createResourceRequestBase(actions, createRe
 export const destroyResourceRequest = destroyResourceRequestBase(actions, destroyResource);
 
 export const findResourceRequest = findResourceRequestBase(actions, findResource);
+
+export const getAllResourcesRequest = getAllResourcesRequestBase(actions, getAllResources);
 
 export const getPaginatedResourcesRequest = getPaginatedResourcesRequestBase(actions, getPaginatedResources);
 
@@ -35,6 +39,7 @@ export default function* rootSaga() {
         fork(createResourceRequest),
         fork(destroyResourceRequest),
         fork(findResourceRequest),
+        fork(getAllResourcesRequest),
         fork(getPaginatedResourcesRequest),
         fork(recoverResourceRequest),
         fork(updateResourceRequest),
