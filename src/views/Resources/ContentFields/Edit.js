@@ -46,7 +46,6 @@ export const Edit = ({
     toggleDestroyResourceModal,
     ...props
 }) => {
-    console.log(props.formSchema.content_type_id);
     const actions = [];
     if(canDestroy === true) {
         actions.push({
