@@ -24,7 +24,9 @@ const ResourceForm = ({
         onCKEditorImageUpload,
         dispatchedValuesSearchers
     );
-    const isAllDisabled = formGroups.filter(formGroup => formGroup.disabled === true).length === formGroups.length;
+    const isAllDisabled = formGroups.filter(
+        (formGroup) => formGroup.disabled === true
+    ).length === formGroups.length;
 
     return (
         <Form onSubmit={onSubmit}>

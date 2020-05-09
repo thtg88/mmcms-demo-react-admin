@@ -20,7 +20,6 @@ import {
     apiResourcePublishSuccessNotification,
     apiResourceRecoverSuccessNotification,
     apiResourceRegenerateSuccessNotification,
-    apiResourceSendCodeSuccessNotification,
     apiResourceUnpublishSuccessNotification,
     apiResourceUpdateSuccessNotification,
 } from '../../../helpers/toastNotification';
@@ -53,7 +52,6 @@ const withEditResource = ({
     resourceTableName,
     sagas,
     schema,
-    sendCodeResource,
     unpublishResource,
     updateResource,
     urlParamsResourceIdCheckDisabled,
@@ -114,14 +112,12 @@ const withEditResource = ({
             this.handlePublishResource = this.handlePublishResource.bind(this);
             this.handleRecoverResource = this.handleRecoverResource.bind(this);
             this.handleRegenerateResource = this.handleRegenerateResource.bind(this);
-            this.handleSendCodeResource = this.handleSendCodeResource.bind(this);
             this.handleUnpublishResource = this.handleUnpublishResource.bind(this);
             this.handleUpdateResource = this.handleUpdateResource.bind(this);
             this.toggleDestroyResourceModal = this.toggleDestroyResourceModal.bind(this);
             this.togglePublishResourceModal = this.togglePublishResourceModal.bind(this);
             this.toggleRecoverResourceModal = this.toggleRecoverResourceModal.bind(this);
             this.toggleRegenerateResourceModal = this.toggleRegenerateResourceModal.bind(this);
-            this.toggleSendCodeResourceModal = this.toggleSendCodeResourceModal.bind(this);
             this.toggleUnpublishResourceModal = this.toggleUnpublishResourceModal.bind(this);
 
             const uriObj = queryString.parse(props.location.search);
@@ -137,13 +133,11 @@ const withEditResource = ({
                 isPublishResourceModalOpen: false,
                 isRecoverResourceModalOpen: false,
                 isRegenerateResourceModalOpen: false,
-                isSendCodeResourceModalOpen: false,
                 isRecovering: parseInt(uriObj.recovery, 10) === 1,
                 isUnpublishResourceModalOpen: false,
                 publishingResource: false,
                 recoveringResource: false,
                 regeneratingResource: false,
-                sendCodingResource: false,
                 unpublishingResource: false,
                 updatingResource: false,
                 valuesSearcherCallbacks: {},
@@ -231,22 +225,6 @@ const withEditResource = ({
             });
 
             regenerateResource({ data });
-        }
-
-        handleSendCodeResource(evt) {
-            evt.preventDefault();
-
-            const { sendCodeResource, token, urlParams } = this.props;
-            const data = {
-                id: urlParams.id,
-                token,
-            };
-
-            this.setState({
-                sendCodingResource: true,
-            });
-
-            sendCodeResource({ data });
         }
 
         handleUnpublishResource(evt) {
@@ -339,14 +317,6 @@ const withEditResource = ({
 
             this.setState({
                 isRegenerateResourceModalOpen: !this.state.isRegenerateResourceModalOpen,
-            });
-        }
-
-        toggleSendCodeResourceModal(evt) {
-            evt.preventDefault();
-
-            this.setState({
-                isSendCodeResourceModalOpen: !this.state.isSendCodeResourceModalOpen,
             });
         }
 
@@ -966,7 +936,6 @@ const withEditResource = ({
                     handlePublishResource={this.handlePublishResource}
                     handleRecoverResource={this.handleRecoverResource}
                     handleRegenerateResource={this.handleRegenerateResource}
-                    handleSendCodeResource={this.handleSendCodeResource}
                     handleSetVariantSelectedAttributeTypeId={this.handleSetVariantSelectedAttributeTypeId}
                     handleSetVariantSelectedAttributeValueId={this.handleSetVariantSelectedAttributeValueId}
                     handleUnpublishResource={this.handleUnpublishResource}
@@ -975,7 +944,6 @@ const withEditResource = ({
                     togglePublishResourceModal={this.togglePublishResourceModal}
                     toggleRecoverResourceModal={this.toggleRecoverResourceModal}
                     toggleRegenerateResourceModal={this.toggleRegenerateResourceModal}
-                    toggleSendCodeResourceModal={this.toggleSendCodeResourceModal}
                     toggleUnpublishResourceModal={this.toggleUnpublishResourceModal}
                 />
             );
@@ -992,7 +960,6 @@ const withEditResource = ({
             recovered,
             regenerated,
             resource,
-            sendCoded,
             unpublished,
             updated,
             variantsGenerated,
@@ -1020,7 +987,6 @@ const withEditResource = ({
             published,
             recovered,
             regenerated,
-            sendCoded,
             token,
             unpublished,
             updated,
@@ -1066,7 +1032,6 @@ const withEditResource = ({
         publishResource,
         recoverResource,
         regenerateResource,
-        sendCodeResource,
         unpublishResource,
         updateImage,
         updateResource,
