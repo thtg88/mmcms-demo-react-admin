@@ -1,7 +1,7 @@
 # React Admin Dashboard - mmCMS Demo
 React Admin Dashboard - mmCMS Demo, is a ReactJS admin app built on top of an [mmCMS demo API project](https://github.com/thtg88/mmcms-demo-api).
 This project was bootstrapped with [CoreUI React](https://github.com/coreui/coreui-free-react-admin-template) on top of [Create React App](https://github.com/facebook/create-react-app).
-You can find the app in action [here](https://mmcms.marco-marassi.com).
+You can find the app in action [here](https://mmcms-demo.marco-marassi.com).
 
 ## Table of Contents
 
