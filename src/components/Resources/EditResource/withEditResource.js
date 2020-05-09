@@ -446,7 +446,6 @@ const withEditResource = ({
                 published,
                 recovered,
                 regenerated,
-                sendCoded,
                 setAllFormSchema,
                 unpublished,
                 updated,
@@ -459,7 +458,6 @@ const withEditResource = ({
                 publishingResource,
                 recoveringResource,
                 regeneratingResource,
-                sendCodingResource,
                 unpublishingResource,
                 updatingResource,
                 valuesSearcherCallbacks,
@@ -645,41 +643,6 @@ const withEditResource = ({
                 );
             }
 
-            // This means that I was regenerating the resource,
-            // And I received errors from the store
-            // So it's time to restore the Recover button
-            else if(
-                sendCodingResource === true
-                && typeof errors.length !== 'undefined'
-                && errors.length !== 0
-            ) {
-                this.setState({
-                    sendCodingResource: false,
-                    isSendCodeResourceModalOpen: false,
-                });
-            }
-
-            // This means that I was sendCoding the resource,
-            // And I received an sendCoded from the store
-            // So it's time to restore the SendCode button
-            else if(
-                sendCodingResource === true
-                && sendCoded === true
-            ) {
-                apiResourceSendCodeSuccessNotification({
-                    resourceDisplayName: resourceDisplayName ? resourceDisplayName : undefined
-                });
-
-                this.setState({
-                    gettingResource: false,
-                    isSendCodeResourceModalOpen: false,
-                    sendCodingResource: false,
-                });
-
-                setAllFormSchema(
-                    getFormResourceFromValues(resource, formSchema, attributesSequenceToShow)
-                );
-            }
 
             // This means that I was unpublishing the resource,
             // And I received errors from the store
