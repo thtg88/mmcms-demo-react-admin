@@ -47,6 +47,8 @@ const getFormResourceFromValues = (values, schema, attributesSequenceToShow = []
             // selectOptionValue prop to decide how the value of a select/react-select option is going to look like
             const selectOptionValue = getSchemaValueFromKeyAndParameter(schema, key, 'selectOptionValue');
 
+            const valuesFetcher = getSchemaValueFromKeyAndParameter(schema, key, 'valuesFetcher');
+
             // Values array of values and texts (for select inputs)
             const values = getSchemaValueFromKeyAndParameter(schema, key, 'values');
 
@@ -124,6 +126,15 @@ const getFormResourceFromValues = (values, schema, attributesSequenceToShow = []
             }
             if(typeof multipleSelectLimit !== 'undefined') {
                 data.multipleSelectLimit = multipleSelectLimit;
+            }
+            if (typeof selectOptionText !== 'undefined') {
+                data.selectOptionText = selectOptionText;
+            }
+            if (typeof selectOptionValue !== 'undefined') {
+                data.selectOptionValue = selectOptionValue;
+            }
+            if (typeof valuesFetcher !== 'undefined') {
+                data.valuesFetcher = valuesFetcher;
             }
 
             return {
