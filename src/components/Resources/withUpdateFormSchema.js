@@ -109,6 +109,17 @@ const withUpdateFormSchema = ({
             const { resourceUnchanged } = this.state;
             const formSchema = cloneDeep(this.state.formSchema);
 
+            // Make sure boolean select values are treated properly
+            if (
+                (value === 'true' || value === 'false') &&
+                formSchema[name].values &&
+                formSchema[name].values.filter(
+                    (temp_value) => temp_value === true || temp_value === false
+                )
+            ) {
+                value = (value === 'true');
+            }
+
             const newState = {
                 formSchema: Object.assign(formSchema, {
                     [name]: Object.assign(formSchema[name], { value }),
