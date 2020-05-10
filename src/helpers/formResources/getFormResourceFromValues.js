@@ -6,7 +6,6 @@ const getFormResourceFromValues = (values, schema, attributesSequenceToShow = []
     if(
         typeof values === 'undefined'
         || values === null
-        || ! schema
     ) {
         return null;
     }
@@ -23,7 +22,7 @@ const getFormResourceFromValues = (values, schema, attributesSequenceToShow = []
 
             // Disabled attribute
             let disabled = false;
-            if(schema[key] && typeof schema[key].disabled !== 'undefined') {
+            if(schema && schema[key] && typeof schema[key].disabled !== 'undefined') {
                 disabled = schema[key].disabled;
             } else if(key.length > 3 && key.indexOf('_at') === key.length - 3) {
                 // We disable everything ending in "_at" to avoid people to fiddle around with timestamps
@@ -96,7 +95,7 @@ const getFormResourceFromValues = (values, schema, attributesSequenceToShow = []
                 value: newValue ? newValue : value,
                 errors: [],
                 rules: getSchemaValueFromKeyAndParameter(schema, key, 'rules'),
-                disabled: disabled
+                disabled: disabled,
             };
             if(typeof label !== 'undefined') {
                 data.label = label;
