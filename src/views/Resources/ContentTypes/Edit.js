@@ -34,17 +34,28 @@ const additionalReducers = {
 
 export const Edit = ({
     gettingResource,
+    isRecovering,
     toggleDestroyResourceModal,
+    toggleRecoverResourceModal,
     ...props
 }) => {
-    let actions = [];
-    if(canDestroy === true) {
+    const actions = [];
+    if(isRecovering === true) {
+        actions.push({
+            className: 'btn-success',
+            disabled: gettingResource,
+            iconClassName: 'fa fa-fw fa-check',
+            onClick: toggleRecoverResourceModal,
+            title: 'Recover '+resourceDisplayName,
+            type: 'button',
+        });
+    } else if(canDestroy === true) {
         actions.push({
             className: 'btn-danger',
             disabled: gettingResource,
             iconClassName: 'fa fa-trash',
             onClick: toggleDestroyResourceModal,
-            title: 'Remove Resource',
+            title: 'Remove '+resourceDisplayName,
             type: 'button',
         });
     }
@@ -55,8 +66,10 @@ export const Edit = ({
             actions={actions}
             canDestroy={canDestroy}
             gettingResource={gettingResource}
+            isRecovering={isRecovering}
             resourceNameField={nameField}
             toggleDestroyResourceModal={toggleDestroyResourceModal}
+            toggleRecoverResourceModal={toggleRecoverResourceModal}
         />
     );
 };
