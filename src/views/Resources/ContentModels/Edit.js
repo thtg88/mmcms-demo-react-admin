@@ -7,6 +7,7 @@ import {
     destroyResource,
     findResource,
     getPaginatedResources,
+    recoverResource,
     updateResource,
 } from '../../../redux/contentModels/actions';
 import reducers from '../../../redux/contentModels/reducers';
@@ -24,12 +25,23 @@ import {
 
 export const Edit = ({
     gettingResource,
+    isRecovering,
     resource,
     toggleDestroyResourceModal,
+    toggleRecoverResourceModal,
     ...props
 }) => {
     const actions = [];
-    if(canDestroy === true) {
+    if(isRecovering === true) {
+        actions.push({
+            className: 'btn-success',
+            disabled: gettingResource,
+            iconClassName: 'fa fa-fw fa-check',
+            onClick: toggleRecoverResourceModal,
+            title: 'Recover '+resourceDisplayName,
+            type: 'button',
+        });
+    } else if(canDestroy === true) {
         actions.push({
             className: 'btn-danger',
             disabled: gettingResource,
@@ -63,12 +75,14 @@ export const Edit = ({
             actions={actions}
             canDestroy={canDestroy}
             gettingResource={gettingResource}
+            isRecovering={isRecovering}
             resource={resource}
             resourceBaseRoute={resourceBaseRoute}
             resourceDisplayName={resourceDisplayName}
             resourceNameField={nameField}
             tabs={tabs}
             toggleDestroyResourceModal={toggleDestroyResourceModal}
+            toggleRecoverResourceModal={toggleRecoverResourceModal}
         />
     );
 };
@@ -81,6 +95,7 @@ export default withEditResource({
     getPaginatedResources,
     nameField,
     pageSize,
+    recoverResource,
     reducerName,
     reducers,
     resourceBaseRoute,

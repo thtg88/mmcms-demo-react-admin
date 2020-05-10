@@ -26,7 +26,7 @@ export const Edit = ({
     toggleRecoverResourceModal,
     ...props
 }) => {
-    let actions = [];
+    const actions = [];
     if(isRecovering === true) {
         actions.push({
             className: 'btn-success',
