@@ -1,5 +1,5 @@
 const getTypeFromKey = (schema, key) => {
-    return schema[key] && schema[key].type
+    return schema && schema[key] && schema[key].type
         ? schema[key].type
         : 'text';
 };
