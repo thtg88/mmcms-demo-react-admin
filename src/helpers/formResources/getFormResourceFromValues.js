@@ -6,6 +6,7 @@ const getFormResourceFromValues = (values, schema, attributesSequenceToShow = []
     if(
         typeof values === 'undefined'
         || values === null
+        || ! schema
     ) {
         return null;
     }
