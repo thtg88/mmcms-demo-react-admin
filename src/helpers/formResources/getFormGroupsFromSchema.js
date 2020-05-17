@@ -3,7 +3,8 @@ const getFormGroupsFromSchema = (
     onInputChange,
     isRecovering,
     onCKEditorImageUpload,
-    dispatchedValuesSearchers
+    dispatchedValuesSearchers,
+    disableForm
 ) => {
     if(!formSchema) {
         return [];
@@ -35,7 +36,7 @@ const getFormGroupsFromSchema = (
         const dateFormat = params.dateFormat
             ? params.dateFormat
             : undefined;
-        const disabled = isRecovering === true
+        const disabled = isRecovering === true || disableForm === true
             ? true
             : (
                 params.disabled

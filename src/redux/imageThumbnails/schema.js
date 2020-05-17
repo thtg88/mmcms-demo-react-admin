@@ -101,6 +101,8 @@ export const searchTextInputPlaceholder = `Search by ${searchColumns.join(', or 
 
 export const canDestroy = true;
 
+export const canUpdate = true;
+
 export const pageSize = 9;
 
 export const schema = {

@@ -12,6 +12,7 @@ import PageTitle from '../../PageTitle';
 const EditResourceContainer = ({
     actions,
     canDestroy,
+    canUpdate,
     destroyingResource,
     dispatchedValuesSearchers,
     errors,
@@ -112,6 +113,7 @@ const EditResourceContainer = ({
                                     />
                                     <TabsContent
                                         activeTab={activeTab}
+                                        canUpdate={canUpdate}
                                         dispatchedValuesSearchers={dispatchedValuesSearchers}
                                         formSchema={formSchema}
                                         gettingResource={gettingResource}
@@ -163,6 +165,7 @@ const EditResourceContainer = ({
 EditResourceContainer.propTypes = {
     actions: PropTypes.array,
     canDestroy: PropTypes.bool,
+    canUpdate: PropTypes.bool,
     destroyingResource: PropTypes.bool,
     dispatchedValuesSearchers: PropTypes.objectOf(PropTypes.func),
     errors: PropTypes.array,
