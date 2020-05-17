@@ -9,6 +9,7 @@ import SpinnerLoader from '../../SpinnerLoader';
 
 const TabsContent = ({
     activeTab,
+    canUpdate,
     dispatchedValuesSearchers,
     formSchema,
     gettingResource,
@@ -35,6 +36,7 @@ const TabsContent = ({
                         ? <SpinnerLoader />
                         : (
                             <ResourceForm
+                                disableForm={!canUpdate}
                                 dispatchedValuesSearchers={dispatchedValuesSearchers}
                                 formSchema={formSchema}
                                 isRecovering={isRecovering}
@@ -131,6 +133,7 @@ const TabsContent = ({
 
 TabsContent.propTypes = {
     activeTab: PropTypes.string,
+    canUpdate: PropTypes.bool,
     formSchema: PropTypes.object,
     gettingResource: PropTypes.bool,
     handleCKEditorImageFileUpload: PropTypes.func,

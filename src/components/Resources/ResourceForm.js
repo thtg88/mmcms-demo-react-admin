@@ -6,6 +6,7 @@ import { getFormGroupsFromSchema } from '../../helpers/formResources';
 
 const ResourceForm = ({
     createButtonIconClassName,
+    disableForm,
     dispatchedValuesSearchers,
     formSchema,
     isRecovering,
@@ -22,7 +23,8 @@ const ResourceForm = ({
         onInputChange,
         isRecovering,
         onCKEditorImageUpload,
-        dispatchedValuesSearchers
+        dispatchedValuesSearchers,
+        disableForm
     );
     const isAllDisabled = formGroups.filter(
         (formGroup) => formGroup.disabled === true
@@ -55,6 +57,8 @@ const ResourceForm = ({
 
 ResourceForm.propTypes = {
     createButtonIconClassName: PropTypes.string,
+    disableForm: PropTypes.bool,
+    dispatchedValuesSearchers: PropTypes.object,
     formSchema: PropTypes.object,
     isRecovering: PropTypes.bool,
     onCKEditorImageUpload: PropTypes.func,

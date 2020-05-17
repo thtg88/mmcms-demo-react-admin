@@ -13,6 +13,7 @@ import sagas from '../../../redux/contentFields/sagas';
 import {
     attributesSequenceToShow,
     canDestroy,
+    canUpdate,
     nameField,
     pageSize,
     reducerName,
@@ -75,6 +76,7 @@ export const Edit = ({
             {...props}
             actions={actions}
             canDestroy={canDestroy}
+            canUpdate={canUpdate}
             gettingResource={gettingResource}
             isRecovering={isRecovering}
             resourceBaseRoute={resourceBaseRoute}
