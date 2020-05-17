@@ -13,6 +13,7 @@ import sagas from '../../../redux/contentFields/sagas';
 import {
     attributesSequenceToShow,
     canDestroy,
+    canRestore,
     canUpdate,
     nameField,
     pageSize,
@@ -51,7 +52,7 @@ export const Edit = ({
     ...props
 }) => {
     const actions = [];
-    if(isRecovering === true) {
+    if(isRecovering === true && canRestore === true) {
         actions.push({
             className: 'btn-success',
             disabled: gettingResource,
@@ -76,6 +77,7 @@ export const Edit = ({
             {...props}
             actions={actions}
             canDestroy={canDestroy}
+            canRestore={canRestore}
             canUpdate={canUpdate}
             gettingResource={gettingResource}
             isRecovering={isRecovering}
