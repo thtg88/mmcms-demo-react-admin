@@ -16,6 +16,7 @@ import sagas from '../../../redux/users/sagas';
 import {
     attributesSequenceToShow,
     canDestroy,
+    canRestore,
     nameField,
     pageSize,
     reducerName,
@@ -40,7 +41,7 @@ export const Edit = ({
     ...props
 }) => {
     const actions = [];
-    if(isRecovering === true) {
+    if(isRecovering === true && canRestore === true) {
         actions.push({
             className: 'btn-success',
             disabled: gettingResource,

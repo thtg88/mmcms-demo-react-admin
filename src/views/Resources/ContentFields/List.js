@@ -8,6 +8,7 @@ import {
 import reducers from '../../../redux/contentFields/reducers';
 import sagas from '../../../redux/contentFields/sagas';
 import {
+    canRestore,
     columns,
     defaultSortingOption,
     keyField,
@@ -44,7 +45,7 @@ export const List = ({
             iconClassName: 'fa fa-plus',
         },
     ];
-    if(isRecovering === true) {
+    if(isRecovering === true && canRestore === true) {
         actions.push({
             className: 'btn-primary',
             onClick: onRecoverDoneClick,
@@ -52,7 +53,7 @@ export const List = ({
             type: 'button',
             iconClassName: 'fa fa-fw fa-check',
         });
-    } else {
+    } else if (canRestore === true) {
         actions.push({
             className: 'btn-warning',
             onClick: onRecoverClick,

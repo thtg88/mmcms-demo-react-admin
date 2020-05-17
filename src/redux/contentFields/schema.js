@@ -94,6 +94,8 @@ export const searchTextInputPlaceholder = `Search by ${searchColumns.join(', or 
 
 export const canDestroy = true;
 
+export const canRestore = false;
+
 export const canUpdate = false;
 
 export const pageSize = 10;
