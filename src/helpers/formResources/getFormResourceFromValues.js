@@ -2,12 +2,13 @@ import getSchemaValueFromKeyAndParameter from './getSchemaValueFromKeyAndParamet
 import getSelectOptionValues from './getSelectOptionValues';
 import getTypeFromKey from './getTypeFromKey';
 
-const getFormResourceFromValues = (values, schema, attributesSequenceToShow = []) => {
-    if(
-        typeof values === 'undefined'
-        || values === null
-    ) {
-        return null;
+const getFormResourceFromValues = (
+    values,
+    schema,
+    attributesSequenceToShow = []
+) => {
+    if(typeof values === 'undefined' || values === null) {
+        return schema;
     }
 
     const resource = Object.entries(values).reduce(
@@ -22,10 +23,15 @@ const getFormResourceFromValues = (values, schema, attributesSequenceToShow = []
 
             // Disabled attribute
             let disabled = false;
-            if(schema && schema[key] && typeof schema[key].disabled !== 'undefined') {
+            if(
+                schema &&
+                schema[key] &&
+                typeof schema[key].disabled !== 'undefined'
+            ) {
                 disabled = schema[key].disabled;
             } else if(key.length > 3 && key.indexOf('_at') === key.length - 3) {
-                // We disable everything ending in "_at" to avoid people to fiddle around with timestamps
+                // We disable everything ending in "_at"
+                // to avoid people to fiddle around with timestamps
                 disabled = true;
             }
 
@@ -139,9 +145,7 @@ const getFormResourceFromValues = (values, schema, attributesSequenceToShow = []
 
             return {
                 ...result,
-                [key]: {
-                    ...data
-                }
+                [key]: {...data},
             };
         },
         {}
