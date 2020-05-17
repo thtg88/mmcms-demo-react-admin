@@ -3,12 +3,6 @@ import moment from 'moment';
 import { searchResources } from './actions';
 import { getFullDateText, getTimeText, momentSqlDateFormat } from '../../helpers/dates';
 import {
-    reducerName as nominalCodesReducerName,
-    selectOptionValue as nominalCodeSelectOptionValue,
-    selectOptionText as nominalCodeSelectOptionText,
-} from '../nominalCodes/schema';
-import { getAllResources as getAllNominalCodes } from '../nominalCodes/actions';
-import {
     reducerName as productCategoriesReducerName,
     selectOptionText as productCategorySelectOptionText,
     selectOptionValue as productCategorySelectOptionValue,
@@ -35,30 +29,12 @@ export const nameField = 'name';
 
 export const selectOptionValue = 'id';
 
-export const selectOptionText = (resource) => {
-    let text = resource.name;
-
-    if(resource.start_date && resource.end_date) {
-        text = text+' ('+getFullDateText(resource.start_date)+' - '+getFullDateText(resource.end_date)+')';
-    } else if(resource.start_date) {
-        text = text+' ('+getFullDateText(resource.start_date)+')';
-    } else if(resource.end_date) {
-        text = text+' ('+getFullDateText(resource.end_date)+')';
-    }
-
-    return text;
-};
+export const selectOptionText = 'name';
 
 const valuesSearcher = {
     reducerName: reducerName,
     searcher: searchResources,
     searcherName: 'searchResources',
-};
-
-const nominalCodeValuesFetcher = {
-    reducerName: nominalCodesReducerName,
-    fetcher: getAllNominalCodes,
-    fetcherName: 'getAllNominalCodes',
 };
 
 const productCategoryValuesFetcher = {
@@ -128,19 +104,6 @@ export const columns = [
 ];
 
 export const filters = [
-    {
-        disabled: false,
-        emptyOption: 'Filter by Nominal Code',
-        label: 'Nominal Code',
-        name: 'nominal_code_id',
-        operator: '=',
-        selectOptionText: nominalCodeSelectOptionText,
-        selectOptionValue: nominalCodeSelectOptionValue,
-        type: 'select',
-        value: '',
-        values: [],
-        valuesFetcher: {...nominalCodeValuesFetcher},
-    },
     {
         disabled: false,
         emptyOption: 'Filter by Category',
@@ -317,18 +280,6 @@ export const schema = {
             .required()
             .max(255),
         errors: [],
-    },
-    nominal_code_id: {
-        type: 'react-select',
-        value: '',
-        label: 'Nominal Code',
-        values: [],
-        rules: undefined,
-        errors: [],
-        emptyOption: 'Please select a Nominal Code...',
-        selectOptionText: nominalCodeSelectOptionText,
-        selectOptionValue: nominalCodeSelectOptionValue,
-        valuesFetcher: {...nominalCodeValuesFetcher},
     },
     price: {
         type: 'number',

@@ -1,12 +1,6 @@
 import * as yup from 'yup';
 import { getFullDateText, getTimeText } from '../../helpers/dates';
 import { getAllResources as getAllProductCategories } from './actions';
-import {
-    reducerName as voucherDenominationsReducerName,
-    selectOptionText as voucherDenominationSelectOptionText,
-    selectOptionValue as voucherDenominationSelectOptionValue,
-} from '../voucherDenominations/schema';
-import { getAllResources as getAllVoucherDenominations } from '../voucherDenominations/actions';
 // Having reducerName in a different files allow the whole schema not to be compiled,
 // before redux initializes, causing valuesFetcher to have an undefined fetcher callback.
 // Please do not move
@@ -79,12 +73,6 @@ const valuesFetcher = {
     reducerName: reducerName,
     fetcher: getAllProductCategories,
     fetcherName: 'getAllProductCategories',
-};
-
-const voucherDenominationValuesFetcher = {
-    reducerName: voucherDenominationsReducerName,
-    fetcher: getAllVoucherDenominations,
-    fetcherName: 'getAllVoucherDenominations',
 };
 
 export const schema = {
@@ -166,18 +154,6 @@ export const schema = {
         rules: undefined,
         errors: [],
     },
-    voucher_denomination_id: {
-        type: 'select',
-        value: '',
-        rules: undefined,
-        errors: [],
-        label: 'Voucher Denomination',
-        values: [],
-        emptyOption: 'Please select a Voucher Denomination...',
-        selectOptionText: voucherDenominationSelectOptionText,
-        selectOptionValue: voucherDenominationSelectOptionValue,
-        valuesFetcher: {...voucherDenominationValuesFetcher},
-    },
 };
 
 export const attributesSequenceToShow = [
@@ -187,7 +163,6 @@ export const attributesSequenceToShow = [
     'price',
     'drive_time',
     'video_url',
-    'voucher_denomination_id',
     'content',
     'faq',
     'reviews',
