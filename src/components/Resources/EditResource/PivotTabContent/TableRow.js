@@ -170,10 +170,6 @@ class TableRow extends Component {
 TableRow.propTypes = {
     childResource: PropTypes.shape({
         id: PropTypes.number,
-        product: PropTypes.shape({
-            id: PropTypes.number,
-            name: PropTypes.string
-        }),
     }),
 };
 

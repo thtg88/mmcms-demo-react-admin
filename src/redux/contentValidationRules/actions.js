@@ -6,7 +6,7 @@ const actions = getActions(reducerName);
 // action creators
 export const changePageResources = payload => ({
     type: actions.CHANGE_PAGE_RESOURCES,
-    payload,
+	payload,
 });
 
 export const clearMetadataResourceCreate = payload => ({
@@ -19,7 +19,7 @@ export const clearMetadataResourceEdit = payload => ({
 
 export const clearMetadataResources = payload => ({
     type: actions.CLEAR_METADATA_RESOURCES,
-    payload
+    payload,
 });
 
 export const createResource = payload => ({
@@ -37,13 +37,13 @@ export const findResource = payload => ({
     payload,
 });
 
-export const getPaginatedResources = payload => ({
-    type: actions.GET_PAGINATED_RESOURCES_REQUEST,
+export const getAllResources = payload => ({
+    type: actions.GET_ALL_RESOURCES_REQUEST,
     payload,
 });
 
-export const getAllResources = payload => ({
-    type: actions.GET_ALL_RESOURCES_REQUEST,
+export const getPaginatedResources = payload => ({
+    type: actions.GET_PAGINATED_RESOURCES_REQUEST,
     payload,
 });
 
@@ -52,13 +52,8 @@ export const recoverResource = payload => ({
     payload,
 });
 
-export const setRelationshipItem = payload => ({
-    type: actions.SET_RELATIONSHIP_ITEM_RESOURCE,
-    payload,
-});
-
-export const unsetRelationshipItem = payload => ({
-    type: actions.UNSET_RELATIONSHIP_ITEM_RESOURCE,
+export const searchResources = payload => ({
+    type: actions.SEARCH_RESOURCES_REQUEST,
     payload,
 });
 

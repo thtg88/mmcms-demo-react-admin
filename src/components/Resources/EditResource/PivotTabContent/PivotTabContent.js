@@ -1,17 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Col, Row } from 'reactstrap';
-// import CreateForm from './CreateForm';
+import CreateForm from './CreateForm';
 import Table from './Table';
 import ApiErrorCard from '../../../Cards/ApiErrorCard';
 import { getApiErrorMessages } from '../../../../helpers/apiMessages';
 
 const PivotTabContent = ({
+    childAttributesSequenceToShow,
+    childNameField,
+    childResourceBaseRoute,
+    childSchema,
+    createChildResource,
     destinationBaseRoute,
     destinationRelationshipName,
     errors,
     parentResource,
     relationshipName,
+    relationshipParentIdColumn,
     resourceDisplayName,
 }) => {
     if(
@@ -42,7 +48,15 @@ const PivotTabContent = ({
             <hr />
             <Row className="mb-4">
                 <Col className="col-md-12">
-                    {/*<CreateForm parentResource={parentResource} />*/}
+                    <CreateForm
+                        childAttributesSequenceToShow={childAttributesSequenceToShow}
+                        childNameField={childNameField}
+                        childResourceBaseRoute={childResourceBaseRoute}
+                        childSchema={childSchema}
+                        createChildResource={createChildResource}
+                        parentResource={parentResource}
+                        relationshipParentIdColumn={relationshipParentIdColumn}
+                    />
                 </Col>
             </Row>
         </>

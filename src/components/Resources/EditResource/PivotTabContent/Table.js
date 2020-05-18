@@ -53,9 +53,8 @@ const Table = ({
 
 Table.propTypes = {
     parentResource: PropTypes.object,
-    reducerName: PropTypes.string,
-    relationshipName: PropTypes.string,
-    resourceDisplayName: PropTypes.string,
+    relationshipName: PropTypes.string.isRequired,
+    resourceDisplayName: PropTypes.string.isRequired,
 };
 
 export default Table;

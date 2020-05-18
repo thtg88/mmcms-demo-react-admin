@@ -2,19 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ResourceForm from '../../ResourceForm';
-import { withCreateResource } from '../../../Resources/CreateResource';
+import { withCreateResourceCallback } from '../../../Resources/CreateResource';
 // import {
 //     clearMetadataResourceCreate,
 //     createResource,
 // } from '../../../../redux/productCategoryNewsArticles/actions';
-// import {
-//     attributesSequenceToShow,
-//     nameField,
-//     reducerName,
-//     resourceBaseRoute,
-//     resourceDisplayName,
-//     schema,
-// } from '../../../../redux/productCategoryNewsArticles/schema';
 
 class CreateForm extends Component {
     componentDidMount() {
@@ -95,19 +87,18 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     setRelationshipItem: ownProps.setRelationshipItem,
 });
 
-export default connect(
-    () => ({}),
-    mapDispatchToProps
-)(
-    withRouter(withCreateResource({
-        // attributesSequenceToShow,
-        // clearMetadataResourceCreate,
-        // createResource,
-        // nameField,
-        // reducerName,
-        // resourceBaseRoute,
-        // resourceDisplayName,
-        // schema,
-        dontRedirectAfterCreate: true,
-    })(CreateForm))
-);
+export default connect(() => ({}), mapDispatchToProps)(withRouter(
+    withCreateResourceCallback(
+        (ownProps) => ({
+            attributesSequenceToShow: ownProps.childAttributesSequenceToShow,
+            clearMetadataResourceCreate: ownProps.clearMetadataResourceCreate,
+            createResource: ownProps.createChildResource,
+            dontRedirectAfterCreate: true,
+            nameField: ownProps.childNameField,
+            reducerName: ownProps.reducerName,
+            resourceBaseRoute: ownProps.childResourceBaseRoute,
+            resourceDisplayName: ownProps.resourceDisplayName,
+            schema: ownProps.childSchema,
+        })
+    )(CreateForm)
+));
