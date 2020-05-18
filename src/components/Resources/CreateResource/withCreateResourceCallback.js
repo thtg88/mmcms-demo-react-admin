@@ -3,7 +3,9 @@ import withCreateResource from './withCreateResource';
 
 const withCreateResourceCallback = (callback) => (ComponentToWrap) => {
     const CreateCallbackHOC = (props) => {
-        return <ComponentToWrap {...props} {...callback(props)} />;
+        const params = callback(props);
+
+        return {withCreateResource(params)(<ComponentToWrap {...props} />)};
     };
 
     return CreateCallbackHOC;
