@@ -10,6 +10,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Fixed
 - Selection of role for user
 
+## [0.26.0] - 2020-05-21
+### Added
+- Ability to set whether or not a model can be restored via schema
+- Ability to set whether or not a model can be updated via schema
+- Dynamic `PivotTabComponent`
+### Changed
+- General improvements
+### Fixed
+- `value` setting on Edit HOCs when `select` type
+### Removed
+- Unused redux state
+
 ## [0.25.0] - 2020-05-10
 ### Added
 - Recovery resource for all entities
