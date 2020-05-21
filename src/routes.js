@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import { noInternetConnectionNotification } from './helpers/toastNotification';
+import ContentTypeEdit from './views/Resources/ContentTypes/Edit';
 
 const Profile = lazy(() => retry(() => import('./views/Pages/Profile')));
 const Dashboard = lazy(() => retry(() => import('./views/Dashboard')));
@@ -21,7 +22,7 @@ const ContentMigrationMethodList = lazy(() => retry(() => import('./views/Resour
 
 // Content Type lazies...
 const ContentTypeCreate = lazy(() => retry(() => import('./views/Resources/ContentTypes/Create')));
-const ContentTypeEdit = lazy(() => retry(() => import('./views/Resources/ContentTypes/Edit')));
+// const ContentTypeEdit = lazy(() => retry(() => import('./views/Resources/ContentTypes/Edit')));
 const ContentTypeList = lazy(() => retry(() => import('./views/Resources/ContentTypes/List')));
 
 // Image Category lazies...
