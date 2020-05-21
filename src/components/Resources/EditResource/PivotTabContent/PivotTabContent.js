@@ -16,6 +16,7 @@ const PivotTabContent = ({
     destinationRelationshipName,
     errors,
     parentResource,
+    reducerName,
     relationshipName,
     relationshipParentIdColumn,
     resourceDisplayName,
@@ -55,6 +56,7 @@ const PivotTabContent = ({
                         childSchema={childSchema}
                         createChildResource={createChildResource}
                         parentResource={parentResource}
+                        reducerName={reducerName}
                         relationshipParentIdColumn={relationshipParentIdColumn}
                     />
                 </Col>
