@@ -7,6 +7,7 @@ import {
     getAllResources,
     getPaginatedResources,
     recoverResource,
+    searchResources,
     updateResource
 } from './helper';
 import {
@@ -16,6 +17,7 @@ import {
     getAllResourcesRequestBase,
     getPaginatedResourcesRequestBase,
     recoverResourceRequestBase,
+    searchResourcesRequestBase,
     updateResourceRequestBase,
 } from '../base/sagas';
 
@@ -31,8 +33,9 @@ export const getPaginatedResourcesRequest = getPaginatedResourcesRequestBase(act
 
 export const recoverResourceRequest = recoverResourceRequestBase(actions, recoverResource);
 
-export const updateResourceRequest = updateResourceRequestBase(actions, updateResource);
+export const searchResourcesRequest = searchResourcesRequestBase(actions, searchResources);
 
+export const updateResourceRequest = updateResourceRequestBase(actions, updateResource);
 
 export default function* rootSaga() {
     yield all([
@@ -42,6 +45,7 @@ export default function* rootSaga() {
         fork(getAllResourcesRequest),
         fork(getPaginatedResourcesRequest),
         fork(recoverResourceRequest),
+        fork(searchResourcesRequest),
         fork(updateResourceRequest),
     ]);
 }
