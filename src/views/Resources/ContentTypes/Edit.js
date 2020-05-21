@@ -45,17 +45,22 @@ import {
     schema,
 } from '../../../redux/contentTypes/schema';
 import {
+    reducerName as contentValidationRulesReducerName,
     resourceBaseRoute as contentValidationRuleBaseRoute
 } from '../../../redux/contentValidationRules/schema';
+import contentValidationRulesReducers from '../../../redux/contentValidationRules/reducers';
+import contentValidationRulesSagas from '../../../redux/contentValidationRules/sagas';
 
 const additionalSagas = {
     [contentMigrationMethodsReducerName]: contentMigrationMethodsSagas,
     [contentTypeContentValidationRulesReducerName]: contentTypeContentValidationRulesSagas,
+    [contentValidationRulesReducerName]: contentValidationRulesSagas,
 };
 
 const additionalReducers = {
     [contentMigrationMethodsReducerName]: contentMigrationMethodsReducers,
     [contentTypeContentValidationRulesReducerName]: contentTypeContentValidationRulesReducers,
+    [contentValidationRulesReducerName]: contentValidationRulesReducers,
 };
 
 export const Edit = ({
