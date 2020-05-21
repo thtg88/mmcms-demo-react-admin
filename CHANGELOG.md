@@ -10,6 +10,48 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Fixed
 - Selection of role for user
 
+## [0.25.0] - 2020-05-10
+### Added
+- Recovery resource for all entities
+
+## [0.24.2] - 2020-05-10
+### Changed
+- Improved boolean handling in forms
+
+## [0.24.1] - 2020-05-10
+### Fixed
+- `getFormResourceValues` general improvements
+
+## [0.24.0] - 2020-05-08
+### Added
+- Content Fields scaffold
+### Fixed
+- Fixed `base_route` label in `contentModels` schema
+
+## [0.23.0] - 2020-04-25
+### Added
+- Content Models scaffold
+
+## [0.22.0] - 2020-04-20
+### Added
+- Content Types scaffold
+
+## [0.21.1] - 2020-04-20
+### Removed
+- PHPloy configuration
+
+## [0.21.0] - 2020-04-19
+### Added
+- Content Migration Methods scaffold
+
+## [0.20.1] - 2020-04-19
+### Added
+- Ability to lazy load additional reducers and sagas in HOCs
+
+## [0.20.0] - 2020-04-19
+### Changed
+- General bug fixes and improvements
+
 ## [0.19.1] - 2019-08-14
 ### Added
 - Usage of React Redux's useSelector hook in certain components
