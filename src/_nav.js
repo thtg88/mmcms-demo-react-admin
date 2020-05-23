@@ -26,6 +26,11 @@ export default {
                     url: '/content-migration-methods',
                     icon: 'fa fa-database',
                 },
+                {
+                    name: 'Validation Rules',
+                    url: '/content-validation-rules',
+                    icon: 'fa fa-check',
+                },
             ],
         },
         {

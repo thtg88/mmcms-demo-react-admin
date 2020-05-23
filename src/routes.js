@@ -25,6 +25,11 @@ const ContentTypeCreate = lazy(() => retry(() => import('./views/Resources/Conte
 // const ContentTypeEdit = lazy(() => retry(() => import('./views/Resources/ContentTypes/Edit')));
 const ContentTypeList = lazy(() => retry(() => import('./views/Resources/ContentTypes/List')));
 
+// Content Validation Rule lazies...
+const ContentValidationRuleCreate = lazy(() => retry(() => import('./views/Resources/ContentValidationRules/Create')));
+const ContentValidationRuleEdit = lazy(() => retry(() => import('./views/Resources/ContentValidationRules/Edit')));
+const ContentValidationRuleList = lazy(() => retry(() => import('./views/Resources/ContentValidationRules/List')));
+
 // Image Category lazies...
 const ImageCategoryCreate = lazy(() => retry(() => import('./views/Resources/ImageCategories/Create')));
 const ImageCategoryEdit = lazy(() => retry(() => import('./views/Resources/ImageCategories/Edit')));
@@ -56,6 +61,9 @@ const routes = [
     { path: '/content-types', exact: true,  name: 'Content Types', component: ContentTypeList },
     { path: '/content-types/create', exact: true,  name: 'Create', component: ContentTypeCreate },
     { path: '/content-types/:id', exact: true, name: 'Edit Type', component: ContentTypeEdit },
+    { path: '/content-validation-rules', exact: true,  name: 'Content Validation Rules', component: ContentValidationRuleList },
+    { path: '/content-validation-rules/create', exact: true,  name: 'Create', component: ContentValidationRuleCreate },
+    { path: '/content-validation-rules/:id', exact: true, name: 'Edit Validation Rule', component: ContentValidationRuleEdit },
     { path: '/image-categories', exact: true,  name: 'Image Categories', component: ImageCategoriesList },
     { path: '/image-categories/create', exact: true,  name: 'Create', component: ImageCategoryCreate },
     { path: '/image-categories/:id', exact: true, name: 'Edit Role', component: ImageCategoryEdit },
