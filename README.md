@@ -3,16 +3,17 @@ React Admin Dashboard - mmCMS Demo, is a ReactJS admin app built on top of an [m
 This project was bootstrapped with [CoreUI React](https://github.com/coreui/coreui-free-react-admin-template) on top of [Create React App](https://github.com/facebook/create-react-app).
 You can find the app in action [here](https://mmcms-demo.marco-marassi.com).
 
+You can find documentation around installation and usage of mmCMS [here](https://github.com/thtg88/mmcms/blob/master/README.md)
+
 ## Table of Contents
 
-* [Installation](#installation)
-* [Basic Usage](#basic-usage)
+* [Development](#development)
 * [Build](#build)
 * [Technologies Used](#technologies-used)
 * [Versioning](#versioning)
 * [License](#license)
 
-## Installation
+## Development
 
 ``` bash
 # clone the repo
@@ -25,9 +26,6 @@ $ cd my-project
 $ npm install
 ```
 In order for your mmCMS REST API to work you have to create a .env file containing a variable pointing to the base URL of your API e.g. ```REACT_APP_API_BASE_URL=https://api.domain.com/v1```
-
-
-## Basic usage
 
 ``` bash
 # dev server with hot module replacement at http://localhost:3000
