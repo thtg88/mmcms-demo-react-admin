@@ -69,7 +69,10 @@ const FormInput = ({
                             || extra.action === 'remove-value'
                             || extra.action === 'clear'
                         ) {
-                            onChange(selectedOption, {...extra, name, multiple})
+                            onChange(
+                                {target: {name, value: selectedOption.value}},
+                                {...extra, name, multiple}
+                            );
                         }
                     }}
                     options={values}
