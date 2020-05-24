@@ -20,6 +20,8 @@ const PivotTabContent = ({
     relationshipName,
     relationshipParentIdColumn,
     resourceDisplayName,
+    setRelationshipItem,
+    setResource,
 }) => {
     if(
         ! parentResource
@@ -41,6 +43,7 @@ const PivotTabContent = ({
                         destinationBaseRoute={destinationBaseRoute}
                         destinationRelationshipName={destinationRelationshipName}
                         parentResource={parentResource}
+                        reducerName={reducerName}
                         relationshipName={relationshipName}
                         resourceDisplayName={resourceDisplayName}
                     />
@@ -58,6 +61,7 @@ const PivotTabContent = ({
                         parentResource={parentResource}
                         reducerName={reducerName}
                         relationshipParentIdColumn={relationshipParentIdColumn}
+                        setRelationshipItem={setRelationshipItem}
                     />
                 </Col>
             </Row>
