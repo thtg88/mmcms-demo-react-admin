@@ -84,7 +84,7 @@ class CreateForm extends Component {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    setRelationshipItem: ownProps.setRelationshipItem,
+    setRelationshipItem: (payload) => dispatch(ownProps.setRelationshipItem(payload)),
 });
 
 export default connect(() => ({}), mapDispatchToProps)(withRouter(

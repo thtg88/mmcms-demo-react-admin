@@ -60,6 +60,7 @@ const PivotTabContent = ({
                         createChildResource={createChildResource}
                         parentResource={parentResource}
                         reducerName={reducerName}
+                        relationshipName={relationshipName}
                         relationshipParentIdColumn={relationshipParentIdColumn}
                         setRelationshipItem={setRelationshipItem}
                     />
