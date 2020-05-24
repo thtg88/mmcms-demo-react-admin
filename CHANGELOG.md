@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Fixed
 - Selection of role for user
 
+## [0.28.0] - 2020-05-24
+### Fixed
+- Content Validation Rule scaffold
+- `PivotTabContent` functionality
+
+## [0.27.0] - 2020-05-23
+### Added
+- Content Validation Rule scaffold
+
 ## [0.26.0] - 2020-05-21
 ### Added
 - Ability to set whether or not a model can be restored via schema
