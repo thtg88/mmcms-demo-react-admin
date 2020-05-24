@@ -47,6 +47,16 @@ export const recoverResource = payload => ({
     payload,
 });
 
+export const setRelationshipItem = payload => ({
+    type: actions.SET_RELATIONSHIP_ITEM_RESOURCE,
+    payload,
+});
+
+export const unsetRelationshipItem = payload => ({
+    type: actions.UNSET_RELATIONSHIP_ITEM_RESOURCE,
+    payload,
+});
+
 export const updateResource = payload => ({
     type: actions.UPDATE_RESOURCE_REQUEST,
     payload,
