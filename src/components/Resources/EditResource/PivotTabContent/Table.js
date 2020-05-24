@@ -6,9 +6,13 @@ import TableRow from './TableRow';
 const Table = ({
     destinationBaseRoute,
     destinationRelationshipName,
+    destroyResource,
     parentResource,
+    reducerName,
     relationshipName,
     resourceDisplayName,
+    setResource,
+    unsetRelationshipItem,
 }) => {
     if(
         ! parentResource
@@ -36,6 +40,11 @@ const Table = ({
                                         childResource={childResource}
                                         destinationBaseRoute={destinationBaseRoute}
                                         destinationRelationshipName={destinationRelationshipName}
+                                        destroyResource={destroyResource}
+                                        reducerName={reducerName}
+                                        relationshipName={relationshipName}
+                                        setResource={setResource}
+                                        unsetRelationshipItem={unsetRelationshipItem}
                                     />
                                 )
                             )
@@ -54,7 +63,9 @@ const Table = ({
 Table.propTypes = {
     parentResource: PropTypes.object,
     relationshipName: PropTypes.string.isRequired,
+    reducerName: PropTypes.string.isRequired,
     resourceDisplayName: PropTypes.string.isRequired,
+    setResource: PropTypes.func,
 };
 
 export default Table;

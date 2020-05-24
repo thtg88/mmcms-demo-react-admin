@@ -1,11 +1,29 @@
 import React from 'react';
 import EditResourceContainer, { withEditResource } from '../../../components/Resources/EditResource';
+import PivotTabContent from '../../../components/Resources/EditResource/PivotTabContent';
+import {
+    createResource as createContentFieldContentValidationRule,
+    destroyResource as destroyContentFieldContentValidationRule,
+    setResource as setContentFieldContentValidationRule,
+} from '../../../redux/contentFieldContentValidationRules/actions';
+import contentFieldContentValidationRulesReducers from '../../../redux/contentFieldContentValidationRules/reducers';
+import contentFieldContentValidationRulesSagas from '../../../redux/contentFieldContentValidationRules/sagas';
+import {
+    attributesSequenceToShow as contentFieldContentValidationRulesAttributesSequenceToShow,
+    nameField as contentFieldContentValidationRulesNameField,
+    reducerName as contentFieldContentValidationRulesReducerName,
+    resourceBaseRoute as contentFieldContentValidationRulesResourceBaseRoute,
+    resourceDisplayName as contentFieldContentValidationRulesResourceDisplayName,
+    schema as contentFieldContentValidationRulesSchema,
+} from '../../../redux/contentFieldContentValidationRules/schema';
 import {
     clearMetadataResourceEdit,
     destroyResource,
     findResource,
     getPaginatedResources,
     recoverResource,
+    setRelationshipItem,
+    unsetRelationshipItem,
     updateResource,
 } from '../../../redux/contentFields/actions';
 import reducers from '../../../redux/contentFields/reducers';
@@ -33,20 +51,31 @@ import contentTypesSagas from '../../../redux/contentTypes/sagas';
 import {
     reducerName as contentTypesReducerName,
 } from '../../../redux/contentTypes/schema';
+import {
+    reducerName as contentValidationRulesReducerName,
+    resourceBaseRoute as contentValidationRuleBaseRoute
+} from '../../../redux/contentValidationRules/schema';
+import contentValidationRulesReducers from '../../../redux/contentValidationRules/reducers';
+import contentValidationRulesSagas from '../../../redux/contentValidationRules/sagas';
 
 const additionalSagas = {
     [contentTypesReducerName]: contentTypesSagas,
     [contentModelsReducerName]: contentModelsSagas,
+    [contentFieldContentValidationRulesReducerName]: contentFieldContentValidationRulesSagas,
+    [contentValidationRulesReducerName]: contentValidationRulesSagas,
 };
 
 const additionalReducers = {
     [contentTypesReducerName]: contentTypesReducers,
     [contentModelsReducerName]: contentModelsReducers,
+    [contentFieldContentValidationRulesReducerName]: contentFieldContentValidationRulesReducers,
+    [contentValidationRulesReducerName]: contentValidationRulesReducers,
 };
 
 export const Edit = ({
     gettingResource,
     isRecovering,
+    resource,
     toggleDestroyResourceModal,
     toggleRecoverResourceModal,
     ...props
@@ -72,6 +101,35 @@ export const Edit = ({
         });
     }
 
+    const tabs = [];
+    if(resource) {
+        tabs.push({
+            iconClassName: 'fa fa-fw fa-check',
+            name: 'content-type-content-validation-rules',
+            text: 'Validation Rules',
+            content: (
+                <PivotTabContent
+                    childAttributesSequenceToShow={contentFieldContentValidationRulesAttributesSequenceToShow}
+                    childNameField={contentFieldContentValidationRulesNameField}
+                    childResourceBaseRoute={contentFieldContentValidationRulesResourceBaseRoute}
+                    childSchema={contentFieldContentValidationRulesSchema}
+                    createChildResource={createContentFieldContentValidationRule}
+                    destinationBaseRoute={contentValidationRuleBaseRoute}
+                    destinationRelationshipName="content_validation_rule"
+                    destroyResource={destroyContentFieldContentValidationRule}
+                    parentResource={resource}
+                    reducerName={contentFieldContentValidationRulesReducerName}
+                    relationshipName="content_field_content_validation_rules"
+                    relationshipParentIdColumn="content_field_id"
+                    resourceDisplayName={contentFieldContentValidationRulesResourceDisplayName}
+                    setRelationshipItem={setRelationshipItem}
+                    setResource={setContentFieldContentValidationRule}
+                    unsetRelationshipItem={unsetRelationshipItem}
+                />
+            ),
+        });
+    }
+
     return (
         <EditResourceContainer
             {...props}
@@ -81,9 +139,11 @@ export const Edit = ({
             canUpdate={canUpdate}
             gettingResource={gettingResource}
             isRecovering={isRecovering}
+            resource={resource}
             resourceBaseRoute={resourceBaseRoute}
             resourceDisplayName={resourceDisplayName}
             resourceNameField={nameField}
+            tabs={tabs}
             toggleDestroyResourceModal={toggleDestroyResourceModal}
             toggleRecoverResourceModal={toggleRecoverResourceModal}
         />

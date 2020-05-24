@@ -113,7 +113,7 @@ class TableRow extends Component {
         } = this.props;
         const { isDestroyResourceModalOpen, destroyingResource } = this.state;
 
-        if(!childResource) {
+        if(! childResource) {
             return null;
         }
 
@@ -191,12 +191,9 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    destroyResource: ownProps.destroyResource,
-    setResource: ownProps.setResource,
-    unsetRelationshipItem: ownProps.unsetRelationshipItem,
+    destroyResource: (payload) => dispatch(ownProps.destroyResource(payload)),
+    setResource: (payload) => dispatch(ownProps.setResource(payload)),
+    unsetRelationshipItem: (payload) => dispatch(ownProps.unsetRelationshipItem(payload)),
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(TableRow);
+export default connect(mapStateToProps, mapDispatchToProps)(TableRow);
