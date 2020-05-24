@@ -7,8 +7,10 @@ const Table = ({
     destinationBaseRoute,
     destinationRelationshipName,
     parentResource,
+    reducerName,
     relationshipName,
     resourceDisplayName,
+    setResource,
 }) => {
     if(
         ! parentResource
@@ -36,6 +38,8 @@ const Table = ({
                                         childResource={childResource}
                                         destinationBaseRoute={destinationBaseRoute}
                                         destinationRelationshipName={destinationRelationshipName}
+                                        reducerName={reducerName}
+                                        setResource={setResource}
                                     />
                                 )
                             )
@@ -54,7 +58,9 @@ const Table = ({
 Table.propTypes = {
     parentResource: PropTypes.object,
     relationshipName: PropTypes.string.isRequired,
+    reducerName: PropTypes.string.isRequired,
     resourceDisplayName: PropTypes.string.isRequired,
+    setResource: PropTypes.func,
 };
 
 export default Table;
