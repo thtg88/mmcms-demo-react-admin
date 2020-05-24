@@ -6,11 +6,13 @@ import TableRow from './TableRow';
 const Table = ({
     destinationBaseRoute,
     destinationRelationshipName,
+    destroyResource,
     parentResource,
     reducerName,
     relationshipName,
     resourceDisplayName,
     setResource,
+    unsetRelationshipItem,
 }) => {
     if(
         ! parentResource
@@ -38,8 +40,11 @@ const Table = ({
                                         childResource={childResource}
                                         destinationBaseRoute={destinationBaseRoute}
                                         destinationRelationshipName={destinationRelationshipName}
+                                        destroyResource={destroyResource}
                                         reducerName={reducerName}
+                                        relationshipName={relationshipName}
                                         setResource={setResource}
+                                        unsetRelationshipItem={unsetRelationshipItem}
                                     />
                                 )
                             )

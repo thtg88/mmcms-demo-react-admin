@@ -14,6 +14,7 @@ const PivotTabContent = ({
     createChildResource,
     destinationBaseRoute,
     destinationRelationshipName,
+    destroyResource,
     errors,
     parentResource,
     reducerName,
@@ -22,6 +23,7 @@ const PivotTabContent = ({
     resourceDisplayName,
     setRelationshipItem,
     setResource,
+    unsetRelationshipItem,
 }) => {
     if(
         ! parentResource
@@ -42,10 +44,13 @@ const PivotTabContent = ({
                     <Table
                         destinationBaseRoute={destinationBaseRoute}
                         destinationRelationshipName={destinationRelationshipName}
+                        destroyResource={destroyResource}
                         parentResource={parentResource}
                         reducerName={reducerName}
                         relationshipName={relationshipName}
                         resourceDisplayName={resourceDisplayName}
+                        setResource={setResource}
+                        unsetRelationshipItem={unsetRelationshipItem}
                     />
                 </Col>
             </Row>
