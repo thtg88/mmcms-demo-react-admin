@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Added
 - Terms and conditions of use
 
+## [0.29.1] - 2020-05-26
+### Fixed
+- Users edit form `disabled` attribute
+
 ## [0.29.0] - 2020-05-26
 ### Changed
 - Pagination meta-data in `base/reducer`
