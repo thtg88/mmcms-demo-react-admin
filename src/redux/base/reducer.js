@@ -239,7 +239,8 @@ const reducer = (actions) => (state = initial_state, action) => {
             };
         }
         case actions.GET_PAGINATED_RESOURCES_SUCCESS: {
-            const { data, total, current_page } = action.payload;
+            const { data, meta } = action.payload;
+            const { current_page, total } = meta;
             return {
                 ...state,
                 current_page,
