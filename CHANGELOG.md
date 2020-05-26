@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Changed
 - Pagination meta-data in `base/reducer`
 ### Fixed
+- `destinationRelationshipName` prop for `PivotTabContent` in ContentTypes Edit component
 - Selection of role for user
 
 ## [0.28.0] - 2020-05-24
