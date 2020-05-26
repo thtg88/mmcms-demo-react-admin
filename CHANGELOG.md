@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ## [Unreleased]
 ### Added
 - Terms and conditions of use
+### Changed
+- Pagination meta-data in `base/reducer`
 ### Fixed
 - Selection of role for user
 
