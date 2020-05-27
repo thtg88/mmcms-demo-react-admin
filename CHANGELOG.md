@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/) (or at lea
 ### Added
 - Terms and conditions of use
 
+## [0.29.2] - 2020-05-27
+### Fixed
+- Pass down `canUpdate` prop to User Edit view
+
 ## [0.29.1] - 2020-05-26
 ### Fixed
 - Users edit form `disabled` attribute
