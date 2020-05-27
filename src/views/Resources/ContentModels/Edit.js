@@ -16,6 +16,7 @@ import {
     attributesSequenceToShow,
     canDestroy,
     canRestore,
+    canUpdate,
     nameField,
     pageSize,
     reducerName,
@@ -75,6 +76,7 @@ export const Edit = ({
             {...props}
             actions={actions}
             canDestroy={canDestroy}
+            canUpdate={canUpdate}
             gettingResource={gettingResource}
             isRecovering={isRecovering}
             resource={resource}
